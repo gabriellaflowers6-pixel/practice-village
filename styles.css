@@ -1123,3 +1123,24 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
 .hardlayer__bridge{ margin:1.5rem auto 1.1rem; }
 .conciergerow__copy .conciergerow__points{ margin-top:0; }
 .conciergerow__copy{ padding-top:0; }
+
+/* ===== JoYi round (11:18pm) ===== */
+/* serious bridge, one line on desktop */
+.hardlayer__bridge{ max-width:none; white-space:nowrap; }
+@media (max-width:720px){ .hardlayer__bridge{ white-space:normal; max-width:22ch; } }
+
+/* signage: fully below the glass, ordered, consistent rhythm */
+.window__plaque{ margin:14px auto 0; display:grid; justify-items:center; gap:7px;
+  padding:18px 28px 15px; width:min(88%,340px); }
+.window__sign{ margin:0; width:min(230px,100%); }
+.window__rule{ display:block; width:56px; height:1px; background:rgba(201,164,92,.55); }
+.window__meta{ margin:0; }
+.window__sell{ margin:0; }
+.window__peek{ margin-top:2px; }
+
+/* six gifts, three columns; snapshot cards carry their link */
+.gifts__grid{ grid-template-columns:repeat(3,1fr); max-width:1040px; }
+@media (max-width:900px){ .gifts__grid{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:600px){ .gifts__grid{ grid-template-columns:1fr; } }
+.gift--tool{ background:linear-gradient(180deg, rgba(197,168,128,.16), var(--paper)); }
+.gift--tool a{ display:inline-block; margin-top:.6rem; font-weight:700; color:var(--clay-deep); text-underline-offset:3px; }

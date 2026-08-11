@@ -212,3 +212,12 @@ the visible 20px in the pane is the pre-reveal translate in a throttled hidden t
 IntersectionObserver does not fire in occluded tabs, which also explains tonight's
 stale screenshots). Section padding tightened again. styles v71 to v73.
 
+**JoYi round (11:18pm):** bridge line is now serious and single-line: "This is
+complicated. We have real answers." Founder heading: "I've been practicing." Plaque
+rebuilt as an ordered grid fully below the glass (sign, gold rule, meta, sell line, peek
+link, consistent 7px rhythm, fixed width). Take-these-with-you grid grows to six in
+three columns: the four teachings plus both Snapshots (WellBEing Snapshot, Sources of
+Wholeness) with free/no-login language matching aidedeq. styles v73 to v74. Verified by
+DOM: one-line bridge, 6 gifts, 3 columns, both snapshot links, plaque grid + rule, no
+overflow.
+
