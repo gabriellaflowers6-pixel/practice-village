@@ -70,3 +70,4 @@ also on the FRONT face of the card; and "Moxie Studio" was added to the main nav
 script.js v29 to v30, styles v58 to v59 (one .room__cta rule). Click-tested headless:
 body click flips, link click navigates to /moxie-studio/ without flipping.
 
+Bugfix DEPLOYED: deploy 6a7aecba8e97e32c5c2a3eef, verified live (nav link x3, front-face door, fixed flip handler in served script.js?v=30).
