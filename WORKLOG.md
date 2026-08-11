@@ -101,3 +101,14 @@ by the scaled showcase card. Mobile: nav rebuilt as brand + compact "Join · $14
 three times); hero headline calmed from 10vw to 7.6vw. Verified at 1280 and 375: no
 horizontal overflow, who cards 2-col/1-col, chips centered, ticket sticky on desktop.
 
+**Village homepage review (same night, same critical eye):** og:title/og:description
+still carried the pre-rework positioning ("rebuilding is hard, we clear the confusion");
+now match the YWCA canon, so shared links preview correctly. The Builders section's six
+mission paragraphs are now three (merged the red-tape and human-work paragraphs,
+rewrote the "not only logistical. It is human" construction, folded the two closing
+invitations into one). Mobile: the sticky "Take a founding seat" pill wrapped to two
+lines and collided with the Breathe button; it now docks bottom-right, one line, and
+the two never overlap (verified by rect intersection at 375px). Hamburger menu
+open/close verified by simulated clicks. No horizontal overflow at 1280 or 375. Zero em
+dashes. styles v60 to v61.
+

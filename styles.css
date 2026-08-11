@@ -359,7 +359,13 @@ em { font-style: italic; color: var(--clay-deep); }
 .sticky.show { transform:translate(-50%,0); }
 .sticky__txt { font-weight:700; font-size:.92rem; white-space:nowrap; }
 .sticky .btn { padding:.65em 1.1em; }
-@media (max-width:520px){ .sticky__txt{ display:none; } .sticky{ padding:.5rem; } }
+@media (max-width:520px){
+  .sticky__txt{ display:none; }
+  /* dock right and stay one line so it never collides with the Breathe pill (bottom left) */
+  .sticky{ padding:.4rem; left:auto; right:14px; transform:translate(0,140%); }
+  .sticky.show{ transform:translate(0,0); }
+  .sticky .btn{ white-space:nowrap; font-size:.9rem; padding:.6em 1em; }
+}
 
 /* ---------- reveal ---------- */
 .reveal { opacity:0; transform:translateY(20px); transition:opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); transition-delay:var(--d,0s); }
