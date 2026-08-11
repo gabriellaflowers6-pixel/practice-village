@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Practice Village: an AI-powered digital community center for women rebuilding after a major life change</title>
+  <meta name="description" content="Practice Village is an AI-powered digital community center for women rebuilding after a major life change. Your Concierge clears the paperwork, the dead ends, the runaround, so you can take the next step and connect with other women rebuilding right beside you." />
+  <meta property="og:title" content="Practice Village: rebuilding is hard, we clear the confusion" />
+  <meta property="og:description" content="An AI-powered digital community center for women rebuilding after a major life change. Your Concierge clears the confusion so you can take the next step, with other women rebuilding right beside you." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://practice-village.netlify.app/" />
+  <link rel="canonical" href="https://practice-village.netlify.app/" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23C2542F'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='15' font-weight='600' fill='%23F4EEE2' text-anchor='middle'%3EPV%3C/text%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,400,50,1;9..144,500,50,1;9..144,600,60,1;9..144,700,80,1;9..144,900,100,1&family=Hanken+Grotesk:wght@400;500;600;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="styles.css?v=58" />
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- ===== NAV ===== -->
+  <header class="nav" id="nav">
+    <a href="#top" class="nav__brand" aria-label="Practice Village home">
+      <span class="nav__mark" aria-hidden="true">
+        <svg viewBox="0 0 40 40" width="34" height="34"><circle cx="20" cy="8" r="2.8" fill="#C2542F"/><circle cx="30.4" cy="14" r="2.8" fill="#C5A880"/><circle cx="30.4" cy="26" r="2.8" fill="#C2542F"/><circle cx="20" cy="32" r="2.8" fill="#C5A880"/><circle cx="9.6" cy="26" r="2.8" fill="#C2542F"/><circle cx="9.6" cy="14" r="2.8" fill="#C5A880"/><circle cx="20" cy="20" r="5.5" fill="#1A1A4E"/></svg>
+      </span>
+      <span class="nav__wordmark">Practice&nbsp;Village</span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#center">The Center</a>
+      <a href="#how">How it works</a>
+      <a href="#builders">The Builders</a>
+      <a href="#hilo">Why trust us</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a href="#doors" class="btn btn--clay nav__cta">Get started</a>
+    <button class="nav__menu" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <main id="top">
+
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+      <div class="hero__copy">
+        <span class="chip chip--pulse reveal">
+          <i class="dot"></i> For women rebuilding after a major life change
+        </span>
+
+        <h1 class="hero__title reveal" style="--d:.05s">
+          Find your <span class="mark">next clear step</span>, and the people to take it with.
+        </h1>
+
+        <p class="hero__lede reveal" style="--d:.16s">
+          Practice Village is a digital community and AI guide for women in transition.
+          Tell the Concierge what you're facing, get a clear path forward, and connect with
+          women who understand the part of life you're in.
+        </p>
+
+        <div class="hero__cta reveal" style="--d:.24s">
+          <a href="#doors" class="btn btn--clay btn--big" data-plan="circle">Reserve a founding seat · $97</a>
+          <a href="#doors" class="btn btn--ghost" data-plan="membership">or $19/mo</a>
+        </div>
+        <p class="hero__free reveal" style="--d:.3s"><a href="#doors">Not ready? Join the free Charter List →</a></p>
+
+      </div>
+
+      <!-- INTERACTIVE CONCIERGE DEMO -->
+      <div class="demo reveal" style="--d:.2s" id="demo">
+        <div class="demo__tape demo__tape--l" aria-hidden="true"></div>
+        <div class="demo__tape demo__tape--r" aria-hidden="true"></div>
+
+        <div class="demo__head">
+          <span class="demo__avatar" aria-hidden="true">
+            <svg viewBox="0 0 40 40" width="30" height="30"><circle cx="20" cy="8" r="2.8" fill="#C2542F"/><circle cx="30.4" cy="14" r="2.8" fill="#C5A880"/><circle cx="30.4" cy="26" r="2.8" fill="#C2542F"/><circle cx="20" cy="32" r="2.8" fill="#C5A880"/><circle cx="9.6" cy="26" r="2.8" fill="#C2542F"/><circle cx="9.6" cy="14" r="2.8" fill="#C5A880"/><circle cx="20" cy="20" r="5.5" fill="#1A1A4E"/></svg>
+          </span>
+          <div>
+            <strong>Your Concierge</strong>
+            <span class="demo__live"><i></i> live demo · tap one, see your next step</span>
+          </div>
+        </div>
+
+        <div class="demo__body" id="demoBody">
+          <p class="demo__q">How may we help you?</p>
+          <div class="demo__chips" id="demoChips">
+            <button data-k="money">Money</button>
+            <button data-k="housing">Housing</button>
+            <button data-k="work">Work</button>
+            <button data-k="family">Family</button>
+            <button data-k="stuck">I feel stuck</button>
+            <button data-k="body">My body</button>
+          </div>
+        </div>
+
+        <div class="demo__layer" id="demoLayer">
+          <span class="demo__layerlabel">Your record · yours to keep</span>
+          <div class="demo__stack" id="demoStack" aria-live="polite">
+            <span class="demo__empty">your Concierge saves nothing unless you choose</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== YOU ARE NOT THE PROBLEM (How it works starts) ===== -->
+    <section class="section hardlayer" id="how">
+      <div class="hardlayer__head">
+        <h2 class="section__title reveal">You are not the problem.</h2>
+        <p class="section__intro reveal">Big life changes come with all of this at once.</p>
+      </div>
+
+      <div class="hardlayer__mess reveal">
+        <span class="hl-label">Current confusion</span>
+        <span class="hl-chip">which form?</span>
+        <span class="hl-chip">19 browser tabs</span>
+        <span class="hl-chip">paperwork</span>
+        <span class="hl-chip">hold music</span>
+        <span class="hl-chip">money questions</span>
+        <span class="hl-chip">conflicting advice</span>
+        <span class="hl-chip">fear</span>
+        <span class="hl-chip">gatekept info</span>
+        <span class="hl-chip">family pressure</span>
+        <span class="hl-chip">no one calls back</span>
+        <span class="hl-chip">old stories</span>
+        <span class="hl-chip">pseudo-science</span>
+        <span class="hl-chip">body changes</span>
+        <span class="hl-chip">do it all alone</span>
+        <span class="hl-chip">decisions</span>
+        <span class="hl-chip">systems that fight you</span>
+      </div>
+
+      <p class="hardlayer__bridge reveal">Practice Village helps you sort the mess.</p>
+
+      <div class="hardlayer__split">
+        <article class="splitcard reveal">
+          <span class="splitcard__tag">The Concierge</span>
+          <span class="splitcard__lead">handles</span>
+          <ul class="splitcard__list">
+            <li>the search</li>
+            <li>the forms</li>
+            <li>the options</li>
+            <li>the next-step planning</li>
+          </ul>
+        </article>
+        <article class="splitcard splitcard--village reveal">
+          <span class="splitcard__tag">The Village</span>
+          <span class="splitcard__lead">holds the human part</span>
+          <ul class="splitcard__list">
+            <li>the story</li>
+            <li>the practice</li>
+            <li>the support</li>
+            <li>the courage</li>
+            <li>the choice to begin again</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===== THE REBUILD ARC (How it works) ===== -->
+    <section class="section arc" id="arc">
+      <div class="section__head section__head--center">
+        <span class="kicker reveal">the inner work</span>
+        <h2 class="section__title reveal">The Rebuild Arc</h2>
+        <p class="section__intro reveal">The Concierge clears the path. This is the part that's yours: the same inner arc, in every room of Practice Village.</p>
+      </div>
+
+      <div class="path">
+        <svg class="path__line" viewBox="0 0 1000 120" preserveAspectRatio="none" aria-hidden="true"><path d="M10 70 C 150 10, 230 110, 360 60 C 490 12, 560 110, 690 60 C 810 14, 880 110, 990 56" fill="none" stroke="var(--clay)" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round"/></svg>
+        <ol class="path__stops">
+          <li class="reveal"><b>1</b><span>Arrive</span></li>
+          <li class="reveal"><b>2</b><span>Learn</span></li>
+          <li class="reveal arc__magic"><b>3</b><span>Match <i>to the right people</i></span></li>
+          <li class="reveal"><b>4</b><span>Practice together</span></li>
+          <li class="reveal"><b>5</b><span>Do the real thing</span></li>
+          <li class="reveal"><b>6</b><span>Make it yours</span></li>
+        </ol>
+      </div>
+      <p class="arc__note reveal"><span class="hand">Advice and apps run out. The real work is six weeks together: unpacking the story you carry, then lining it up with where you're headed.</span></p>
+    </section>
+
+    <!-- ===== THE CENTER MAP (Practice Village) ===== -->
+    <section class="section center" id="center">
+      <div class="section__head section__head--center">
+        <svg class="center__bloom reveal" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="Six women from all walks, gathered like petals around one warm center">
+          <defs>
+            <radialGradient id="gw-goldglow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#C5A880" stop-opacity="0.6"/>
+              <stop offset="55%" stop-color="#C5A880" stop-opacity="0.2"/>
+              <stop offset="100%" stop-color="#C5A880" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <circle cx="60" cy="60" r="58" fill="url(#gw-goldglow)"/>
+          <circle cx="60" cy="30" r="13" fill="#C2542F"/>
+          <circle cx="85.98" cy="45" r="13" fill="#DD6A47"/>
+          <circle cx="85.98" cy="75" r="13" fill="#E2A23C"/>
+          <circle cx="60" cy="90" r="13" fill="#C0445F"/>
+          <circle cx="34.02" cy="75" r="13" fill="#2E7D5E"/>
+          <circle cx="34.02" cy="45" r="13" fill="#C77B6B"/>
+          <circle cx="60" cy="60" r="16" fill="#C5A880"/>
+          <circle cx="60" cy="60" r="6" fill="#1A1A4E"/>
+        </svg>
+        <span class="kicker reveal">your digital community center</span>
+        <h2 class="section__title center__title reveal">One Center · Many Rooms for Rebuilding</h2>
+        <p class="section__intro center__sub reveal">Practice Village is a digital community center for women rebuilding their lives.</p>
+        <p class="center__tagline reveal">One front desk. Many rooms. Real help inside.</p>
+      </div>
+
+      <div class="map">
+        <div class="map__desk reveal">
+          <h3>The Front Desk</h3>
+          <p class="map__name">Your Concierge</p>
+          <p class="map__desc">A place to ask for help without starting from scratch every time. The Concierge helps you figure out what you need next.</p>
+        </div>
+
+        <p class="map__hint reveal">Tap a room to look inside ↻</p>
+        <div class="map__wings">
+          <article class="room reveal" tabindex="0" role="button" aria-label="The Circle, tap for more">
+            <div class="room__inner">
+              <div class="room__face room__front">
+                <span class="room__tag room__tag--live">Founding cohort · starts Jul 11</span>
+                <h4>The Circle</h4>
+                <p>Helps you unpack your story and line it up with where you're going.</p>
+                <span class="room__flip" aria-hidden="true">more ↻</span>
+              </div>
+              <div class="room__face room__back">
+                <h4>The Circle</h4>
+                <p>The Rebuild Arc, facilitated by JoYi. Six weeks of live group sessions, never recorded so you speak freely, a weekly lesson to rewatch, and your cohort on the WhatsApp porch. 6 months in the Village included.</p>
+                <span class="room__flip" aria-hidden="true">back ↺</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="room reveal" tabindex="0" role="button" aria-label="Safety Hall, tap for more">
+            <div class="room__inner">
+              <div class="room__face room__front">
+                <span class="room__tag room__tag--live">Opens Jun 29</span>
+                <h4>Safety Hall</h4>
+                <p>Helps you think about safety beyond emergencies: body, money, housing, relationships, work, digital life, and belonging.</p>
+                <span class="room__flip" aria-hidden="true">more ↻</span>
+              </div>
+              <div class="room__face room__back">
+                <h4>Safety Hall</h4>
+                <p>A calm place to plan for safety in everyday life, not just the worst moments. Practical guidance across the 6 dimensions of safety.</p>
+                <span class="room__flip" aria-hidden="true">back ↺</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="room reveal" tabindex="0" role="button" aria-label="Resource Library, tap for more">
+            <div class="room__inner">
+              <div class="room__face room__front">
+                <span class="room__tag room__tag--live">Opens Jun 29</span>
+                <h4>Resource Library</h4>
+                <p>Gives you vetted information, not 19 browser tabs and a headache.</p>
+                <span class="room__flip" aria-hidden="true">more ↻</span>
+              </div>
+              <div class="room__face room__back">
+                <h4>Resource Library</h4>
+                <p>One trustworthy source instead of conflicting advice and dead ends. Curated, checked, and pointed at what actually applies to you. No misinformation, no pseudo-science.</p>
+                <span class="room__flip" aria-hidden="true">back ↺</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="room reveal" tabindex="0" role="button" aria-label="Your Record, tap for more">
+            <div class="room__inner">
+              <div class="room__face room__front">
+                <span class="room__tag">In founding build</span>
+                <h4>Your Record</h4>
+                <p>Becomes something you can keep, carry, and use again.</p>
+                <span class="room__flip" aria-hidden="true">more ↻</span>
+              </div>
+              <div class="room__face room__back">
+                <h4>Your Record</h4>
+                <p>A private record of who you are, what you're working through, and what helps. Yours to export or delete, so you never start from scratch with a new therapist, a hard conversation, or your next chapter.</p>
+                <span class="room__flip" aria-hidden="true">back ↺</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="room room--soon reveal" tabindex="0" role="button" aria-label="The Commons, tap for more">
+            <div class="room__inner">
+              <div class="room__face room__front">
+                <span class="room__tag">Coming · join the list</span>
+                <h4>The Commons</h4>
+                <p>Helps you find people who understand the part of life you're in.</p>
+                <span class="room__flip" aria-hidden="true">more ↻</span>
+              </div>
+              <div class="room__face room__back">
+                <h4>The Commons</h4>
+                <p>Connection you build, not luck you wait for. Practice the skills, get matched into a small circle in your season, find activity partners, even shared living down the road.</p>
+                <span class="room__flip" aria-hidden="true">back ↺</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="room room--soon reveal" tabindex="0" role="button" aria-label="Moxie Studio, tap for more">
+            <div class="room__inner">
+              <div class="room__face room__front">
+                <span class="room__tag">Coming · join the list</span>
+                <h4>Moxie Studio</h4>
+                <p>AI coaching for fitness and crafts, with a live coach in the room.</p>
+                <span class="room__flip" aria-hidden="true">more ↻</span>
+              </div>
+              <div class="room__face room__back">
+                <h4>Moxie Studio</h4>
+                <p>Movement and making, guided. An AI coach plus a real human for your body and your hands, so practice has a place too.</p>
+                <span class="room__flip" aria-hidden="true">back ↺</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FOUNDER PROOF / HILO (Why trust us) ===== -->
+    <section class="section hilo" id="hilo">
+      <div class="hilo__inner hilo__inner--split reveal">
+        <div class="hilo__photo">
+          <img src="assets/joyi-builder.png" width="520" height="520" alt="JoYi, founder of Practice Village" />
+        </div>
+        <div class="hilo__text">
+          <span class="kicker">this is not theory</span>
+          <h2 class="section__title">I have already built this in real rooms.</h2>
+          <p>I'm JoYi. For years, I worked with women at <strong>Moxie Fitness and The Practice Center in Hilo, Hawaiʻi</strong>, helping them rebuild through movement, practice, honest conversation, clear choices, and community.</p>
+          <p>Practice Village grows from that work. It takes what happened in those rooms, the courage, the practice, the support, the next step, and brings it online for women navigating major life changes everywhere.</p>
+          <p class="hilo__tag hand">Moxie Fitness began in Hawai'i. Practice Village opens the door wider.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PERSONAL INTELLIGENCE LAYER ===== -->
+    <section class="section layer" id="layer">
+      <div class="layer__copy reveal">
+        <span class="kicker">what you take with you</span>
+        <h2 class="section__title">Your record. <span class="mark">Yours to keep.</span></h2>
+        <p class="layer__lead">Tell the Concierge what you're dealing with. It finds the help you didn't know existed, the women already in it with you, and a plan that's yours to keep.</p>
+        <p>Your Concierge turns each insight into a card you keep: a private record of who
+        you are, what you're working through, and what helps. Most apps trap your story.
+        This one hands it to you.</p>
+        <p class="carry__lead">It goes with you, into:</p>
+        <ul class="carry">
+          <li>a new therapist's office, so you never start from scratch</li>
+          <li>a hard conversation, with your words already ready</li>
+          <li>your next job or chapter, with your patterns known</li>
+          <li>next year, when you've forgotten how far you've come</li>
+        </ul>
+        <div class="exports">
+          <span>Summary</span><span>Action Plan</span><span>Full record</span><span>Resource list</span>
+        </div>
+      </div>
+
+      <div class="cardstack reveal" id="cardstack" role="group" aria-label="Your record cards">
+        <article class="icard" style="--i:0"><span class="icard__pin"></span><b>What I'm facing</b><p>Caring for Mom while working full-time. Drowning.</p></article>
+        <article class="icard" style="--i:1"><span class="icard__pin"></span><b>What it found</b><p>A caregiver grant and respite I didn't know existed.</p></article>
+        <article class="icard" style="--i:2"><span class="icard__pin"></span><b>My circle</b><p>Four women caring for a parent too, matched to me.</p></article>
+        <article class="icard" style="--i:3"><span class="icard__pin"></span><b>My next step</b><p>The three questions to ask at Mom's appointment.</p></article>
+        <article class="icard icard--accent" style="--i:4"><span class="icard__pin"></span><b>What I own</b><p>A plan that's mine, and people who get it.</p></article>
+        <button class="cardstack__next" id="cardNext" aria-label="Next card">next ↺</button>
+        <p class="hand layer__hint">flip through the cards ↑</p>
+      </div>
+    </section>
+
+    <!-- ===== THE BUILDERS (building in the open) ===== -->
+    <section class="section" id="builders">
+      <div class="hilo__inner reveal">
+        <span class="kicker">the builders</span>
+        <h2 class="section__title">We're building in the open.</h2>
+        <p>We are building Practice Village because human potential should not be buried under
+        red tape, dead ends, broken systems, or support that hands people information but no real
+        way through. Especially for women rebuilding their lives.</p>
+        <p>Practice Village begins with the Concierge: an AI-supported guide that helps clear the
+        noise, name the next step, and move through systems that too often leave people stuck.</p>
+        <p>But the real work is not only logistical. It is human. It is the clear choice. The
+        practice. The support. The courage to begin again. The next best action. We help with that too.</p>
+        <p>The three of us are building Practice Village in the open, room by room, as our entry
+        in the Build with Gemini XPRIZE for Education &amp; Human Potential.</p>
+        <p>As the rooms open, step inside with us. Experience what we are building. Tell us what is
+        missing. Tell us what would have helped you sooner.</p>
+        <p>If you are rebuilding any part of your life and want real people in it with you, come
+        into the Village.</p>
+        <div class="builders__team">
+          <figure class="builder">
+            <div class="builder__photo"><img src="assets/joyi-founder.png" width="130" height="130" alt="JoYi" style="object-position:50% 26%" /></div>
+            <figcaption>JoYi</figcaption>
+          </figure>
+          <figure class="builder">
+            <div class="builder__photo"><img src="assets/gabby.jpg" width="130" height="130" alt="Gabby" style="object-position:50% 55%" /></div>
+            <figcaption>Gabby</figcaption>
+          </figure>
+          <figure class="builder">
+            <div class="builder__photo"><img src="assets/alison.png" width="130" height="130" alt="Alison" style="object-position:50% 40%" /></div>
+            <figcaption>Alison</figcaption>
+          </figure>
+        </div>
+        <p class="builders__org hand">AIdedEQ</p>
+      </div>
+    </section>
+
+    <!-- ===== FAQ (own tab) ===== -->
+    <section class="section faq" id="faq">
+      <div class="section__head section__head--center">
+        <span class="kicker reveal">good questions</span>
+        <h2 class="section__title reveal">Before you walk in</h2>
+      </div>
+      <div class="faq__list">
+        <details class="faq__item reveal"><summary>Is the whole place built yet?</summary><p>No, and we're not pretending otherwise. We're opening Practice Village room by room, in the open. You can join and reserve your founding spot today. Safety Hall and the Resource Library open June 29. The Founding Circle starts July 11. Your record and the WhatsApp porch follow within weeks, then the Commons (your social fitness room) and Moxie Studio. Founding members get in first and help shape each room.</p></details>
+        <details class="faq__item reveal"><summary>Is this therapy or coaching?</summary><p>Neither. It's a practice environment. It doesn't diagnose or treat, and it never replaces a therapist, doctor, attorney, or crisis service. It points you to vetted resources when something's outside its lane.</p></details>
+        <details class="faq__item reveal"><summary>What's the AI actually doing?</summary><p>The Concierge does real work: it cuts through the bureaucracy and noise, turns it into one clear next step, builds your record, and (as the Commons opens) matches you to the right people. A live human guide and you do the authentically-human part.</p></details>
+        <details class="faq__item reveal"><summary>How is my information handled?</summary><p>Consent-led, always. Nothing sensitive is saved without your yes, private stays private, and you can export or delete your record anytime.</p></details>
+        <details class="faq__item reveal"><summary>Who's behind it?</summary><p>JoYi, who has guided this work in real life at Moxie Fitness and The Practice Center in Hilo, Hawaii. Practice Village makes it AI-powered and brings it to women everywhere.</p></details>
+      </div>
+    </section>
+
+    <!-- ===== THREE DOORS / PRICING (Join) ===== -->
+    <section class="section pricing" id="doors">
+      <div class="section__head section__head--center">
+        <span class="kicker reveal">three ways in</span>
+        <h2 class="section__title reveal">Find the one that fits today</h2>
+        <p class="section__intro reveal">Founding prices, locked. No one leaves empty-handed.</p>
+      </div>
+
+      <div class="plans plans--three">
+        <article class="ticket reveal">
+          <div class="ticket__head">
+            <h3>Charter List</h3>
+            <p class="ticket__price"><span>Free</span></p>
+          </div>
+          <p class="ticket__sub">Be first in when the new rooms open.</p>
+          <ul class="ticket__list">
+            <li>First into The Commons: find your people</li>
+            <li>First access to Moxie Studio</li>
+            <li>First access to co-living</li>
+            <li>New studios as they open</li>
+            <li>Founder build updates</li>
+          </ul>
+          <form class='ticket__capture' id='charterForm' method='POST' name='founding-signup'>
+            <input type="hidden" name="form-name" value="founding-signup" />
+            <input type="hidden" name="plan" value="list" />
+            <p hidden aria-hidden="true"><label>Skip: <input name="bot-field" /></label></p>
+            <input type="email" name="email" autocomplete="email" required placeholder="you@example.com" aria-label="Your email" />
+            <button type="submit" class="btn btn--ghost btn--block">Join the Charter List</button>
+            <p class="ticket__note" id="charterNote" role="status"></p>
+          </form>
+        </article>
+
+        <article class="ticket ticket--feature reveal">
+          <span class="ticket__ribbon">JoYi's recommendation</span>
+          <div class="ticket__head">
+            <h3>Founding Circle</h3>
+            <p class="ticket__price"><span>$97</span><i>once</i></p>
+          </div>
+          <p class="ticket__sub">Six weeks to unpack your story and line it up with your goals. July 11 to August 15. Live, never recorded.</p>
+          <ul class="ticket__list">
+            <li>Live group sessions, never recorded so you speak freely</li>
+            <li>A weekly lesson from JoYi, yours to rewatch</li>
+            <li>Your cohort talks all week on the WhatsApp porch</li>
+            <li><strong>6 months in the Village included</strong></li>
+            <li>Two cohorts: Americas-friendly or Europe-friendly</li>
+            <li>Founding price, locked</li>
+          </ul>
+          <a href="#doors" class="btn btn--clay btn--block" data-plan="circle">Reserve a founding seat</a>
+        </article>
+
+        <article class="ticket reveal">
+          <div class="ticket__head">
+            <h3>Membership</h3>
+            <p class="ticket__price"><span>$19</span><i>/month</i></p>
+          </div>
+          <p class="ticket__sub">The Village as it opens, month to month.</p>
+          <ul class="ticket__list">
+            <li>Your Concierge and your record</li>
+            <li>Safety Hall + Resource Library (open June 29)</li>
+            <li>The WhatsApp porch when it opens</li>
+            <li>Founding rate, locked</li>
+            <li>Cancel anytime</li>
+          </ul>
+          <a href="#doors" class="btn btn--ghost btn--block" data-plan="membership">Start membership</a>
+        </article>
+      </div>
+      <p class="plans__note reveal">Already a member and want the Circle? Your $19 this month counts toward it, so you pay $78. Your monthly stops, and the 6 months in the Village come with it.</p>
+      <p class="plans__note plans__note--porch reveal">The WhatsApp Front Porch opens soon, a space where your Concierge says hello. Join any door and you're first on.</p>
+    </section>
+
+    <!-- Walk-in form removed: the free Charter List capture now lives in its pricing card; paid plans go straight to Stripe from the cards. -->
+
+    <!-- ===== FREE TEACHINGS / GENEROSITY (the parting treat) ===== -->
+    <section class="section gifts">
+      <div class="section__head section__head--center">
+        <span class="kicker reveal">our real teaching, free</span>
+        <h2 class="section__title reveal">Take these with you,<br>whether you join or not</h2>
+        <p class="section__intro reveal">Four ideas we practice inside Practice Village. They're yours now.</p>
+      </div>
+      <div class="gifts__grid">
+        <article class="gift reveal"><b>“Capacity is not consent.”</b><p>Being able to do it doesn't mean you owe it.</p></article>
+        <article class="gift reveal"><b>“Capable doesn't mean available.”</b><p>You can be good at something and still say no.</p></article>
+        <article class="gift reveal"><b>“Pause. Name it. Take authentic responsibility.”</b><p>The whole method, in six words.</p></article>
+        <article class="gift reveal"><b>“Asked, or assigned?”</b><p>Notice what you actually agreed to.</p></article>
+      </div>
+      <p class="gifts__note hand reveal">Take them. They're yours.</p>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a href="#top" class="footer__logo" aria-label="Practice Village home">
+          <span class="footer__mark" aria-hidden="true">
+            <svg viewBox="0 0 40 40" width="30" height="30"><circle cx="20" cy="8" r="2.8" fill="#C2542F"/><circle cx="30.4" cy="14" r="2.8" fill="#C5A880"/><circle cx="30.4" cy="26" r="2.8" fill="#C2542F"/><circle cx="20" cy="32" r="2.8" fill="#C5A880"/><circle cx="9.6" cy="26" r="2.8" fill="#C2542F"/><circle cx="9.6" cy="14" r="2.8" fill="#C5A880"/><circle cx="20" cy="20" r="5.5" fill="#C5A880"/></svg>
+          </span>
+          <span class="footer__word">Practice&nbsp;Village</span>
+        </a>
+        <p class="footer__tag">An AI-powered digital community center for women rebuilding after a major life change.</p>
+        <p class="footer__by">By <a href="https://aidedeq.org" rel="noopener">AIdedEQ</a></p>
+      </div>
+      <nav class="footer__col" aria-label="Explore">
+        <h4>Explore</h4>
+        <a href="#center">The Center</a>
+        <a href="#how">How it works</a>
+        <a href="#builders">The Builders</a>
+        <a href="#hilo">Why trust us</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <nav class="footer__col" aria-label="Join">
+        <h4>Join</h4>
+        <a href="#doors">Founding Circle · $97</a>
+        <a href="#doors">Membership · $19/mo</a>
+        <a href="#doors">Free Charter List</a>
+      </nav>
+      <div class="footer__col">
+        <h4>Connect</h4>
+        <a href="mailto:info@aidedeq.org">info@aidedeq.org</a>
+        <a href="https://aidedeq.org" rel="noopener">aidedeq.org</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© <span id="year"></span> AIdedEQ · Practice Village · <a href='/privacy'>Privacy</a> · <a href='/terms'>Terms</a></span>
+      <span class="footer__legal">An educational &amp; practice service. Not therapy, medical, legal, or financial advice.</span>
+    </div>
+  </footer>
+
+  <!-- ===== STICKY CTA ===== -->
+  <div class="sticky" id="sticky" aria-hidden="true">
+    <span class="sticky__txt">Founding cohort forming now</span>
+    <a href="#doors" class="btn btn--clay">Reserve my spot</a>
+  </div>
+
+  <!-- ===== BREATHE TOOL (a gift from HUSH) ===== -->
+  <button class="breathe-btn" id="breatheBtn" aria-label="Take a 60-second breath">
+    <span class="breathe-btn__orb" aria-hidden="true"></span>
+    <span>Breathe</span>
+  </button>
+
+  <div class="breathe" id="breathe" role="dialog" aria-modal="true" aria-label="Breathing space" aria-hidden="true">
+    <button class="breathe__close" id="breatheClose" aria-label="Close breathing space">close ✕</button>
+    <div class="breathe__orb" id="breatheOrb"><span class="breathe__word" id="breatheWord">Breathe in</span></div>
+    <p class="breathe__caption">a quiet gift from HUSH · 5 rounds, no login</p>
+    <p class="breathe__time" id="breatheTime">Round 1 of 5</p>
+    <p class="breathe__hint">shake your phone to breathe again · tap outside to close</p>
+  </div>
+
+  <script src="script.js?v=28"></script>
+</body>
+</html>
