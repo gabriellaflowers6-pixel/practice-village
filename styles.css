@@ -1198,3 +1198,9 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
   -webkit-mask-image:radial-gradient(98% 96% at 50% 54%, #000 52%, transparent 88%);
   mask-image:radial-gradient(98% 96% at 50% 54%, #000 52%, transparent 88%);
 }
+
+/* the transom fought the figure: the window is one tall pane, she stands whole */
+.window__transom{ display:none; }
+.window__figure{ width:96%; bottom:4%;
+  -webkit-mask-image:radial-gradient(96% 94% at 50% 52%, #000 55%, transparent 86%);
+  mask-image:radial-gradient(96% 94% at 50% 52%, #000 55%, transparent 86%); }

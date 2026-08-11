@@ -243,3 +243,7 @@ width, zero gap, verified 0px/0px by rect); the figure fills the glass (104% wid
 wider mask, no hard side gutters); hero columns center vertically so the section ends
 evenly (symmetric overhang, was 200px one-sided). styles v77 to v78.
 
+**Final hero fix (11:39pm):** the transom bar cut the figure's neck once she filled the
+glass; the bar lost. Window is one tall arched pane, figure whole at 96% width, head
+clear under the curve. styles v78 to v79.
+
