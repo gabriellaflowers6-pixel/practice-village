@@ -1,0 +1,33 @@
+# Practice Village — Work Log
+
+Repo created 2026-08-11 by importing the live practice-village.netlify.app deploy
+(no repo was connected to the Netlify site; source did not exist on this machine).
+Deploys: `netlify deploy --prod --dir .` to the `practice-village` Netlify site,
+only with JoYi/Gabby's OK. First commit is the as-deployed baseline; diff against
+it to see every change.
+
+---
+
+## 2026-08-11: Rebuild to match aidedeq.org canon — PENDING DEPLOY
+
+Source of truth: the 2026-08-11 aidedeq.org work + Moxie-Studio-Launch-Plan-2026-08.
+- Positioning: "a digital community center for women, built the way a YWCA serves a
+  town. Women focused, open to all" (title, meta, center section, footer).
+- Rooms: Moxie Studio (Open, flagship, no "coach" language, Feb 2027 live classes),
+  The Kitchen (PlantLuck live link), The Quiet Room (HUSH, free, live link),
+  Safety Hall (in build, microaggression tracker), The Record Room (rolling out).
+  Removed: The Circle (stale July 11 cohort), Resource Library (folded into the
+  Front Desk), The Commons (cut per JoYi).
+- Pricing: Charter List free; Membership $15/mo founding, moves to $25 once all
+  rooms open; Founding Villager $149/yr, 108 seats, locked for life. Founding
+  Circle ($97) retired. All stale June/July dates removed.
+- STRIPE: the old $97 and $19 payment links were removed from script.js CONFIG.
+  New $149/yr and $15/mo links DO NOT EXIST YET (JoYi creates them). Until pasted
+  into CONFIG.stripeVillager / CONFIG.stripeMembership, paid buttons route to the
+  Charter List capture with a "checkout opens shortly" note (verified working).
+- Alison Wagner removed (builders section + assets/alison.png); "the three of us"
+  is now "the two of us"; Moxie Studio named as the XPRIZE entry, matching the
+  submission doc.
+- script.js v28 -> v29. Verified in rendered DOM: rooms, prices, builders JoYi +
+  Gabby only, PlantLuck + HUSH links live, paid-button fallback focuses the email
+  field.

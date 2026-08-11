@@ -4,37 +4,40 @@
 
   /* ---- config: drop real links/keys here when ready ---- */
   var CONFIG = {
-    stripeCircle: "https://buy.stripe.com/5kQaEQ3q89NsbIZacZ4800c",      // $97 Founding Circle (live)
-    stripeMembership: "https://buy.stripe.com/8x2fZa1i04t8aEVbh34800d",  // $19/mo Membership (live)
-    whatsappInvite: "",    // WhatsApp porch link (channel or wa.me)
-    signupEndpoint: ""     // POST endpoint for signups
+    /* Founding Circle ($97) and $19/mo retired 2026-08-11. Paste the new Stripe
+       payment links here when JoYi creates them; until then paid buttons route
+       to the Charter List capture with a note. */
+    stripeVillager: "",     // $149/year Founding Villager (Stripe link pending)
+    stripeMembership: "",   // $15/mo Membership (Stripe link pending)
+    whatsappInvite: "",     // WhatsApp porch link (channel or wa.me)
+    signupEndpoint: ""      // POST endpoint for signups
   };
 
   /* ============ interactive Concierge demo (clears the hard layer) ============ */
   var SCRIPTS = {
     money:   { hl: ["12 tabs open", "which form?", "hold music", "the shame spiral"],
                clear: "The benefits and local programs you actually qualify for, in one list.",
-               route: "Resource Library · benefits",
+               route: "the resource library · benefits",
                save: "Money: the programs I qualify for, in one list" },
     housing: { hl: ["19 listing sites", "is it even safe?", "first + last + deposit", "do it alone"],
                clear: "Trusted local options and a safe next step, not 19 sketchy listings.",
-               route: "Safety Hall + Resource Library",
+               route: "Safety Hall + the resource library",
                save: "Housing: trusted options + a safe next step" },
     work:    { hl: ["55 and starting over", "100 applications", "the AI screener", "no callbacks"],
                clear: "A real plan to restart your income at midlife, with the tools to do it.",
-               route: "Resource Library · restart your income",
+               route: "the resource library · restart your income",
                save: "Work: a plan to restart my income at midlife" },
     family:  { hl: ["Mom needs more care", "I work full-time", "no respite", "what do I qualify for?"],
                clear: "Caregiving help and respite you didn't know existed, and women in it with you.",
-               route: "Resource Library + your circle",
+               route: "the resource library + your people",
                save: "Family: caregiving help + respite I didn't know existed" },
     stuck:   { hl: ["everything at once", "ten 'shoulds'", "no starting point", "all alone"],
                clear: "One first step, and your circle, so you're not doing it alone.",
-               route: "the Circle",
+               route: "your Concierge + the Village",
                save: "Stuck: my first step, and my circle" },
     body:    { hl: ["dismissed by doctors", "conflicting advice", "no time", "where to start?"],
                clear: "Trusted menopause info, and the questions to bring to your doctor.",
-               route: "Resource Library · health (Moxie coming)",
+               route: "the resource library · health (Moxie Studio open)",
                save: "Body: menopause info + questions for my doctor" }
   };
 
@@ -156,10 +159,13 @@
   document.querySelectorAll("[data-plan]").forEach(function (btn) {
     btn.addEventListener("click", function (ev) {
       var plan = btn.getAttribute("data-plan");
-      var link = plan === "circle" ? CONFIG.stripeCircle : plan === "membership" ? CONFIG.stripeMembership : "";
+      var link = plan === "villager" ? CONFIG.stripeVillager : plan === "membership" ? CONFIG.stripeMembership : "";
       if (link) { ev.preventDefault(); window.location.href = link; return; }
-      var radio = document.querySelector('input[name="plan"][value="' + plan + '"]');
-      if (radio) radio.checked = true;
+      /* No checkout link yet: land on the Charter List capture with a note */
+      var note = document.getElementById("charterNote");
+      if (note) note.textContent = "Founding checkout opens shortly. Join the Charter List and we will email you the moment it is live.";
+      var emailEl = document.querySelector('#charterForm input[name="email"]');
+      if (emailEl) setTimeout(function () { emailEl.focus(); }, 400);
     });
   });
 
