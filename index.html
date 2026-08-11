@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,400,50,1;9..144,500,50,1;9..144,600,60,1;9..144,700,80,1;9..144,900,100,1&family=Hanken+Grotesk:wght@400;500;600;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=63" />
+  <link rel="stylesheet" href="styles.css?v=65" />
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -54,13 +54,12 @@
         </span>
 
         <h1 class="hero__title reveal" style="--d:.05s">
-          Find your <span class="mark">next clear step</span>, and the people to take it with.
+          A&nbsp;<span class="mark">digital community center</span> for women.
         </h1>
 
         <p class="hero__lede reveal" style="--d:.16s">
-          Practice Village is a digital community and AI guide for women in transition.
-          Tell the Concierge what you're facing, get a clear path forward, and connect with
-          women who understand the part of life you're in.
+          Built the way a YWCA serves a town: many rooms, one membership, real help inside.
+          Women focused, open to all.
         </p>
 
         <div class="hero__cta reveal" style="--d:.24s">
@@ -71,38 +70,15 @@
 
       </div>
 
-      <!-- INTERACTIVE CONCIERGE DEMO -->
-      <div class="demo reveal" style="--d:.2s" id="demo">
-        <div class="demo__tape demo__tape--l" aria-hidden="true"></div>
-        <div class="demo__tape demo__tape--r" aria-hidden="true"></div>
-
-        <div class="demo__head">
-          <span class="demo__avatar" aria-hidden="true">
-            <svg viewBox="0 0 40 40" width="30" height="30"><circle cx="20" cy="8" r="2.8" fill="#C2542F"/><circle cx="30.4" cy="14" r="2.8" fill="#C5A880"/><circle cx="30.4" cy="26" r="2.8" fill="#C2542F"/><circle cx="20" cy="32" r="2.8" fill="#C5A880"/><circle cx="9.6" cy="26" r="2.8" fill="#C2542F"/><circle cx="9.6" cy="14" r="2.8" fill="#C5A880"/><circle cx="20" cy="20" r="5.5" fill="#1A1A4E"/></svg>
-          </span>
-          <div>
-            <strong>Your Concierge</strong>
-            <span class="demo__live"><i></i> live demo · tap one, see your next step</span>
-          </div>
-        </div>
-
-        <div class="demo__body" id="demoBody">
-          <p class="demo__q">How may we help you?</p>
-          <div class="demo__chips" id="demoChips">
-            <button data-k="money">Money</button>
-            <button data-k="housing">Housing</button>
-            <button data-k="work">Work</button>
-            <button data-k="family">Family</button>
-            <button data-k="stuck">I feel stuck</button>
-            <button data-k="body">My body</button>
-          </div>
-        </div>
-
-        <div class="demo__layer" id="demoLayer">
-          <span class="demo__layerlabel">Your record · yours to keep</span>
-          <div class="demo__stack" id="demoStack" aria-live="polite">
-            <span class="demo__empty">your Concierge saves nothing unless you choose</span>
-          </div>
+      <!-- THE STUDIO WINDOW: the fitness room you see from the entrance -->
+      <div class="window reveal" style="--d:.2s">
+        <a class="window__frame" href="/moxie-studio/" aria-label="Look into Moxie Studio, the flagship room">
+          <img src="moxie-studio/assets/mirror-reads-real.png" alt="Through the window: Moxie Studio's mirror view, a glowing outline holding warrior two" width="630" height="593" />
+        </a>
+        <div class="window__plaque">
+          <span class="window__room">MOXIE STUDIO</span>
+          <span class="window__meta">the flagship room · open</span>
+          <a class="window__peek" href="/moxie-studio/">Peek inside →</a>
         </div>
       </div>
     </section>
@@ -135,6 +111,42 @@
       </div>
 
       <p class="hardlayer__bridge reveal">Practice Village helps you sort the mess.</p>
+
+      <!-- The Front Desk in action -->
+      <div class="demo demo--inline reveal" style="--d:.2s" id="demo">
+        <div class="demo__tape demo__tape--l" aria-hidden="true"></div>
+        <div class="demo__tape demo__tape--r" aria-hidden="true"></div>
+
+        <div class="demo__head">
+          <span class="demo__avatar" aria-hidden="true">
+            <svg viewBox="0 0 40 40" width="30" height="30"><circle cx="20" cy="8" r="2.8" fill="#C2542F"/><circle cx="30.4" cy="14" r="2.8" fill="#C5A880"/><circle cx="30.4" cy="26" r="2.8" fill="#C2542F"/><circle cx="20" cy="32" r="2.8" fill="#C5A880"/><circle cx="9.6" cy="26" r="2.8" fill="#C2542F"/><circle cx="9.6" cy="14" r="2.8" fill="#C5A880"/><circle cx="20" cy="20" r="5.5" fill="#1A1A4E"/></svg>
+          </span>
+          <div>
+            <strong>Your Concierge</strong>
+            <span class="demo__live"><i></i> live demo · tap one, see your next step</span>
+          </div>
+        </div>
+
+        <div class="demo__body" id="demoBody">
+          <p class="demo__q">How may we help you?</p>
+          <div class="demo__chips" id="demoChips">
+            <button data-k="money">Money</button>
+            <button data-k="housing">Housing</button>
+            <button data-k="work">Work</button>
+            <button data-k="family">Family</button>
+            <button data-k="stuck">I feel stuck</button>
+            <button data-k="body">My body</button>
+          </div>
+        </div>
+
+        <div class="demo__layer" id="demoLayer">
+          <span class="demo__layerlabel">Your record · yours to keep</span>
+          <div class="demo__stack" id="demoStack" aria-live="polite">
+            <span class="demo__empty">your Concierge saves nothing unless you choose</span>
+          </div>
+        </div>
+      </div>
+
 
       <div class="hardlayer__split">
         <article class="splitcard reveal">
@@ -206,7 +218,6 @@
         </svg>
         <span class="kicker reveal">your digital community center</span>
         <h2 class="section__title center__title reveal">One Center · Many Rooms for Rebuilding</h2>
-        <p class="section__intro center__sub reveal">Practice Village is a digital community center for women, built the way a YWCA serves a town. Women focused, open to all.</p>
         <p class="center__tagline reveal">One front desk. Many rooms. Real help inside.</p>
       </div>
 

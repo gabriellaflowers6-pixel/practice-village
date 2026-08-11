@@ -123,3 +123,19 @@ canon og:title, 3 builder paragraphs, Studio who-cards/week-list/room-chips/comp
 all serving, 3 CTAs to /#doors. aidedeq 26fae2e..46e93ef pushed, ready: v60, village
 grid gone, PV store card gone, "Tools that stand on their own" + one-line room list live.
 
+## 2026-08-11 (late night): The Studio Window hero — PENDING DEPLOY
+
+JoYi's redesign, talked through first: the old hero led with benefit copy and the
+Concierge chat demo, so visitors could not tell what the building was. New hero =
+walking up to the community center. Left: identity stated flat out ("A digital community
+center for women." + YWCA line + CTAs). Right: an arched window into Moxie Studio (warm
+chocolate interior, the mirror's warrior-two outline glowing through the glass) with a
+brass room plaque: MOXIE STUDIO · the flagship room · open · Peek inside -> /moxie-studio/.
+The Concierge demo moved to "sort the mess" where it demonstrates the claim (see the
+building, see the fitness room through the glass, then meet the front desk). The Center
+section no longer repeats the YWCA sentence. Fixed in the pass: lone-"A" headline break
+(nbsp), and a real mobile clip where the window's fixed padding forced the hero wider
+than the phone (hero children min-width:0, frame img max-width:100%). Verified at 1280
+and 375 by DOM rects: nothing clipped, order chip > h1 > lede > CTAs > window > plaque.
+styles v63 to v65.
+
