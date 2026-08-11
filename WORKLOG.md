@@ -257,3 +257,20 @@ across the glass. Fixed in the source PNG, not CSS: alpha fade over the top 22% 
 curve) and 6% side fades, so the room dissolves into the arch shadow with no seam.
 styles v80 to v81 (cache-bust only).
 
+## SESSION CLOSE 2026-08-11 (~midnight)
+
+Repo now lives at github.com/gabriellaflowers6-pixel/practice-village (private,
+joyirhyss-tech invited with write). All work committed and pushed through the
+cache-bust commit.
+
+DEPLOY STATE: the live site (practice-village.netlify.app) is still the 10:41pm deploy
+(6a7aecba, flip-fix). Everything after — one-door checkout logic, Studio page review,
+Village review, email field, window hero with the Moxie sign, Concierge unit with
+researched questions, six rooms (Your PIL + Cur.AI.ted), RAW block, one amber/navy mark,
+all of JoYi's punch-list rounds — is committed and on GitHub but NOT DEPLOYED. Deploy
+with: netlify deploy --prod --dir . --site aae16881-7774-4d75-a7f2-6065e8c2e45d
+(only with an explicit OK).
+
+Local preview: python3 -m http.server 8742 from the repo root (server was stopped at
+close). NEXT-SESSION.md has the handoff.
+
