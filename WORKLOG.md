@@ -38,3 +38,21 @@ Source of truth: the 2026-08-11 aidedeq.org work + Moxie-Studio-Launch-Plan-2026
 - script.js v28 -> v29. Verified in rendered DOM: rooms, prices, builders JoYi +
   Gabby only, PlantLuck + HUSH links live, paid-button fallback focuses the email
   field.
+
+## 2026-08-11 (later): Moxie Studio landing joins the Village — PENDING DEPLOY
+
+Discovery: moxiestudio.netlify.app is the live-class JOIN screen (first name + class
+code), not a landing page. The sales page (the bridge, canon per JoYi) was never
+deployed publicly. Per JoYi: "these cannot be stand alone," and the committed language
+is $15 up to $25, 108 seats, everywhere.
+
+Done: the bridge page now lives at /moxie-studio/ on this site (copied from
+~/dev/movemirror/landing/moxie-studio-village-bridge.html + its assets). Fixed while
+staging: $19 → $15 "once all rooms are open"; Founding Circle $97 line deleted (that
+Stripe link was still live in the page); room list and grid now canonical (Den → The
+Quiet Room/HUSH free, The Commons → Safety Hall + tracker); all
+practice-village.netlify.app absolute links now relative; nav gains "Practice Village
+home"; privacy link fixed. The page's own empty-Stripe fallback (scroll to its Charter
+capture) kept; STRIPE_ANNUAL_LINK / STRIPE_MONTHLY_LINK in the inline script join the
+FLIP-AT-STRIPE list. Homepage Moxie Studio room card now links to /moxie-studio/
+instead of the join screen; same fix queued on aidedeq (unpushed).

@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Moxie Studio: yoga and meditation with a virtual personal teacher, nobody watching</title>
+<meta name="description" content="Moxie Studio teaches yoga and meditation from zero. A teacher models every pose, the studio checks your form gently, and your video stays on your machine. A room in Practice Village, the digital community center for women." />
+<meta property="og:title" content="Moxie Studio: a virtual personal teacher, nobody watching" />
+<meta property="og:description" content="Yoga and meditation from zero, at home, at your own pace, with a virtual personal teacher. No class, no audience, nothing recorded. 108 founding seats." />
+<meta property="og:type" content="website" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%2323150E'/%3E%3Ccircle cx='16' cy='16' r='8' fill='none' stroke='%23C9A45C' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%23C9A45C'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Karla:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#23150E;          /* deep chocolate */
+    --panel:#2E1D12;
+    --cream:#F6EEDF;
+    --cream-2:#EFE2CB;
+    --cream-ink:#2A1910;
+    --gold:#C9A45C;
+    --gold-bright:#E2BE74;
+    --gold-glow:rgba(216,172,92,.32);
+    --line:rgba(201,164,92,.35);
+    --line-dark:rgba(42,25,16,.18);
+    --max:1120px;
+    --serif:"Cormorant Garamond",Georgia,serif;
+    --sans:"Karla",-apple-system,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--sans);font-size:18px;line-height:1.65;
+    color:var(--cream-ink);background:var(--cream);
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%;display:block}
+  a{color:inherit}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+  h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.12;letter-spacing:.005em}
+  .kicker{
+    font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--gold);
+  }
+  .grain{position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.05;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");}
+
+  /* ===== reveal ===== */
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none}
+    *{animation:none!important}
+    html{scroll-behavior:auto}
+  }
+
+  /* ===== nav ===== */
+  .nav{position:sticky;top:0;z-index:40;background:rgba(35,21,14,.92);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line)}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .nav__brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--cream)}
+  .nav__brand img{width:34px;height:34px;border-radius:50%}
+  .nav__brand span{font-family:var(--serif);font-size:21px;font-weight:600}
+  .nav__links{display:flex;gap:26px;font-size:15px}
+  .nav__links a{color:var(--cream);opacity:.85;text-decoration:none}
+  .nav__links a:hover,.nav__links a:focus{opacity:1;color:var(--gold-bright)}
+  .nav__cta{font-size:15px}
+  @media(max-width:820px){.nav__links{display:none}}
+
+  /* ===== buttons ===== */
+  .btn{display:inline-block;font-family:var(--sans);font-weight:700;font-size:17px;
+    padding:15px 30px;border-radius:999px;text-decoration:none;cursor:pointer;border:0;
+    transition:transform .15s ease,box-shadow .15s ease}
+  .btn--gold{background:var(--gold);color:var(--ink);box-shadow:0 0 0 0 var(--gold-glow)}
+  .btn--gold:hover,.btn--gold:focus{transform:translateY(-1px);box-shadow:0 6px 28px var(--gold-glow)}
+  .btn--ghost{background:transparent;color:var(--cream);border:1.5px solid var(--line)}
+  .btn--ghost:hover,.btn--ghost:focus{border-color:var(--gold);color:var(--gold-bright)}
+  .btn--ghost.on-cream{color:var(--cream-ink);border-color:var(--line-dark)}
+  :focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:4px}
+
+  /* ===== hero ===== */
+  .hero{background:radial-gradient(1200px 700px at 70% -10%,#3A2413 0%,var(--ink) 60%);
+    color:var(--cream);position:relative;overflow:hidden}
+  .hero .wrap{display:grid;grid-template-columns:1fr 1fr;column-gap:72px;align-items:center;
+    padding-top:72px;padding-bottom:72px}
+  .hero__copy{display:contents}
+  .hero h1{font-size:clamp(27px,3vw,36px);line-height:1.08;text-align:center;max-width:none;margin-bottom:32px;grid-column:1/-1}
+  .hero__promise{display:block;white-space:nowrap;letter-spacing:-.01em}
+  .hero h1 em{display:block;font-style:italic;color:var(--gold-bright);margin-top:.18em}
+  .hero__lede{font-size:18px;line-height:1.55;max-width:30em;opacity:.92;margin-bottom:30px;grid-column:1}
+  .hero__ctas{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-bottom:14px;grid-column:1}
+  .hero__seats{font-size:15px;color:var(--gold-bright);letter-spacing:.04em}
+  /* the breathing om */
+  .om{position:relative;top:-8px;display:grid;place-items:center;min-height:360px;grid-column:2;grid-row:2/4}
+  .om__glow{position:absolute;width:340px;height:340px;border-radius:50%;
+    background:radial-gradient(circle,var(--gold-glow) 0%,rgba(216,172,92,.10) 45%,transparent 70%);
+    animation:breathe 7s ease-in-out infinite}
+  .om__ring{position:absolute;width:280px;height:280px;border-radius:50%;
+    border:1px solid var(--line);animation:breathe 7s ease-in-out infinite}
+  .om__logo{position:relative;width:220px;height:220px;border-radius:50%;object-fit:cover;
+    box-shadow:0 0 80px var(--gold-glow)}
+  @keyframes breathe{0%,100%{transform:scale(1);opacity:.75}50%{transform:scale(1.12);opacity:1}}
+  @media(max-width:900px){.hero .wrap{display:block;padding-top:64px;padding-bottom:72px}
+    .hero__copy{display:block}.hero h1{font-size:clamp(38px,10vw,46px)}.hero__promise{white-space:normal;letter-spacing:normal}
+    .om{top:0;min-height:320px}.om__logo{width:190px;height:190px}}
+
+  /* ===== what you are joining ===== */
+  .village-intro{background:var(--cream-2)}
+  .village-intro .wrap{max-width:1040px}
+  .village-intro__grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+  .village-intro h2{font-size:clamp(34px,4vw,48px);line-height:1.12;color:var(--cream-ink)}
+  .village-intro__copy{border-left:3px solid var(--gold);padding-left:28px}
+  .village-intro__copy p{font-size:18px;margin-bottom:18px}
+  .village-intro__copy strong{color:#7A4A22}
+  .village-intro__copy .btn{margin-top:6px}
+  @media(max-width:800px){.village-intro__grid{grid-template-columns:1fr;gap:28px}
+    .village-intro__copy{padding-left:20px}}
+
+  /* ===== sections ===== */
+  section{padding:88px 0}
+
+  /* ===== ipad scroll (ported from 21st.dev container-scroll-animation, vanilla) ===== */
+  .ipad{padding:0}
+  .ipad__space{min-height:110vh;display:flex;align-items:center;justify-content:center;padding:24px}
+  .ipad__persp{perspective:820px;width:100%;max-width:960px}
+  .ipad__head{text-align:center;margin-bottom:34px;will-change:transform}
+  .ipad__head h2{font-size:clamp(28px,4.2vw,44px);color:var(--cream-ink)}
+  .ipad__card{
+    margin:0 auto;width:100%;height:min(64vw,540px);
+    border:4px solid var(--line);border-radius:30px;padding:14px;
+    background:var(--panel);will-change:transform;
+    box-shadow:0 0 #0000004d,0 9px 20px #0000004a,0 37px 37px #00000042,
+      0 84px 50px #00000026,0 149px 60px #0000000a,0 233px 65px #00000003;
+  }
+  .ipad__screen{
+    height:100%;width:100%;overflow:hidden;border-radius:18px;background:var(--ink);
+    display:flex;align-items:center;justify-content:center;position:relative;
+  }
+  .ipad__screen img{max-height:88%;max-width:88%;object-fit:contain}
+  .ipad__cap{
+    position:absolute;left:50%;bottom:14px;transform:translateX(-50%);white-space:nowrap;
+    font-size:13px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--gold-bright);opacity:.85;
+  }
+  @media (prefers-reduced-motion:reduce){
+    .ipad__card,.ipad__head{transform:none!important}
+  }
+  .sec-head{max-width:720px;margin-bottom:44px}
+  .sec-head h2{font-size:clamp(32px,4vw,46px);margin:10px 0 16px}
+  .sec-head p{font-size:19px}
+
+  /* who for */
+  .who{background:var(--cream)}
+  .who__big{font-family:var(--serif);font-size:clamp(24px,3vw,33px);line-height:1.45;
+    max-width:30em;margin-bottom:28px}
+  .who__big strong{color:#7A4A22;font-weight:600}
+  .who__after{font-size:19px;max-width:36em}
+
+  /* practice benefits */
+  .practice{background:var(--ink);color:var(--cream)}
+  .practice .sec-head h2{color:var(--cream)}
+  .bene{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-bottom:44px}
+  .bene__card{border:1px solid var(--line);border-radius:18px;padding:30px 26px;
+    background:linear-gradient(160deg,rgba(216,172,92,.06),transparent 55%)}
+  .posefig{display:block;filter:drop-shadow(0 0 14px rgba(216,172,92,.30))}
+  .pw{fill:#F0E4CC}
+  .pw-s{stroke:#F0E4CC;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .pw-arc{stroke:#F0E4CC;fill:none;stroke-width:2;opacity:.55}
+  .posefig--ink{filter:none}
+  .posefig--ink .pw{fill:#3E2414}
+  .posefig--ink .pw-s{stroke:#3E2414}
+  .posefig--ink .pw-arc{stroke:#3E2414;opacity:.5}
+  .bene__card .posefig-img{width:116px;height:116px;border-radius:18px;margin-bottom:18px;
+    box-shadow:0 6px 24px rgba(0,0,0,.35)}
+  .bene__card h3{font-size:26px;color:var(--gold-bright);margin-bottom:10px}
+  .bene__card p{font-size:16.5px;opacity:.92}
+  .practice__how{border-top:1px solid var(--line);padding-top:30px;display:grid;
+    grid-template-columns:1fr 1fr;gap:32px}
+  .practice__how p{font-size:17.5px;opacity:.92}
+  .practice__how .lead{font-family:var(--serif);font-size:23px;line-height:1.4;color:var(--gold-bright)}
+  @media(max-width:900px){.bene{grid-template-columns:1fr}.practice__how{grid-template-columns:1fr}}
+
+  /* mirror */
+  .mirror{background:var(--cream-2)}
+  .mirror .wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+  .mirror__fig{position:relative;background:#2A1A0F;border-radius:20px;padding:26px;
+    display:grid;place-items:center;min-height:360px;overflow:hidden}
+  .mirror__fig img{width:100%;max-width:400px;height:auto;border-radius:14px}
+  .mirror__fig figcaption{margin-top:18px;font-size:14.5px;color:var(--gold-bright);
+    letter-spacing:.06em;text-align:center}
+  .chips{display:grid;gap:14px;margin-top:30px}
+  .chip{display:flex;gap:14px;align-items:flex-start;background:var(--cream);
+    border:1px solid var(--line-dark);border-radius:14px;padding:16px 18px;font-size:16.5px}
+  .chip::before{content:"";flex:0 0 10px;height:10px;border-radius:50%;background:var(--gold);margin-top:7px}
+  @media(max-width:900px){.mirror .wrap{grid-template-columns:1fr}}
+
+  /* bott om */
+  .bott{background:var(--cream)}
+  .bott .wrap{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:center}
+  .bott__img{border-radius:50%;width:min(300px,80%);margin:0 auto;box-shadow:0 20px 60px rgba(42,25,16,.25)}
+  .bott blockquote{font-family:var(--serif);font-style:italic;font-size:27px;line-height:1.4;
+    color:#7A4A22;border-left:3px solid var(--gold);padding-left:22px;margin-top:26px}
+  @media(max-width:900px){.bott .wrap{grid-template-columns:1fr}}
+
+  /* two doors */
+  .doors{background:var(--ink);color:var(--cream)}
+  .doors .sec-head h2{color:var(--cream)}
+  .doors__grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-bottom:40px}
+  .door{border:1px solid var(--line);border-radius:20px;padding:34px 30px;position:relative}
+  .door__tag{font-size:12.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--ink);background:var(--gold);border-radius:999px;padding:5px 14px;
+    position:absolute;top:-14px;left:26px}
+  .door h3{font-size:28px;color:var(--gold-bright);margin-bottom:12px}
+  .door p{font-size:16.5px;opacity:.92}
+  .door .poses{display:flex;gap:14px;margin-top:22px;flex-wrap:wrap}
+  .door .poses .posefig{width:48px;height:48px}
+  .commit{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;border-top:1px solid var(--line);padding-top:34px}
+  .commit p{font-size:16px;opacity:.92}
+  .commit strong{display:block;font-family:var(--serif);font-weight:600;font-size:20px;
+    color:var(--gold-bright);margin-bottom:6px}
+  .doors__closer{margin-top:40px;font-family:var(--serif);font-style:italic;font-size:24px;
+    color:var(--gold-bright);text-align:center}
+  @media(max-width:900px){.doors__grid,.commit{grid-template-columns:1fr}}
+
+  /* wind down */
+  .wind{background:linear-gradient(180deg,var(--cream-2) 0%,#E7D3AE 100%)}
+  .wind .wrap{display:grid;grid-template-columns:1fr .6fr;gap:48px;align-items:center}
+  .wind .posefig{width:170px;margin:0 auto}
+  @media(max-width:900px){.wind .wrap{grid-template-columns:1fr}.wind img{width:110px}}
+
+  /* village */
+  .village{background:var(--cream)}
+  .rooms{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .room{border:1px solid var(--line-dark);border-radius:16px;padding:24px;background:#FBF6EA}
+  .room h3{font-size:22px;margin-bottom:6px}
+  .room p{font-size:15.5px;opacity:.85}
+  .room__badge{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.1em;
+    text-transform:uppercase;border-radius:999px;padding:3px 11px;margin-bottom:12px}
+  .room__badge--open{background:#DFF0DC;color:#295C2E}
+  .room__badge--soon{background:#F3E4C4;color:#7A5A1E}
+  .village__doorway{margin-top:34px;text-align:center;font-family:var(--serif);font-size:24px}
+  .village__doorway a{color:#7A4A22;text-underline-offset:5px}
+  .village__doorway a:hover,.village__doorway a:focus{color:var(--cream-ink)}
+  @media(max-width:900px){.rooms{grid-template-columns:1fr 1fr}}
+  @media(max-width:620px){.rooms{grid-template-columns:1fr}}
+
+  /* live */
+  .live{background:var(--ink);color:var(--cream);position:relative;overflow:hidden}
+  .live::after{content:"";position:absolute;left:0;right:0;bottom:0;height:180px;
+    background:radial-gradient(60% 140px at 50% 100%,var(--gold-glow),transparent 70%)}
+  .live .wrap{position:relative;z-index:1;text-align:center;max-width:760px}
+  .live .kicker{margin-bottom:14px;display:block}
+  .live h2{font-size:clamp(32px,4.4vw,48px);color:var(--cream);margin-bottom:8px}
+  .live__date{font-family:var(--serif);font-style:italic;font-size:24px;color:var(--gold-bright);margin-bottom:24px}
+  .live p{font-size:18.5px;opacity:.92;max-width:36em;margin:0 auto 14px}
+
+  /* offer */
+  .offer{background:var(--cream-2)}
+  .offer .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:start}
+  .ticket{background:var(--ink);color:var(--cream);border-radius:22px;padding:38px 34px;
+    box-shadow:0 24px 70px rgba(42,25,16,.35);position:sticky;top:88px}
+  .ticket h3{font-size:30px;color:var(--gold-bright)}
+  .ticket__price{font-family:var(--serif);font-size:56px;font-weight:600;margin:8px 0 2px}
+  .ticket__price span{font-size:20px;font-family:var(--sans);font-weight:400;opacity:.8}
+  .ticket__lock{font-size:15px;color:var(--gold-bright);margin-bottom:20px}
+  .ticket__scope{margin:0 0 20px;padding:14px 16px;border:1px solid var(--line);
+    border-radius:12px;background:rgba(216,172,92,.08);font-size:16px;line-height:1.5}
+  .ticket ul{list-style:none;margin:0 0 26px}
+  .ticket li{padding:9px 0 9px 26px;position:relative;font-size:16px;border-bottom:1px solid rgba(246,238,223,.08)}
+  .ticket li::before{content:"";position:absolute;left:2px;top:16px;width:9px;height:9px;
+    border-radius:50%;background:var(--gold)}
+  .ticket__seats{font-size:15px;letter-spacing:.05em;color:var(--gold-bright);margin:16px 0 6px}
+  .ticket__bar{height:6px;border-radius:99px;background:rgba(246,238,223,.15);overflow:hidden;margin-bottom:20px}
+  .ticket__bar i{display:block;height:100%;width:0%;background:var(--gold);border-radius:99px;transition:width 1.2s ease}
+  .ticket .btn{width:100%;text-align:center}
+  .ticket__alt{font-size:14.5px;opacity:.8;text-align:center;margin-top:14px}
+  .ticket__alt a{color:var(--gold-bright)}
+  .offer__copy h2{font-size:clamp(30px,3.6vw,42px);margin:8px 0 18px}
+  .offer__copy p{margin-bottom:16px;font-size:17.5px}
+  .offer__policy{border-left:3px solid var(--gold);background:var(--cream);
+    border-radius:0 14px 14px 0;padding:18px 20px;font-size:16.5px;margin:22px 0}
+  @media(max-width:960px){.offer .wrap{grid-template-columns:1fr}.ticket{position:static}}
+
+  /* charter */
+  .charter{background:var(--cream);padding-top:0}
+  .charter__box{border:1.5px dashed var(--line-dark);border-radius:18px;padding:30px;
+    display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center}
+  .charter__box p{font-size:16.5px;max-width:34em}
+  .charter form{display:flex;gap:10px;flex-wrap:wrap}
+  .charter input[type=email]{font-family:var(--sans);font-size:16px;padding:13px 16px;
+    border:1.5px solid var(--line-dark);border-radius:999px;background:#FBF6EA;min-width:240px}
+  @media(max-width:820px){.charter__box{grid-template-columns:1fr}}
+
+  /* faq */
+  .faq{background:var(--cream)}
+  .faq details{border-bottom:1px solid var(--line-dark);padding:20px 0}
+  .faq summary{font-family:var(--serif);font-size:22px;font-weight:600;cursor:pointer;
+    list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"+";font-family:var(--sans);font-size:24px;color:var(--gold);
+    flex:0 0 auto;transition:transform .2s ease}
+  .faq details[open] summary::after{transform:rotate(45deg)}
+  .faq details p{padding-top:12px;max-width:44em;font-size:17px}
+
+  /* footer */
+  footer{background:var(--ink);color:var(--cream);padding:56px 0;font-size:15px}
+  footer .wrap{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
+  footer a{color:var(--gold-bright)}
+  .foot__tag{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--gold-bright)}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="nav__brand" href="#top" aria-label="Moxie Studio home">
+      <img src="assets/zen-bott-om-logo.png" alt="" width="34" height="34" />
+      <span>Moxie&nbsp;Studio</span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#practice">The practice</a>
+      <a href="#mirror">The mirror</a>
+      <a href="#bottom">Bott Om</a>
+      <a href="#village">The Village</a>
+      <a href="/">Practice Village home</a>
+      <a href="#live">Live classes</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="btn btn--gold nav__cta" href="#offer">Founding seat · $149</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero__copy">
+        <h1 class="reveal"><span class="hero__promise">Learn yoga and meditation from zero, with virtual guidance at every step.</span> <em>Just you at your own pace.</em></h1>
+        <p class="hero__lede reveal">Moxie Studio teaches yoga and meditation from zero. Follow every pose on screen at your own pace, wobbles and all. No class, no audience, and no person ever sees you practice. The guidance runs on your own machine, and nothing is recorded or uploaded.</p>
+        <div class="hero__ctas reveal">
+          <a class="btn btn--gold" href="#offer">See founding membership · $149</a>
+          <span class="hero__seats"><strong id="seatsLeftHero">108</strong> of 108 founding seats remain</span>
+        </div>
+      </div>
+      <div class="om reveal" aria-hidden="true">
+        <div class="om__glow"></div>
+        <div class="om__ring"></div>
+        <img class="om__logo" src="assets/zen-bott-om-logo.png" alt="" />
+      </div>
+    </div>
+  </section>
+
+  <!-- IPAD SCROLL: the studio in your hands -->
+  <section class="ipad" id="glimpse" aria-label="A look inside the studio">
+    <div class="ipad__space">
+      <div class="ipad__persp">
+        <div class="ipad__head" data-ipad-head>
+          <span class="kicker">Inside the studio</span>
+        </div>
+        <div class="ipad__card" data-ipad-card>
+          <div class="ipad__screen">
+            <img src="assets/mirror-reads-real.png" alt="The mirror's view inside the studio: a glowing outline of a practitioner in warrior two, front knee highlighted green as it lands in place" loading="lazy" />
+            <span class="ipad__cap">your outline, on your device · never a recording</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT YOU ARE JOINING -->
+  <section class="village-intro" id="village-intro">
+    <div class="wrap">
+      <span class="kicker reveal">What you're joining</span>
+      <div class="village-intro__grid">
+        <h2 class="reveal">Moxie Studio is your yoga room inside a whole community center.</h2>
+        <div class="village-intro__copy reveal">
+          <p>Practice Village is a digital community center for women, built online the way a YWCA serves a town. Moxie Studio is its flagship room.</p>
+          <p><strong>Come for yoga and meditation.</strong> Your membership opens the whole Village, including the Front Desk, the Kitchen, the free Quiet Room, Safety Hall, and the Record Room.</p>
+          <a class="btn btn--ghost on-cream" href="/">Walk through Practice Village</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHO -->
+  <section class="who" id="who">
+    <div class="wrap">
+      <span class="kicker reveal">Who this is for</span>
+      <div class="sec-head"><h2 class="reveal">Start here if this sounds like your year.</h2></div>
+      <p class="who__big reveal">Your sleep, joints, and energy changed with perimenopause, and most fitness apps still train you like you're 25. The layoff took the job, the routine, and the gym budget in the same week. You haven't taken a class of any kind in years, and leaving the house for one feels like a lot. Or you tried a studio and spent the whole hour <strong>watching yourself be watched</strong>.</p>
+      <p class="who__after reveal">Moxie Studio is a private room with a patient teacher. You learn the poses, the purpose of each one, and the breath that connects them, at home, at your pace, with nobody looking except a mirror you control.</p>
+    </div>
+  </section>
+
+  <!-- PRACTICE -->
+  <section class="practice" id="practice">
+    <div class="wrap">
+      <span class="kicker reveal">What the practice does</span>
+      <div class="sec-head"><h2 class="reveal">Yoga and meditation, one practice. Here is what it gives you.</h2></div>
+      <div class="bene">
+        <article class="bene__card reveal">
+          <img class="posefig-img" src="assets/woman-physical.png" alt="A Black woman with a full afro holding warrior two pose" width="512" height="512" />
+          <h3>Physical</h3>
+          <p>Strength, balance, and steadier sleep. Weight-bearing poses support your bones, and that matters now: women lose up to 20 percent of bone density in the five to seven years after menopause. Breath-led core work supports the pelvic floor, which changes for about half of us. Every pose is layered so your joints set the pace.</p>
+        </article>
+        <article class="bene__card reveal">
+          <img class="posefig-img" src="assets/woman-emotional.png" alt="A woman with long locs seated cross-legged in meditation" width="512" height="512" />
+          <h3>Emotional</h3>
+          <p>A calmer baseline. Fifteen minutes of practice is a working tool for a stressful day, and knowing a pose beats copying one: confidence comes from understanding what your body is doing and why.</p>
+        </article>
+        <article class="bene__card reveal">
+          <img class="posefig-img" src="assets/woman-social.png" alt="A Black woman with braided hair balancing in tree pose" width="512" height="512" />
+          <h3>Social</h3>
+          <p>A community center of women, open now. Live classes open in February, and you walk in already knowing the practice. Isolation is a health risk on its own; this is a room out of the house that starts at home.</p>
+        </article>
+      </div>
+      <div class="practice__how">
+        <p class="lead reveal">Every pose is cued from the breath. The meditation trains that same breath. Move, then sit. One practice, two rooms, one teacher.</p>
+        <p class="reveal">The studies on yoga, mindfulness, menopausal sleep and mood are public and linked in the footer. The faster proof is fifteen minutes on the mat tonight.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MIRROR -->
+  <section class="mirror" id="mirror">
+    <div class="wrap">
+      <figure class="mirror__fig reveal">
+        <img src="assets/mirror-reads-real.png" alt="The mirror's real view: a warm glowing outline of a practitioner in warrior two, the front knee highlighted green as it lands in place" width="630" height="593" />
+        <figcaption>This is everything the mirror reads.</figcaption>
+      </figure>
+      <div>
+        <span class="kicker reveal">The mirror</span>
+        <div class="sec-head">
+          <h2 class="reveal">The studio sees you. It never records you.</h2>
+          <p class="reveal">Point your camera at your mat. The mirror reads your body as a simple glowing outline, compares it to the teacher's, and speaks up the way a good teacher does: "let the shoulders come down," "you can let the breath move again." The outline is all it reads, and it runs and stays on your own computer. Video never leaves your machine. The camera is optional every day; the whole practice works with it off.</p>
+        </div>
+        <div class="chips">
+          <p class="chip reveal">Runs on your device. Zero video uploaded, zero video stored.</p>
+          <p class="chip reveal">Guidance arrives one cue at a time, spoken, in plain words, and always as words: nobody adjusts your body here.</p>
+          <p class="chip reveal">Your progress is measured one way: poses you know.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOTT OM -->
+  <section class="bott" id="bottom">
+    <div class="wrap">
+      <img class="bott__img reveal" src="assets/bott-om-canonical.png" alt="Bott Om herself: seen from behind with her full afro, seated in lotus, hands in mudra" />
+      <div>
+        <span class="kicker reveal">Meet Bott Om</span>
+        <div class="sec-head">
+          <h2 class="reveal">Your teacher is modeled on a real one.</h2>
+          <p class="reveal">Bott Om is the woman on our logo, built from JoYi's own movement and recorded in JoYi's own voice. She gets into every position with you: sitting, standing, lying down, holding. She teaches each pose from the ground up, feet first, because the base creates the action and the action creates the shape. When your attention wanders, she says what a teacher in the room would say: wandering is normal, returning is the practice.</p>
+        </div>
+        <blockquote class="reveal">"Unclench and sit with us. You can let this be simple."</blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- TWO DOORS -->
+  <section class="doors" id="begin">
+    <div class="wrap">
+      <span class="kicker reveal">Two ways to begin</span>
+      <div class="sec-head">
+        <h2 class="reveal">Start at zero, or start where you are.</h2>
+        <p class="reveal">Beginner means different things. Some of us know absolutely nothing and want to be taught. Some of us know some poses, half-remember a class from years ago, and want easy practice without a curriculum in the way. The studio holds both doors open, and you can walk between them any day.</p>
+      </div>
+      <div class="doors__grid">
+        <article class="door reveal">
+          <span class="door__tag">Door one</span>
+          <h3>The First 30 Days</h3>
+          <p>Brand new? One pose a day, 10 to 15 minutes a session, always the same shape: arrive, revisit yesterday's pose from memory, learn one new pose in layers, hold it with the mirror watching if you invite it, one steady breath to close. Week one is ground and breath. Week two is the floor. Week three is standing poses. Week four links what you know into a full 20-minute Hatha sequence. Know a pose already? Show the mirror and the course moves at your speed.</p>
+        </article>
+        <article class="door reveal">
+          <span class="door__tag">Door two</span>
+          <h3>Simple Sequences</h3>
+          <p>Been on a mat before? Guided beginner sequences are open from day one: a gentle morning stretch, an easy standing flow, a rest practice, the evening wind-down, and short sits from one minute to twenty. Bott Om checks in, points you toward what fits today, and gets out of your way.</p>
+        </article>
+      </div>
+      <div class="commit">
+        <p class="reveal"><strong>Show up, it counts.</strong> Days advance when you show up. Miss four days and day 12 waits for you, exactly where you left it.</p>
+        <p class="reveal"><strong>The easier version is the real version.</strong> Knees down, blocks, wall: all of it counts as the pose.</p>
+        <p class="reveal"><strong>Your record grows.</strong> Every practice ends in your record: the growing list of poses you know, yours to keep, yours to export.</p>
+      </div>
+      <p class="doors__closer reveal">This is practice. This is enough.</p>
+    </div>
+  </section>
+
+  <!-- WIND DOWN -->
+  <section class="wind" id="winddown">
+    <div class="wrap">
+      <div>
+        <span class="kicker reveal">The evening wind-down</span>
+        <div class="sec-head">
+          <h2 class="reveal">The body scan that ends the day.</h2>
+          <p class="reveal">JoYi has prescribed the same practice to parents, teens, and beginners for years: lie down, squeeze and release, let the day end on purpose. It ships with the studio in two recordings, one for you alone and one made to play out loud with kids in the room. Press play tonight.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VILLAGE -->
+  <section class="village" id="village">
+    <div class="wrap">
+      <span class="kicker reveal">The Village</span>
+      <div class="sec-head">
+        <h2 class="reveal">One membership. A whole community center.</h2>
+        <p class="reveal">Moxie Studio is the flagship room in Practice Village, a digital community center for women, built the way a YWCA serves a town. The studio trains your body. The Concierge sorts paperwork and next steps when life reshuffles. The Kitchen plans the week's cooking. The Quiet Room gives anyone sixty seconds of breath, free. And your record of all of it belongs to you.</p>
+      </div>
+      <div class="rooms">
+        <article class="room reveal"><span class="room__badge room__badge--open">Open now</span><h3>Moxie Studio</h3><p>Yoga and meditation with Bott Om. Live classes February 2027.</p></article>
+        <article class="room reveal"><span class="room__badge room__badge--open">Open</span><h3>The Front Desk</h3><p>Your Concierge and the assessments.</p></article>
+        <article class="room reveal"><span class="room__badge room__badge--open">Open</span><h3>The Kitchen</h3><p>Plant-forward cooking, planned for a week that is already full.</p></article>
+        <article class="room reveal"><span class="room__badge room__badge--open">Open · free</span><h3>The Quiet Room</h3><p>HUSH: sixty seconds of breath, free for everyone.</p></article>
+        <article class="room reveal"><span class="room__badge room__badge--soon">Rolling out</span><h3>The Record Room</h3><p>Your record: yours to keep, carry, and use again.</p></article>
+        <article class="room reveal"><span class="room__badge room__badge--soon">In build</span><h3>Safety Hall</h3><p>Safety tools and support, starting with the microaggression tracker we built ourselves.</p></article>
+      </div>
+      <p class="village__doorway reveal"><a href="/">Walk through the whole Practice Village.</a></p>
+    </div>
+  </section>
+
+  <!-- LIVE -->
+  <section class="live" id="live">
+    <div class="wrap">
+      <span class="kicker reveal">Live classes</span>
+      <h2 class="reveal">Live classes open at Lunar New Year.</h2>
+      <p class="live__date reveal">Saturday, February 6, 2027 · sunrise and sunset · Central Time</p>
+      <p class="reveal">JoYi finishes her 200-hour teacher training in October. In February, Moxie Studio opens its live room with sunrise and sunset classes: yoga, meditation, and stretch. Small classes, live, never recorded, with the mirror watching only if you invite it.</p>
+      <p class="reveal">Graduates of the First 30 Days enter first. Founding Villagers hold the next seats. Everyone else enters as space allows.</p>
+    </div>
+  </section>
+
+  <!-- OFFER -->
+  <section class="offer" id="offer">
+    <div class="wrap">
+      <div class="offer__copy">
+        <span class="kicker reveal">The founding offer</span>
+        <h2 class="reveal">108 founding seats. Priced in the open.</h2>
+        <p class="reveal">Membership runs $15 a month today and moves to $25 a month once all rooms are open. Founding Villagers pay $149 a year and keep that rate for life.</p>
+        <p class="reveal">Here is the roadmap and here is the price at every stage. We publish both because women have watched too many communities launch free and vanish. The Village runs on memberships, so the Village answers to members.</p>
+      </div>
+      <aside class="ticket reveal" aria-label="Founding Villager membership">
+        <h3>Founding Villager</h3>
+        <p class="ticket__price">$149<span> / year</span></p>
+        <p class="ticket__lock">Locked for life</p>
+        <p class="ticket__scope"><strong>This membership is to the whole Practice Village:</strong> every room, including Moxie Studio, not only the Studio.</p>
+        <ul>
+          <li>Everything in Moxie Studio: the First 30 Days, all Simple Sequences, every meditation, the mirror, and Bott Om</li>
+          <li>Live classes with JoYi, included</li>
+          <li>Every open Village room, and each new room as it opens</li>
+          <li>First cohort of the First 30 Days and early entry to the February live room</li>
+          <li>Your name in the Village lobby, if you want it there</li>
+          <li>A vote on which room the Village builds next</li>
+        </ul>
+        <p class="ticket__seats"><strong id="seatsLeft">108</strong> of 108 seats remain</p>
+        <div class="ticket__bar" aria-hidden="true"><i id="seatsBar"></i></div>
+        <a class="btn btn--gold" id="checkoutBtn" href="#" rel="noopener">Take a founding seat · $149</a>
+        <p class="ticket__alt">Stripe checkout · or <a href="#" id="monthlyBtn">$15/month, cancel anytime</a><br />Not ready? <a href="#charter">Join the free Charter List</a></p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- CHARTER -->
+  <section class="charter" id="charter">
+    <div class="wrap">
+      <div class="charter__box reveal">
+        <p><strong>The Charter List is free.</strong> Founder build updates, first word when rooms open, and first access to the February live room after founding members. One email when it matters, and your address is never sold or shared.</p>
+        <form name="moxie-charter" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="moxie-charter" />
+          <p hidden aria-hidden="true"><label>Skip this field: <input name="bot-field" /></label></p>
+          <input type="email" name="email" required autocomplete="email" placeholder="you@example.com" aria-label="Your email address" />
+          <button type="submit" class="btn btn--ghost on-cream">Join the Charter List</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq" id="faq">
+    <div class="wrap">
+      <span class="kicker reveal">Questions</span>
+      <div class="sec-head"><h2 class="reveal">Asked and answered.</h2></div>
+      <details class="reveal"><summary>Do I need to be flexible, thin, young, or experienced?</summary>
+        <p>You need a floor and 15 minutes. The studio teaches from zero, the sequences meet you where you are, and every pose has an easier version that counts.</p></details>
+      <details class="reveal"><summary>What if I hate being on camera?</summary>
+        <p>The camera is optional every single day. Every practice works with it off; the mirror is there for the days you want a teacher's eye on your form.</p></details>
+      <details class="reveal"><summary>Who is teaching me?</summary>
+        <p>JoYi Rhyss: meditation teacher, Attitudinal Healing facilitator, 200-hour yoga teacher training complete in October. Bott Om moves and speaks from JoYi's own practice, and February's live classes are taught by JoYi, live. The studio is built the way real studios are: room for more teachers as it grows.</p></details>
+      <details class="reveal"><summary>What exactly is in the membership today?</summary>
+        <p>The wind-down recordings, the meditation room as sessions ship this fall, the Simple Sequences as they ship, the First 30 Days first cohort, the open Village rooms, and founding early entry in February. The room grid above is the current state of everything.</p></details>
+      <details class="reveal"><summary>What happens to my data?</summary>
+        <p>Camera video is processed on your device and never uploaded. Your record saves what you choose, and you can read, export, or delete it any time.</p></details>
+      <details class="reveal"><summary>Refunds?</summary>
+        <p>Thirty days, full refund, no questions. Founding seats that refund go back to the pool of 108.</p></details>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <p class="foot__tag">This is practice. This is enough.</p>
+      <p>Moxie Studio · a room in <a href="/">Practice Village</a> · The Practice Center</p>
+    </div>
+    <p>Times shown in Central Time · <a href="#" id="sourcesLink">Studies and sources</a> · <a href="/privacy">Privacy</a></p>
+  </div>
+</footer>
+
+<script>
+  // ---- Config: set these before launch ----
+  var STRIPE_ANNUAL_LINK  = "";   // Stripe Payment Link for $149/yr founding seat
+  var STRIPE_MONTHLY_LINK = "";   // Stripe Payment Link for $15/mo founding rate
+  var SEATS_TAKEN = 0;            // update until webhook automation lands
+
+  (function(){
+    var left = Math.max(0, 108 - SEATS_TAKEN);
+    document.getElementById("seatsLeft").textContent = left;
+    document.getElementById("seatsLeftHero").textContent = left;
+    requestAnimationFrame(function(){
+      document.getElementById("seatsBar").style.width = (SEATS_TAKEN/108*100) + "%";
+    });
+
+    function wire(id, link){
+      var el = document.getElementById(id);
+      if (link) { el.setAttribute("href", link); }
+      else {
+        el.addEventListener("click", function(e){
+          e.preventDefault();
+          document.getElementById("charter").scrollIntoView({behavior:"smooth"});
+          var input = document.querySelector('#charter input[type=email]');
+          if (input) input.focus({preventScroll:true});
+        });
+      }
+    }
+    wire("checkoutBtn", STRIPE_ANNUAL_LINK);
+    wire("monthlyBtn", STRIPE_MONTHLY_LINK);
+
+    // ipad scroll animation (vanilla port of 21st.dev container-scroll-animation)
+    (function(){
+      var sect = document.getElementById("glimpse");
+      var card = document.querySelector("[data-ipad-card]");
+      var head = document.querySelector("[data-ipad-head]");
+      if (!sect || !card || !head) return;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      var ticking = false;
+      function apply(){
+        ticking = false;
+        var r = card.getBoundingClientRect();
+        var vh = window.innerHeight;
+        // progress follows the CARD: 0 with full tilt as its top enters the bottom edge,
+        // 1 (flat) once it has risen to the upper quarter of the screen
+        var p = (vh - r.top) / (vh * 0.75);
+        p = Math.max(0, Math.min(1, p));
+        p = p * p * (3 - 2 * p);   // smoothstep: keeps the entry tilt visible, settles cleanly
+        var mobile = window.innerWidth <= 768;
+        var rot = 38 * (1 - p);
+        var scale = mobile ? (0.62 + 0.3 * p) : (1.08 - 0.08 * p);
+        card.style.transform = "rotateX(" + rot.toFixed(2) + "deg) scale(" + scale.toFixed(3) + ")";
+        head.style.transform = "translateY(" + (-100 * p).toFixed(1) + "px)";
+      }
+      function onScroll(){ if (!ticking){ ticking = true; requestAnimationFrame(apply); } }
+      window.addEventListener("scroll", onScroll, {passive:true});
+      window.addEventListener("resize", onScroll, {passive:true});
+      apply();
+    })();
+
+    // reveal on scroll
+    var els = document.querySelectorAll(".reveal");
+    if (!("IntersectionObserver" in window) ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      els.forEach(function(el){ el.classList.add("in"); });
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); }
+      });
+    }, {threshold:.12});
+    els.forEach(function(el){ io.observe(el); });
+  })();
+</script>
+</body>
+</html>
