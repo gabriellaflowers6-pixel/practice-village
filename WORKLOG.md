@@ -139,3 +139,13 @@ than the phone (hero children min-width:0, frame img max-width:100%). Verified a
 and 375 by DOM rects: nothing clipped, order chip > h1 > lede > CTAs > window > plaque.
 styles v63 to v65.
 
+**Window rebuild (JoYi: looked cheap, square cut off in the arch):** the scene now fills
+the whole glass. Layers inside the arch: ceiling light glow, floorboards with a light
+pool, the practitioner screen-blended into the room (brightness/contrast crush + radial
+mask dissolve her screenshot rectangle), a transom bar at the spring line, one restrained
+diagonal sheen, brass inner lining on the doubled frame. Research note: 2026 design
+writing agrees glass effects read cheap when heavy; quality comes from the scene filling
+the frame with depth cues, effects restrained. The plaque markup is JoYi's sign slot
+(drop her image into .window__plaque). styles v65 to v67. OPEN: mid-scroll creativity
+pass, JoYi's Moxie Studio sign.
+

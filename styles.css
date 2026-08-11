@@ -953,23 +953,55 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
 .ticket__seats { font-size: 0.9rem; letter-spacing: 0.03em; color: var(--clay, #C2542F); margin: 0.75rem 0 0.5rem; }
 .ticket__seats strong { font-size: 1.05rem; }
 
-/* ===== The Studio Window (hero, 2026-08-11): an arched window into the flagship
-   room, warm light spilling out, with a brass room plaque under the glass. ===== */
-.window{ justify-self:center; width:min(100%,430px); position:relative; z-index:2; }
+/* ===== The Studio Window (hero): a full room behind the glass, not a poster.
+   The scene fills the whole arch: warm walls, a lit floor, the practitioner
+   standing in the room (screen-blend dissolves her screenshot box). Frame is
+   doubled with a brass lining and a transom bar at the spring line. ===== */
+.window{ justify-self:center; width:min(100%,410px); position:relative; z-index:2; }
 .window__frame{
-  position:relative; display:grid; place-items:center; overflow:hidden;
-  border:10px solid #2A1910; border-radius:200px 200px 20px 20px;
-  background:radial-gradient(120% 90% at 50% 18%, #3A2413 0%, #23150E 68%);
-  padding:44px 28px 34px; min-height:400px;
-  box-shadow:0 30px 70px -30px rgba(26,21,30,.45), inset 0 0 60px rgba(216,172,92,.14);
+  position:relative; display:block; overflow:hidden;
+  aspect-ratio: 10/12.4;
+  border:10px solid #241209; border-radius:210px 210px 22px 22px;
+  background:
+    radial-gradient(90% 40% at 50% 4%, rgba(226,190,116,.34) 0%, transparent 60%),
+    linear-gradient(180deg, #3A2413 0%, #2A1810 52%, #1D0F08 100%);
+  box-shadow:
+    0 34px 80px -32px rgba(26,21,30,.5),
+    inset 0 0 0 3px rgba(201,164,92,.5),
+    inset 0 0 54px rgba(0,0,0,.55);
 }
-.window__frame img{
-  width:100%; max-width:320px; height:auto; border-radius:12px;
-  filter:drop-shadow(0 0 26px rgba(216,172,92,.38));
+/* pool of light on the floor under the practitioner */
+.window__room-light{
+  position:absolute; left:50%; bottom:6%; transform:translateX(-50%);
+  width:78%; height:26%; border-radius:50%;
+  background:radial-gradient(closest-side, rgba(216,172,92,.34), transparent 72%);
 }
-.window__frame::after{
-  content:""; position:absolute; inset:0; pointer-events:none;
-  background:linear-gradient(115deg, rgba(255,255,255,.14) 0%, transparent 26%);
+/* the floor plane: darker, with faint boards */
+.window__floor{
+  position:absolute; left:0; right:0; bottom:0; height:30%;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 44px, rgba(0,0,0,.16) 44px 46px),
+    linear-gradient(180deg, rgba(20,10,5,.0) 0%, rgba(20,10,5,.5) 40%, rgba(12,6,3,.72) 100%);
+}
+.window__figure{
+  position:absolute; left:50%; bottom:5%; transform:translateX(-50%);
+  width:92%; height:auto; mix-blend-mode:screen;
+  /* crush the screenshot's dark background toward black so the screen blend
+     dissolves it, then feather the edges so no rectangle survives */
+  filter:brightness(1.04) contrast(1.45) saturate(1.08) drop-shadow(0 0 30px rgba(216,172,92,.35));
+  -webkit-mask-image:radial-gradient(85% 82% at 50% 52%, #000 48%, transparent 74%);
+  mask-image:radial-gradient(85% 82% at 50% 52%, #000 48%, transparent 74%);
+}
+/* transom bar where the arch meets the straight glass */
+.window__transom{
+  position:absolute; left:-2%; right:-2%; top:38%; height:9px;
+  background:linear-gradient(180deg,#2E1A0E,#241209);
+  box-shadow:0 2px 4px rgba(0,0,0,.4), inset 0 1px 0 rgba(201,164,92,.35);
+}
+/* one restrained diagonal sheen: glass, not gloss */
+.window__sheen{
+  position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(112deg, transparent 30%, rgba(255,255,255,.09) 38%, rgba(255,255,255,.02) 46%, transparent 52%);
 }
 .window__plaque{
   position:relative; z-index:3; width:max-content; max-width:92%;
@@ -978,13 +1010,13 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
   color:#23150E; border:1px solid rgba(42,25,16,.3); border-radius:10px;
   padding:12px 26px 13px; box-shadow:0 12px 26px rgba(42,25,16,.3);
 }
+/* JoYi's Moxie Studio sign replaces the plaque content when ready:
+   drop an <img> inside .window__plaque and hide the text spans. */
 .window__room{ display:block; font-family:var(--serif); font-weight:700; font-size:1.08rem; letter-spacing:.16em; }
 .window__meta{ display:block; font-size:.8rem; letter-spacing:.05em; margin-top:2px; }
 .window__peek{ display:inline-block; margin-top:5px; font-weight:700; font-size:.9rem; color:#23150E; text-underline-offset:3px; }
 @media (max-width:920px){
-  .window{ margin:2.2rem auto 0; max-width:100%; min-width:0; }
-  .window__frame{ min-height:300px; padding:28px 16px 22px; }
-  .window__frame img{ max-width:100%; }
+  .window{ margin:2.2rem auto 0; max-width:min(100%,360px); min-width:0; }
 }
 /* grid items may not force the hero wider than the phone */
 .hero > *{ min-width:0; }
