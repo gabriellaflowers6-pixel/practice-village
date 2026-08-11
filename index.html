@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,400,50,1;9..144,500,50,1;9..144,600,60,1;9..144,700,80,1;9..144,900,100,1&family=Hanken+Grotesk:wght@400;500;600;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=67" />
+  <link rel="stylesheet" href="styles.css?v=68" />
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -116,20 +116,6 @@
 
       <p class="hardlayer__bridge reveal">Practice Village helps you sort the mess.</p>
 
-      <!-- The Front Desk in action -->
-      <div class="demo demo--inline reveal" style="--d:.2s" id="demo">
-        <div class="demo__tape demo__tape--l" aria-hidden="true"></div>
-        <div class="demo__tape demo__tape--r" aria-hidden="true"></div>
-
-        <div class="demo__head">
-          <span class="demo__avatar" aria-hidden="true">
-            <svg viewBox="0 0 40 40" width="30" height="30"><circle cx="20" cy="8" r="2.8" fill="#C2542F"/><circle cx="30.4" cy="14" r="2.8" fill="#C5A880"/><circle cx="30.4" cy="26" r="2.8" fill="#C2542F"/><circle cx="20" cy="32" r="2.8" fill="#C5A880"/><circle cx="9.6" cy="26" r="2.8" fill="#C2542F"/><circle cx="9.6" cy="14" r="2.8" fill="#C5A880"/><circle cx="20" cy="20" r="5.5" fill="#1A1A4E"/></svg>
-          </span>
-          <div>
-            <strong>Your Concierge</strong>
-            <span class="demo__live"><i></i> live demo · tap one, see your next step</span>
-          </div>
-        </div>
 
         <div class="demo__body" id="demoBody">
           <p class="demo__q">How may we help you?</p>
@@ -152,52 +138,34 @@
       </div>
 
 
-      <div class="hardlayer__split">
-        <article class="splitcard reveal">
-          <span class="splitcard__tag">The Concierge</span>
-          <span class="splitcard__lead">handles</span>
-          <ul class="splitcard__list">
-            <li>the search</li>
-            <li>the forms</li>
-            <li>the options</li>
-            <li>the next-step planning</li>
+      <div class="conciergerow">
+      <div class="demo demo--inline reveal" style="--d:.2s" id="demo">
+        <div class="demo__tape demo__tape--l" aria-hidden="true"></div>
+        <div class="demo__tape demo__tape--r" aria-hidden="true"></div>
+
+        <div class="demo__head">
+          <span class="demo__avatar" aria-hidden="true">
+            <svg viewBox="0 0 40 40" width="30" height="30"><circle cx="20" cy="8" r="2.8" fill="#C2542F"/><circle cx="30.4" cy="14" r="2.8" fill="#C5A880"/><circle cx="30.4" cy="26" r="2.8" fill="#C2542F"/><circle cx="20" cy="32" r="2.8" fill="#C5A880"/><circle cx="9.6" cy="26" r="2.8" fill="#C2542F"/><circle cx="9.6" cy="14" r="2.8" fill="#C5A880"/><circle cx="20" cy="20" r="5.5" fill="#1A1A4E"/></svg>
+          </span>
+          <div>
+            <strong>Your Concierge</strong>
+            <span class="demo__live"><i></i> live demo · tap one, see your next step</span>
+          </div>
+        </div>
+        <div class="conciergerow__copy reveal">
+          <span class="kicker">the front desk</span>
+          <h3 class="conciergerow__title">Meet your Concierge.</h3>
+          <p>Ask in plain words. The Concierge answers with Gemini, grounded in AIdedEQ and The Practice Center's own curriculum: 30 years of frontline practice, Mindful Forgiveness, and attitudinal healing. Not generic internet advice.</p>
+          <ul class="conciergerow__points">
+            <li><strong>Answers that hold.</strong> Our curriculum, turned into one clear next step.</li>
+            <li><strong>Routes you to the right room.</strong> A breath in the Quiet Room, a practice in the Studio, the tracker in Safety Hall as it opens.</li>
+            <li><strong>Remembers, with your consent.</strong> What you save goes to Your PIL. When the same lesson returns, the Concierge brings back what worked. The long arc of learning is the magic of practice.</li>
           </ul>
-        </article>
-        <article class="splitcard splitcard--village reveal">
-          <span class="splitcard__tag">The Village</span>
-          <span class="splitcard__lead">holds the human part</span>
-          <ul class="splitcard__list">
-            <li>the story</li>
-            <li>the practice</li>
-            <li>the support</li>
-            <li>the courage</li>
-            <li>the choice to begin again</li>
-          </ul>
-        </article>
+          <p class="conciergerow__close">The Concierge handles the search, the forms, the options. The Village holds the human part: the story, the practice, the support, the courage to begin again.</p>
+        </div>
       </div>
     </section>
 
-    <!-- ===== THE REBUILD ARC (How it works) ===== -->
-    <section class="section arc" id="arc">
-      <div class="section__head section__head--center">
-        <span class="kicker reveal">the inner work</span>
-        <h2 class="section__title reveal">The Rebuild Arc</h2>
-        <p class="section__intro reveal">The Concierge clears the path. This is the part that's yours: the same inner arc, in every room of Practice Village.</p>
-      </div>
-
-      <div class="path">
-        <svg class="path__line" viewBox="0 0 1000 120" preserveAspectRatio="none" aria-hidden="true"><path d="M10 70 C 150 10, 230 110, 360 60 C 490 12, 560 110, 690 60 C 810 14, 880 110, 990 56" fill="none" stroke="var(--clay)" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round"/></svg>
-        <ol class="path__stops">
-          <li class="reveal"><b>1</b><span>Arrive</span></li>
-          <li class="reveal"><b>2</b><span>Learn</span></li>
-          <li class="reveal arc__magic"><b>3</b><span>Match <i>to the right people</i></span></li>
-          <li class="reveal"><b>4</b><span>Practice together</span></li>
-          <li class="reveal"><b>5</b><span>Do the real thing</span></li>
-          <li class="reveal"><b>6</b><span>Make it yours</span></li>
-        </ol>
-      </div>
-      <p class="arc__note reveal"><span class="hand">Advice and apps run out. The real work is practice: showing up in the rooms, together, at your own pace.</span></p>
-    </section>
 
     <!-- ===== THE CENTER MAP (Practice Village) ===== -->
     <section class="section center" id="center">
@@ -222,7 +190,7 @@
         </svg>
         <span class="kicker reveal">your digital community center</span>
         <h2 class="section__title center__title reveal">One Center · Many Rooms for Rebuilding</h2>
-        <p class="center__tagline reveal">One front desk. Many rooms. Real help inside.</p>
+        <p class="center__tagline reveal">One front desk. Six rooms. The Concierge routes you to the right one.</p>
       </div>
 
       <div class="map">
@@ -299,17 +267,33 @@
             </div>
           </article>
 
-          <article class="room room--soon reveal" tabindex="0" role="button" aria-label="The Record Room, tap for more">
+          <article class="room room--soon reveal" tabindex="0" role="button" aria-label="Your PIL, tap for more">
             <div class="room__inner">
               <div class="room__face room__front">
                 <span class="room__tag">Rolling out</span>
-                <h4>The Record Room</h4>
-                <p>Your record: yours to keep, carry, and use again.</p>
+                <h4>Your PIL</h4>
+                <p>Your Personal Intelligence Layer: the record of what helps, yours to keep.</p>
                 <span class="room__flip" aria-hidden="true">more ↻</span>
               </div>
               <div class="room__face room__back">
-                <h4>The Record Room</h4>
-                <p>A private record of who you are, what you're working through, and what helps. Yours to export or delete, so you never start from scratch with a new therapist, a hard conversation, or your next chapter.</p>
+                <h4>Your PIL</h4>
+                <p>A private record of who you are, what you're working through, and what helps. The Concierge saves to it only with your consent. Yours to export or delete, so you never start from scratch with a new therapist, a hard conversation, or your next chapter.</p>
+                <span class="room__flip" aria-hidden="true">back ↺</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="room reveal" tabindex="0" role="button" aria-label="Cur.AI.ted, tap for more">
+            <div class="room__inner">
+              <div class="room__face room__front">
+                <span class="room__tag room__tag--live">Starter tier included</span>
+                <h4>Cur.AI.ted</h4>
+                <p>Find the story in your camera roll.</p>
+                <span class="room__flip" aria-hidden="true">more ↻</span>
+              </div>
+              <div class="room__face room__back">
+                <h4>Cur.AI.ted</h4>
+                <p>Review your life through the photos you already have, and turn forgotten moments into something you can hold. A starter tier is included with membership; the full studio is sold on its own. <a href="https://curaited.org" target="_blank" rel="noopener">Visit Cur.AI.ted →</a></p>
                 <span class="room__flip" aria-hidden="true">back ↺</span>
               </div>
             </div>
@@ -334,37 +318,6 @@
       </div>
     </section>
 
-    <!-- ===== PERSONAL INTELLIGENCE LAYER ===== -->
-    <section class="section layer" id="layer">
-      <div class="layer__copy reveal">
-        <span class="kicker">what you take with you</span>
-        <h2 class="section__title">Your record. <span class="mark">Yours to keep.</span></h2>
-        <p class="layer__lead">Tell the Concierge what you're dealing with. It finds the help you didn't know existed, the women already in it with you, and a plan that's yours to keep.</p>
-        <p>Your Concierge turns each insight into a card you keep: a private record of who
-        you are, what you're working through, and what helps. Most apps trap your story.
-        This one hands it to you.</p>
-        <p class="carry__lead">It goes with you, into:</p>
-        <ul class="carry">
-          <li>a new therapist's office, so you never start from scratch</li>
-          <li>a hard conversation, with your words already ready</li>
-          <li>your next job or chapter, with your patterns known</li>
-          <li>next year, when you've forgotten how far you've come</li>
-        </ul>
-        <div class="exports">
-          <span>Summary</span><span>Action Plan</span><span>Full record</span><span>Resource list</span>
-        </div>
-      </div>
-
-      <div class="cardstack reveal" id="cardstack" role="group" aria-label="Your record cards">
-        <article class="icard" style="--i:0"><span class="icard__pin"></span><b>What I'm facing</b><p>Caring for Mom while working full-time. Drowning.</p></article>
-        <article class="icard" style="--i:1"><span class="icard__pin"></span><b>What it found</b><p>A caregiver grant and respite I didn't know existed.</p></article>
-        <article class="icard" style="--i:2"><span class="icard__pin"></span><b>My circle</b><p>Four women caring for a parent too, matched to me.</p></article>
-        <article class="icard" style="--i:3"><span class="icard__pin"></span><b>My next step</b><p>The three questions to ask at Mom's appointment.</p></article>
-        <article class="icard icard--accent" style="--i:4"><span class="icard__pin"></span><b>What I own</b><p>A plan that's mine, and people who get it.</p></article>
-        <button class="cardstack__next" id="cardNext" aria-label="Next card">next ↺</button>
-        <p class="hand layer__hint">flip through the cards ↑</p>
-      </div>
-    </section>
 
     <!-- ===== THE BUILDERS (building in the open) ===== -->
     <section class="section" id="builders">
@@ -481,6 +434,16 @@
     </section>
 
     <!-- Walk-in form removed: the free Charter List capture now lives in its pricing card; paid plans go straight to Stripe from the cards. -->
+
+    <!-- ===== THE REBUILD ARC WORKSHOP ===== -->
+    <section class="section raw" id="arc">
+      <div class="raw__box reveal">
+        <span class="kicker">included with membership</span>
+        <h2 class="section__title">The Rebuild Arc, live with JoYi.</h2>
+        <p class="raw__phil">The philosophy in six steps: <b>Arrive. Learn. Match. Practice together. Do the real thing. Make it yours.</b> Advice runs out; practice is what holds.</p>
+        <p class="raw__when">A live Rebuild Arc workshop runs once a quarter: four Saturday morning classes. <strong>The next one starts in October.</strong> Every membership includes one workshop a year.</p>
+      </div>
+    </section>
 
     <!-- ===== FREE TEACHINGS / GENEROSITY (the parting treat) ===== -->
     <section class="section gifts">

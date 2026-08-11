@@ -149,3 +149,27 @@ the frame with depth cues, effects restrained. The plaque markup is JoYi's sign 
 (drop her image into .window__plaque). styles v65 to v67. OPEN: mid-scroll creativity
 pass, JoYi's Moxie Studio sign.
 
+## 2026-08-11 (latest): Concierge unit, six rooms, RAW — PENDING DEPLOY
+
+JoYi's restructure, talked through and synced first:
+- Window: head no longer cut (figure 80%, transom raised, mask widened).
+- After "You are not the problem": one two-column Concierge unit — the live demo beside
+  what powers it (Gemini grounded in AIdedEQ + The Practice Center IP), three point
+  cards (answers that hold / routes to the right room / remembers with consent into Your
+  PIL), closing line: Concierge handles the logistics, the Village holds the human part.
+  The old duplicate splitcards are gone.
+- Rooms now six and named her way: Moxie Studio, The Kitchen, The Quiet Room, Safety
+  Hall, Your PIL (renamed from Record Room), Cur.AI.ted ("starter tier included with
+  membership; the full studio is sold on its own"). Center tagline: the Concierge routes
+  you to the right one.
+- The Rebuild Arc left mid-page and became a compact workshop block after pricing:
+  six-step philosophy, quarterly, four Saturday mornings, next one October, one workshop
+  a year included with membership. Redeem-code mechanics deferred.
+- Removed: the standalone Arc section and the big PIL cardstack section (job now done by
+  the Concierge unit, the demo's save layer, and the Your PIL room). Page order:
+  hero, how, center, hilo, builders, faq, doors, arc (RAW), gifts.
+- aidedeq store: Cur.AI.ted card keeps full/tiered pricing and notes the included
+  starter tier (committed on aidedeq repo).
+Verified: 6 rooms, section order, head clear of transom, no overflow desktop or mobile,
+single-column stacking at 375. styles v67 to v68.
+

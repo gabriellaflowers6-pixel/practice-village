@@ -989,8 +989,8 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
   /* crush the screenshot's dark background toward black so the screen blend
      dissolves it, then feather the edges so no rectangle survives */
   filter:brightness(1.04) contrast(1.45) saturate(1.08) drop-shadow(0 0 30px rgba(216,172,92,.35));
-  -webkit-mask-image:radial-gradient(85% 82% at 50% 52%, #000 48%, transparent 74%);
-  mask-image:radial-gradient(85% 82% at 50% 52%, #000 48%, transparent 74%);
+  -webkit-mask-image:radial-gradient(92% 90% at 50% 55%, #000 58%, transparent 82%);
+  mask-image:radial-gradient(92% 90% at 50% 55%, #000 58%, transparent 82%);
 }
 /* transom bar where the arch meets the straight glass */
 .window__transom{
@@ -1023,3 +1023,35 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
 
 /* The Concierge demo, relocated to "sort the mess" */
 .demo--inline{ max-width:560px; margin:0 auto clamp(2.4rem,4.5vw,3.2rem); }
+
+/* ===== Concierge unit: the live demo beside what powers it (2026-08-11) ===== */
+.conciergerow{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(2rem,4vw,3.5rem);
+  align-items:center; max-width:1040px; margin:0 auto; }
+.conciergerow .demo--inline{ margin:0; max-width:none; }
+.conciergerow__title{ font-family:var(--serif); font-weight:600; font-size:clamp(1.6rem,2.6vw,2.2rem); margin:.4rem 0 .9rem; }
+.conciergerow__copy > p{ color:var(--ink-soft); max-width:46ch; }
+.conciergerow__points{ list-style:none; padding:0; margin:1.2rem 0; display:grid; gap:.85rem; }
+.conciergerow__points li{ position:relative; padding:1rem 1.1rem 1rem 2.4rem;
+  background:rgba(247,244,238,.7); border:1px solid rgba(26,21,30,.1); border-radius:14px;
+  font-size:.99rem; line-height:1.45; color:var(--ink-soft); }
+.conciergerow__points li::before{ content:""; position:absolute; left:1rem; top:1.35rem;
+  width:9px; height:9px; border-radius:50%; background:var(--clay); }
+.conciergerow__points strong{ color:var(--ink); }
+.conciergerow__close{ font-size:.99rem; color:var(--ink-soft); border-left:3px solid var(--clay);
+  padding-left:1rem; max-width:46ch; }
+@media (max-width:880px){ .conciergerow{ grid-template-columns:1fr; } }
+
+/* ===== The Rebuild Arc workshop (compact, before the gifts) ===== */
+.raw{ padding-top:0; }
+.raw__box{ max-width:820px; margin:0 auto; text-align:center;
+  border:1px solid rgba(26,21,30,.1); border-radius:20px; padding:clamp(1.8rem,4vw,2.8rem);
+  background:linear-gradient(180deg, rgba(197,168,128,.14), rgba(194,84,47,.05));
+  box-shadow:0 18px 40px -20px rgba(26,21,30,.18); }
+.raw__box .section__title{ margin:.4rem 0 1rem; }
+.raw__phil{ color:var(--ink-soft); max-width:52ch; margin:0 auto .8rem; }
+.raw__phil b{ color:var(--clay-deep); font-weight:700; }
+.raw__when{ color:var(--ink-soft); max-width:52ch; margin:0 auto; }
+
+/* window: keep the whole figure, head clear of the transom */
+.window__figure{ width:80%; bottom:4%; }
+.window__transom{ top:32%; }
