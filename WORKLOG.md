@@ -39,7 +39,12 @@ Source of truth: the 2026-08-11 aidedeq.org work + Moxie-Studio-Launch-Plan-2026
   Gabby only, PlantLuck + HUSH links live, paid-button fallback focuses the email
   field.
 
-## 2026-08-11 (later): Moxie Studio landing joins the Village — PENDING DEPLOY
+## 2026-08-11 (later): Moxie Studio landing joins the Village — DEPLOYED
+
+Deploy `6a7ad57d02f9635e1b1087d2` on JoYi's "lets ship". Verified live:
+/moxie-studio/ serves 200 with "Membership runs $15 a month today and moves to $25 a
+month once all rooms are open", Quiet Room x3, zero $97 / Den / Commons; the homepage
+Moxie Studio room card links to /moxie-studio/.
 
 Discovery: moxiestudio.netlify.app is the live-class JOIN screen (first name + class
 code), not a landing page. The sales page (the bridge, canon per JoYi) was never
