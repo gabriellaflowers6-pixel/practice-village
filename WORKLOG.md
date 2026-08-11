@@ -61,3 +61,12 @@ home"; privacy link fixed. The page's own empty-Stripe fallback (scroll to its C
 capture) kept; STRIPE_ANNUAL_LINK / STRIPE_MONTHLY_LINK in the inline script join the
 FLIP-AT-STRIPE list. Homepage Moxie Studio room card now links to /moxie-studio/
 instead of the join screen; same fix queued on aidedeq (unpushed).
+
+**Bugfix (same evening, found by JoYi):** clicking the Moxie Studio room card only
+flipped it; the "Step into the Studio" link on the back face was eaten by the card's
+flip handler, so the landing page was unreachable by click. Fixed: the flip handler now
+ignores clicks on links (e.target.closest("a") returns early); the Studio door link is
+also on the FRONT face of the card; and "Moxie Studio" was added to the main nav.
+script.js v29 to v30, styles v58 to v59 (one .room__cta rule). Click-tested headless:
+body click flips, link click navigates to /moxie-studio/ without flipping.
+

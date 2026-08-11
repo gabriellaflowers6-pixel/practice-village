@@ -202,7 +202,10 @@
   /* ============ flip room tiles (the Center) ============ */
   document.querySelectorAll(".room").forEach(function (room) {
     var flip = function () { room.classList.toggle("is-flipped"); };
-    room.addEventListener("click", flip);
+    room.addEventListener("click", function (e) {
+      if (e.target.closest("a")) return;   /* links inside a card navigate, never flip */
+      flip();
+    });
     room.addEventListener("keydown", function (e) {
       if (e.key === "Enter" || e.key === " ") { e.preventDefault(); flip(); }
     });
