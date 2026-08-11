@@ -194,3 +194,21 @@ single-column stacking at 375. styles v67 to v68.
 Plus: JoYi's MoxieStudios_logo.png (from Downloads, alpha-trimmed 2000x2000 to 1977x359)
 installed as the window sign on a clean cream plaque. styles v68 to v71.
 
+**Approved copy pass (JoYi sign-off, 2026-08-11 late):** Card 1 now carries the three
+questions midlife women actually ask, per Mayo Clinic Proceedings (~5,000 women 45-60;
+sleep among the most severe symptoms, 87% never sought care), AASM (50% of women 45-64
+report menopause-disrupted sleep), and AARP (financial security + 61% of caregivers are
+women): Why can't I sleep? Will my money last? Who cares for me while I care for
+everyone else? Card 3 adds the RAW invitation; card 4 uses JoYi's routing framing
+(quiet/people/practice). FAQ: Moxie's real words (Bott Om + the mirror), Gemini named
+overtly for the buildathon, "in the open" removed. Builders heading: "Meet the
+builders." Window plaque: "beginner yoga and meditation · open" + the sell line for
+people not ready to walk into a class; plaque restyled brass-on-mahogany (the white
+cheapened the gold sign). Glass below the transom color-matched to the sampled image
+background (#2D2016) so no square-in-square. Serif swapped Fraunces -> Cormorant
+Garamond for the prettier J (also unifies with the Studio page). Concierge heading
+moved above both columns; demo and first card tops align (verified at row geometry;
+the visible 20px in the pane is the pre-reveal translate in a throttled hidden tab —
+IntersectionObserver does not fire in occluded tabs, which also explains tonight's
+stale screenshots). Section padding tightened again. styles v71 to v73.
+

@@ -20,7 +20,7 @@
   --line:      rgba(26, 26, 78, 0.16);
   --tape:      rgba(197, 168, 128, 0.42);
 
-  --serif: "Fraunces", Georgia, serif;
+  --serif: "Cormorant Garamond", Georgia, serif;
   --sans:  "Hanken Grotesk", system-ui, sans-serif;
   --hand:  "Caveat", "Comic Sans MS", cursive;
 
@@ -1088,3 +1088,38 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
 .section{ padding:clamp(46px,6.2vw,86px) var(--pad); }
 .section__head{ margin-bottom:clamp(26px,3.6vw,46px); }
 .room__face{ padding:1.3rem 1.25rem; }
+
+/* ===== Approved pass (2026-08-11, JoYi sign-off) ===== */
+/* heading above both columns so the demo tops align with the first card */
+.conciergerow__head{ text-align:center; max-width:760px; margin:0 auto 1.6rem; }
+.conciergerow__head .conciergerow__title{ margin:.35rem 0 0; }
+.conciergerow{ align-items:start; }
+
+/* the glass below the transom matches the room panel: one surface, no square in a square */
+.window__frame{
+  background:
+    radial-gradient(90% 40% at 50% 4%, rgba(226,190,116,.34) 0%, transparent 60%),
+    linear-gradient(180deg, #3A2413 0%, #2E1F13 30%, #2D2016 46%, #2D2016 100%);
+}
+.window__floor{ background:
+    repeating-linear-gradient(90deg, transparent 0 44px, rgba(0,0,0,.10) 44px 46px),
+    linear-gradient(180deg, rgba(20,10,5,0) 0%, rgba(24,13,7,.35) 55%, rgba(18,9,4,.55) 100%); }
+
+/* boutique signage: brass on mahogany, not white card stock */
+.window__plaque{
+  background:linear-gradient(180deg,#2B160C 0%,#241209 100%);
+  border:1px solid rgba(201,164,92,.55);
+  box-shadow:0 0 0 3px #241209, 0 0 0 4px rgba(201,164,92,.35), 0 14px 30px rgba(20,10,5,.45);
+  color:#E2BE74; padding:16px 26px 14px;
+}
+.window__sign{ filter:drop-shadow(0 1px 6px rgba(226,190,116,.25)); }
+.window__meta{ color:#E2BE74; letter-spacing:.08em; text-transform:uppercase; font-size:.72rem; }
+.window__sell{ display:block; margin-top:6px; font-size:.85rem; line-height:1.4; color:rgba(244,238,225,.85); max-width:34ch; }
+.window__peek{ color:#E2BE74; }
+
+/* whitespace: one more measured pass */
+.section{ padding:clamp(38px,5.2vw,68px) var(--pad); }
+.section__head{ margin-bottom:clamp(22px,3vw,38px); }
+.hardlayer__bridge{ margin:1.5rem auto 1.1rem; }
+.conciergerow__copy .conciergerow__points{ margin-top:0; }
+.conciergerow__copy{ padding-top:0; }
