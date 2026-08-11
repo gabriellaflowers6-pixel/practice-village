@@ -1175,3 +1175,26 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
 .raw__steps li::before{ content:counter(step); display:inline-grid; place-items:center; width:1.5em; height:1.5em; margin-right:.55em; border-radius:50%; background:var(--clay); color:#FBF9F4; font-size:.78em; font-weight:700; }
 .raw__phil{ margin:0 0 .5rem; max-width:none; }
 .raw__when{ max-width:none; margin:0; }
+
+/* ===== Hero resolution (11:35pm): one architectural unit, shared edges ===== */
+/* columns center against each other; the section ends with intent */
+.hero{ align-items:center; padding-bottom:clamp(48px,5vw,64px); }
+
+/* window + sign become one mounted unit: no gap, shared width, one border rhythm */
+.window{ width:min(100%,400px); }
+.window__frame{
+  border-bottom-left-radius:0; border-bottom-right-radius:0; border-bottom-width:0;
+  aspect-ratio:10/10.6; min-height:0;
+}
+.window__plaque{
+  margin:0 auto; width:100%; max-width:none; border-radius:0 0 16px 16px;
+  border:10px solid #241209; border-top:none;
+  box-shadow:0 34px 80px -32px rgba(26,21,30,.5);
+  padding:16px 22px 14px;
+}
+/* the room reaches the glass: figure wider, edges dissolve into the wall color */
+.window__figure{
+  width:104%; bottom:2%;
+  -webkit-mask-image:radial-gradient(98% 96% at 50% 54%, #000 52%, transparent 88%);
+  mask-image:radial-gradient(98% 96% at 50% 54%, #000 52%, transparent 88%);
+}

@@ -236,3 +236,10 @@ tightened head margin. RAW box redone: left-aligned, six numbered step chips in 
 phil and when lines full width. styles v76 to v77. Verified by DOM: 3 marks all
 amber/navy, bloom gone, intro gone, one-line header, 6 step chips, no overflow.
 
+**Hero resolution (11:35pm, JoYi: does this look high-end?):** honest answer was no,
+three balance failures. Fixed: window frame and sign are now one mounted unit (frame
+bottom radius/border removed, plaque takes the same 10px wood border and full frame
+width, zero gap, verified 0px/0px by rect); the figure fills the glass (104% width,
+wider mask, no hard side gutters); hero columns center vertically so the section ends
+evenly (symmetric overhang, was 200px one-sided). styles v77 to v78.
+
