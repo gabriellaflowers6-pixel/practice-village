@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,400,50,1;9..144,500,50,1;9..144,600,60,1;9..144,700,80,1;9..144,900,100,1&family=Hanken+Grotesk:wght@400;500;600;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=68" />
+  <link rel="stylesheet" href="styles.css?v=71" />
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -80,7 +80,7 @@
           <span class="window__sheen" aria-hidden="true"></span>
         </a>
         <div class="window__plaque">
-          <span class="window__room">MOXIE STUDIO</span>
+          <img class="window__sign" src="assets/moxie-studios-logo.png" alt="Moxie Studios" width="1977" height="359" />
           <span class="window__meta">the flagship room · open</span>
           <a class="window__peek" href="/moxie-studio/">Peek inside →</a>
         </div>
@@ -116,52 +116,51 @@
 
       <p class="hardlayer__bridge reveal">Practice Village helps you sort the mess.</p>
 
-
-        <div class="demo__body" id="demoBody">
-          <p class="demo__q">How may we help you?</p>
-          <div class="demo__chips" id="demoChips">
-            <button data-k="money">Money</button>
-            <button data-k="housing">Housing</button>
-            <button data-k="work">Work</button>
-            <button data-k="family">Family</button>
-            <button data-k="stuck">I feel stuck</button>
-            <button data-k="body">My body</button>
-          </div>
-        </div>
-
-        <div class="demo__layer" id="demoLayer">
-          <span class="demo__layerlabel">Your record · yours to keep</span>
-          <div class="demo__stack" id="demoStack" aria-live="polite">
-            <span class="demo__empty">your Concierge saves nothing unless you choose</span>
-          </div>
-        </div>
-      </div>
-
-
       <div class="conciergerow">
-      <div class="demo demo--inline reveal" style="--d:.2s" id="demo">
-        <div class="demo__tape demo__tape--l" aria-hidden="true"></div>
-        <div class="demo__tape demo__tape--r" aria-hidden="true"></div>
+        <div class="demo demo--inline reveal" style="--d:.2s" id="demo">
+          <div class="demo__tape demo__tape--l" aria-hidden="true"></div>
+          <div class="demo__tape demo__tape--r" aria-hidden="true"></div>
 
-        <div class="demo__head">
-          <span class="demo__avatar" aria-hidden="true">
-            <svg viewBox="0 0 40 40" width="30" height="30"><circle cx="20" cy="8" r="2.8" fill="#C2542F"/><circle cx="30.4" cy="14" r="2.8" fill="#C5A880"/><circle cx="30.4" cy="26" r="2.8" fill="#C2542F"/><circle cx="20" cy="32" r="2.8" fill="#C5A880"/><circle cx="9.6" cy="26" r="2.8" fill="#C2542F"/><circle cx="9.6" cy="14" r="2.8" fill="#C5A880"/><circle cx="20" cy="20" r="5.5" fill="#1A1A4E"/></svg>
-          </span>
-          <div>
-            <strong>Your Concierge</strong>
-            <span class="demo__live"><i></i> live demo · tap one, see your next step</span>
+          <div class="demo__head">
+            <span class="demo__avatar" aria-hidden="true">
+              <svg viewBox="0 0 40 40" width="30" height="30"><circle cx="20" cy="8" r="2.8" fill="#C2542F"/><circle cx="30.4" cy="14" r="2.8" fill="#C5A880"/><circle cx="30.4" cy="26" r="2.8" fill="#C2542F"/><circle cx="20" cy="32" r="2.8" fill="#C5A880"/><circle cx="9.6" cy="26" r="2.8" fill="#C2542F"/><circle cx="9.6" cy="14" r="2.8" fill="#C5A880"/><circle cx="20" cy="20" r="5.5" fill="#1A1A4E"/></svg>
+            </span>
+            <div>
+              <strong>Your Concierge</strong>
+              <span class="demo__live"><i></i> live demo · tap one, see your next step</span>
+            </div>
+          </div>
+
+          <div class="demo__body" id="demoBody">
+            <p class="demo__q">How may we help you?</p>
+            <div class="demo__chips" id="demoChips">
+              <button data-k="money">Money</button>
+              <button data-k="housing">Housing</button>
+              <button data-k="work">Work</button>
+              <button data-k="family">Family</button>
+              <button data-k="stuck">I feel stuck</button>
+              <button data-k="body">My body</button>
+            </div>
+          </div>
+
+          <div class="demo__layer" id="demoLayer">
+            <span class="demo__layerlabel">Your record · yours to keep</span>
+            <div class="demo__stack" id="demoStack" aria-live="polite">
+              <span class="demo__empty">your Concierge saves nothing unless you choose</span>
+            </div>
           </div>
         </div>
+
         <div class="conciergerow__copy reveal">
           <span class="kicker">the front desk</span>
           <h3 class="conciergerow__title">Meet your Concierge.</h3>
-          <p>Ask in plain words. The Concierge answers with Gemini, grounded in AIdedEQ and The Practice Center's own curriculum: 30 years of frontline practice, Mindful Forgiveness, and attitudinal healing. Not generic internet advice.</p>
           <ul class="conciergerow__points">
-            <li><strong>Answers that hold.</strong> Our curriculum, turned into one clear next step.</li>
-            <li><strong>Routes you to the right room.</strong> A breath in the Quiet Room, a practice in the Studio, the tracker in Safety Hall as it opens.</li>
-            <li><strong>Remembers, with your consent.</strong> What you save goes to Your PIL. When the same lesson returns, the Concierge brings back what worked. The long arc of learning is the magic of practice.</li>
+            <li><strong>Ask anything.</strong> Plain words in, one clear next step out.</li>
+            <li><strong>Answers you can trace.</strong> Built on Gemini, answering from The Practice Center's 30 years of teaching, AIdedEQ's tools, and your own saved learning. Not random internet advice.</li>
+            <li><strong>You are wise.</strong> Much of the answer is already in you. The Concierge helps you remember what you know, and re-remember it when life asks again.</li>
+            <li><strong>It routes you.</strong> Like any front desk: a breath in the Quiet Room, a practice in the Studio, the tracker in Safety Hall as it opens.</li>
           </ul>
-          <p class="conciergerow__close">The Concierge handles the search, the forms, the options. The Village holds the human part: the story, the practice, the support, the courage to begin again.</p>
+          <p class="conciergerow__close">The Concierge handles the logistics. The Village holds the human part. The magic of practice unfolds over the long arc of learning and healing.</p>
         </div>
       </div>
     </section>
@@ -195,8 +194,10 @@
 
       <div class="map">
         <div class="map__desk reveal">
-          <h3>The Front Desk</h3>
-          <p class="map__name">Your Concierge</p>
+          <div class="map__desk-title">
+            <h3>The Front Desk</h3>
+            <p class="map__name">Your Concierge</p>
+          </div>
           <p class="map__desc">A place to ask for help without starting from scratch every time. Your Concierge, the assessments, and the resource library: everything you need to figure out your next step.</p>
         </div>
 
@@ -213,7 +214,7 @@
               </div>
               <div class="room__face room__back">
                 <h4>Moxie Studio</h4>
-                <p>Learn yoga and meditation with Bott Om, a teacher modeled on a real one. The mirror reads your form on your own device; video never leaves your machine. Live classes with JoYi open February 2027, and founding members enter first. <a href="/moxie-studio/">Step into the Studio →</a></p>
+                <p>Learn yoga and meditation with Bott Om, a teacher modeled on a real one. The mirror reads your form on your device; video never leaves your machine. Live classes open February 2027. <a href="/moxie-studio/">Step into the Studio →</a></p>
                 <span class="room__flip" aria-hidden="true">back ↺</span>
               </div>
             </div>
@@ -277,7 +278,7 @@
               </div>
               <div class="room__face room__back">
                 <h4>Your PIL</h4>
-                <p>A private record of who you are, what you're working through, and what helps. The Concierge saves to it only with your consent. Yours to export or delete, so you never start from scratch with a new therapist, a hard conversation, or your next chapter.</p>
+                <p>A private record of who you are and what helps. The Concierge saves to it only with your consent. Yours to export or delete, so you never start from scratch with a new therapist or your next chapter.</p>
                 <span class="room__flip" aria-hidden="true">back ↺</span>
               </div>
             </div>
@@ -354,11 +355,11 @@
         <h2 class="section__title reveal">Before you walk in</h2>
       </div>
       <div class="faq__list">
-        <details class="faq__item reveal"><summary>Is the whole place built yet?</summary><p>No, and we're not pretending otherwise. We're opening Practice Village room by room, in the open. Open today: Moxie Studio, the Kitchen (PlantLuck), and the free Quiet Room (HUSH). Safety Hall is in build and the Record Room is rolling out. Live classes with JoYi open February 2027. Founding members get in first and help shape each room.</p></details>
-        <details class="faq__item reveal"><summary>Is this therapy or coaching?</summary><p>Neither. It's a practice environment. It doesn't diagnose or treat, and it never replaces a therapist, doctor, attorney, or crisis service. It points you to vetted resources when something's outside its lane.</p></details>
-        <details class="faq__item reveal"><summary>What's the AI actually doing?</summary><p>The Concierge does real work: it cuts through the bureaucracy and noise, turns it into one clear next step, and builds your record. In Moxie Studio, the mirror reads your form on your own device and never records you. A live human guide and you do the authentically-human part.</p></details>
-        <details class="faq__item reveal"><summary>How is my information handled?</summary><p>Consent-led, always. Nothing sensitive is saved without your yes, private stays private, and you can export or delete your record anytime.</p></details>
-        <details class="faq__item reveal"><summary>Who's behind it?</summary><p>JoYi, who has guided this work in real life at Moxie Fitness and The Practice Center in Hilo, Hawaii. Practice Village makes it AI-powered and brings it to women everywhere.</p></details>
+        <details class="faq__item reveal"><summary>Is the whole place built yet?</summary><p>No. We open room by room, in the open. Open today: Moxie Studio, the Kitchen (PlantLuck), and the free Quiet Room (HUSH). Safety Hall is in build; Your PIL is rolling out. Live classes with JoYi open February 2027. Founding members enter first and help shape each room.</p></details>
+        <details class="faq__item reveal"><summary>Is this therapy or coaching?</summary><p>Neither. Practice Village is a practice environment. It does not diagnose or treat, and it never replaces a therapist, doctor, attorney, or crisis service. When something needs a professional, the Concierge points you to vetted resources.</p></details>
+        <details class="faq__item reveal"><summary>What is the AI actually doing?</summary><p>The Concierge answers your question, turns it into one clear next step, and routes you to the right room. It saves to Your PIL only when you choose. In Moxie Studio, the mirror reads your form on your device and never records video. People teach the classes and hold the human part.</p></details>
+        <details class="faq__item reveal"><summary>How is my information handled?</summary><p>Nothing sensitive is saved without your yes. What you choose to save lives in Your PIL, where you can read, export, or delete it at any time. Camera video in Moxie Studio is processed on your device and never uploaded. We never sell or share your information.</p></details>
+        <details class="faq__item reveal"><summary>Who is behind it?</summary><p>JoYi Rhyss, who led this work in person at Moxie Fitness and The Practice Center in Hilo, Hawaii. Practice Village brings the same practice online for women everywhere.</p></details>
       </div>
     </section>
 

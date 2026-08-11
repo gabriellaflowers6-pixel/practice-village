@@ -1004,12 +1004,13 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
   background:linear-gradient(112deg, transparent 30%, rgba(255,255,255,.09) 38%, rgba(255,255,255,.02) 46%, transparent 52%);
 }
 .window__plaque{
-  position:relative; z-index:3; width:max-content; max-width:92%;
+  position:relative; z-index:3; width:max-content; max-width:94%;
   margin:-30px auto 0; text-align:center;
-  background:linear-gradient(135deg,#C9A45C 0%,#E2BE74 55%,#C9A45C 100%);
-  color:#23150E; border:1px solid rgba(42,25,16,.3); border-radius:10px;
-  padding:12px 26px 13px; box-shadow:0 12px 26px rgba(42,25,16,.3);
+  background:#FBF9F4; color:#23150E;
+  border:1px solid rgba(42,25,16,.25); border-radius:12px;
+  padding:14px 24px 12px; box-shadow:0 12px 26px rgba(42,25,16,.3);
 }
+.window__sign{ display:block; width:min(240px,100%); height:auto; margin:0 auto 4px; }
 /* JoYi's Moxie Studio sign replaces the plaque content when ready:
    drop an <img> inside .window__plaque and hide the text spans. */
 .window__room{ display:block; font-family:var(--serif); font-weight:700; font-size:1.08rem; letter-spacing:.16em; }
@@ -1026,7 +1027,7 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
 
 /* ===== Concierge unit: the live demo beside what powers it (2026-08-11) ===== */
 .conciergerow{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(2rem,4vw,3.5rem);
-  align-items:center; max-width:1040px; margin:0 auto; }
+  align-items:start; max-width:1040px; margin:0 auto; }
 .conciergerow .demo--inline{ margin:0; max-width:none; }
 .conciergerow__title{ font-family:var(--serif); font-weight:600; font-size:clamp(1.6rem,2.6vw,2.2rem); margin:.4rem 0 .9rem; }
 .conciergerow__copy > p{ color:var(--ink-soft); max-width:46ch; }
@@ -1055,3 +1056,35 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
 /* window: keep the whole figure, head clear of the transom */
 .window__figure{ width:80%; bottom:4%; }
 .window__transom{ top:32%; }
+
+/* ===== JoYi's punch list (2026-08-11 late) ===== */
+/* 1: the bridge line sits WITH the Concierge, not floating in space */
+.hardlayer__bridge{ margin:1.7rem auto 1.3rem; }
+
+/* 2+5: readable, warm point cards; no grey on grey */
+.conciergerow__copy > p{ color:var(--ink); }
+.conciergerow__points li{ background:#FFFFFF; border:1px solid rgba(26,21,30,.14);
+  color:var(--ink); font-size:1rem; }
+.conciergerow__points strong{ color:var(--clay-deep); }
+.conciergerow__points li:nth-child(1)::before{ background:var(--clay); }
+.conciergerow__points li:nth-child(2)::before{ background:var(--marigold, #E2A23C); }
+.conciergerow__points li:nth-child(3)::before{ background:#2E7D5E; }
+.conciergerow__points li:nth-child(4)::before{ background:var(--blue, #1A1A4E); }
+.conciergerow__close{ color:var(--ink); }
+
+/* 6: the Front Desk banner uses its width: title left, description right */
+.map__desk{ display:grid; grid-template-columns:auto 1fr; gap:clamp(1.6rem,4vw,3.4rem);
+  align-items:center; text-align:left; padding:clamp(1.8rem,3.5vw,2.6rem) clamp(1.8rem,4vw,3.2rem); }
+.map__desk-title{ position:relative; z-index:1; padding-right:clamp(1.2rem,3vw,2.6rem);
+  border-right:1px solid rgba(224,165,59,.4); }
+.map__desc{ margin:0; max-width:56ch; }
+@media (max-width:760px){
+  .map__desk{ grid-template-columns:1fr; text-align:center; gap:1rem; }
+  .map__desk-title{ border-right:0; padding-right:0; }
+  .map__desc{ margin:0 auto; }
+}
+
+/* 7: less dead air between sections and inside the room cards */
+.section{ padding:clamp(46px,6.2vw,86px) var(--pad); }
+.section__head{ margin-bottom:clamp(26px,3.6vw,46px); }
+.room__face{ padding:1.3rem 1.25rem; }

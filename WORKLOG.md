@@ -173,3 +173,24 @@ JoYi's restructure, talked through and synced first:
 Verified: 6 rooms, section order, head clear of transom, no overflow desktop or mobile,
 single-column stacking at 375. styles v67 to v68.
 
+**JoYi's punch list (2026-08-11 latest), one by one:**
+1. Bridge spacing: "Practice Village helps you sort the mess" now sits 1px above the
+   Concierge unit (was 204px). Root cause was worse than margins: an earlier regex had
+   cut the demo card in half, orphaning demoBody/demoLayer between the bridge and the
+   row (the ghost "How may we help you?" in her screenshot). Demo rebuilt whole,
+   div-balance verified, chips click-tested.
+2+5. Point cards: white background, ink text, per-card accent dots; no more grey on grey.
+3. Plain language: "Answers that hold" et al replaced with Ask anything / Answers you
+   can trace (Gemini + TPC 30 years + your own saved learning, not random internet
+   advice) / You are wise (remember and re-remember) / It routes you.
+4. Closing line now hers: "The magic of practice unfolds over the long arc of learning
+   and healing."
+6. Front Desk banner: title left of a gold rule, description right; no more crammed
+   center in a wide box.
+7. Whitespace: section padding tightened sitewide, room backs trimmed, faces tightened.
+8. FAQ rewritten to copy rules: no "we're not pretending otherwise", info-handling
+   answer expanded for transparency (PIL, on-device video, never sold or shared), stale
+   Record Room reference fixed.
+Plus: JoYi's MoxieStudios_logo.png (from Downloads, alpha-trimmed 2000x2000 to 1977x359)
+installed as the window sign on a clean cream plaque. styles v68 to v71.
+
