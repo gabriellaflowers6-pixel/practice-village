@@ -72,7 +72,7 @@ body click flips, link click navigates to /moxie-studio/ without flipping.
 
 Bugfix DEPLOYED: deploy 6a7aecba8e97e32c5c2a3eef, verified live (nav link x3, front-face door, fixed flip handler in served script.js?v=30).
 
-## 2026-08-11 (night): One-job-per-site logic pass — PENDING DEPLOY
+## 2026-08-11 (night): One-job-per-site logic pass — DEPLOYED
 
 JoYi's architecture review: three sites repeated each other. New logic, decided with
 JoYi: aidedeq.org = the company (Village appears once as a hand-off, no room grid, no
@@ -116,4 +116,10 @@ dashes. styles v60 to v61.
 on the dark ticket. Two .ticket__capture input rule blocks competed; the later one (55%
 transparent white, written for a light card) won the cascade. Consolidated to one block:
 solid #FBF9F4 field, ink text, readable placeholder, clay focus ring. styles v61 to v63.
+
+**Night deploy shipped:** PV deploy 6a7afc85b0584d7bb1f9ae18 (one-door logic + Studio
+review + Village review + email field, styles v63). Verified live: seat counter markup,
+canon og:title, 3 builder paragraphs, Studio who-cards/week-list/room-chips/compact-CTA
+all serving, 3 CTAs to /#doors. aidedeq 26fae2e..46e93ef pushed, ready: v60, village
+grid gone, PV store card gone, "Tools that stand on their own" + one-line room list live.
 
