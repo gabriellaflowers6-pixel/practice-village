@@ -227,3 +227,12 @@ builders) now share max-width 920px. styles v74 to v76. Logo unification propose
 JoYi (one consistent mark, amber center + single dot color; kill the big multicolor
 bloom above One Center) awaiting her pick before any dot changes.
 
+**11:31pm round:** one mark sitewide, JoYi's pick: deep amber center (#C9862B), navy
+dots (#1A1A4E), identical in nav, demo avatar, and footer (footer's sits on a cream coin
+so navy reads on dark); favicon now amber with navy PV; the big multicolor bloom above
+One Center is gone. Builders box text left-aligned and fills the box. Concierge closing
+line breathes 54px below the demo. Gifts: intro line removed, header on one line with
+tightened head margin. RAW box redone: left-aligned, six numbered step chips in a row,
+phil and when lines full width. styles v76 to v77. Verified by DOM: 3 marks all
+amber/navy, bloom gone, intro gone, one-line header, 6 step chips, no overflow.
+
