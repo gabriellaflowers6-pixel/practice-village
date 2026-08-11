@@ -88,3 +88,16 @@ the live counter (CONFIG.seatsTaken in script.js, id="seatsLeft"). script v31, s
 v60. STRIPE FLIP now touches ONE file: script.js CONFIG (stripeVillager,
 stripeMembership, seatsTaken).
 
+**Studio page design + copy review (same night, JoYi's ask):** desktop and mobile pass
+for a modern professional product page. Copy: hero lede no longer repeats the h1; the
+"Who this is for" wall of text is now four scannable gold-dot cards; the First 30 Days
+door breaks its run-on into a shape line + a Week 1-4 list; the "studies linked in the
+footer" claim and the footer's dead "Studies and sources" href="#" link are gone; the
+FAQ no longer references "the room grid above" (removed earlier); zero em dashes.
+Visual: village band gains room-name chips + a real button; ticket seat line no longer
+echoes the section heading; .ipad{overflow:hidden} kills a horizontal scrollbar caused
+by the scaled showcase card. Mobile: nav rebuilt as brand + compact "Join · $149" pill
+(three items could not fit 375px without overlap; the page body links to the Village
+three times); hero headline calmed from 10vw to 7.6vw. Verified at 1280 and 375: no
+horizontal overflow, who cards 2-col/1-col, chips centered, ticket sticky on desktop.
+
