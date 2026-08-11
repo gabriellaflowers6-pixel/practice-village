@@ -252,3 +252,8 @@ clamp(2.2rem,4.7vw,3.6rem); "women" count in the hero is exactly 2 (chip targeti
 canon lede). The image's top band (with the glow-mode chip) cropped out of the source
 PNG; arch snugged to 10/9.7 so her head clears the curve by ~67px. styles v79 to v80.
 
+**JoYi caught the arch seam (11:52pm):** the image's top edge still drew a straight line
+across the glass. Fixed in the source PNG, not CSS: alpha fade over the top 22% (power
+curve) and 6% side fades, so the room dissolves into the arch shadow with no seam.
+styles v80 to v81 (cache-bust only).
+
