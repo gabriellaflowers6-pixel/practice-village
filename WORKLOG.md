@@ -8,7 +8,14 @@ it to see every change.
 
 ---
 
-## 2026-08-11: Rebuild to match aidedeq.org canon — PENDING DEPLOY
+## 2026-08-11: Rebuild to match aidedeq.org canon — DEPLOYED
+
+Shipped on JoYi/Gabby's "lets go": `netlify deploy --prod` to site
+`aae16881-7774-4d75-a7f2-6065e8c2e45d`, deploy `6a7ac56532bc8f919b57cfc3`. Verified
+live: 200; Founding Villager / $149 / $15 / YWCA line / Quiet Room / Kitchen / "Step
+into the Studio" all present; zero $97, $19, Alison, Founding Circle, The Commons, and
+zero buy.stripe.com links anywhere (old wrong-price checkout is dead). Commons stays
+out per JoYi, reviewed step by step before shipping.
 
 Source of truth: the 2026-08-11 aidedeq.org work + Moxie-Studio-Launch-Plan-2026-08.
 - Positioning: "a digital community center for women, built the way a YWCA serves a
