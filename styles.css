@@ -1144,3 +1144,10 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
 @media (max-width:600px){ .gifts__grid{ grid-template-columns:1fr; } }
 .gift--tool{ background:linear-gradient(180deg, rgba(197,168,128,.16), var(--paper)); }
 .gift--tool a{ display:inline-block; margin-top:.6rem; font-weight:700; color:var(--clay-deep); text-underline-offset:3px; }
+
+/* close quote balances under the demo; the section tightens */
+.conciergerow__left{ display:grid; gap:1.3rem; align-content:start; }
+.conciergerow__left .conciergerow__close{ margin:0; }
+
+/* bio and builders boxes share one size */
+.hilo__inner{ max-width:920px; }

@@ -221,3 +221,9 @@ Wholeness) with free/no-login language matching aidedeq. styles v73 to v74. Veri
 DOM: one-line bridge, 6 gifts, 3 columns, both snapshot links, plaque grid + rule, no
 overflow.
 
+**11:28pm round:** the closing quote (clay-rule paragraph) moved under the demo in the
+left column, balancing the Concierge unit; both hilo boxes (JoYi bio + Meet the
+builders) now share max-width 920px. styles v74 to v76. Logo unification proposed to
+JoYi (one consistent mark, amber center + single dot color; kill the big multicolor
+bloom above One Center) awaiting her pick before any dot changes.
+
