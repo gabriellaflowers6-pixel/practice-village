@@ -830,12 +830,6 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
 .ticket--feature h3{ color:#E7C88A; }
 .ticket--feature .ticket__price i{ color:rgba(247,244,238,.6); }
 
-/* Charter List email field, restyled for the dark glass */
-.ticket__capture input[type=email]{
-  background:rgba(247,244,238,.1); border-color:rgba(247,244,238,.28); color:#FBF9F4;
-}
-.ticket__capture input[type=email]::placeholder{ color:rgba(247,244,238,.5); }
-.ticket__capture input[type=email]:focus{ border-color:var(--clay); background:rgba(247,244,238,.16); }
 .ticket__note{ color:rgba(247,244,238,.72); }
 
 /* ============================================================
@@ -946,10 +940,10 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
 .ticket__capture{ display:grid; gap:.7rem; }
 .ticket__capture input[type=email]{
   width:100%; padding:.74em .95em; font-family:var(--sans); font-size:.97rem; color:var(--ink);
-  border:1.5px solid var(--line); border-radius:12px; background:rgba(255,255,255,.55);
+  border:1.5px solid rgba(247,244,238,.4); border-radius:12px; background:#FBF9F4;
 }
-.ticket__capture input[type=email]::placeholder{ color:var(--ink-faint); }
-.ticket__capture input[type=email]:focus{ outline:none; border-color:var(--clay); background:rgba(255,255,255,.8); }
+.ticket__capture input[type=email]::placeholder{ color:rgba(42,25,16,.5); }
+.ticket__capture input[type=email]:focus{ outline:none; border-color:var(--clay); background:#FFFFFF; }
 .ticket__note{ margin:0; min-height:1.1em; font-size:.83rem; line-height:1.35; color:var(--ink-soft); }
 
 /* Room-card door link (2026-08-11): visible on the front face, styled as a real way in */

@@ -112,3 +112,8 @@ the two never overlap (verified by rect intersection at 375px). Hamburger menu
 open/close verified by simulated clicks. No horizontal overflow at 1280 or 375. Zero em
 dashes. styles v60 to v61.
 
+**Charter email field (JoYi spotted it):** the input rendered as an unreadable grey slab
+on the dark ticket. Two .ticket__capture input rule blocks competed; the later one (55%
+transparent white, written for a light card) won the cascade. Consolidated to one block:
+solid #FBF9F4 field, ink text, readable placeholder, clay focus ring. styles v61 to v63.
+
