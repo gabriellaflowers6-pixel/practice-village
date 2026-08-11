@@ -247,3 +247,8 @@ evenly (symmetric overhang, was 200px one-sided). styles v77 to v78.
 glass; the bar lost. Window is one tall arched pane, figure whole at 96% width, head
 clear under the curve. styles v78 to v79.
 
+**Done well (11:47pm, approved first):** headline is "Your digital community center." at
+clamp(2.2rem,4.7vw,3.6rem); "women" count in the hero is exactly 2 (chip targeting +
+canon lede). The image's top band (with the glow-mode chip) cropped out of the source
+PNG; arch snugged to 10/9.7 so her head clears the curve by ~67px. styles v79 to v80.
+
