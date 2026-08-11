@@ -71,3 +71,20 @@ script.js v29 to v30, styles v58 to v59 (one .room__cta rule). Click-tested head
 body click flips, link click navigates to /moxie-studio/ without flipping.
 
 Bugfix DEPLOYED: deploy 6a7aecba8e97e32c5c2a3eef, verified live (nav link x3, front-face door, fixed flip handler in served script.js?v=30).
+
+## 2026-08-11 (night): One-job-per-site logic pass — PENDING DEPLOY
+
+JoYi's architecture review: three sites repeated each other. New logic, decided with
+JoYi: aidedeq.org = the company (Village appears once as a hand-off, no room grid, no
+store membership card); Practice Village = single source of truth for rooms, pricing,
+checkout, Charter List, and the 108-seat counter; Moxie Studio page = pure product page,
+every join CTA deep-links to /#doors.
+
+This repo's changes: Studio page lost its duplicate room grid, its own founding
+checkout wiring (checkoutBtn/monthlyBtn/STRIPE config), its Charter form, and its live
+seat counter (now a static "108 founding seats, priced in the open" line + same in
+hero); nav CTA and ticket buttons -> /#doors. Homepage Founding Villager ticket gains
+the live counter (CONFIG.seatsTaken in script.js, id="seatsLeft"). script v31, styles
+v60. STRIPE FLIP now touches ONE file: script.js CONFIG (stripeVillager,
+stripeMembership, seatsTaken).
+

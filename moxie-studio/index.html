@@ -328,7 +328,7 @@
       <a href="#live">Live classes</a>
       <a href="#faq">FAQ</a>
     </nav>
-    <a class="btn btn--gold nav__cta" href="#offer">Founding seat · $149</a>
+    <a class="btn btn--gold nav__cta" href="/#doors">Founding seat · $149</a>
   </div>
 </header>
 
@@ -342,7 +342,7 @@
         <p class="hero__lede reveal">Moxie Studio teaches yoga and meditation from zero. Follow every pose on screen at your own pace, wobbles and all. No class, no audience, and no person ever sees you practice. The guidance runs on your own machine, and nothing is recorded or uploaded.</p>
         <div class="hero__ctas reveal">
           <a class="btn btn--gold" href="#offer">See founding membership · $149</a>
-          <span class="hero__seats"><strong id="seatsLeftHero">108</strong> of 108 founding seats remain</span>
+          <span class="hero__seats">108 founding seats, priced in the open</span>
         </div>
       </div>
       <div class="om reveal" aria-hidden="true">
@@ -511,14 +511,6 @@
         <h2 class="reveal">One membership. A whole community center.</h2>
         <p class="reveal">Moxie Studio is the flagship room in Practice Village, a digital community center for women, built the way a YWCA serves a town. The studio trains your body. The Concierge sorts paperwork and next steps when life reshuffles. The Kitchen plans the week's cooking. The Quiet Room gives anyone sixty seconds of breath, free. And your record of all of it belongs to you.</p>
       </div>
-      <div class="rooms">
-        <article class="room reveal"><span class="room__badge room__badge--open">Open now</span><h3>Moxie Studio</h3><p>Yoga and meditation with Bott Om. Live classes February 2027.</p></article>
-        <article class="room reveal"><span class="room__badge room__badge--open">Open</span><h3>The Front Desk</h3><p>Your Concierge and the assessments.</p></article>
-        <article class="room reveal"><span class="room__badge room__badge--open">Open</span><h3>The Kitchen</h3><p>Plant-forward cooking, planned for a week that is already full.</p></article>
-        <article class="room reveal"><span class="room__badge room__badge--open">Open · free</span><h3>The Quiet Room</h3><p>HUSH: sixty seconds of breath, free for everyone.</p></article>
-        <article class="room reveal"><span class="room__badge room__badge--soon">Rolling out</span><h3>The Record Room</h3><p>Your record: yours to keep, carry, and use again.</p></article>
-        <article class="room reveal"><span class="room__badge room__badge--soon">In build</span><h3>Safety Hall</h3><p>Safety tools and support, starting with the microaggression tracker we built ourselves.</p></article>
-      </div>
       <p class="village__doorway reveal"><a href="/">Walk through the whole Practice Village.</a></p>
     </div>
   </section>
@@ -556,28 +548,13 @@
           <li>Your name in the Village lobby, if you want it there</li>
           <li>A vote on which room the Village builds next</li>
         </ul>
-        <p class="ticket__seats"><strong id="seatsLeft">108</strong> of 108 seats remain</p>
-        <div class="ticket__bar" aria-hidden="true"><i id="seatsBar"></i></div>
-        <a class="btn btn--gold" id="checkoutBtn" href="#" rel="noopener">Take a founding seat · $149</a>
-        <p class="ticket__alt">Stripe checkout · or <a href="#" id="monthlyBtn">$15/month, cancel anytime</a><br />Not ready? <a href="#charter">Join the free Charter List</a></p>
+        <p class="ticket__seats">108 founding seats, priced in the open</p>
+        <a class="btn btn--gold" href="/#doors">Take a founding seat · $149</a>
+        <p class="ticket__alt">Or <a href="/#doors">$15/month, cancel anytime</a><br />Not ready? <a href="/#doors">Join the free Charter List</a></p>
       </aside>
     </div>
   </section>
 
-  <!-- CHARTER -->
-  <section class="charter" id="charter">
-    <div class="wrap">
-      <div class="charter__box reveal">
-        <p><strong>The Charter List is free.</strong> Founder build updates, first word when rooms open, and first access to the February live room after founding members. One email when it matters, and your address is never sold or shared.</p>
-        <form name="moxie-charter" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-          <input type="hidden" name="form-name" value="moxie-charter" />
-          <p hidden aria-hidden="true"><label>Skip this field: <input name="bot-field" /></label></p>
-          <input type="email" name="email" required autocomplete="email" placeholder="you@example.com" aria-label="Your email address" />
-          <button type="submit" class="btn btn--ghost on-cream">Join the Charter List</button>
-        </form>
-      </div>
-    </div>
-  </section>
 
   <!-- FAQ -->
   <section class="faq" id="faq">
@@ -612,33 +589,7 @@
 </footer>
 
 <script>
-  // ---- Config: set these before launch ----
-  var STRIPE_ANNUAL_LINK  = "";   // Stripe Payment Link for $149/yr founding seat
-  var STRIPE_MONTHLY_LINK = "";   // Stripe Payment Link for $15/mo founding rate
-  var SEATS_TAKEN = 0;            // update until webhook automation lands
-
   (function(){
-    var left = Math.max(0, 108 - SEATS_TAKEN);
-    document.getElementById("seatsLeft").textContent = left;
-    document.getElementById("seatsLeftHero").textContent = left;
-    requestAnimationFrame(function(){
-      document.getElementById("seatsBar").style.width = (SEATS_TAKEN/108*100) + "%";
-    });
-
-    function wire(id, link){
-      var el = document.getElementById(id);
-      if (link) { el.setAttribute("href", link); }
-      else {
-        el.addEventListener("click", function(e){
-          e.preventDefault();
-          document.getElementById("charter").scrollIntoView({behavior:"smooth"});
-          var input = document.querySelector('#charter input[type=email]');
-          if (input) input.focus({preventScroll:true});
-        });
-      }
-    }
-    wire("checkoutBtn", STRIPE_ANNUAL_LINK);
-    wire("monthlyBtn", STRIPE_MONTHLY_LINK);
 
     // ipad scroll animation (vanilla port of 21st.dev container-scroll-animation)
     (function(){

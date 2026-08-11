@@ -948,3 +948,7 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
 
 /* Room-card door link (2026-08-11): visible on the front face, styled as a real way in */
 .room__cta { font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+
+/* Founding seat counter on the Villager ticket (2026-08-11) */
+.ticket__seats { font-size: 0.9rem; letter-spacing: 0.03em; color: var(--clay, #C2542F); margin: 0.75rem 0 0.5rem; }
+.ticket__seats strong { font-size: 1.05rem; }

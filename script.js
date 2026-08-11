@@ -10,8 +10,13 @@
     stripeVillager: "",     // $149/year Founding Villager (Stripe link pending)
     stripeMembership: "",   // $15/mo Membership (Stripe link pending)
     whatsappInvite: "",     // WhatsApp porch link (channel or wa.me)
-    signupEndpoint: ""      // POST endpoint for signups
+    signupEndpoint: "",     // POST endpoint for signups
+    seatsTaken: 0           // founding seats sold; update until webhook automation lands
   };
+
+  /* single source of truth for the 108-seat counter (the Studio page shows a static line) */
+  var seatsEl = document.getElementById("seatsLeft");
+  if (seatsEl) seatsEl.textContent = Math.max(0, 108 - CONFIG.seatsTaken);
 
   /* ============ interactive Concierge demo (clears the hard layer) ============ */
   var SCRIPTS = {
