@@ -30,7 +30,9 @@ invitation accepted). Shipped on JoYi's "go" after 5 review drafts.
 - FILES: script.js, index.html, WORKLOG.md, NEXT-SESSION.md.
 - Old $97 / $19 payment links: JoYi deactivating in the dashboard (new links
   exist; deactivation does not affect existing subscribers).
-- STOPPED: see deploy id in the entry below this line after prod push.
+- STOPPED ~13:20 JST, DEPLOYED to production: deploy 6a7be8cbe63997bf49a7431c. Verified live:
+  nav CTA, pill label, 2 stripe links in script.js, zero $97/$19, /moxie-studio/ 200,
+  both checkouts load real products.
 
 ---
 
