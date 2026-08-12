@@ -84,6 +84,13 @@ The Concierge is the front desk of a digital community center. It is not a chatb
 
 Source registry (the APIs + vetted orgs above) → scheduled fetch jobs (the Roo infrastructure pattern: scheduled functions + digest + review queue) → **human review gate before anything goes live** (same accept/reject discipline as the pose library) → Supabase `resources` table (domain, state, zip, source, date_checked, status) → Concierge queries the table first, grounded search second, guided-out third. Every fetch logged: this pipeline is itself AI-native-operations evidence.
 
+## PIL consent pattern (JoYi, 2026-08-12)
+
+**Never ask a save decision per exchange.** Consent fatigue is real and per-reply prompts train reflexive clicking, the opposite of consent. Instead:
+- During a session, candidate cards accumulate quietly (a soft counter at most, never a button interrupting each reply).
+- At **session end** (an explicit wrap-up she initiates, or a before-you-go moment), the Concierge presents one review: everything the visit produced across rooms, queries, and actions, each item checkable. She keeps what she keeps.
+- "Keep this private" remains available at any moment as an interrupt; exclusion is urgent, inclusion can wait.
+
 ## Intake (what makes a member's Concierge sharp)
 
 State + zip · domains she wants help with (the room list as checkboxes) · situation in her words · consent choices (what the Concierge may remember). Nothing medical, nothing extractive. Members get the sharpened Concierge; visitors get the demo.
