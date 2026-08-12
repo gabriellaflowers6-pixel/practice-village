@@ -1,3 +1,21 @@
+### 2026-08-12 NIGHT CLOSE (JoYi's bot) — Concierge v2 SHIPPED to repo, prod has checkout
+PROD (practice-village.netlify.app): Stripe checkout LIVE both plans, honest CTAs,
+Moxie Studios plural, /concierge function deployed (page toggle OFF pending JoYi's
+final tone pass; latest draft has it ON with the full spec conversation).
+CONCIERGE v2 (commits ed44d54..539f2bd): MVP-spec conversation (reflect + question +
+choice menu), quick-reply taps, understand-arc that NAMES the pattern then offers
+action/resource, routes ONLY at resolution moments (code-enforced), HUD + FDIC zip
+lookups live, dating-safety = NSOPW/reverse-image/FTC walkthrough WITH the refusal,
+PIL consent = ONE wrap-up review at session end (JoYi rule: never per-exchange).
+Adversarial battery 10/10 on paid tier.
+GEMINI: paid tier ACTIVATED on Default Gemini Project (free tier = 20 req/day/model,
+verified; this was today's mystery outage). GEMINI_BACKEND=aistudio, model
+gemini-flash-latest, thinkingLevel LOW (adaptive thinking truncates JSON).
+TOMORROW: JoYi launches thepracticevillage.org (primary; .com also owned; Moxie =
+subdomain/path). Then: tone pass -> prod flip of live Concierge, Safety Hall deploy
+(font reconciliation: Fraunces vs site Cormorant), evidence pack.
+STOPPED for the night. No servers running. Working tree clean.
+
 # Practice Village — Work Log
 
 Repo created 2026-08-11 by importing the live practice-village.netlify.app deploy
