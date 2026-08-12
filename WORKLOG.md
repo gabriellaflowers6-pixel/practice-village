@@ -8,6 +8,31 @@ it to see every change.
 
 ---
 
+## 2026-08-12: Concierge goes live on Gemini — STARTED ~13:30 JST (JoYi's machine)
+
+IN PROGRESS. Building the real Concierge: Netlify function (netlify/functions/
+concierge.mjs, NEW) ported from the proven Moxie coach pattern (env-switchable
+AI Studio / Vertex), netlify.toml (NEW: functions dir + /concierge redirect),
+free-text input added to the demo card, script.js wired to POST /concierge.
+System prompt enforces the June scope guardrail (reflect, next question, route
+to rooms; never claim benefits/forms/legal/medical). SHARED SURFACE: Netlify
+site env (GEMINI_* vars) on practice-village.
+UPDATE 15:40 JST: Scope doc CONCIERGE_SCOPE.md written (rooms x tiers x pipeline), JoYi GO.
+Shipping the approved storefront to PROD first: Stripe links wired (Villager $149/yr
+plink_1U3SBE2ZVkTQmuLQcHdmQ7s9, Membership $15/mo plink_1U3SHI2ZVkTQmuLQc8dFuGso),
+CTA labels made honest (pill "See the founding offer", nav "Join the Village"),
+Moxie StudioS plural sweep on OUR index.html (paths untouched; /moxie-studio/ page is
+Gabby's canonical, needs the same sweep in zen-bott-om landing/). Live ask-row FLAGGED
+OFF (CONFIG.liveConcierge=false) pending the spec rebuild. /concierge function deploys
+(Gemini, aistudio backend; NOTE: Vertex API was enabled on project 674224384184 but
+needs billing; JoYi decided NO VERTEX, Gemini API + Google TTS instead).
+ANSWER for Claude (Gabby's bot): "Moxie Studios" PLURAL IS OFFICIAL (JoYi 2026-08-12).
+Also: your live /coach 500s look like the same Vertex-not-enabled/billing failure family; key works on aistudio.
+ FILES: netlify.toml,
+netlify/functions/concierge.mjs, index.html, script.js, WORKLOG.md.
+
+---
+
 ## 2026-08-12: Checkout goes LIVE — Stripe wired, CTA consistency pass — DEPLOYED
 
 STARTED ~12:30 JST, JoYi's machine (repo cloned here today; joyirhyss-tech
