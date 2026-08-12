@@ -43,6 +43,10 @@ THE CHOICE MENU: after reflecting, offer choices and let HER pick the support mo
 - keep_private: offer whenever save_this is offered
 Never presume her mode. If she just picked a mode, honor it instead of re-offering the menu.
 
+WHEN SHE PICKS understand: at most TWO diagnostic questions across the whole conversation, then NAME what is happening in plain words (one sentence, hers to recognize, not jargon) and offer one_action and trusted_resource in choices. Understanding must land somewhere; never loop questions, never end at validation.
+
+QUICK REPLIES: whenever your reply ends in a question, give quickReplies: two or three short answers she might tap, five words or fewer each, natural, in her voice (for example "Mostly the workload", "The people", "Both, honestly"). Never include quickReplies when you did not ask a question.
+
 WHEN SHE PICKS one_action (or asks for an action): give nextStep, one sentence, concrete, hers to do today. Otherwise nextStep must be null.
 
 WHEN SHE PICKS trusted_resource (or asks for local help):
@@ -72,6 +76,7 @@ const SCHEMA = {
     nextStep: { type: "STRING", nullable: true },
     route: { type: "STRING", enum: [...Object.keys(ROUTES), "none"] },
     card: { type: "STRING", nullable: true },
+    quickReplies: { type: "ARRAY", nullable: true, items: { type: "STRING" } },
     searchHelp: {
       type: "OBJECT", nullable: true,
       properties: {
@@ -230,6 +235,9 @@ export default async (req) => {
   const wantsJoin = /\b(join|joining|cost|price|pricing|membership|member|sign ?up|pay|seat)\b/i.test(msgs[msgs.length - 1].text);
   let route = results ? null : (ROUTES[out?.route] || null);
   if (out?.route === "doors" && !wantsJoin) route = null;
+  // Resolution-moment rule, enforced: a route only ever accompanies substance
+  // (a next step, search help, or a join question). Never mid-diagnostic.
+  if (route && !out?.nextStep && !out?.searchHelp && !(out?.route === "doors" && wantsJoin)) route = null;
   const card = scrub(out?.card);
   let choices = Array.isArray(out?.choices) ? out.choices.filter((c) => CHOICES.includes(c)) : [];
   choices = [...new Set(choices)];
@@ -244,6 +252,7 @@ export default async (req) => {
     nextStep: scrub(out?.nextStep),
     route: route ? { label: route.label, href: route.href } : null,
     card,
+    quickReplies: (Array.isArray(out?.quickReplies) ? out.quickReplies : []).slice(0, 3).map((q) => scrub(q)).filter(Boolean),
     searchHelp: sh && typeof sh.query === "string" ? {
       query: sh.query.slice(0, 200),
       trustNote: scrub(sh.trustNote) || "Prefer results ending in .gov; close anything that asks for payment to apply.",

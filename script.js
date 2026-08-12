@@ -109,8 +109,13 @@
         html += "</div>";
       }
       if (d.route) {
-        html += '<p class="demo__route">→ leads to <b><a href="' + esc(d.route.href) + '"' +
+        html += '<p class="demo__route">when you want it: <b><a href="' + esc(d.route.href) + '"' +
                 (String(d.route.href).charAt(0) === "#" ? "" : ' target="_blank" rel="noopener"') + ">" + esc(d.route.label) + "</a></b></p>";
+      }
+      if (d.quickReplies && d.quickReplies.length) {
+        html += '<div class="demo__chips demo__chips--quick">' + d.quickReplies.map(function (q) {
+          return '<button data-quick="' + esc(q) + '">' + esc(q) + "</button>";
+        }).join("") + "</div>";
       }
       var menu = (d.choices || []).filter(function (c) { return c !== "save_this"; });
       if (menu.length) {
@@ -126,6 +131,9 @@
     demoBody.innerHTML = html;
     demoBody.querySelectorAll("[data-choice]").forEach(function (b) {
       b.addEventListener("click", function () { pickChoice(b.getAttribute("data-choice"), b); });
+    });
+    demoBody.querySelectorAll("[data-quick]").forEach(function (b) {
+      b.addEventListener("click", function () { askConcierge(b.getAttribute("data-quick")); });
     });
     var wrapBtn = demoBody.querySelector(".demo__wrap");
     if (wrapBtn) wrapBtn.addEventListener("click", renderWrapUp);

@@ -1249,3 +1249,7 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
 .demo__wraplist { display: flex; flex-direction: column; gap: .45rem; margin: .6rem 0 .8rem; }
 .demo__wrapitem { display: flex; gap: .5rem; align-items: flex-start; font-size: .9rem; line-height: 1.45; cursor: pointer; }
 .demo__wrapitem input { margin-top: .2rem; accent-color: var(--clay, #C2542F); }
+
+/* quick replies: her likely answers, one tap */
+.demo__chips--quick { margin-top: .55rem; }
+.demo__chips--quick button { font-style: italic; opacity: .95; }
