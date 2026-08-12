@@ -1242,3 +1242,10 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
 .demo__query code { display: block; padding: .5rem .7rem; background: rgba(26,26,78,.08); border-radius: 8px; font-size: .84rem; word-break: break-word; user-select: all; }
 .demo__steps { margin: .5rem 0 0; padding-left: 1.2rem; font-size: .88rem; line-height: 1.55; }
 .demo__steps li { margin-bottom: .3rem; }
+
+/* ===== PIL session-end review (consent once, at wrap-up) ===== */
+.demo__pending { margin: .55rem 0 0; font-size: .78rem; opacity: .8; }
+.demo__wrap { background: none; border: 0; padding: 0; color: var(--clay, #C2542F); text-decoration: underline; cursor: pointer; font: inherit; font-size: .78rem; }
+.demo__wraplist { display: flex; flex-direction: column; gap: .45rem; margin: .6rem 0 .8rem; }
+.demo__wrapitem { display: flex; gap: .5rem; align-items: flex-start; font-size: .9rem; line-height: 1.45; cursor: pointer; }
+.demo__wrapitem input { margin-top: .2rem; accent-color: var(--clay, #C2542F); }

@@ -66,6 +66,7 @@
 
   var liveMsgs = [];
   var lastReply = null;
+  var pendingCards = [];
   var askBusy = false;
   var askForm = document.getElementById("demoAsk");
   var askInput = document.getElementById("demoAskInput");
@@ -111,32 +112,54 @@
         html += '<p class="demo__route">→ leads to <b><a href="' + esc(d.route.href) + '"' +
                 (String(d.route.href).charAt(0) === "#" ? "" : ' target="_blank" rel="noopener"') + ">" + esc(d.route.label) + "</a></b></p>";
       }
-      if (d.choices && d.choices.length) {
-        html += '<div class="demo__chips demo__chips--menu">' + d.choices.map(function (c) {
+      var menu = (d.choices || []).filter(function (c) { return c !== "save_this"; });
+      if (menu.length) {
+        html += '<div class="demo__chips demo__chips--menu">' + menu.map(function (c) {
           return '<button data-choice="' + c + '">' + esc(CHOICE_LABELS[c] || c) + "</button>";
         }).join("") + "</div>";
       }
+    }
+    if (pendingCards.length) {
+      html += '<p class="demo__pending">' + pendingCards.length + (pendingCards.length === 1 ? " moment" : " moments") + ' set aside · <button class="demo__wrap" type="button">wrap up and review</button></p>';
     }
     html += '<button class="demo__reset demo__reset--lone" type="button">↺ start over</button></div>';
     demoBody.innerHTML = html;
     demoBody.querySelectorAll("[data-choice]").forEach(function (b) {
       b.addEventListener("click", function () { pickChoice(b.getAttribute("data-choice"), b); });
     });
+    var wrapBtn = demoBody.querySelector(".demo__wrap");
+    if (wrapBtn) wrapBtn.addEventListener("click", renderWrapUp);
     var resetBtn = demoBody.querySelector(".demo__reset");
     if (resetBtn) resetBtn.addEventListener("click", function () { liveMsgs = []; lastReply = null; resetDemo(); });
     demoBody.scrollTop = demoBody.scrollHeight;
   }
 
   function pickChoice(choice, btn) {
-    if (choice === "save_this") {
-      if (lastReply && lastReply.card) { saveCard(lastReply.card); btn.disabled = true; btn.textContent = "✓ in your record"; }
-      return;
-    }
     if (choice === "keep_private") {
-      btn.disabled = true; btn.textContent = "✓ kept private, nothing saved";
+      pendingCards.pop();
+      btn.disabled = true; btn.textContent = "✓ kept private, nothing set aside";
+      var p = demoBody.querySelector(".demo__pending");
+      if (p && !pendingCards.length) p.remove();
       return;
     }
     if (CHOICE_SENDS[choice]) askConcierge(CHOICE_SENDS[choice]);
+  }
+
+  /* session-end review: ONE consent moment, per CONCIERGE_SCOPE (JoYi 2026-08-12) */
+  function renderWrapUp() {
+    var html = '<div class="fade-in"><p class="demo__q">Before you go: keep any of this in your record?</p><div class="demo__wraplist">';
+    pendingCards.forEach(function (c, i) {
+      html += '<label class="demo__wrapitem"><input type="checkbox" checked data-i="' + i + '"> ' + esc(c) + "</label>";
+    });
+    html += '</div><button class="demo__save" type="button">Keep the checked ones</button> <button class="demo__reset" type="button">keep nothing, discard all</button></div>';
+    demoBody.innerHTML = html;
+    demoBody.querySelector(".demo__save").addEventListener("click", function () {
+      demoBody.querySelectorAll("input[data-i]:checked").forEach(function (cb) { saveCard(pendingCards[Number(cb.getAttribute("data-i"))]); });
+      pendingCards = []; liveMsgs = []; lastReply = null; resetDemo();
+    });
+    demoBody.querySelector(".demo__reset").addEventListener("click", function () {
+      pendingCards = []; liveMsgs = []; lastReply = null; resetDemo();
+    });
   }
 
   function askConcierge(text) {
@@ -159,6 +182,7 @@
       }
       liveMsgs.push({ role: "model", text: d.reply });
       lastReply = d;
+      if (d.card && pendingCards.indexOf(d.card) === -1) pendingCards.push(d.card);
       renderConvo(d);
     }).catch(function () {
       askBusy = false;
