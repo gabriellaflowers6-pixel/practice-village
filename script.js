@@ -12,74 +12,20 @@
     whatsappInvite: "",     // WhatsApp porch link (channel or wa.me)
     signupEndpoint: "",     // POST endpoint for signups
     seatsTaken: 0,          // founding seats sold; update until webhook automation lands
-    liveConcierge: false    // live Gemini ask-row; OFF in prod until the spec rebuild ships
+    liveConcierge: true    // live Gemini ask-row; OFF in prod until the spec rebuild ships
   };
 
   /* single source of truth for the 108-seat counter (the Studio page shows a static line) */
   var seatsEl = document.getElementById("seatsLeft");
   if (seatsEl) seatsEl.textContent = Math.max(0, 108 - CONFIG.seatsTaken);
 
-  /* ============ interactive Concierge demo (clears the hard layer) ============ */
-  var SCRIPTS = {
-    money:   { hl: ["12 tabs open", "which form?", "hold music", "the shame spiral"],
-               clear: "The benefit programs worth checking in your state, and exactly how to check them yourself.",
-               route: "your Concierge · money",
-               save: "Money: what to check, and how to check it" },
-    housing: { hl: ["19 listing sites", "is it even safe?", "first + last + deposit", "do it alone"],
-               clear: "Trusted local options and a safe next step, not 19 sketchy listings.",
-               route: "Safety Hall + the resource library",
-               save: "Housing: trusted options + a safe next step" },
-    work:    { hl: ["55 and starting over", "100 applications", "the AI screener", "no callbacks"],
-               clear: "A real plan to restart your income at midlife, with the tools to do it.",
-               route: "the resource library · restart your income",
-               save: "Work: a plan to restart my income at midlife" },
-    family:  { hl: ["Mom needs more care", "I work full-time", "no respite", "what do I qualify for?"],
-               clear: "The caregiving and respite programs run in your county, and women carrying it with you.",
-               route: "your Concierge + your people",
-               save: "Family: the county programs to call, and my people" },
-    stuck:   { hl: ["everything at once", "ten 'shoulds'", "no starting point", "all alone"],
-               clear: "One first step, and your circle, so you're not doing it alone.",
-               route: "your Concierge + the Village",
-               save: "Stuck: my first step, and my circle" },
-    body:    { hl: ["dismissed by doctors", "conflicting advice", "no time", "where to start?"],
-               clear: "Trusted menopause info, and the questions to bring to your doctor.",
-               route: "the resource library · health (Moxie Studio open)",
-               save: "Body: menopause info + questions for my doctor" }
-  };
-
+  /* ============ the Concierge: one live conversation (02_MVP spec) ============
+     Chips seed it ("What feels heaviest this week?"), replies follow the spec:
+     one reflection, one next-best question, a choice menu SHE picks from.
+     Next-step ceremony only when she chose an action. Saves only by her choice. */
   var demoBody = document.getElementById("demoBody");
   var demoStack = document.getElementById("demoStack");
   var savedCount = 0;
-
-  function bindChips() {
-    var chips = document.getElementById("demoChips");
-    if (!chips) return;
-    chips.querySelectorAll("button").forEach(function (b) {
-      b.addEventListener("click", function () { showReflection(b.getAttribute("data-k")); });
-    });
-  }
-
-  function showReflection(key) {
-    var s = SCRIPTS[key];
-    if (!s) return;
-    var chips = s.hl.map(function (h, i) {
-      return '<span class="demo__hlchip" style="--cd:' + (i * 0.12) + 's">' + h + "</span>";
-    }).join("");
-    demoBody.innerHTML =
-      '<div class="fade-in">' +
-        '<p class="demo__cleared">clearing the runaround…</p>' +
-        '<div class="demo__hl">' + chips + "</div>" +
-        '<div class="demo__result">' +
-          '<span class="demo__rlabel">your clear next step</span>' +
-          '<p class="demo__act">' + s.clear + "</p>" +
-          '<p class="demo__route">→ leads to <b>' + s.route + "</b></p>" +
-          '<button class="demo__save" type="button">Let my Concierge keep this</button>' +
-          '<button class="demo__reset" type="button">↺ try another</button>' +
-        "</div>" +
-      "</div>";
-    demoBody.querySelector(".demo__save").addEventListener("click", function () { saveCard(s.save); this.disabled = true; this.textContent = "✓ your Concierge saved it"; this.style.background = "var(--moss)"; });
-    demoBody.querySelector(".demo__reset").addEventListener("click", resetDemo);
-  }
 
   function saveCard(text) {
     if (savedCount === 0) demoStack.innerHTML = "";
@@ -97,10 +43,146 @@
     }
   }
 
+  var SEEDS = {
+    money:   "Money feels heaviest this week.",
+    housing: "Housing feels heaviest this week.",
+    work:    "Work feels heaviest this week.",
+    family:  "Family feels heaviest this week.",
+    stuck:   "I feel stuck. Everything is heavy at once.",
+    body:    "My body feels heaviest this week."
+  };
+  var CHOICE_LABELS = {
+    understand:       "Help me understand what's happening",
+    one_action:       "One small action today",
+    trusted_resource: "A trusted resource",
+    save_this:        "Keep this in my record",
+    keep_private:     "Keep this private"
+  };
+  var CHOICE_SENDS = {
+    understand:       "Help me understand what is happening first.",
+    one_action:       "Give me one small action I can take today.",
+    trusted_resource: "Point me to a trusted resource for this."
+  };
+
+  var liveMsgs = [];
+  var lastReply = null;
+  var askBusy = false;
+  var askForm = document.getElementById("demoAsk");
+  var askInput = document.getElementById("demoAskInput");
+
+  function esc(t) {
+    var d = document.createElement("div");
+    d.textContent = t == null ? "" : t;
+    return d.innerHTML;
+  }
+
+  function threadHtml() {
+    return liveMsgs.map(function (m) {
+      return '<p class="demo__msg demo__msg--' + (m.role === "user" ? "me" : "c") + '">' + esc(m.text) + "</p>";
+    }).join("");
+  }
+
+  function renderConvo(d) {
+    var html = '<div class="fade-in">' + threadHtml();
+    if (d) {
+      if (d.nextStep) {
+        html += '<div class="demo__result"><span class="demo__rlabel">your clear next step</span>' +
+                '<p class="demo__act">' + esc(d.nextStep) + "</p></div>";
+      }
+      if (d.results && d.results.items) {
+        html += '<div class="demo__result"><span class="demo__rlabel">' + esc(d.results.title) + "</span>";
+        if (d.results.items.length) {
+          html += '<ul class="demo__found">' + d.results.items.map(function (it) {
+            return '<li><a href="' + esc(it.href) + '" target="_blank" rel="noopener">' + esc(it.name) + "</a> · " + esc(it.detail) + "</li>";
+          }).join("") + "</ul>";
+        }
+        html += '<p class="demo__srcnote">' + esc(d.results.sourceNote) + "</p></div>";
+      }
+      if (d.searchHelp) {
+        html += '<div class="demo__result"><span class="demo__rlabel">search this, together</span>' +
+                '<p class="demo__query"><code>' + esc(d.searchHelp.query) + "</code></p>" +
+                '<p class="demo__srcnote">' + esc(d.searchHelp.trustNote) + "</p>";
+        if (d.searchHelp.steps && d.searchHelp.steps.length) {
+          html += '<ol class="demo__steps">' + d.searchHelp.steps.map(function (st) { return "<li>" + esc(st) + "</li>"; }).join("") + "</ol>";
+        }
+        html += "</div>";
+      }
+      if (d.route) {
+        html += '<p class="demo__route">→ leads to <b><a href="' + esc(d.route.href) + '"' +
+                (String(d.route.href).charAt(0) === "#" ? "" : ' target="_blank" rel="noopener"') + ">" + esc(d.route.label) + "</a></b></p>";
+      }
+      if (d.choices && d.choices.length) {
+        html += '<div class="demo__chips demo__chips--menu">' + d.choices.map(function (c) {
+          return '<button data-choice="' + c + '">' + esc(CHOICE_LABELS[c] || c) + "</button>";
+        }).join("") + "</div>";
+      }
+    }
+    html += '<button class="demo__reset demo__reset--lone" type="button">↺ start over</button></div>';
+    demoBody.innerHTML = html;
+    demoBody.querySelectorAll("[data-choice]").forEach(function (b) {
+      b.addEventListener("click", function () { pickChoice(b.getAttribute("data-choice"), b); });
+    });
+    var resetBtn = demoBody.querySelector(".demo__reset");
+    if (resetBtn) resetBtn.addEventListener("click", function () { liveMsgs = []; lastReply = null; resetDemo(); });
+    demoBody.scrollTop = demoBody.scrollHeight;
+  }
+
+  function pickChoice(choice, btn) {
+    if (choice === "save_this") {
+      if (lastReply && lastReply.card) { saveCard(lastReply.card); btn.disabled = true; btn.textContent = "✓ in your record"; }
+      return;
+    }
+    if (choice === "keep_private") {
+      btn.disabled = true; btn.textContent = "✓ kept private, nothing saved";
+      return;
+    }
+    if (CHOICE_SENDS[choice]) askConcierge(CHOICE_SENDS[choice]);
+  }
+
+  function askConcierge(text) {
+    if (askBusy) return;
+    askBusy = true;
+    liveMsgs.push({ role: "user", text: text });
+    demoBody.innerHTML = '<div class="fade-in">' + threadHtml() + '<p class="demo__cleared">the Concierge is thinking…</p></div>';
+    demoBody.scrollTop = demoBody.scrollHeight;
+    fetch("/concierge", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: liveMsgs })
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      askBusy = false;
+      if (!d.ok) {
+        liveMsgs.pop();
+        renderConvo(lastReply);
+        demoBody.insertAdjacentHTML("beforeend", '<p class="demo__msg demo__msg--c">' + esc(d.error || "The Concierge is away from the desk. Try again in a moment.") + "</p>");
+        return;
+      }
+      liveMsgs.push({ role: "model", text: d.reply });
+      lastReply = d;
+      renderConvo(d);
+    }).catch(function () {
+      askBusy = false;
+      liveMsgs.pop();
+      renderConvo(lastReply);
+      demoBody.insertAdjacentHTML("beforeend", '<p class="demo__msg demo__msg--c">The Concierge is away from the desk. Try again in a moment.</p>');
+    });
+  }
+
+  function bindChips() {
+    var chips = document.getElementById("demoChips");
+    if (!chips) return;
+    chips.querySelectorAll("button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var seed = SEEDS[b.getAttribute("data-k")];
+        if (seed) askConcierge(seed);
+      });
+    });
+  }
+
   function resetDemo() {
     demoBody.innerHTML =
       '<div class="fade-in">' +
-      '<p class="demo__q">How may we help you?</p>' +
+      '<p class="demo__q">What feels heaviest this week?</p>' +
       '<div class="demo__chips" id="demoChips">' +
         '<button data-k="money">Money</button>' +
         '<button data-k="housing">Housing</button>' +
@@ -114,76 +196,7 @@
 
   bindChips();
 
-  /* ============ live Concierge (real Gemini via /concierge) ============ */
-  var liveMsgs = [];
-  var askForm = document.getElementById("demoAsk");
-  var askInput = document.getElementById("demoAskInput");
-  var askBusy = false;
-
-  function liveEsc(t) {
-    var d = document.createElement("div");
-    d.textContent = t;
-    return d.innerHTML;
-  }
-
-  function liveRender(reply, nextStep, route, card) {
-    var html = '<div class="fade-in">';
-    liveMsgs.forEach(function (m) {
-      html += '<p class="demo__msg demo__msg--' + (m.role === "user" ? "me" : "c") + '">' + liveEsc(m.text) + "</p>";
-    });
-    if (nextStep) {
-      html += '<div class="demo__result">' +
-        '<span class="demo__rlabel">your clear next step</span>' +
-        '<p class="demo__act">' + liveEsc(nextStep) + "</p>" +
-        (route ? '<p class="demo__route">→ leads to <b><a href="' + route.href + '"' + (route.href.charAt(0) === "#" ? "" : ' target="_blank" rel="noopener"') + ">" + liveEsc(route.label) + "</a></b></p>" : "") +
-        (card ? '<button class="demo__save" type="button">Let my Concierge keep this</button>' : "") +
-        '<button class="demo__reset" type="button">↺ start over</button>' +
-        "</div>";
-    } else {
-      html += '<button class="demo__reset demo__reset--lone" type="button">↺ start over</button>';
-    }
-    html += "</div>";
-    demoBody.innerHTML = html;
-    var saveBtn = demoBody.querySelector(".demo__save");
-    if (saveBtn) saveBtn.addEventListener("click", function () { saveCard(card); this.disabled = true; this.textContent = "✓ your Concierge saved it"; this.style.background = "var(--moss)"; });
-    var resetBtn = demoBody.querySelector(".demo__reset");
-    if (resetBtn) resetBtn.addEventListener("click", function () { liveMsgs = []; resetDemo(); });
-    demoBody.scrollTop = demoBody.scrollHeight;
-  }
-
-  function askConcierge(text) {
-    if (askBusy) return;
-    askBusy = true;
-    liveMsgs.push({ role: "user", text: text });
-    demoBody.innerHTML = liveMsgs.map(function (m) {
-      return '<p class="demo__msg demo__msg--' + (m.role === "user" ? "me" : "c") + '">' + liveEsc(m.text) + "</p>";
-    }).join("") + '<p class="demo__cleared">the Concierge is thinking…</p>';
-    fetch("/concierge", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages: liveMsgs })
-    }).then(function (r) { return r.json(); }).then(function (d) {
-      askBusy = false;
-      if (!d.ok) {
-        liveMsgs.pop();
-        demoBody.insertAdjacentHTML("beforeend", '<p class="demo__msg demo__msg--c">' + liveEsc(d.error || "The Concierge is away from the desk. Try again in a moment.") + "</p>");
-        return;
-      }
-      liveMsgs.push({ role: "model", text: d.reply });
-      liveRender(d.reply, d.nextStep, d.route, d.card);
-    }).catch(function () {
-      askBusy = false;
-      liveMsgs.pop();
-      demoBody.insertAdjacentHTML("beforeend", '<p class="demo__msg demo__msg--c">The Concierge is away from the desk. Try again in a moment.</p>');
-    });
-  }
-
-  if (!CONFIG.liveConcierge) {
-    if (askForm) askForm.style.display = "none";
-    var askNote = document.querySelector(".demo__note");
-    if (askNote) askNote.style.display = "none";
-  }
-  if (CONFIG.liveConcierge && askForm && askInput) {
+  if (askForm && askInput) {
     askForm.addEventListener("submit", function (ev) {
       ev.preventDefault();
       var t = askInput.value.trim();

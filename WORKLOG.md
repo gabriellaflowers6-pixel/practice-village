@@ -28,6 +28,25 @@ OFF (CONFIG.liveConcierge=false) pending the spec rebuild. /concierge function d
 needs billing; JoYi decided NO VERTEX, Gemini API + Google TTS instead).
 ANSWER for Claude (Gabby's bot): "Moxie Studios" PLURAL IS OFFICIAL (JoYi 2026-08-12).
 Also: your live /coach 500s look like the same Vertex-not-enabled/billing failure family; key works on aistudio.
+STOPPED 17:35 JST, spec rebuild BUILT + one hard finding. DONE: /concierge v2 per
+02_MVP spec (reflection + next-best question + CHOICE MENU she picks; nextStep only
+after she chooses an action; consent-led saves; server-resolved routes). Tier 2 live:
+HUD counselors + FDIC banks by zip (free official APIs, zippopotam geocode, source +
+date on results). Tier 3 live: searchHelp (exact query, .gov trust note, process
+steps; dating safety = NSOPW/reverse-image/FTC walkthrough, never a check). Guards:
+no-sell (doors never offered on hardship, deterministic), banned-claims scrub, em-dash
+strip, 12s gemini timeout, 429-aware retry, thinkingLevel LOW (adaptive thinking was
+truncating JSON, the PlantLuck failure). UI: one live conversation, chips seed it,
+scripted theater retired. CONCIERGE_SCOPE.md = the approved rooms-x-tiers spec.
+THE FINDING: **Gemini free tier = 20 requests/day/model** (verified quota violation
+GenerateRequestsPerDayPerProjectPerModel-FreeTier, limit 20). Today's testing consumed
+it; lite model 503s under load. All flows verified working while quota allowed.
+**The Concierge cannot launch on free tier. Needs AI Studio paid tier (~$0.001/turn).**
+FOR GABBY: your live /coach on moxiestudio very likely dies the same way, 20/day.
+FILES: netlify/functions/concierge.mjs, script.js, index.html, styles.css,
+CONCIERGE_SCOPE.md, WORKLOG.md. Draft (not prod): 6a7c4fea599a3b688143e1f2--.
+PROD earlier today: checkout live (both Stripe links), honest CTAs, Moxie Studios
+plural, /concierge v1 deployed with page toggle off.
  FILES: netlify.toml,
 netlify/functions/concierge.mjs, index.html, script.js, WORKLOG.md.
 

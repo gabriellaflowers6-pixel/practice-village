@@ -1231,3 +1231,14 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
 .demo__msg--me { background: rgba(26,26,78,.08); margin-left: auto; }
 .demo__msg--c { background: rgba(197,168,128,.18); margin-right: auto; }
 .demo__reset--lone { margin-top: .5rem; }
+
+/* ===== Concierge spec conversation (2026-08-12) ===== */
+.demo__chips--menu { margin-top: .6rem; }
+.demo__chips--menu button { font-size: .82rem; }
+.demo__found { margin: .4rem 0 .2rem; padding-left: 1.1rem; font-size: .9rem; line-height: 1.55; }
+.demo__found a { color: var(--clay, #C2542F); }
+.demo__srcnote { margin: .3rem 0 0; font-size: .72rem; opacity: .7; line-height: 1.4; }
+.demo__query { margin: .3rem 0; }
+.demo__query code { display: block; padding: .5rem .7rem; background: rgba(26,26,78,.08); border-radius: 8px; font-size: .84rem; word-break: break-word; user-select: all; }
+.demo__steps { margin: .5rem 0 0; padding-left: 1.2rem; font-size: .88rem; line-height: 1.55; }
+.demo__steps li { margin-bottom: .3rem; }
