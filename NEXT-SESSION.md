@@ -8,7 +8,7 @@
   localhost preview, then: netlify deploy --prod --dir . --site aae16881-7774-4d75-a7f2-6065e8c2e45d
 - Read WORKLOG.md top to bottom for tonight's full decision trail.
 
-## The one blocking item: STRIPE
+## RESOLVED 2026-08-12: Stripe links live and wired (see WORKLOG). Was: The one blocking item: STRIPE
 script.js CONFIG needs stripeVillager ($149/yr) and stripeMembership ($15/mo) payment
 links from JoYi's Stripe, plus seatsTaken as sales land. Until then paid buttons route
 to the Charter List with a note. This is the entire checkout flip: one file.

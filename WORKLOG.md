@@ -8,6 +8,32 @@ it to see every change.
 
 ---
 
+## 2026-08-12: Checkout goes LIVE — Stripe wired, CTA consistency pass — DEPLOYED
+
+STARTED ~12:30 JST, JoYi's machine (repo cloned here today; joyirhyss-tech
+invitation accepted). Shipped on JoYi's "go" after 5 review drafts.
+
+- Stripe payment links created in the AIdedEQ dashboard (live mode), driven in
+  JoYi's browser session with her at the wheel:
+  - Founding Villager $149/year: plink_1U3SBE2ZVkTQmuLQcHdmQ7s9
+  - Practice Village Membership $15/mo: plink_1U3SHI2ZVkTQmuLQc8dFuGso
+  - Both wired into script.js CONFIG (stripeVillager, stripeMembership).
+  - Gotcha logged: a mistranscribed link (O read as 0 from a screenshot) still
+    returns HTTP 200 on Stripe's "not found" page. Verify payment links by
+    reading the URL from the dashboard DOM and loading the checkout in a real
+    browser, never by status code.
+- CTA consistency pass (JoYi's rule: words match the action):
+  - Sticky pill button relabeled "Take a founding seat" -> "See the founding
+    offer" (it scrolls to #doors; the label now says so).
+  - Nav CTA "Get started" -> "Join the Village".
+  - Full-page link audit: verbs act, nouns point; no other mismatches.
+- FILES: script.js, index.html, WORKLOG.md, NEXT-SESSION.md.
+- Old $97 / $19 payment links: JoYi deactivating in the dashboard (new links
+  exist; deactivation does not affect existing subscribers).
+- STOPPED: see deploy id in the entry below this line after prod push.
+
+---
+
 ## 2026-08-11: Rebuild to match aidedeq.org canon — DEPLOYED
 
 Shipped on JoYi/Gabby's "lets go": `netlify deploy --prod` to site

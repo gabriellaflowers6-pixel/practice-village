@@ -7,8 +7,8 @@
     /* Founding Circle ($97) and $19/mo retired 2026-08-11. Paste the new Stripe
        payment links here when JoYi creates them; until then paid buttons route
        to the Charter List capture with a note. */
-    stripeVillager: "",     // $149/year Founding Villager (Stripe link pending)
-    stripeMembership: "",   // $15/mo Membership (Stripe link pending)
+    stripeVillager: "https://buy.stripe.com/8x2fZa3q89NscN33OB4800i",     // $149/year Founding Villager (created 2026-08-12, plink_1U3SBE2ZVkTQmuLQcHdmQ7s9)
+    stripeMembership: "https://buy.stripe.com/5kQ28k0dWf7M6oF1Gt4800j",   // $15/mo Membership (created 2026-08-12, plink_1U3SHI2ZVkTQmuLQc8dFuGso)
     whatsappInvite: "",     // WhatsApp porch link (channel or wa.me)
     signupEndpoint: "",     // POST endpoint for signups
     seatsTaken: 0           // founding seats sold; update until webhook automation lands
