@@ -11,7 +11,8 @@
     stripeMembership: "https://buy.stripe.com/5kQ28k0dWf7M6oF1Gt4800j",   // $15/mo Membership (created 2026-08-12, plink_1U3SHI2ZVkTQmuLQc8dFuGso)
     whatsappInvite: "",     // WhatsApp porch link (channel or wa.me)
     signupEndpoint: "",     // POST endpoint for signups
-    seatsTaken: 0           // founding seats sold; update until webhook automation lands
+    seatsTaken: 0,          // founding seats sold; update until webhook automation lands
+    liveConcierge: false    // live Gemini ask-row; OFF in prod until the spec rebuild ships
   };
 
   /* single source of truth for the 108-seat counter (the Studio page shows a static line) */
@@ -21,9 +22,9 @@
   /* ============ interactive Concierge demo (clears the hard layer) ============ */
   var SCRIPTS = {
     money:   { hl: ["12 tabs open", "which form?", "hold music", "the shame spiral"],
-               clear: "The benefits and local programs you actually qualify for, in one list.",
-               route: "the resource library · benefits",
-               save: "Money: the programs I qualify for, in one list" },
+               clear: "The benefit programs worth checking in your state, and exactly how to check them yourself.",
+               route: "your Concierge · money",
+               save: "Money: what to check, and how to check it" },
     housing: { hl: ["19 listing sites", "is it even safe?", "first + last + deposit", "do it alone"],
                clear: "Trusted local options and a safe next step, not 19 sketchy listings.",
                route: "Safety Hall + the resource library",
@@ -33,9 +34,9 @@
                route: "the resource library · restart your income",
                save: "Work: a plan to restart my income at midlife" },
     family:  { hl: ["Mom needs more care", "I work full-time", "no respite", "what do I qualify for?"],
-               clear: "Caregiving help and respite you didn't know existed, and women in it with you.",
-               route: "the resource library + your people",
-               save: "Family: caregiving help + respite I didn't know existed" },
+               clear: "The caregiving and respite programs run in your county, and women carrying it with you.",
+               route: "your Concierge + your people",
+               save: "Family: the county programs to call, and my people" },
     stuck:   { hl: ["everything at once", "ten 'shoulds'", "no starting point", "all alone"],
                clear: "One first step, and your circle, so you're not doing it alone.",
                route: "your Concierge + the Village",
@@ -112,6 +113,85 @@
   }
 
   bindChips();
+
+  /* ============ live Concierge (real Gemini via /concierge) ============ */
+  var liveMsgs = [];
+  var askForm = document.getElementById("demoAsk");
+  var askInput = document.getElementById("demoAskInput");
+  var askBusy = false;
+
+  function liveEsc(t) {
+    var d = document.createElement("div");
+    d.textContent = t;
+    return d.innerHTML;
+  }
+
+  function liveRender(reply, nextStep, route, card) {
+    var html = '<div class="fade-in">';
+    liveMsgs.forEach(function (m) {
+      html += '<p class="demo__msg demo__msg--' + (m.role === "user" ? "me" : "c") + '">' + liveEsc(m.text) + "</p>";
+    });
+    if (nextStep) {
+      html += '<div class="demo__result">' +
+        '<span class="demo__rlabel">your clear next step</span>' +
+        '<p class="demo__act">' + liveEsc(nextStep) + "</p>" +
+        (route ? '<p class="demo__route">→ leads to <b><a href="' + route.href + '"' + (route.href.charAt(0) === "#" ? "" : ' target="_blank" rel="noopener"') + ">" + liveEsc(route.label) + "</a></b></p>" : "") +
+        (card ? '<button class="demo__save" type="button">Let my Concierge keep this</button>' : "") +
+        '<button class="demo__reset" type="button">↺ start over</button>' +
+        "</div>";
+    } else {
+      html += '<button class="demo__reset demo__reset--lone" type="button">↺ start over</button>';
+    }
+    html += "</div>";
+    demoBody.innerHTML = html;
+    var saveBtn = demoBody.querySelector(".demo__save");
+    if (saveBtn) saveBtn.addEventListener("click", function () { saveCard(card); this.disabled = true; this.textContent = "✓ your Concierge saved it"; this.style.background = "var(--moss)"; });
+    var resetBtn = demoBody.querySelector(".demo__reset");
+    if (resetBtn) resetBtn.addEventListener("click", function () { liveMsgs = []; resetDemo(); });
+    demoBody.scrollTop = demoBody.scrollHeight;
+  }
+
+  function askConcierge(text) {
+    if (askBusy) return;
+    askBusy = true;
+    liveMsgs.push({ role: "user", text: text });
+    demoBody.innerHTML = liveMsgs.map(function (m) {
+      return '<p class="demo__msg demo__msg--' + (m.role === "user" ? "me" : "c") + '">' + liveEsc(m.text) + "</p>";
+    }).join("") + '<p class="demo__cleared">the Concierge is thinking…</p>';
+    fetch("/concierge", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: liveMsgs })
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      askBusy = false;
+      if (!d.ok) {
+        liveMsgs.pop();
+        demoBody.insertAdjacentHTML("beforeend", '<p class="demo__msg demo__msg--c">' + liveEsc(d.error || "The Concierge is away from the desk. Try again in a moment.") + "</p>");
+        return;
+      }
+      liveMsgs.push({ role: "model", text: d.reply });
+      liveRender(d.reply, d.nextStep, d.route, d.card);
+    }).catch(function () {
+      askBusy = false;
+      liveMsgs.pop();
+      demoBody.insertAdjacentHTML("beforeend", '<p class="demo__msg demo__msg--c">The Concierge is away from the desk. Try again in a moment.</p>');
+    });
+  }
+
+  if (!CONFIG.liveConcierge) {
+    if (askForm) askForm.style.display = "none";
+    var askNote = document.querySelector(".demo__note");
+    if (askNote) askNote.style.display = "none";
+  }
+  if (CONFIG.liveConcierge && askForm && askInput) {
+    askForm.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var t = askInput.value.trim();
+      if (!t) return;
+      askInput.value = "";
+      askConcierge(t);
+    });
+  }
 
   /* ============ card stack (PIL) ============ */
   var cardNext = document.getElementById("cardNext");

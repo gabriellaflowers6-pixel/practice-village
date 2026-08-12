@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Practice Village: a digital community center for women, built the way a YWCA serves a town</title>
-  <meta name="description" content="Practice Village is a digital community center for women, built the way a YWCA serves a town. Women focused, open to all. One membership opens every room: Moxie Studio, the Kitchen, the Quiet Room, and more. Your Concierge clears the confusion so you can take the next step." />
+  <meta name="description" content="Practice Village is a digital community center for women, built the way a YWCA serves a town. Women focused, open to all. One membership opens every room: Moxie Studios, the Kitchen, the Quiet Room, and more. Your Concierge clears the confusion so you can take the next step." />
   <meta property="og:title" content="Practice Village: a digital community center for women" />
-  <meta property="og:description" content="Built the way a YWCA serves a town. Women focused, open to all. One membership opens every room: Moxie Studio, the Kitchen, the free Quiet Room, and more." />
+  <meta property="og:description" content="Built the way a YWCA serves a town. Women focused, open to all. One membership opens every room: Moxie Studios, the Kitchen, the free Quiet Room, and more." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://practice-village.netlify.app/" />
   <link rel="canonical" href="https://practice-village.netlify.app/" />
@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Hanken+Grotesk:wght@400;500;600;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="styles.css?v=81" />
+  <link rel="stylesheet" href="styles.css?v=82" />
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -32,7 +32,7 @@
     </a>
     <nav class="nav__links" aria-label="Primary">
       <a href="#center">The Center</a>
-      <a href="/moxie-studio/">Moxie Studio</a>
+      <a href="/moxie-studio/">Moxie Studios</a>
       <a href="#how">How it works</a>
       <a href="#builders">The Builders</a>
       <a href="#hilo">Why trust us</a>
@@ -72,10 +72,10 @@
 
       <!-- THE STUDIO WINDOW: the fitness room you see from the entrance -->
       <div class="window reveal" style="--d:.2s">
-        <a class="window__frame" href="/moxie-studio/" aria-label="Look into Moxie Studio, the flagship room">
+        <a class="window__frame" href="/moxie-studio/" aria-label="Look into Moxie Studios, the flagship room">
           <span class="window__room-light" aria-hidden="true"></span>
           <span class="window__floor" aria-hidden="true"></span>
-          <img class="window__figure" src="moxie-studio/assets/mirror-reads-real.png?v=2" alt="Through the window: a practitioner glowing in warrior two inside Moxie Studio" width="630" height="534" />
+          <img class="window__figure" src="moxie-studio/assets/mirror-reads-real.png?v=2" alt="Through the window: a practitioner glowing in warrior two inside Moxie Studios" width="630" height="534" />
           <span class="window__transom" aria-hidden="true"></span>
           <span class="window__sheen" aria-hidden="true"></span>
         </a>
@@ -151,6 +151,12 @@
             </div>
           </div>
 
+          <form class="demo__ask" id="demoAsk" autocomplete="off">
+            <input type="text" id="demoAskInput" maxlength="500" placeholder="or say it in your own words…" aria-label="Tell the Concierge what you are facing" />
+            <button type="submit" class="demo__askbtn">Ask</button>
+          </form>
+          <p class="demo__note">Live AI, powered by Gemini. The Concierge reflects and routes. It does not give legal or medical advice, and it saves nothing unless you choose.</p>
+
           <div class="demo__layer" id="demoLayer">
             <span class="demo__layerlabel">Your record · yours to keep</span>
             <div class="demo__stack" id="demoStack" aria-live="polite">
@@ -193,17 +199,17 @@
 
         <p class="map__hint reveal">Tap a room to look inside ↻</p>
         <div class="map__wings">
-          <article class="room reveal" tabindex="0" role="button" aria-label="Moxie Studio, tap for more">
+          <article class="room reveal" tabindex="0" role="button" aria-label="Moxie Studios, tap for more">
             <div class="room__inner">
               <div class="room__face room__front">
                 <span class="room__tag room__tag--live">Open · the flagship room</span>
-                <h4>Moxie Studio</h4>
+                <h4>Moxie Studios</h4>
                 <p>Yoga and meditation from zero, with a teacher who never records you.</p>
                 <p><a href="/moxie-studio/" class="room__cta">Step into the Studio →</a></p>
                 <span class="room__flip" aria-hidden="true">more ↻</span>
               </div>
               <div class="room__face room__back">
-                <h4>Moxie Studio</h4>
+                <h4>Moxie Studios</h4>
                 <p>Learn yoga and meditation with Bott Om, a teacher modeled on a real one. The mirror reads your form on your device; video never leaves your machine. Live classes open February 2027. <a href="/moxie-studio/">Step into the Studio →</a></p>
                 <span class="room__flip" aria-hidden="true">back ↺</span>
               </div>
@@ -320,7 +326,7 @@
         their lives. The Concierge clears the noise and names the next step. The real work stays
         human: the clear choice, the practice, the support, the courage to begin again.</p>
         <p>The two of us are building Practice Village in the open, room by room. Its flagship
-        room, Moxie Studio, is our entry in the Build with Gemini XPRIZE for Education &amp; Human Potential.</p>
+        room, Moxie Studios, is our entry in the Build with Gemini XPRIZE for Education &amp; Human Potential.</p>
         <p>As the rooms open, step inside. Tell us what is missing and what would have helped you
         sooner. If you are rebuilding any part of your life and want real people in it with you,
         come into the Village.</p>
@@ -345,10 +351,10 @@
         <h2 class="section__title reveal">Before you walk in</h2>
       </div>
       <div class="faq__list">
-        <details class="faq__item reveal"><summary>Is the whole place built yet?</summary><p>No. We open one room at a time. Open today: Moxie Studio, with beginner yoga and meditation guided by Bott Om and the mirror to support your form; the Kitchen (PlantLuck); and the free Quiet Room (HUSH). Safety Hall is in build; Your PIL is rolling out. Live classes with JoYi open February 2027. Founding members enter first and help shape each room.</p></details>
+        <details class="faq__item reveal"><summary>Is the whole place built yet?</summary><p>No. We open one room at a time. Open today: Moxie Studios, with beginner yoga and meditation guided by Bott Om and the mirror to support your form; the Kitchen (PlantLuck); and the free Quiet Room (HUSH). Safety Hall is in build; Your PIL is rolling out. Live classes with JoYi open February 2027. Founding members enter first and help shape each room.</p></details>
         <details class="faq__item reveal"><summary>Is this therapy or coaching?</summary><p>Neither. Practice Village is a practice environment. It does not diagnose or treat, and it never replaces a therapist, doctor, attorney, or crisis service. When something needs a professional, the Concierge points you to vetted resources.</p></details>
-        <details class="faq__item reveal"><summary>What is the AI actually doing?</summary><p>The Concierge runs on Google's Gemini. It answers your question, gives you one clear next step, and suggests the room that can help. It saves to Your PIL only when you choose. In Moxie Studio, the mirror reads your form on your device and never records video. People teach the classes.</p></details>
-        <details class="faq__item reveal"><summary>How is my information handled?</summary><p>Nothing sensitive is saved without your yes. What you choose to save lives in Your PIL, where you can read, export, or delete it at any time. Camera video in Moxie Studio is processed on your device and never uploaded. We never sell or share your information.</p></details>
+        <details class="faq__item reveal"><summary>What is the AI actually doing?</summary><p>The Concierge runs on Google's Gemini. It answers your question, gives you one clear next step, and suggests the room that can help. It saves to Your PIL only when you choose. In Moxie Studios, the mirror reads your form on your device and never records video. People teach the classes.</p></details>
+        <details class="faq__item reveal"><summary>How is my information handled?</summary><p>Nothing sensitive is saved without your yes. What you choose to save lives in Your PIL, where you can read, export, or delete it at any time. Camera video in Moxie Studios is processed on your device and never uploaded. We never sell or share your information.</p></details>
         <details class="faq__item reveal"><summary>Who is behind it?</summary><p>JoYi Rhyss, who led this work in person at Moxie Fitness and The Practice Center in Hilo, Hawaii. Practice Village brings the same practice online for women everywhere.</p></details>
       </div>
     </section>
@@ -390,9 +396,9 @@
             <h3>Founding Villager</h3>
             <p class="ticket__price"><span>$149</span><i>/year</i></p>
           </div>
-          <p class="ticket__sub">This membership is to the whole Practice Village: every room, including Moxie Studio, not only the Studio.</p>
+          <p class="ticket__sub">This membership is to the whole Practice Village: every room, including Moxie Studios, not only the Studio.</p>
           <ul class="ticket__list">
-            <li>Everything in Moxie Studio: the practices, the mirror, and Bott Om</li>
+            <li>Everything in Moxie Studios: the practices, the mirror, and Bott Om</li>
             <li>Live classes with JoYi, included, opening February 2027</li>
             <li>Every open Village room, and each new room as it opens</li>
             <li>Early entry to the February live room</li>
@@ -412,7 +418,7 @@
           <p class="ticket__sub">The Village as it opens, month to month.</p>
           <ul class="ticket__list">
             <li>Your Concierge and your record</li>
-            <li>Moxie Studio, the Kitchen, and every open room</li>
+            <li>Moxie Studios, the Kitchen, and every open room</li>
             <li>Moves to $25 a month once all rooms are open</li>
             <li>Founding rate, locked while you stay</li>
             <li>Cancel anytime</li>
@@ -517,6 +523,6 @@
     <p class="breathe__hint">shake your phone to breathe again · tap outside to close</p>
   </div>
 
-  <script src="script.js?v=31"></script>
+  <script src="script.js?v=32"></script>
 </body>
 </html>
