@@ -1253,3 +1253,44 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
 /* quick replies: her likely answers, one tap */
 .demo__chips--quick { margin-top: .55rem; }
 .demo__chips--quick button { font-style: italic; opacity: .95; }
+
+/* ===== responsive polish (2026-08-13, JoYi launch notes) ===== */
+/* nav: tighter spacing on laptop widths so the whole row always fits */
+@media (max-width:1560px){
+  .nav__links{ gap:1.1rem; }
+  .nav__links a{ font-size:.9rem; }
+  .nav__cta{ padding:.62em 1.05em; font-size:.9rem; }
+}
+@media (max-width:1300px){
+  .nav__links{ gap:.8rem; }
+  .nav__links a{ font-size:.86rem; }
+  .nav__wordmark{ font-size:1.35rem; }
+  .nav__cta{ padding:.55em .9em; font-size:.86rem; }
+}
+/* nav: switch to the menu button before links can wrap; never a two-line header */
+@media (max-width:1080px){
+  .nav__links, .nav__cta { display:none; }
+  .nav__menu { display:flex; }
+  .nav.is-open .nav__links { display:flex; flex-direction:column; gap:1.1rem; position:absolute; top:100%; left:0; right:0; background:var(--paper); padding:1.4rem var(--pad); border-bottom:2px solid var(--line); box-shadow:var(--shadow-lg); }
+  .nav.is-open .nav__menu span:first-child { transform:translateY(3.7px) rotate(45deg); }
+  .nav.is-open .nav__menu span:last-child { transform:translateY(-3.7px) rotate(-45deg); }
+}
+/* hero: headline and window each own their column; they never touch */
+@media (min-width:921px){
+  .hero{ grid-template-columns:minmax(0,1.15fr) minmax(320px,400px); gap:clamp(2rem,4vw,4rem); }
+  .hero__copy{ min-width:0; }
+  .hero__title{ font-size:clamp(2.2rem,4.2vw,3.4rem); }
+}
+/* sticky pill: quiet and grown-up at every width */
+.sticky .btn{ white-space:nowrap; }
+@media (max-width:1000px){
+  .sticky{ gap:.6rem; padding:.4rem .4rem .4rem 1rem; }
+  .sticky__txt{ font-size:.8rem; }
+  .sticky .btn{ padding:.5em .95em; font-size:.85rem; }
+}
+/* Rebuild Arc: six steps in one row, or three and three; never five and an orphan */
+@media (min-width:1051px){ .raw__steps{ flex-wrap:nowrap; } }
+@media (max-width:1050px){ .raw__steps{ display:grid; grid-template-columns:repeat(3,minmax(0,auto)); justify-content:start; } }
+@media (max-width:600px){ .raw__steps{ grid-template-columns:repeat(2,minmax(0,auto)); } }
+/* nav items never break their own words */
+.nav__links a, .nav__cta { white-space:nowrap; }
