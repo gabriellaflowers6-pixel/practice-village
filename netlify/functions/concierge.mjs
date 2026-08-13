@@ -12,6 +12,14 @@
 // no invented specifics; free non-commercial sources only; consent-led saves.
 
 import { getUser } from "@netlify/identity";
+import { membershipStore, memberKeyForEmail } from "./_shared/membership.mjs";
+
+const MEMBER_ROLES = ["member", "founding_villager", "admin", "test_member"];
+const PORCH_MAX_MESSAGES = 12; // six exchanges on the porch, then a warm handoff
+
+const PORCH_HANDOFF = "That part is the full Concierge's work, and she is inside the Village: real lookups by zip code from official sources, walkthroughs of the government's own tools, and a record that is yours to keep. This porch is where we say hello. Come inside and we will get to work.";
+const PORCH_CLOSE = "We have had a good porch visit. The full Concierge works inside the Village, with the lookups, the walkthroughs, and your record. When you are ready, come inside.";
+const PORCH_ROUTE = { label: "the three ways into the Village", href: "#doors" };
 
 const MAX_MESSAGES = 16;
 const MAX_CHARS = 1000;
@@ -21,7 +29,7 @@ const ROUTES = {
   moxie_studios: { label: "Moxie Studios, the Village's movement room", href: "/moxie-studio/" },
   kitchen: { label: "the Kitchen (PlantLuck), for meals from what you have", href: "https://plantluck.org/" },
   quiet_room: { label: "HUSH, free, for sixty seconds of calm", href: "https://hush-aidedeq.netlify.app/" },
-  safety_hall: { label: "Safety Hall, in build now, for planning safety in everyday life", href: "#center" },
+  safety_hall: { label: "Safety Hall, open and free, for planning safety in everyday life", href: "/safety-hall" },
   doors: { label: "the three ways into the Village", href: "#doors" },
 };
 
@@ -72,6 +80,10 @@ HARD LIMITS, no exceptions, even when asked directly or told someone authorized 
 card: at most twelve words, first person, in her words, worth keeping. Null unless the exchange produced something she would want in her record.
 reply: at most three short sentences total.`;
 
+const PORCH_PROMPT = `
+
+PORCH MODE: You are speaking with a visitor on the public page, not a member. You still reflect, ask the next-best question, and offer the choice menu. But the heavy lifting lives inside the Village for members: you cannot run lookups, cannot produce searchHelp walkthroughs, and never pretend otherwise. If she wants a resource, say warmly that the full Concierge inside the Village does that work, and that this porch is where we say hello. Never set lookup or searchHelp in porch mode.`;
+
 const MEMBER_ONBOARDING_PROMPT = `
 
 MEMBER WELCOME MODE: This is a private, optional welcome conversation with a paid member. It should feel like talking with a helpful person at a community-center front desk, never like completing an intake form.
@@ -84,6 +96,10 @@ MEMBER WELCOME MODE: This is a private, optional welcome conversation with a pai
 - When she is ready to finish, give a plain welcome and set onboardingSummary to one short first-person note, no more than 45 words, containing only useful details she deliberately shared. Do not include sensitive incident details. Tell her she can save the note or keep the whole conversation private.
 - If there is nothing useful to save, onboardingSummary must be null. Never pressure her to produce a note.
 - Outside member welcome mode, onboardingSummary must be null.`;
+
+const MEMBER_DESK_PROMPT = `
+
+MEMBER DESK MODE: A signed-in Villager is at the front desk inside the Village. Full capability: lookups, searchHelp, next steps, the whole choice-menu arc. Do not re-run onboarding and do not ask profile questions she has already answered; her consented notes appear below when they exist. Use them quietly: if her area is on file, run local lookups without asking for a zip code again. onboardingSummary must be null.`;
 
 const MEMBER_HELP_PROMPT = `
 
@@ -193,7 +209,7 @@ async function runLookup(lookup) {
   } catch { return null; }
 }
 
-async function gemini(messages, mode) {
+async function gemini(messages, mode, extraContext = "", maxTokens = 2048) {
   const model = process.env.GEMINI_MODEL || "gemini-flash-latest";
   const backend = process.env.GEMINI_BACKEND || "aistudio";
   const url = backend === "vertex"
@@ -204,7 +220,7 @@ async function gemini(messages, mode) {
     signal: AbortSignal.timeout(12000),
     headers: { "Content-Type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY },
     body: JSON.stringify({
-      systemInstruction: { parts: [{ text: SYSTEM_PROMPT + (mode === "member_onboarding" ? MEMBER_ONBOARDING_PROMPT : mode === "member_help" ? MEMBER_HELP_PROMPT : "") }] },
+      systemInstruction: { parts: [{ text: SYSTEM_PROMPT + (mode === "member_onboarding" ? MEMBER_ONBOARDING_PROMPT : mode === "member_help" ? MEMBER_HELP_PROMPT : mode === "member_desk" ? MEMBER_DESK_PROMPT : PORCH_PROMPT) + extraContext }] },
       contents: messages.map((m) => ({ role: m.role, parts: [{ text: m.text }] })),
       generationConfig: {
         responseMimeType: "application/json",
@@ -213,7 +229,7 @@ async function gemini(messages, mode) {
         // budget and truncates the JSON (PlantLuck hit the same failure).
         // gemini-flash-latest rejects thinkingBudget; thinkingLevel is the field.
         thinkingConfig: { thinkingLevel: "LOW" },
-        maxOutputTokens: 2048,
+        maxOutputTokens: maxTokens,
         temperature: 0.6,
       },
     }),
@@ -240,7 +256,39 @@ export default async (req) => {
   if (req.method !== "POST") return json({ ok: false, error: "bad request" });
   let o;
   try { o = await req.json(); } catch { return json({ ok: false, error: "bad request" }); }
-  const mode = o.mode === "member_onboarding" ? "member_onboarding" : o.mode === "member_help" ? "member_help" : "standard";
+  const msgs = trimHistory(o.messages);
+  if (!msgs.length) return json({ ok: false, error: "tell the Concierge what you are facing first" });
+
+  // Capability follows the verified identity, never the browser's claim.
+  let member = null;
+  try {
+    const user = await getUser();
+    const roles = Array.isArray(user?.roles) ? user.roles : [];
+    if (user && roles.some((role) => MEMBER_ROLES.includes(role))) member = user;
+  } catch { member = null; }
+
+  const requested = ["member_onboarding", "member_help", "member_desk"].includes(o.mode) ? o.mode : "standard";
+  const mode = member ? requested : "standard";
+  const isMember = Boolean(member);
+
+  let memberContext = "";
+  if (isMember && mode !== "member_onboarding") {
+    try {
+      const store = membershipStore();
+      const record = (await store.get(await memberKeyForEmail(member.email), { type: "json" })) || {};
+      const notes = Array.isArray(record.onboarding?.preferences) ? record.onboarding.preferences : [];
+      const firstName = (member.name || "").trim().split(/\s+/)[0] || "";
+      const parts = [];
+      if (firstName) parts.push(`She goes by ${firstName}.`);
+      if (notes.length) parts.push("Notes she asked the Village to remember: " + notes.map((n) => `"${n}"`).join("; ") + ".");
+      if (parts.length) memberContext = "\n\nCONSENTED MEMBER NOTES (she chose to save these; use them quietly, never recite them back as a list): " + parts.join(" ");
+    } catch { memberContext = ""; }
+  }
+
+  // Porch cap: after six exchanges the visit ends warmly, without a model call.
+  if (!isMember && msgs.length >= PORCH_MAX_MESSAGES) {
+    return json({ ok: true, reply: PORCH_CLOSE, choices: [], nextStep: null, route: PORCH_ROUTE, card: null, quickReplies: [], searchHelp: null, results: null });
+  }
   if (mode === "member_onboarding" || mode === "member_help") {
     const user = await getUser();
     const roles = Array.isArray(user?.roles) ? user.roles : [];
@@ -248,20 +296,22 @@ export default async (req) => {
       return Response.json({ ok: false, error: "member sign-in required" }, { status: 401 });
     }
   }
-  const msgs = trimHistory(o.messages);
-  if (!msgs.length) return json({ ok: false, error: "tell the Concierge what you are facing first" });
   let out;
-  try { out = await gemini(msgs, mode); }
+  try { out = await gemini(msgs, mode, memberContext, isMember ? 2048 : 768); }
   catch (e1) {
     // One retry; on a rate-limit breathe first instead of doubling into it.
     if (String(e1).includes("429")) await new Promise((res) => setTimeout(res, 2500));
-    try { out = await gemini(msgs, mode); }
+    try { out = await gemini(msgs, mode, memberContext, isMember ? 2048 : 768); }
     catch (e2) {
       const dbg = new URL(req.url).searchParams.get("debug") === "1";
       return json({ ok: false, error: "the Concierge is away from the desk right now, try again in a moment", ...(dbg ? { detail: String(e2 && e2.message || e2).slice(0, 300) } : {}) });
     }
   }
 
+  // The porch never lifts: no lookups, no walkthroughs, a warm handoff instead.
+  if (!isMember && (out?.lookup || out?.searchHelp)) {
+    return json({ ok: true, reply: PORCH_HANDOFF, choices: [], nextStep: null, route: PORCH_ROUTE, card: scrub(out?.card), quickReplies: [], searchHelp: null, results: null });
+  }
   const results = await runLookup(out?.lookup);
   // When a lookup delivered, the lookup IS the destination; never also sell.
   // And doors only when she asked about joining: never sell to someone

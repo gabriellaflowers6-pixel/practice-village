@@ -59,6 +59,15 @@ export default async function handler(request) {
       preferences,
       completedAt: now,
     };
+  } else if (body.action === "save_cards") {
+    const cards = Array.isArray(body.cards)
+      ? [...new Set(body.cards.map((item) => String(item || "").trim().slice(0, 180)).filter(Boolean))].slice(0, 12)
+      : [];
+    if (!cards.length) return Response.json({ ok: false, error: "Nothing to save" }, { status: 400 });
+    const existing = Array.isArray(record.savedCards) ? record.savedCards : [];
+    const merged = [...existing];
+    for (const card of cards) if (!merged.some((entry) => entry.text === card)) merged.push({ text: card, savedAt: now });
+    record.savedCards = merged.slice(-100);
   } else if (body.action === "founder_listing") {
     if (!foundingEligible) return Response.json({ ok: false, error: "Founding Villager access required" }, { status: 403 });
     const decision = body.decision === "yes" ? "yes" : body.decision === "no" ? "no" : null;

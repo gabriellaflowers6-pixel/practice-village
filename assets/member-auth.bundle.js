@@ -1238,8 +1238,8 @@ async function initMemberLobby() {
       }
       if (["complete", "complete_private"].includes(membership.onboardingStatus)) {
         document.getElementById("conciergeCardTitle").textContent = "Your Concierge";
-        document.getElementById("conciergeCardCopy").textContent = "Review or update the onboarding choices the Village remembers for you.";
-        document.getElementById("conciergeCardLink").textContent = "Review onboarding choices";
+        document.getElementById("conciergeCardCopy").textContent = "The full Concierge is at the desk: lookups from official sources, walkthroughs, and next steps. Your onboarding choices stay reviewable anytime.";
+        document.getElementById("conciergeCardLink").textContent = "Open the front desk";
       }
     }
   } catch (error) {
@@ -1252,11 +1252,172 @@ async function initMemberLobby() {
   document.getElementById("logoutButton").addEventListener("click", signOut);
   document.getElementById("logoutButtonBottom").addEventListener("click", signOut);
 }
+function initDesk(user) {
+  const main = document.querySelector(".welcome-main");
+  if (!main) return;
+  const firstName = (user.name || "").trim().split(/\s+/)[0];
+  main.innerHTML = `
+    <section class="welcome-intro">
+      <p class="eyebrow">The front desk</p>
+      <h1>${firstName ? "Hello, " + firstName + "." : "The Concierge is in."}</h1>
+      <p>Talk about what you are facing. Lookups, walkthroughs, and next steps happen here, and nothing is kept unless you choose it.</p>
+    </section>
+    <section class="onboarding-card desk-card" aria-label="Your Concierge">
+      <div class="desk-thread" id="deskThread" aria-live="polite"></div>
+      <form class="desk-ask" id="deskAsk">
+        <input type="text" id="deskInput" maxlength="1000" placeholder="Say it in your own words\u2026" aria-label="Tell the Concierge what you are facing" />
+        <button type="submit" class="primary-button">Ask</button>
+      </form>
+      <p class="onboarding-privacy">Live AI, powered by Gemini. The Concierge reflects, routes, and looks things up from official sources. It does not give legal or medical advice.</p>
+      <div class="welcome-exits"><a href="/member">Back to your lobby</a><a href="/welcome?onboarding=review">Review onboarding choices</a></div>
+    </section>`;
+  const thread = document.getElementById("deskThread");
+  const form = document.getElementById("deskAsk");
+  const input = document.getElementById("deskInput");
+  const CHOICE_LABELS = { understand: "Help me understand what's happening", one_action: "One small action today", trusted_resource: "A trusted resource", keep_private: "Keep this private" };
+  const CHOICE_SENDS = { understand: "Help me understand what is happening first.", one_action: "Give me one small action I can take today.", trusted_resource: "Point me to a trusted resource for this." };
+  const SEEDS = [["Money", "Money feels heaviest this week."], ["Housing", "Housing feels heaviest this week."], ["Work", "Work feels heaviest this week."], ["Family", "Family feels heaviest this week."], ["I feel stuck", "I feel stuck. Everything is heavy at once."], ["My body", "My body feels heaviest this week."]];
+  let msgs = [];
+  let pending = [];
+  let last = null;
+  let busy = false;
+  const esc = (t) => {
+    const d = document.createElement("div");
+    d.textContent = t == null ? "" : t;
+    return d.innerHTML;
+  };
+  const bubbles = () => msgs.map((m) => `<p class="desk-msg desk-msg--${m.role === "user" ? "me" : "c"}">${esc(m.text)}</p>`).join("");
+  function renderIdle() {
+    thread.innerHTML = `<p class="desk-q">What feels heaviest this week?</p><div class="desk-chips">${SEEDS.map(([label, seed]) => `<button type="button" data-seed="${esc(seed)}">${esc(label)}</button>`).join("")}</div>`;
+    wire();
+  }
+  function render(d) {
+    let html = bubbles();
+    if (d) {
+      if (d.nextStep) html += `<div class="desk-block"><span class="desk-label">your clear next step</span><p class="desk-act">${esc(d.nextStep)}</p></div>`;
+      if (d.results && d.results.items) {
+        html += `<div class="desk-block"><span class="desk-label">${esc(d.results.title)}</span><ul class="desk-found">${d.results.items.map((it) => `<li><a href="${esc(it.href)}" target="_blank" rel="noopener">${esc(it.name)}</a> \xB7 ${esc(it.detail)}</li>`).join("")}</ul><p class="desk-note">${esc(d.results.sourceNote)}</p></div>`;
+      }
+      if (d.searchHelp) {
+        html += `<div class="desk-block"><span class="desk-label">search this, together</span><p class="desk-query"><code>${esc(d.searchHelp.query)}</code></p><p class="desk-note">${esc(d.searchHelp.trustNote)}</p>${d.searchHelp.steps?.length ? `<ol class="desk-steps">${d.searchHelp.steps.map((st) => `<li>${esc(st)}</li>`).join("")}</ol>` : ""}</div>`;
+      }
+      if (d.route) html += `<p class="desk-route">when you want it: <b><a href="${esc(d.route.href)}"${String(d.route.href).startsWith("#") || String(d.route.href).startsWith("/") ? "" : ' target="_blank" rel="noopener"'}>${esc(d.route.label)}</a></b></p>`;
+      if (d.quickReplies?.length) html += `<div class="desk-chips desk-chips--quick">${d.quickReplies.map((q) => `<button type="button" data-seed="${esc(q)}">${esc(q)}</button>`).join("")}</div>`;
+      const menu = (d.choices || []).filter((c) => c !== "save_this");
+      if (menu.length) html += `<div class="desk-chips">${menu.map((c) => `<button type="button" data-choice="${c}">${esc(CHOICE_LABELS[c] || c)}</button>`).join("")}</div>`;
+    }
+    if (pending.length) html += `<p class="desk-pending">${pending.length} ${pending.length === 1 ? "moment" : "moments"} set aside \xB7 <button type="button" class="text-button" data-wrap>wrap up and review</button></p>`;
+    html += `<button type="button" class="text-button desk-reset" data-reset>\u21BA start over</button>`;
+    thread.innerHTML = html;
+    wire();
+    thread.scrollTop = thread.scrollHeight;
+  }
+  function renderWrap() {
+    thread.innerHTML = `<p class="desk-q">Keep any of this in your Village record?</p><div class="desk-wraplist">${pending.map((c, i) => `<label class="desk-wrapitem"><input type="checkbox" checked data-i="${i}"> ${esc(c)}</label>`).join("")}</div><div class="welcome-actions"><button type="button" class="primary-button" data-keep>Keep the checked ones</button><button type="button" class="secondary-button" data-discard>Keep nothing</button></div><p class="onboarding-privacy" id="wrapStatus" role="status"></p>`;
+    thread.querySelector("[data-keep]").addEventListener("click", async () => {
+      const chosen = [...thread.querySelectorAll("input[data-i]:checked")].map((cb) => pending[Number(cb.dataset.i)]);
+      const wrapStatus = document.getElementById("wrapStatus");
+      if (chosen.length) {
+        wrapStatus.textContent = "Saving to your record\u2026";
+        try {
+          const r = await fetch("/member-onboarding", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "save_cards", cards: chosen }) });
+          wrapStatus.textContent = r.ok ? "Kept in your Village record." : "Saving did not go through. Your cards are still here.";
+          if (!r.ok) return;
+        } catch {
+          wrapStatus.textContent = "Saving did not go through. Your cards are still here.";
+          return;
+        }
+      }
+      pending = [];
+      msgs = [];
+      last = null;
+      window.setTimeout(renderIdle, chosen.length ? 900 : 0);
+    });
+    thread.querySelector("[data-discard]").addEventListener("click", () => {
+      pending = [];
+      msgs = [];
+      last = null;
+      renderIdle();
+    });
+  }
+  function wire() {
+    thread.querySelectorAll("[data-seed]").forEach((b) => b.addEventListener("click", () => ask(b.dataset.seed)));
+    thread.querySelectorAll("[data-choice]").forEach((b) => b.addEventListener("click", () => {
+      const c = b.dataset.choice;
+      if (c === "keep_private") {
+        pending.pop();
+        b.disabled = true;
+        b.textContent = "\u2713 kept private";
+        return;
+      }
+      if (CHOICE_SENDS[c]) ask(CHOICE_SENDS[c]);
+    }));
+    thread.querySelector("[data-wrap]")?.addEventListener("click", renderWrap);
+    thread.querySelector("[data-reset]")?.addEventListener("click", () => {
+      msgs = [];
+      last = null;
+      renderIdle();
+    });
+  }
+  async function ask(text) {
+    if (busy || !text) return;
+    busy = true;
+    msgs.push({ role: "user", text });
+    thread.innerHTML = bubbles() + `<p class="desk-note">the Concierge is thinking\u2026</p>`;
+    thread.scrollTop = thread.scrollHeight;
+    try {
+      const r = await fetch("/concierge", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ mode: "member_desk", messages: msgs }) });
+      const d = await r.json();
+      busy = false;
+      if (!d.ok) {
+        msgs.pop();
+        render(last);
+        thread.insertAdjacentHTML("beforeend", `<p class="desk-msg desk-msg--c">${esc(d.error || "The Concierge is away from the desk. Try again in a moment.")}</p>`);
+        return;
+      }
+      msgs.push({ role: "model", text: d.reply });
+      if (d.card && !pending.includes(d.card)) pending.push(d.card);
+      last = d;
+      render(d);
+    } catch {
+      busy = false;
+      msgs.pop();
+      render(last);
+      thread.insertAdjacentHTML("beforeend", `<p class="desk-msg desk-msg--c">The Concierge is away from the desk. Try again in a moment.</p>`);
+    }
+  }
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const t = input.value.trim();
+    if (!t) return;
+    input.value = "";
+    ask(t);
+  });
+  document.getElementById("logoutButton")?.addEventListener("click", async () => {
+    await logout();
+    window.location.replace("/");
+  });
+  renderIdle();
+}
 async function initWelcome() {
   const user = await getUser();
   if (!user || !hasMemberAccess(user)) {
     window.location.replace("/login");
     return;
+  }
+  const wantsReview = new URLSearchParams(window.location.search).get("onboarding") === "review";
+  if (!wantsReview) {
+    try {
+      const check = await fetch("/member-onboarding", { headers: { Accept: "application/json" } });
+      if (check.ok) {
+        const data = await check.json();
+        if (["complete", "complete_private"].includes(data.onboarding?.status)) {
+          initDesk(user);
+          return;
+        }
+      }
+    } catch {
+    }
   }
   const title = document.getElementById("welcomeTitle");
   const progress = document.getElementById("onboardingProgress");
