@@ -17,6 +17,19 @@ screenshotted: breakpoints cannot predict it (visitor font size / zoom / min-fon
 setting change the row width), so script.js now measures the row and falls back to
 the menu button via .is-crowded. Verified by forcing oversized nav type: collapses
 cleanly, menu opens, zero page overflow. styles.css?v=97, script.js?v=38.
+FINAL 20:10 JST: room card titles darkened (serif 400 with no explicit color was
+washing out on the cream cards; now var(--ink) at 600). styles.css?v=98.
+SHIPPED on JoYi's go: pushed fefe70d..ad9a641 to gabriellaflowers6-pixel/practice-village
+main, then `netlify deploy --prod --dir . --site aae16881-...` (deploy
+6a7da580381b8371bda03dfc). LIVE VERIFIED on thepracticevillage.org: styles.css?v=98 +
+script.js?v=38 + all four new assets serve 200, body cream #FBF3E8, CTA #A84214, room
+titles #2B2013/600, logo dot orange, zero broken images, zero horizontal overflow;
+/, /moxie-studio/, /login, /privacy, /terms all 200; POST /concierge answers (its
+input validation, so the Gemini gate is alive); all 6 functions report deployed.
+NOTE for Gabby's side: the deploy rewrote the tracked generated file
+.netlify/netlify.toml to this machine's path; restored, not committed. That file is
+in .gitignore but still tracked, so it will keep flip-flopping between machines until
+someone runs `git rm --cached .netlify/netlify.toml`.
 UI ONLY, landing page. New palette from "TPV header example.png" + "MoxieStudiosHeader.png"
 (Downloads): warm cream ground, deep chocolate brown dark panels, metallic gold accents,
 deeper burnt orange CTAs (#A84214), navy kept for the Practice Village wordmark; logo
