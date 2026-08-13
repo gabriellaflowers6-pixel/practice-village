@@ -1,3 +1,32 @@
+### 2026-08-13 — LAUNCH: thepracticevillage.org is live (JoYi's bot, STOPPED 21:10 JST)
+DOMAIN LIVE. thepracticevillage.org (apex + www, Let's Encrypt cert issued) and
+thepracticevillage.com pointed at the same Netlify site. Squarespace parking presets
+deleted on both, email security TXT records preserved. Netlify site aae16881: custom
+domain + 3 aliases. CLI deploys only (no repo connected).
+PROD SHIPPED (commits 7aedb4b..4d0516f):
+- Checkout live: Founding Villager $149/yr + Membership $15/mo, both verified.
+  Pricing model corrected: $15 rises to $25 at Feb 7 2027 opening and $25 becomes the
+  member's locked founding rate; annual $149 locked for life; new-member rates TBD.
+  Stripe product description matches the page.
+- CONCIERGE LIVE ON THE ENTRY DOMAIN (the Gemini gate). Verified on prod: reflection +
+  choice menu + quick replies, and a Tier 2 lookup returning real HUD-certified
+  counselors for 96720 (Legal Aid Society of Hawaii, Hawaiian Community Assets) with
+  no sales pitch attached. Gemini paid tier active (free tier was 20 req/day/model).
+- Copy: builders section tells the entry story (agent-first, Bott Om trained ground-up
+  with human review, two builders using Gemini/Claude/Codex); JoYi bio updated IN its
+  own section (a duplicate under builders was removed); WhatsApp porch removed; banned
+  filler swept; The Practice Center added to the footer.
+- REBUILD ARC new canon: Arrive/Notice/Connect/Practice/Explore/Choose as tap-to-read
+  pills (3+3), four week pills (2x2, no orphan), all logistics folded behind a
+  disclosure. First series Oct 31 + Nov 7/14/21, 3pm Central, 90-min Zoom. Voucher:
+  registering consumes it, 48h cancellation keeps it, Founding Villagers get a second
+  for Q1 2027.
+- Responsive: nav fits at 125% zoom laptop widths, sticky pill never wraps, headings
+  use text-wrap balance so no word stands alone.
+STILL OPEN: Safety Hall deploy (built, needs font reconciliation Fraunces vs the site's
+Cormorant Garamond), evidence pack, demo video, Moxie Studios plural sweep on the
+zen-bott-om canonical landing (Gabby's side).
+
 ### 2026-08-12 NIGHT CLOSE (JoYi's bot) — Concierge v2 SHIPPED to repo, prod has checkout
 PROD (practice-village.netlify.app): Stripe checkout LIVE both plans, honest CTAs,
 Moxie Studios plural, /concierge function deployed (page toggle OFF pending JoYi's
