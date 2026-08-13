@@ -32,23 +32,32 @@ function goToMemberLobby(user) {
 }
 
 async function initLogin() {
+  const card = document.getElementById("authCard");
   const status = document.getElementById("authStatus");
   const loginForm = document.getElementById("loginForm");
   const inviteForm = document.getElementById("inviteForm");
   const resetForm = document.getElementById("resetForm");
   const recoveryForm = document.getElementById("recoveryForm");
   const forgotButton = document.getElementById("forgotButton");
+  const inviteSuccess = document.getElementById("inviteSuccess");
   let inviteToken = null;
 
   try {
     const callback = await handleAuthCallback();
     if (callback?.type === "invite") {
       inviteToken = callback.token;
+      card.classList.add("auth-card--invite");
       loginForm.hidden = true;
       inviteForm.hidden = false;
+      resetForm.hidden = true;
+      recoveryForm.hidden = true;
       forgotButton.hidden = true;
-      document.getElementById("authTitle").textContent = "Set up your member account.";
-      document.getElementById("authIntro").textContent = "Create a password to finish accepting your invitation.";
+      document.querySelector(".auth-card > .auth-help").hidden = true;
+      document.querySelector(".auth-card > .eyebrow").textContent = "Your invitation";
+      document.getElementById("authTitle").textContent = "Come on in.";
+      document.getElementById("authIntro").textContent = "Create one password and your Practice Village account is ready.";
+      document.title = "Accept your invitation · Practice Village";
+      document.getElementById("invitePassword").focus();
     } else if (callback?.type === "recovery") {
       loginForm.hidden = true;
       resetForm.hidden = false;
@@ -79,12 +88,28 @@ async function initLogin() {
   inviteForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     if (!inviteToken) return;
-    status.textContent = "Setting up your account…";
+    const button = inviteForm.querySelector("button");
+    button.disabled = true;
+    button.textContent = "Creating your account…";
+    status.textContent = "";
     try {
       const user = await acceptInvite(inviteToken, document.getElementById("invitePassword").value);
-      goToMemberLobby(user);
+      inviteForm.hidden = true;
+      status.hidden = true;
+      document.getElementById("authTitle").hidden = true;
+      document.getElementById("authIntro").hidden = true;
+      document.querySelector(".auth-card > .eyebrow").hidden = true;
+      inviteSuccess.hidden = false;
+      inviteSuccess.focus();
+      window.setTimeout(() => {
+        window.location.replace(hasMemberAccess(user) ? "/welcome" : "/?membership=inactive#doors");
+      }, 900);
     } catch (error) {
-      status.textContent = messageFor(error);
+      button.disabled = false;
+      button.textContent = "Create my account";
+      status.textContent = error instanceof AuthError && [401, 404, 422].includes(error.status)
+        ? "That invitation link has already been used or has expired. Email us and we will send a fresh one."
+        : messageFor(error);
     }
   });
 

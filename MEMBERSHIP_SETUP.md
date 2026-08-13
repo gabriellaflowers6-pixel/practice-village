@@ -11,7 +11,9 @@ In the `practice-village` Netlify project:
 3. Set registration to **Invite only**.
 4. Keep email confirmation on.
 5. Set the site URL to `https://thepracticevillage.org`.
-6. Set the account email templates to use Practice Village language.
+6. Set the invitation subject to `You've been invited to join Practice Village`.
+7. Set the invitation template path to `/emails/invitation.html`.
+8. Keep invitation links active for 7 days.
 
 Do not enable open public signup. Stripe creates the entitlement; Identity provides the account.
 

@@ -1,5 +1,5 @@
 import { getStore } from "@netlify/blobs";
-import { admin, requestPasswordRecovery } from "@netlify/identity";
+import { admin, getIdentityConfig } from "@netlify/identity";
 
 export const MEMBERSHIP_ROLES = ["member", "founding_villager"];
 export const FOUNDING_CUTOFF = "2026-10-31T15:00:00-05:00";
@@ -78,26 +78,37 @@ export async function findIdentityUserByEmail(email) {
   return null;
 }
 
+async function inviteIdentityUser(email) {
+  const identity = getIdentityConfig();
+  if (!identity?.url || !identity.token) throw new Error("Identity operator access is unavailable");
+  const response = await fetch(`${identity.url}/invite`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${identity.token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok || !payload.id) throw new Error(payload.msg || "Identity invitation could not be created");
+  return payload;
+}
+
 export async function grantIdentityRole(record) {
   let user = await findIdentityUserByEmail(record.email);
   let accountSetupEmailSent = false;
 
   if (!user) {
-    const temporaryPassword = `${crypto.randomUUID()}Aa1!`;
-    user = await admin.createUser({
-      email: record.email,
-      password: temporaryPassword,
-      data: {
-        app_metadata: {
-          roles: [record.role],
-          membership_plan: record.plan,
-          membership_status: record.status,
-          stripe_customer_id: record.stripeCustomerId,
-          stripe_subscription_id: record.stripeSubscriptionId,
-        },
+    user = await inviteIdentityUser(record.email);
+    user = await admin.updateUser(user.id, {
+      app_metadata: {
+        roles: [record.role],
+        membership_plan: record.plan,
+        membership_status: record.status,
+        stripe_customer_id: record.stripeCustomerId,
+        stripe_subscription_id: record.stripeSubscriptionId,
       },
     });
-    await requestPasswordRecovery(record.email);
     accountSetupEmailSent = true;
   } else {
     const existingRoles = Array.isArray(user.roles) ? user.roles : [];

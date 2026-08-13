@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/member.css?v=1" />
+  <link rel="stylesheet" href="/assets/member.css?v=3" />
 </head>
 <body data-auth-page="login">
   <header class="member-header">
@@ -16,7 +16,8 @@
     <a href="/" class="member-link">Back to the Village</a>
   </header>
   <main class="auth-shell">
-    <section class="auth-card" aria-labelledby="authTitle">
+    <section class="auth-card" id="authCard" aria-labelledby="authTitle">
+      <div class="auth-mark" aria-hidden="true"><span></span></div>
       <p class="eyebrow">Member entrance</p>
       <h1 id="authTitle">Welcome back.</h1>
       <p id="authIntro">Sign in with the email connected to your membership.</p>
@@ -28,9 +29,17 @@
       </form>
 
       <form id="inviteForm" class="auth-form" hidden>
-        <label>Create a password<input id="invitePassword" type="password" autocomplete="new-password" minlength="8" required /></label>
-        <button type="submit">Finish setting up my account</button>
+        <label>Create your password<input id="invitePassword" type="password" autocomplete="new-password" minlength="8" required aria-describedby="invitePasswordHelp" /></label>
+        <p id="invitePasswordHelp" class="field-help">Use at least 8 characters. This is the only time you will create it.</p>
+        <button type="submit">Create my account</button>
       </form>
+
+      <div id="inviteSuccess" class="invite-success" hidden tabindex="-1">
+        <p class="eyebrow">Welcome to Practice Village</p>
+        <h2>You’re in.</h2>
+        <p>Your account is ready. We’re opening the doors now.</p>
+        <a href="/welcome">Step inside</a>
+      </div>
 
       <form id="resetForm" class="auth-form" hidden>
         <label>New password<input id="resetPassword" type="password" autocomplete="new-password" minlength="8" required /></label>
@@ -47,6 +56,6 @@
       <p class="auth-help">Paid members receive an account setup email after purchase. Need help? <a href="mailto:info@aidedeq.org">Email us.</a></p>
     </section>
   </main>
-  <script type="module" src="/assets/member-auth.bundle.js?v=1"></script>
+  <script type="module" src="/assets/member-auth.bundle.js?v=3"></script>
 </body>
 </html>
