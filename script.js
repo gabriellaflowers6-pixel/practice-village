@@ -480,6 +480,7 @@
     function fitNav() {
       if (navEl.classList.contains("is-open")) return;
       navEl.classList.remove("is-crowded");
+      if (window.matchMedia("(min-width: 681px) and (max-width: 1080px)").matches) return;
       if (getComputedStyle(links).display === "none") return; // CSS already compact
       var cs = getComputedStyle(navEl);
       var gap = parseFloat(cs.columnGap || cs.gap) || 0;
