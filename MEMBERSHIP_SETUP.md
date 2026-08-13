@@ -79,3 +79,15 @@ This pass records voucher allowance. Workshop registration and voucher redemptio
 ## 7. Production release gate
 
 Do not publish member access until all required preview tests pass. Keep the public HUSH and Terms copy separate from this release if those changes need to publish sooner.
+
+## 8. Concierge-led welcome checks
+
+- Membership access works even when the member skips onboarding.
+- `/welcome` redirects a signed-out visitor to `/login`.
+- The welcome conversation accepts typing and offers voice transcription where the browser supports it.
+- A transcript is shown to the member before it is sent.
+- The Concierge asks one optional question at a time and honors skip and finish requests.
+- No audio or raw welcome transcript is stored by Practice Village.
+- The short welcome note is stored only after the member chooses to save it.
+- Choosing private completes the welcome without storing a note.
+- Safety Hall records are never pulled into onboarding.

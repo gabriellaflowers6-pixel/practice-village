@@ -1,6 +1,6 @@
 import { getUser } from "@netlify/identity";
 
-const MEMBER_ROLES = ["member", "founding_villager", "admin"];
+const MEMBER_ROLES = ["member", "founding_villager", "admin", "test_member"];
 
 function memberPage() {
   return `<!DOCTYPE html>
@@ -28,7 +28,7 @@ function memberPage() {
       <span id="memberPlan" class="member-plan">Checking membership…</span>
     </section>
     <section class="member-grid" aria-label="Member shortcuts">
-      <article class="member-card member-card--wide"><p class="eyebrow">Front desk</p><h2>Ask your Concierge</h2><p>Bring one question. Your Concierge can help you sort it and find the right room or outside resource.</p><a href="/#how">Go to the Concierge</a></article>
+      <article class="member-card member-card--wide"><p class="eyebrow">Front desk</p><h2 id="conciergeCardTitle">Meet your Concierge</h2><p id="conciergeCardCopy">Start with a short, optional welcome conversation. Talk or type, skip any question, and save nothing unless you choose.</p><a id="conciergeCardLink" href="/welcome">Start your welcome conversation</a></article>
       <article class="member-card"><p class="eyebrow">Continue</p><h2>Your saved practices and plans</h2><p>Your Personal Intelligence Layer will appear here as member saving rolls out.</p><span class="member-state">Rolling out</span></article>
       <article class="member-card"><p class="eyebrow">Live</p><h2>Upcoming events</h2><p>Live classes with JoYi begin February 7, 2027. Member registration details will appear here.</p><span class="member-state">Included</span></article>
       <article class="member-card"><p class="eyebrow">Rebuild Arc Workshop</p><h2>Your membership-year voucher</h2><p id="voucherSummary">Checking your voucher allowance…</p><span id="voucherYear" class="member-state">Membership year</span></article>

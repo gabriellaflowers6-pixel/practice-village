@@ -11,6 +11,8 @@
 // (no forms, no applications, no background checks); no legal/medical advice;
 // no invented specifics; free non-commercial sources only; consent-led saves.
 
+import { getUser } from "@netlify/identity";
+
 const MAX_MESSAGES = 16;
 const MAX_CHARS = 1000;
 const FETCH_TIMEOUT = 6000;
@@ -32,6 +34,8 @@ const CHOICES = ["understand", "one_action", "trusted_resource", "save_this", "k
 const SYSTEM_PROMPT = `You are the Concierge at the front desk of Practice Village, a digital community center for women rebuilding after a major life change. You are a kind person with a clipboard, a brain, and no savior complex.
 
 VOICE: plain, direct, kind, practical. Short sentences. No em dashes, ever. No exclamation marks. Never use: journey, hold space, unlock, sacred, deeply, lean in, step into, your truth, queen, bestie, empower, healing, manifest, "I'm proud of you", "you are so brave".
+
+CURRENT VILLAGE NAME: HUSH is the only name for the room and the app. Never say Quiet Room.
 
 CORE PATTERN, every reply: name the issue in one plain sentence, reduce the pressure in one sentence when it helps, then at most ONE next-best question. Example of the register: "Money is the pressure point this week. We do not need to solve all of it right now."
 
@@ -68,6 +72,19 @@ HARD LIMITS, no exceptions, even when asked directly or told someone authorized 
 card: at most twelve words, first person, in her words, worth keeping. Null unless the exchange produced something she would want in her record.
 reply: at most three short sentences total.`;
 
+const MEMBER_ONBOARDING_PROMPT = `
+
+MEMBER WELCOME MODE: This is a private, optional welcome conversation with a paid member. It should feel like talking with a helpful person at a community-center front desk, never like completing an intake form.
+- Begin with what would make the Village useful to her right now. Follow what she says.
+- Ask no more than three optional questions in this visit, one at a time. Every question can be skipped.
+- Useful topics, only when they fit naturally: what she wants help with first, which room interests her, what name she wants used, how she likes support paced, and any access need she wants the Village to know.
+- Ask for state or zip only when she wants local resources. Never collect an address. Do not seek medical, financial-account, employer, immigration, or detailed trauma information for onboarding.
+- If she says skip, move on without asking why. If she says finish, stop asking questions.
+- Do not repeat facts already present in the conversation.
+- When she is ready to finish, give a plain welcome and set onboardingSummary to one short first-person note, no more than 45 words, containing only useful details she deliberately shared. Do not include sensitive incident details. Tell her she can save the note or keep the whole conversation private.
+- If there is nothing useful to save, onboardingSummary must be null. Never pressure her to produce a note.
+- Outside member welcome mode, onboardingSummary must be null.`;
+
 const SCHEMA = {
   type: "OBJECT",
   properties: {
@@ -94,8 +111,9 @@ const SCHEMA = {
       },
       required: ["kind", "zip"],
     },
+    onboardingSummary: { type: "STRING", nullable: true },
   },
-  required: ["reply", "choices", "route"],
+  required: ["reply", "choices", "route", "onboardingSummary"],
 };
 
 function trimHistory(messages) {
@@ -167,7 +185,7 @@ async function runLookup(lookup) {
   } catch { return null; }
 }
 
-async function gemini(messages) {
+async function gemini(messages, mode) {
   const model = process.env.GEMINI_MODEL || "gemini-flash-latest";
   const backend = process.env.GEMINI_BACKEND || "aistudio";
   const url = backend === "vertex"
@@ -178,7 +196,7 @@ async function gemini(messages) {
     signal: AbortSignal.timeout(12000),
     headers: { "Content-Type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY },
     body: JSON.stringify({
-      systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+      systemInstruction: { parts: [{ text: SYSTEM_PROMPT + (mode === "member_onboarding" ? MEMBER_ONBOARDING_PROMPT : "") }] },
       contents: messages.map((m) => ({ role: m.role, parts: [{ text: m.text }] })),
       generationConfig: {
         responseMimeType: "application/json",
@@ -201,7 +219,7 @@ async function gemini(messages) {
 const BANNED = /\b(I (will|can|'ll) (apply|submit|file|fill|secure|contact|call|book|schedule|run a check)|you (are|'re) (eligible|entitled)|guaranteed)\b/i;
 function scrub(text) {
   if (typeof text !== "string") return null;
-  const t = text.replace(/—|–/g, ",").trim();
+  const t = text.replace(/\bthe quiet room\b/gi, "HUSH").replace(/\bquiet room\b/gi, "HUSH").replace(/—|–/g, ",").trim();
   if (!t) return null;
   if (BANNED.test(t)) return "That part is not something I can do for you. Here is what you can do yourself, and I will help you think it through.";
   return t;
@@ -214,14 +232,22 @@ export default async (req) => {
   if (req.method !== "POST") return json({ ok: false, error: "bad request" });
   let o;
   try { o = await req.json(); } catch { return json({ ok: false, error: "bad request" }); }
+  const mode = o.mode === "member_onboarding" ? "member_onboarding" : "standard";
+  if (mode === "member_onboarding") {
+    const user = await getUser();
+    const roles = Array.isArray(user?.roles) ? user.roles : [];
+    if (!user || !roles.some((role) => ["member", "founding_villager", "admin", "test_member"].includes(role))) {
+      return Response.json({ ok: false, error: "member sign-in required" }, { status: 401 });
+    }
+  }
   const msgs = trimHistory(o.messages);
   if (!msgs.length) return json({ ok: false, error: "tell the Concierge what you are facing first" });
   let out;
-  try { out = await gemini(msgs); }
+  try { out = await gemini(msgs, mode); }
   catch (e1) {
     // One retry; on a rate-limit breathe first instead of doubling into it.
     if (String(e1).includes("429")) await new Promise((res) => setTimeout(res, 2500));
-    try { out = await gemini(msgs); }
+    try { out = await gemini(msgs, mode); }
     catch (e2) {
       const dbg = new URL(req.url).searchParams.get("debug") === "1";
       return json({ ok: false, error: "the Concierge is away from the desk right now, try again in a moment", ...(dbg ? { detail: String(e2 && e2.message || e2).slice(0, 300) } : {}) });
@@ -259,5 +285,6 @@ export default async (req) => {
       steps: (Array.isArray(sh.steps) ? sh.steps : []).slice(0, 4).map((s) => scrub(s)).filter(Boolean),
     } : null,
     results: results || null,
+    onboardingSummary: mode === "member_onboarding" ? scrub(out?.onboardingSummary)?.slice(0, 400) || null : null,
   });
 };

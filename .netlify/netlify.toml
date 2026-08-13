@@ -1,14 +1,15 @@
+functionsDirectory = "/Users/jkr/Documents/ALL Build Projects/practice-village/netlify/functions"
+functionsDirectoryOrigin = "config"
+headersOrigin = "config"
+redirectsOrigin = "config"
 plugins = []
-headers = []
-redirects = []
-
-[functions]
-
-[functions."*"]
 
 [build]
-publish = "/Users/gabriellakalvaitis-flowers/dev/practice-village"
-publishOrigin = "default"
+publish = "/Users/jkr/Documents/ALL Build Projects/practice-village"
+publishOrigin = "config"
+commandOrigin = "config"
+command = "npm run build"
+functions = "/Users/jkr/Documents/ALL Build Projects/practice-village/netlify/functions"
 
 [build.environment]
 
@@ -23,3 +24,63 @@ publishOrigin = "default"
 [build.processing.js]
 
 [build.services]
+
+[functions]
+
+[functions."*"]
+
+[[headers]]
+for = "/*"
+
+[headers.values]
+X-Frame-Options = "DENY"
+X-Content-Type-Options = "nosniff"
+Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[redirects]]
+from = "/concierge"
+to = "/.netlify/functions/concierge"
+status = 200.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
+
+[[redirects]]
+from = "/privacy"
+to = "/privacy.html"
+status = 200.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
+
+[[redirects]]
+from = "/terms"
+to = "/terms.html"
+status = 200.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
+
+[[redirects]]
+from = "/login"
+to = "/login.html"
+status = 200.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]

@@ -157,3 +157,9 @@ export async function getRecordBySubscription(store, subscriptionId) {
   const key = await store.get(`subscription/${subscriptionId}`);
   return key ? store.get(key, { type: "json" }) : null;
 }
+
+export async function getMembershipRecordByEmail(email) {
+  const store = membershipStore();
+  const key = await memberKeyForEmail(email);
+  return { store, key, record: await store.get(key, { type: "json" }) };
+}

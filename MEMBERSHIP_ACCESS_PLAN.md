@@ -108,6 +108,21 @@ After login, a member enters the lobby rather than returning to the sales page. 
 - Workshop voucher status
 - Account, privacy, export, and deletion controls
 
+## Concierge-led welcome
+
+The member account opens with the minimum information required for payment and access. Onboarding happens afterward as an optional conversation with the Concierge, not as an intake form.
+
+- The member can talk or type.
+- Voice becomes a transcript the member can review before sending. Practice Village does not keep the audio.
+- The Concierge asks one useful, optional question at a time and no more than three questions in the first visit.
+- The member can skip any question, finish for now, or return later without losing access.
+- Questions follow what the member says. They may cover what would make membership useful, the first room she wants, how she likes support paced, the name she wants used, or an access need she wants remembered.
+- State or zip is requested only when the member wants local resources. A street address is not part of onboarding.
+- The Concierge does not seek medical details, account numbers, employer information, immigration information, or a trauma history for onboarding.
+- At the end, the Concierge offers one short welcome note containing only useful details the member deliberately shared.
+- The member chooses once whether to save that note or keep the entire conversation private. Raw onboarding conversation and audio are not saved.
+- Public display of a Founding Villager's name remains a separate, explicit choice and is never inferred from onboarding.
+
 ## Roles
 
 - `member`: active monthly membership
