@@ -128,6 +128,7 @@ Status: protected page works, experience not approved.
 4. Give each room a member-facing entrance that can hold apps, resources, live offerings, status, and return navigation.
 5. Label unavailable or unconfirmed destinations before a click.
 6. Keep account, voucher, event, saved-item, Concierge, and room status accurate.
+7. Replace the temporary text orientation with a real guided orientation. Consider a short demo-style video after the format and script are approved.
 
 Review checkpoint: JoYi checks whether the member page feels like the Village and whether the information hierarchy makes sense. JoYi does not test room applications during this phase.
 

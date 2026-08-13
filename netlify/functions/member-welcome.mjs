@@ -13,7 +13,7 @@ function welcomePage() {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/member.css?v=5" />
+  <link rel="stylesheet" href="/assets/member.css?v=6" />
 </head>
 <body data-auth-page="welcome">
   <header class="member-header">
@@ -54,7 +54,7 @@ function welcomePage() {
       <p id="onboardingStatus" class="auth-status" role="status" aria-live="polite"></p>
     </section>
   </main>
-  <script type="module" src="/assets/member-auth.bundle.js?v=5"></script>
+  <script type="module" src="/assets/member-auth.bundle.js?v=6"></script>
 </body>
 </html>`;
 }

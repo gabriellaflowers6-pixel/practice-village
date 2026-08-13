@@ -1344,6 +1344,7 @@ async function initWelcome() {
     responseBox.hidden = false;
     skipButton.hidden = false;
     input.value = "";
+    input.rows = 3;
     input.placeholder = "Type your answer";
     state.pendingMemoryPrefix = null;
   }
@@ -1361,6 +1362,7 @@ async function initWelcome() {
       progress.textContent = "Optional account setup";
       question.textContent = "What should we call you?";
       help.textContent = "You can skip this and add a name later.";
+      input.rows = 1;
       input.placeholder = "Preferred name";
       return;
     }
