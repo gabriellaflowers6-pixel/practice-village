@@ -1,3 +1,22 @@
+### 2026-08-13 NIGHT — THE SWAP shipped to prod (JoYi's bot, STOPPED 23:55 JST)
+PROD (thepracticevillage.org, commits 0a9aef7..7c11748): Safety Hall live at
+/safety-hall (all 4 files + safety-controls.js, palette-bridged, room card open,
+JoYi walked the checklist). Phase 2 member lobby = the Village map (public visual
+language, truthful doors, Moxie unlinked until the member destination is confirmed).
+THE SWAP: full Concierge at the member desk (/welcome desk-first; onboarding is an
+invitation banner, never a gate), consented member notes feed the prompt, wrap-up
+saves cards to the member record (member-onboarding action save_cards). Landing =
+the porch: real Gemini, choice menu + quick replies, but lookups/searchHelp/cards
+are member-only, six-exchange cap, light-funnel handoff; identity enforced server-
+side (spoofed member mode verified = porch, on prod). TOPIC GUIDANCE in the brain
+(money/housing/work/caregiving/stuck/body) incl. honest behavior-as-driver for
+weight, no diet framing, and NEVER-ASSUME-LIFE-STAGE rule (rebuilding happens at 25
+and 75). Porch honesty on the landing page: record layer removed, "porch saves
+nothing" bullet, porch label on the demo card. No-orphan text-wrap in member area.
+FOR GABBY: concierge.mjs now imports _shared/membership.mjs; member modes require
+a live Identity token. SENDGRID_WEBHOOK_SECRET on this site is wanderpack residue,
+unused here (JoYi deleting). Phase 4 still needs the real Moxie member destination.
+
 ### 2026-08-13 — Landing page warm-palette restyle from JoYi's reference mocks (JoYi's bot, STARTED 19:30, STOPPED 20:05 JST)
 RESULT: DONE locally, commit d586b66 on main, NOT pushed, NOT deployed — awaiting
 JoYi's preview approval. Full-page desktop + mobile QA passed (no horizontal
