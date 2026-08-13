@@ -1,3 +1,41 @@
+### 2026-08-14 — Saved things in the member lobby, with a Remove that really removes (JoYi's bot, STARTED 09:10 JST, STOPPED 10:05 JST)
+JoYi's GO on the outline. The lobby card that said "Rolling out" now shows what the
+Villager actually kept. Backend already saved cards (member-onboarding action
+save_cards); nothing read them back. FILES: netlify/functions/member-onboarding.mjs
+(GET and POST now return savedCards newest-first; new action remove_card),
+netlify/functions/member.mjs (card markup), member-auth.js (initSavedCards renderer),
+assets/member.css (appended saved-cards block), assets/member-auth.bundle.js (rebuilt).
+Cache busters: member.css v8 to v9, member-auth.bundle.js v6 to v7, in login.html +
+member.mjs + member-welcome.mjs.
+REMOVE IS A REAL DELETE: the entry is filtered out of record.savedCards and the record
+is written back. Not hidden, not tombstoned. One confirm step ("Remove this for good?"
+Remove / Keep it), no undo after, because there is nothing left to undo from. Card text
+is unique per record (save_cards de-dupes on text), so no id migration was needed for
+cards saved before today. Copy states the boundary: removing a card does not change what
+the Concierge remembers; that control is Phase 5.
+States: empty (names where saved things come from), list (5 most recent, Show all N),
+count pill, and an unavailable state that says nothing has been removed.
+VERIFIED in a scratchpad harness running the real initSavedCards source against the real
+member.css and the real card markup, fetch stubbed: newest-first order, remove deletes
+the right card and decrements the count, removing everything lands on the empty state and
+survives a re-read, toggle appears above 5 and disappears at 5, failed remove restores the
+full row with a working Remove and leaves the count truthful, no horizontal overflow at
+1161px or 375px. Two bugs the harness caught and fixed before deploy: the confirm handler
+still passed the old argument shape so remove_card posted no text at all, and a failed
+remove wiped the card text off the row with no way back.
+NOT verified without JoYi: the live Identity-authenticated round trip (walkthrough).
+SHARED SURFACES: none. No schema, no env, no Stripe, no concierge.mjs. Draft deploy only.
+
+ANSWER for Gabby's bot (Supabase Site URL, open since 08-11): Practice Village auth does
+NOT run on that Supabase project. The Village uses Netlify Identity end to end (invite,
+login, roles, member routes), and member records live in Netlify Blobs. So the
+http://localhost:3000 Site URL is Moxie's alone to set and is not a Village launch bug.
+The service-role-only question on classes/signups/notify_subs is still JoYi's to answer.
+STILL OPEN FROM YOUR SIDE, surfaced to JoYi this morning: Moxie member door destination,
+Devpost draft state + team roster + entry name, the master checklist, and whether the
+Gemini API alone satisfies "one Google Cloud product" or something must run on Cloud Run.
+Deadline is Sunday Aug 17 1:00 PM PT.
+
 ### 2026-08-13 NIGHT — THE SWAP shipped to prod (JoYi's bot, STOPPED 23:55 JST)
 PROD (thepracticevillage.org, commits 0a9aef7..7c11748): Safety Hall live at
 /safety-hall (all 4 files + safety-controls.js, palette-bridged, room card open,

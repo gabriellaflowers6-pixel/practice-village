@@ -71,3 +71,16 @@ p,li,.member-card p,.onboarding-help,.welcome-intro p{text-wrap:pretty}
 /* the welcome line is ONE line: size down until it fits, never wrap the name */
 .member-welcome h1{font-size:clamp(1.9rem,4.2vw,3.4rem);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .welcome-intro h1{font-size:clamp(1.9rem,4vw,3.2rem)}
+/* your saved things: what the Villager kept, and the way to unkeep it */
+.saved-cards{display:grid;gap:10px;margin:.2rem 0 .6rem}
+.saved-card-list{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.saved-card{padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#FFFDF8}
+.saved-card__text{margin:0!important;font-size:.94rem;line-height:1.45;color:var(--ink)!important}
+.saved-card__meta{display:flex;gap:12px;align-items:baseline;justify-content:space-between;margin-top:.4rem;font-size:.76rem;color:var(--soft)}
+.saved-card__remove{font-size:.76rem;text-decoration:underline;opacity:.8;padding:.55rem 0 .55rem .6rem;margin:-.55rem 0}
+.saved-card__remove:hover,.saved-card__remove:focus-visible{opacity:1;color:var(--clay)}
+.saved-card__status{margin:.35rem 0 0!important;font-size:.82rem;font-weight:650;color:var(--clay)!important}
+.saved-card__actions{display:flex;gap:14px;margin-top:.4rem}
+.saved-card__actions .text-button{font-size:.8rem;text-decoration:underline}
+.saved-cards .text-button{justify-self:start;font-size:.8rem;text-decoration:underline}
+.member-card--saved .room-note{margin:0}

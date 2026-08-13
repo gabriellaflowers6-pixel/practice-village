@@ -150,6 +150,134 @@ async function initLogin() {
   });
 }
 
+function initSavedCards() {
+  const wrap = document.getElementById("savedCards");
+  const state = document.getElementById("savedCardsState");
+  if (!wrap || !state) return;
+  const PREVIEW = 5;
+  let cards = [];
+  let showAll = false;
+
+  const savedOn = (iso) => {
+    if (!iso) return "";
+    const date = new Date(iso);
+    return Number.isNaN(date.getTime()) ? "" : date.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+  };
+
+  const line = (text, className) => {
+    const p = document.createElement("p");
+    if (className) p.className = className;
+    p.textContent = text;
+    return p;
+  };
+
+  function unavailable() {
+    wrap.replaceChildren(line("Your saved things are temporarily unavailable. Nothing has been removed."));
+    state.textContent = "Temporarily unavailable";
+  }
+
+  async function removeCard(card, item) {
+    item.replaceChildren(line(card.text, "saved-card__text"), line("Removing…", "saved-card__status"));
+    const failed = () => {
+      fillRow(card, item);
+      item.append(line("That did not remove. It is still kept.", "saved-card__status"));
+    };
+    try {
+      const response = await fetch("/member-onboarding", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "remove_card", text: card.text }),
+      });
+      const payload = await response.json().catch(() => null);
+      if (!response.ok || !payload?.ok) return failed();
+      cards = Array.isArray(payload.savedCards) ? payload.savedCards : [];
+      render();
+    } catch {
+      failed();
+    }
+  }
+
+  function confirmRow(card, item) {
+    const question = line("Remove this for good?", "saved-card__status");
+    const actions = document.createElement("span");
+    actions.className = "saved-card__actions";
+    const yes = document.createElement("button");
+    yes.type = "button";
+    yes.className = "text-button";
+    yes.textContent = "Remove";
+    yes.addEventListener("click", () => removeCard(card, item));
+    const no = document.createElement("button");
+    no.type = "button";
+    no.className = "text-button";
+    no.textContent = "Keep it";
+    no.addEventListener("click", render);
+    actions.append(yes, no);
+    item.replaceChildren(line(card.text, "saved-card__text"), question, actions);
+    yes.focus();
+  }
+
+  function fillRow(card, item) {
+    const text = line(card.text, "saved-card__text");
+    const meta = document.createElement("span");
+    meta.className = "saved-card__meta";
+    const date = savedOn(card.savedAt);
+    if (date) meta.textContent = `Kept ${date}`;
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "text-button saved-card__remove";
+    remove.textContent = "Remove";
+    remove.setAttribute("aria-label", `Remove: ${card.text}`);
+    remove.addEventListener("click", () => confirmRow(card, item));
+    meta.append(remove);
+    item.replaceChildren(text, meta);
+  }
+
+  function render() {
+    if (!cards.length) {
+      wrap.replaceChildren(line("You have not kept anything yet. At the end of a conversation at the front desk, you choose what to keep. It lands here."));
+      state.textContent = "Nothing kept yet";
+      return;
+    }
+
+    const list = document.createElement("ul");
+    list.className = "saved-card-list";
+    const visible = showAll ? cards : cards.slice(0, PREVIEW);
+    for (const card of visible) {
+      const item = document.createElement("li");
+      item.className = "saved-card";
+      fillRow(card, item);
+      list.append(item);
+    }
+
+    wrap.replaceChildren(list);
+
+    if (cards.length > PREVIEW) {
+      const toggle = document.createElement("button");
+      toggle.type = "button";
+      toggle.className = "text-button";
+      toggle.textContent = showAll ? "Show the most recent five" : `Show all ${cards.length}`;
+      toggle.addEventListener("click", () => { showAll = !showAll; render(); });
+      wrap.append(toggle);
+    }
+
+    wrap.append(line("Removing something here clears it from your saved things. It does not change what the Concierge remembers about you.", "room-note"));
+    state.textContent = cards.length === 1 ? "1 kept" : `${cards.length} kept`;
+  }
+
+  return (async () => {
+    try {
+      const response = await fetch("/member-onboarding", { headers: { Accept: "application/json" } });
+      if (!response.ok) return unavailable();
+      const payload = await response.json();
+      if (!payload?.ok) return unavailable();
+      cards = Array.isArray(payload.savedCards) ? payload.savedCards : [];
+      render();
+    } catch {
+      unavailable();
+    }
+  })();
+}
+
 async function initMemberLobby() {
   const user = await getUser();
   if (!user || !hasMemberAccess(user)) {
@@ -189,6 +317,8 @@ async function initMemberLobby() {
   } catch (error) {
     document.getElementById("voucherSummary").textContent = "Voucher details are temporarily unavailable. Your membership has not changed.";
   }
+
+  initSavedCards();
 
   const signOut = async () => {
     await logout();

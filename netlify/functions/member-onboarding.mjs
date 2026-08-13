@@ -28,6 +28,10 @@ export default async function handler(request) {
     displayName: record.founderListing.displayName || null,
     updatedAt: record.founderListing.updatedAt || null,
   } : null;
+  const savedCardsView = () => (Array.isArray(record.savedCards) ? record.savedCards : [])
+    .filter((entry) => entry && typeof entry.text === "string" && entry.text.trim())
+    .map((entry) => ({ text: entry.text, savedAt: entry.savedAt || null }))
+    .reverse();
 
   if (request.method === "GET") {
     return Response.json({
@@ -35,6 +39,7 @@ export default async function handler(request) {
       onboarding: onboardingView(),
       foundingEligible,
       founderListing: founderListingView(),
+      savedCards: savedCardsView(),
     });
   }
 
@@ -68,6 +73,15 @@ export default async function handler(request) {
     const merged = [...existing];
     for (const card of cards) if (!merged.some((entry) => entry.text === card)) merged.push({ text: card, savedAt: now });
     record.savedCards = merged.slice(-100);
+  } else if (body.action === "remove_card") {
+    const text = String(body.text || "").trim().slice(0, 180);
+    if (!text) return Response.json({ ok: false, error: "Nothing to remove" }, { status: 400 });
+    const existing = Array.isArray(record.savedCards) ? record.savedCards : [];
+    const kept = existing.filter((entry) => entry?.text !== text);
+    if (kept.length === existing.length) {
+      return Response.json({ ok: false, error: "That is not in your saved things" }, { status: 404 });
+    }
+    record.savedCards = kept;
   } else if (body.action === "founder_listing") {
     if (!foundingEligible) return Response.json({ ok: false, error: "Founding Villager access required" }, { status: 403 });
     const decision = body.decision === "yes" ? "yes" : body.decision === "no" ? "no" : null;
@@ -88,6 +102,7 @@ export default async function handler(request) {
     onboarding: onboardingView(),
     foundingEligible,
     founderListing: founderListingView(),
+    savedCards: savedCardsView(),
   });
 }
 
