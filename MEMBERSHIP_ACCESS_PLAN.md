@@ -108,6 +108,8 @@ After login, a member enters the lobby rather than returning to the sales page. 
 - Workshop voucher status
 - Account, privacy, export, and deletion controls
 
+The member lobby is the working Village map. It uses the same visual language as the public landing page without pricing, sales copy, product demonstrations, or invitations to join. The Practice Village name and Village map link keep signed-in Villagers inside the member area. Each available room link opens the working room or member resource, not its public product page or demo. Rooms that are not open must say so before the Villager clicks.
+
 ## Concierge-led welcome
 
 The member account opens with the minimum information required for payment and access. Onboarding happens afterward as an optional conversation with the Concierge, not as an intake form.

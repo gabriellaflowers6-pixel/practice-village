@@ -17,8 +17,8 @@ function memberPage() {
 </head>
 <body data-auth-page="member">
   <header class="member-header">
-    <a href="/" class="member-brand">Practice Village</a>
-    <nav><a href="/" class="member-link">Village map</a><button id="logoutButton" class="text-button" type="button">Sign out</button></nav>
+    <a href="/member" class="member-brand">Practice Village</a>
+    <nav><a href="#rooms" class="member-link">Village map</a><button id="logoutButton" class="text-button" type="button">Sign out</button></nav>
   </header>
   <main class="member-main">
     <section class="member-welcome">
@@ -33,7 +33,7 @@ function memberPage() {
       <article class="member-card"><p class="eyebrow">Live</p><h2>Upcoming events</h2><p>Live classes with JoYi begin February 7, 2027. Member registration details will appear here.</p><span class="member-state">Included</span></article>
       <article class="member-card"><p class="eyebrow">Rebuild Arc Workshop</p><h2>Your membership-year voucher</h2><p id="voucherSummary">Checking your voucher allowance…</p><span id="voucherYear" class="member-state">Membership year</span></article>
     </section>
-    <section class="member-section">
+    <section class="member-section" id="rooms">
       <div class="section-heading"><div><p class="eyebrow">Your rooms</p><h2>Open the door you need.</h2></div></div>
       <div class="room-grid">
         <a class="room-card" href="/moxie-studio/"><b>Moxie Studios</b><span>Yoga, meditation, Bott Om, and the mirror</span></a>
