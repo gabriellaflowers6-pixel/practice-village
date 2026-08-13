@@ -1163,7 +1163,9 @@ async function initLogin() {
     button.textContent = "Creating your account\u2026";
     status.textContent = "";
     try {
-      const user = await acceptInvite(inviteToken, document.getElementById("invitePassword").value);
+      const password = document.getElementById("invitePassword").value;
+      const invitedUser = await acceptInvite(inviteToken, password);
+      const user = await login(invitedUser.email, password);
       inviteForm.hidden = true;
       status.hidden = true;
       document.getElementById("authTitle").hidden = true;

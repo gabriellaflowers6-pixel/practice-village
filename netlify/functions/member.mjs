@@ -47,7 +47,7 @@ function memberPage() {
       <div class="account-links"><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="mailto:info@aidedeq.org?subject=Practice%20Village%20membership">Membership help or cancellation</a><button id="logoutButtonBottom" class="text-button" type="button">Sign out</button></div>
     </section>
   </main>
-  <script type="module" src="/assets/member-auth.bundle.js?v=1"></script>
+  <script type="module" src="/assets/member-auth.bundle.js?v=4"></script>
 </body>
 </html>`;
 }

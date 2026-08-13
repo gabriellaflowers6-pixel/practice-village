@@ -93,7 +93,13 @@ async function initLogin() {
     button.textContent = "Creating your account…";
     status.textContent = "";
     try {
-      const user = await acceptInvite(inviteToken, document.getElementById("invitePassword").value);
+      const password = document.getElementById("invitePassword").value;
+      const invitedUser = await acceptInvite(inviteToken, password);
+
+      // Accepting an invitation creates the Identity account, but the protected
+      // member pages also need the auth cookie established by login(). Without
+      // it, the first trip to /welcome is redirected straight back here.
+      const user = await login(invitedUser.email, password);
       inviteForm.hidden = true;
       status.hidden = true;
       document.getElementById("authTitle").hidden = true;

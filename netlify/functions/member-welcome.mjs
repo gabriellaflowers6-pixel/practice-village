@@ -53,7 +53,7 @@ function welcomePage() {
       </div>
     </section>
   </main>
-  <script type="module" src="/assets/member-auth.bundle.js?v=2"></script>
+  <script type="module" src="/assets/member-auth.bundle.js?v=4"></script>
 </body>
 </html>`;
 }
