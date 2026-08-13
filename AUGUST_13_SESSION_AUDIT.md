@@ -24,6 +24,26 @@ Walkthrough observations are added in the order reported. They are not fixed dur
 2. The member lobby works as a protected page, but its design and room logic do not yet feel like the Village.
 3. The Village Map change keeps the link on the member page, but it only points to the room section on the same page. It has no clear visible result and does not solve member navigation.
 
+## Decisions and review results omitted from the first audit
+
+1. The live site is the current source of truth. Older plans, names, prices, dates, and links must match it when they conflict.
+2. The public landing page explains and previews the Village. The protected member area removes marketing and opens working member rooms, apps, resources, events, and account controls.
+3. The initial member account collects only what is required for payment and access. Optional onboarding continues through the Concierge by voice or type, not a form.
+4. Member sign-in language passed review before the invitation walkthrough.
+5. The invitation email uses the approved Practice Village message, one Accept the invitation action, and a seven-day link.
+6. The Terms and Privacy pass was approved. The AI warning begins with "Important:" and states that the Concierge can be incomplete or wrong, should be verified, and is not professional advice.
+7. Workshop vouchers follow the membership year, not the calendar year. One voucher is included in each membership year.
+8. The only voucher exception is for the 108 Founding Villagers who become members before the first Rebuild Arc Workshop begins on October 31, 2026 at 3:00 pm Central. They receive one additional voucher in their first membership year.
+9. Quiet Room is retired as a name. HUSH is the room and the app. The HUSH room will include the sixty-second app plus additional member mindfulness apps and resources.
+10. The public landing page needs a future area for the 108 Founding Villager names. Placement, display format, exact consent, and removal must be approved before implementation. No name is public by default.
+11. Cur.AI.ted starter access is included with membership. The full Cur.AI.ted studio remains a separate offer. Member access and the correct starter destination still need to be connected.
+12. The Concierge already uses the Gemini API. The Google Cloud review was for reliability, protection, and operations, not another AI feature.
+13. No additional product features are being added during this pass. Work is limited to completing agreed functions, correcting logic and flow, connecting rooms, and strengthening reliability.
+14. Shared-branch work must be checked before each change so partner updates are not overwritten.
+15. Do not invent a member destination when the working room or access link is not ready. Label the room honestly and wait for the correct link.
+16. Each review checkpoint states what JoYi checks and what does not need checking at that step.
+17. Use the check-balance process before approval: what the Villager gives, what the Village returns, what is saved, what remains private, and whether the exchange asks for more than it provides.
+
 ## Onboarding walkthrough notes in reported order
 
 1. Remove "A conversation, not a form."
