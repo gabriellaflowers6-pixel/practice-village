@@ -16,7 +16,7 @@ Walkthrough observations are added in the order reported. They are not fixed dur
 6. The account-creation session bug was fixed so a new member can enter the protected area.
 7. A first conversational onboarding flow was built with type, browser voice transcription, skip, finish, and optional saving.
 8. Copy rules were added to the membership plan: no em dashes, no orphaned display words, no generic AI language, and no words that do not help the Villager understand, decide, or act.
-9. Google Cloud tools were reviewed. No additional AI or Google Cloud feature was added.
+9. Google Cloud tools were reviewed without adding another AI layer. The approved reliability plan is: add public uptime checks first; add invisible reCAPTCHA to the public Concierge in monitor-only mode after the walkthrough; add privacy-safe operational logging later if needed. Do not move the Concierge to Cloud Run or duplicate member data in Firestore.
 
 ## Built today but not approved
 
@@ -55,6 +55,8 @@ Walkthrough observations are added in the order reported. They are not fixed dur
 11. Village Map points to the room section on the current page. It appears to do nothing and should not remain in this form.
 12. Each room needs a member-facing room entrance that can contain apps, resources, live offerings, status, and return navigation.
 13. Room links must tell the truth. A working link opens the working member experience. An unconfirmed or unfinished destination is labeled before the Villager clicks.
+14. Cur.AI.ted starter access is included in the published membership offer but is missing from the member lobby.
+15. Add Cur.AI.ted to the member Village map only after the starter-tier destination, member handoff, and access logic are confirmed. Keep the separate full-studio offer distinct.
 
 ## Safety Hall integration status
 
@@ -73,9 +75,10 @@ The live member page currently points to `/safety-hall/`, but that route has no 
 1. Onboarding pass. Approve the exact welcome, three-question structure, voice behavior, save choice, and destination ending before coding.
 2. Member Village map pass. Define the room entrance pattern, remove sales behavior, confirm every destination, and redesign the protected member page.
 3. Safety Hall integration pass. Move the existing Safety Hall build into the live project, connect the canonical route, and run its existing safety checklist.
-4. Cross-room pass. Confirm Moxie Studios, PlantLuck, and HUSH member destinations. Do not invent missing links.
+4. Cross-room pass. Confirm Moxie Studios, PlantLuck, HUSH, and Cur.AI.ted member destinations. Do not invent missing links. Confirm how Cur.AI.ted starter access is recognized from a Practice Village membership.
 5. Account and membership controls pass.
-6. Full copy, desktop, mobile, accessibility, privacy, and regression pass.
+6. Reliability pass. Add Google Cloud public uptime checks, then test invisible reCAPTCHA on the public Concierge in monitor-only mode. Keep all logs free of conversations, Safety Hall records, screenshots, voice, email addresses, zip codes, and invitation tokens.
+7. Full copy, desktop, mobile, accessibility, privacy, and regression pass.
 
 ## Next action
 
