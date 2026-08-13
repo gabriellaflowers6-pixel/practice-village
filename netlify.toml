@@ -1,4 +1,5 @@
 [build]
+  command = "npm run build"
   publish = "."
 
 [functions]
@@ -7,6 +8,21 @@
 [[redirects]]
   from = "/concierge"
   to = "/.netlify/functions/concierge"
+  status = 200
+
+[[redirects]]
+  from = "/privacy"
+  to = "/privacy.html"
+  status = 200
+
+[[redirects]]
+  from = "/terms"
+  to = "/terms.html"
+  status = 200
+
+[[redirects]]
+  from = "/login"
+  to = "/login.html"
   status = 200
 
 [[headers]]

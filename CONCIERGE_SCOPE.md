@@ -48,7 +48,7 @@ The Concierge is the front desk of a digital community center. It is not a chatb
 - **T3:** Local pantry schedules, WIC office walkthroughs.
 - **Never:** meat-consumption guidance of any kind, subtraction framing, diet culture.
 
-### The Quiet Room (HUSH)
+### HUSH
 - **T1:** HUSH. Sixty seconds, free, no account.
 - **T2:** Only free-use, non-selling mindfulness sources: UCLA MARC free guided meditations, Palouse Mindfulness (free full MBSR course), Healthy Minds Program (nonprofit, free), NIH/NCCIH evidence pages, VA mindfulness apps (free to all). **Exclusion rule: any platform whose free tier exists to sell a subscription does not get routed.**
 - **T3:** How to evaluate a meditation app before giving it money or data.

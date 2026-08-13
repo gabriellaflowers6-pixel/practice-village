@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Member sign in · Practice Village</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/member.css?v=1" />
+</head>
+<body data-auth-page="login">
+  <header class="member-header">
+    <a href="/" class="member-brand">Practice Village</a>
+    <a href="/" class="member-link">Back to the Village</a>
+  </header>
+  <main class="auth-shell">
+    <section class="auth-card" aria-labelledby="authTitle">
+      <p class="eyebrow">Member entrance</p>
+      <h1 id="authTitle">Welcome back.</h1>
+      <p id="authIntro">Sign in with the email connected to your membership.</p>
+
+      <form id="loginForm" class="auth-form">
+        <label>Email<input id="loginEmail" type="email" autocomplete="email" required /></label>
+        <label>Password<input id="loginPassword" type="password" autocomplete="current-password" required /></label>
+        <button type="submit">Sign in</button>
+      </form>
+
+      <form id="inviteForm" class="auth-form" hidden>
+        <label>Create a password<input id="invitePassword" type="password" autocomplete="new-password" minlength="8" required /></label>
+        <button type="submit">Finish setting up my account</button>
+      </form>
+
+      <form id="resetForm" class="auth-form" hidden>
+        <label>New password<input id="resetPassword" type="password" autocomplete="new-password" minlength="8" required /></label>
+        <button type="submit">Save new password</button>
+      </form>
+
+      <form id="recoveryForm" class="auth-form auth-form--small" hidden>
+        <label>Email<input id="recoveryEmail" type="email" autocomplete="email" required /></label>
+        <button type="submit">Send reset link</button>
+      </form>
+
+      <p id="authStatus" class="auth-status" role="status" aria-live="polite"></p>
+      <button id="forgotButton" class="text-button" type="button">I forgot my password</button>
+      <p class="auth-help">Paid members receive an account setup email after purchase. Need help? <a href="mailto:info@aidedeq.org">Email us.</a></p>
+    </section>
+  </main>
+  <script type="module" src="/assets/member-auth.bundle.js?v=1"></script>
+</body>
+</html>
