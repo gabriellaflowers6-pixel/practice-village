@@ -1,3 +1,17 @@
+### 2026-08-13 — Landing page warm-palette restyle from JoYi's reference mocks (JoYi's bot, STARTED 19:30 JST)
+UI ONLY, landing page. New palette from "TPV header example.png" + "MoxieStudiosHeader.png"
+(Downloads): warm cream ground, deep chocolate brown dark panels, metallic gold accents,
+deeper burnt orange CTAs (#A84214), navy kept for the Practice Village wordmark; logo
+center dot becomes the button orange. Hero window art swaps to a room-photo crop
+(new assets/moxie-room.jpg). Copy, structure, links unchanged. Appending a token-override
+layer at the bottom of styles.css per house rules.
+FILES: index.html, styles.css, assets/moxie-room.jpg (new), WORKLOG.md.
+NOT touching: member-auth.js, assets/member-auth.bundle.js, assets/member.css,
+netlify/functions/* (another session is live on onboarding there), moxie-studio/.
+SHARED SURFACES: none (no schema, no env, no functions). No push/deploy until JoYi
+approves the local preview. NOTE: could not post this entry to the shared Drive worklog —
+this session's Drive connector is create/read only; entry is here instead.
+
 ### 2026-08-13 — LAUNCH: thepracticevillage.org is live (JoYi's bot, STOPPED 21:10 JST)
 DOMAIN LIVE. thepracticevillage.org (apex + www, Let's Encrypt cert issued) and
 thepracticevillage.com pointed at the same Netlify site. Squarespace parking presets

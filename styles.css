@@ -1337,3 +1337,89 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
 h1, h2, h3, h4, .section__title, .hero__title, .raw__title, .conciergerow__title,
 .ticket__head h3, .room__front h4, .room__back h4{ text-wrap:balance; }
 p, li, .hero__lede, .section__intro, .raw__explain{ text-wrap:pretty; }
+
+/* ============================================================
+   WARM PALETTE PASS (2026-08-13, JoYi's reference mocks)
+   Cream + chocolate brown + metallic gold + deeper burnt orange.
+   Colors sampled from "TPV header example.png" / "MoxieStudiosHeader.png".
+   Token override layer: everything below re-tones the page; structure,
+   copy and layout above are untouched.
+   ============================================================ */
+:root{
+  --paper:     #FBF3E8;   /* warm cream (mock ground) */
+  --paper-2:   #F5E8D4;
+  --paper-3:   #EEDDC2;
+  --ink:       #2B2013;   /* deep chocolate brown-black (text + dark grounds) */
+  --ink-soft:  #5D4F3E;
+  --ink-faint: #99876F;
+  --clay:      #A84214;   /* deeper burnt orange (mock CTA) */
+  --clay-deep: #7E300C;
+  --marigold:  #C79A52;   /* metallic gold */
+  --blue:      #8A6524;   /* bronze (replaces forest green accents) */
+  --moss:      #8A6524;   /* "open / live" is gold now, like the mock */
+  --navy:      #1A1A4E;   /* survives only in the wordmark */
+  --line:      rgba(58,40,16,.18);
+  --tape:      rgba(199,154,82,.42);
+  --shadow:    8px 9px 0 -2px rgba(43,32,19,.16);
+  --shadow-lg: 12px 14px 0 -3px rgba(43,32,19,.18);
+}
+body{
+  background:
+    radial-gradient(120% 80% at 12% -5%, rgba(199,154,82,.20), transparent 55%),
+    radial-gradient(120% 80% at 100% 8%, rgba(168,66,20,.10), transparent 50%),
+    var(--paper);
+}
+.nav__wordmark{ color:var(--navy); }
+.footer{ border-top:1px solid rgba(199,154,82,.4); }
+
+/* hero flips light: cream/gold ground, dark type — the meadow photo retires */
+.hero{
+  background:
+    radial-gradient(90% 100% at 88% 30%, rgba(199,154,82,.26), transparent 62%),
+    radial-gradient(70% 80% at 0% 100%, rgba(238,221,194,.9), transparent 70%),
+    linear-gradient(160deg, #FBF3E8 0%, #F7E9D2 55%, #F1DDBE 100%);
+}
+.hero__title{ color:var(--ink); }
+.hero__title .mark{
+  background-image:linear-gradient(100deg,#8A6524,#C79A52 34%,#E2BE74 50%,#A87E33 66%,#8A6524);
+  background-size:220% 100%;
+}
+.hero__lede{ color:var(--ink-soft); }
+.hero .chip{ background:rgba(255,252,244,.72); border-color:rgba(58,40,16,.24); color:var(--ink); }
+.hero .btn--ghost{ color:var(--ink); border-color:rgba(43,32,19,.75); background:rgba(255,252,244,.55); }
+.hero .btn--ghost:hover{ background:var(--ink); color:var(--paper); }
+.hero__free a{ color:var(--clay-deep); border-color:rgba(168,66,20,.4); }
+.hero__free a:hover{ color:var(--clay); border-color:var(--clay); }
+
+/* the studio window shows the room itself: full photo, no screen-blend */
+.window__figure{
+  position:absolute; inset:0; bottom:auto; left:0; transform:none;
+  width:100%; height:100%; object-fit:cover; object-position:42% 46%;
+  mix-blend-mode:normal; filter:none;
+  -webkit-mask-image:none; mask-image:none;
+}
+.window__room-light, .window__floor, .window__sheen{ display:none; }
+.window__frame{ aspect-ratio:10/10.6; }
+
+/* warm the remaining cool/green hard-codes */
+.demo{ background:rgba(30,19,9,.62); }
+.demo__live i{ background:#C79A52; }
+.demo__msg--me{ background:rgba(58,40,16,.10); }
+.demo__msg--c{ background:rgba(199,154,82,.22); }
+.demo__ask input{ border-color:rgba(58,40,16,.28); color:var(--ink); }
+.conciergerow__points li:nth-child(3)::before{ background:#7A5A20; }
+.arc{
+  background:linear-gradient(180deg, rgba(32,20,8,.84), rgba(32,20,8,.68)),
+    url('assets/forest-path.jpg') center 35%/cover no-repeat;
+}
+.pricing{
+  background:linear-gradient(180deg, rgba(30,19,9,.9) 0%, rgba(30,19,9,.74) 52%, rgba(30,19,9,.82) 100%),
+    url('assets/community-hall.jpg') center/cover no-repeat;
+}
+.ticket, .ticket--feature{ background:rgba(32,21,10,.5); }
+.ticket--feature{ background:rgba(28,18,9,.56); border-color:rgba(213,168,128,.45); }
+.breathe{ background:radial-gradient(120% 90% at 50% 28%, #3A2A14, #140D05 74%); }
+.layer{
+  background:linear-gradient(180deg, rgba(251,243,232,.9), rgba(251,243,232,.8)),
+    url('assets/dawn-lake.jpg') center 28%/cover no-repeat;
+}
