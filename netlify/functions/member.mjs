@@ -13,7 +13,7 @@ function memberPage() {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/member.css?v=6" />
+  <link rel="stylesheet" href="/assets/member.css?v=7" />
 </head>
 <body data-auth-page="member">
   <header class="member-header">
@@ -36,12 +36,12 @@ function memberPage() {
     <section class="member-section" id="rooms">
       <div class="section-heading"><div><p class="eyebrow">The Village map</p><h2>Open the door you need.</h2></div></div>
       <div class="room-grid">
-        <a class="room-card" href="/safety-hall"><span class="room-tag room-tag--open">Open</span><b>Safety Hall</b><span>Record what happened, check for patterns, map what is yours to carry, and find support options. Private on your device.</span><span class="room-note">Opens here; your lobby stays one tap back.</span></a>
-        <a class="room-card" href="https://plantluck.org/" target="_blank" rel="noopener"><span class="room-tag room-tag--open">Open</span><b>The Kitchen</b><span>PlantLuck: a week of plant-forward meals from what is already in your pantry.</span><span class="room-note">Opens in a new tab so the Village stays open.</span></a>
-        <a class="room-card" href="https://hush-aidedeq.netlify.app/" target="_blank" rel="noopener"><span class="room-tag room-tag--open">Open</span><b>HUSH</b><span>Sixty seconds of calm, free for everyone. Member mindfulness apps and resources join as they open.</span><span class="room-note">Opens in a new tab so the Village stays open.</span></a>
-        <div class="room-card room-card--soon"><span class="room-tag room-tag--soon">Member entrance being confirmed</span><b>Moxie Studios</b><span>Yoga and meditation with Bott Om and the mirror. Your member door is being connected; we will not hand you a marketing page instead.</span><a class="room-note" href="https://moxiestudio.netlify.app/zenbottom-schedule.html?demo=1" target="_blank" rel="noopener">Try the free studio demo meanwhile →</a></div>
-        <div class="room-card room-card--soon"><span class="room-tag room-tag--soon">Being connected</span><b>cur.AI.ted starter</b><span>Starter access to the cur.AI.ted studio for members.</span></div>
-        <div class="room-card room-card--soon"><span class="room-tag room-tag--soon">Rolling out</span><b>Your Record</b><span>Your Personal Intelligence Layer: what you choose to keep, portable and yours.</span></div>
+        <a class="room-card" href="/safety-hall"><img class="room-card__img" src="/assets/rooms/safety-hall.jpg?v=2" alt="" loading="lazy" /><span class="room-tag room-tag--open">Open</span><b>Safety Hall</b><span>Record what happened, check for patterns, map what is yours to carry, and find support options. Private on your device.</span><span class="room-note">Opens here; your lobby stays one tap back.</span></a>
+        <a class="room-card" href="https://plantluck.org/" target="_blank" rel="noopener"><img class="room-card__img" src="/assets/rooms/kitchen.jpg?v=2" alt="" loading="lazy" /><span class="room-tag room-tag--open">Open</span><b>The Kitchen</b><span>PlantLuck: a week of plant-forward meals from what is already in your pantry.</span><span class="room-note">Opens in a new tab so the Village stays open.</span></a>
+        <a class="room-card" href="https://hush-aidedeq.netlify.app/" target="_blank" rel="noopener"><img class="room-card__img" src="/assets/rooms/hush.jpg?v=2" alt="" loading="lazy" /><span class="room-tag room-tag--open">Open</span><b>HUSH</b><span>Sixty seconds of calm, free for everyone. Member mindfulness apps and resources join as they open.</span><span class="room-note">Opens in a new tab so the Village stays open.</span></a>
+        <div class="room-card room-card--soon"><img class="room-card__img" src="/assets/rooms/moxie.jpg?v=2" alt="" loading="lazy" /><span class="room-tag room-tag--soon">Member entrance being confirmed</span><b>Moxie Studios</b><span>Yoga and meditation with Bott Om and the mirror. Your member door is being connected; we will not hand you a marketing page instead.</span><a class="room-note" href="https://moxiestudio.netlify.app/zenbottom-schedule.html?demo=1" target="_blank" rel="noopener">Try the free studio demo meanwhile →</a></div>
+        <div class="room-card room-card--soon"><img class="room-card__img" src="/assets/rooms/curaited.jpg?v=2" alt="" loading="lazy" /><span class="room-tag room-tag--soon">Being connected</span><b>cur.AI.ted starter</b><span>Starter access to the cur.AI.ted studio for members.</span></div>
+        <div class="room-card room-card--soon"><img class="room-card__img" src="/assets/rooms/pil.jpg?v=2" alt="" loading="lazy" /><span class="room-tag room-tag--soon">Rolling out</span><b>Your Record</b><span>Your Personal Intelligence Layer: what you choose to keep, portable and yours.</span></div>
       </div>
     </section>
     <section class="member-section account-section">

@@ -63,3 +63,8 @@ p,li,.member-card p,.onboarding-help,.welcome-intro p{text-wrap:pretty}
 .desk-invite p{margin:0 0 .6rem;font-size:.92rem;line-height:1.5}
 .desk-invite .welcome-actions{justify-content:flex-start;margin:0}
 .desk-invite a{text-decoration:none}
+/* room banners on the member map */
+.room-card{overflow:hidden}
+.room-card__img{width:calc(100% + 48px);margin:-24px -24px 10px;display:block;height:118px;object-fit:cover;object-position:center;border-bottom:1px solid var(--line)}
+.room-card--soon .room-card__img{opacity:.65;filter:saturate(.8)}
+@media(max-width:600px){.room-card__img{height:100px}}
