@@ -200,7 +200,7 @@ async function initMemberLobby() {
 
 
 /* ============ The front desk: the full Concierge for members ============ */
-function initDesk(user) {
+function initDesk(user, opts = {}) {
   const main = document.querySelector(".welcome-main");
   if (!main) return;
   const firstName = (user.name || "").trim().split(/\s+/)[0];
@@ -210,6 +210,7 @@ function initDesk(user) {
       <h1>${firstName ? "Hello, " + firstName + "." : "The Concierge is in."}</h1>
       <p>Talk about what you are facing. Lookups, walkthroughs, and next steps happen here, and nothing is kept unless you choose it.</p>
     </section>
+    ${opts.inviteOnboarding && !sessionStorage.getItem("pvSkipInvite") ? `<div class="desk-invite" id="deskInvite"><p>New to the Village? There is a short, optional welcome conversation: three questions, talk or type, skip anything.</p><div class="welcome-actions"><a class="secondary-button" href="/welcome?onboarding=start">Take the welcome conversation</a><button type="button" class="text-button" id="dismissInvite">Not now</button></div></div>` : ""}
     <section class="onboarding-card desk-card" aria-label="Your Concierge">
       <div class="desk-thread" id="deskThread" aria-live="polite"></div>
       <form class="desk-ask" id="deskAsk">
@@ -313,6 +314,7 @@ function initDesk(user) {
   }
 
   form.addEventListener("submit", (e) => { e.preventDefault(); const t = input.value.trim(); if (!t) return; input.value = ""; ask(t); });
+  document.getElementById("dismissInvite")?.addEventListener("click", () => { sessionStorage.setItem("pvSkipInvite", "1"); document.getElementById("deskInvite").remove(); });
   document.getElementById("logoutButton")?.addEventListener("click", async () => { await logout(); window.location.replace("/"); });
   renderIdle();
 }
@@ -324,20 +326,20 @@ async function initWelcome() {
     return;
   }
 
-  // The desk is the destination; onboarding is the doorway. Once onboarding is
-  // complete the full Concierge takes this page, unless she asks to review.
-  const wantsReview = new URLSearchParams(window.location.search).get("onboarding") === "review";
-  if (!wantsReview) {
+  // The desk IS the front desk, always. Onboarding is a doorway offered from
+  // it, never a gate in front of it: nobody must finish onboarding to get help.
+  const onboardingParam = new URLSearchParams(window.location.search).get("onboarding");
+  if (onboardingParam !== "review" && onboardingParam !== "start") {
+    let complete = false;
     try {
       const check = await fetch("/member-onboarding", { headers: { Accept: "application/json" } });
       if (check.ok) {
         const data = await check.json();
-        if (["complete", "complete_private"].includes(data.onboarding?.status)) {
-          initDesk(user);
-          return;
-        }
+        complete = ["complete", "complete_private"].includes(data.onboarding?.status);
       }
-    } catch { /* fall through to onboarding */ }
+    } catch { complete = false; }
+    initDesk(user, { inviteOnboarding: !complete });
+    return;
   }
 
   const title = document.getElementById("welcomeTitle");

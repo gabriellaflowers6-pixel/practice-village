@@ -54,3 +54,12 @@ a.room-card:hover{transform:translate(-2px,-2px);box-shadow:11px 12px 0 -2px rgb
 .desk-wraplist{display:grid;gap:8px;margin:.4rem 0 .8rem}
 .desk-wrapitem{display:flex;gap:.55rem;align-items:flex-start;font-size:.92rem;line-height:1.45;cursor:pointer}
 .desk-wrapitem input{margin-top:.2rem;accent-color:var(--clay)}
+
+/* no word stands alone in the member area */
+h1,h2,h3,.auth-card h1,.member-welcome h1,.welcome-intro h1{text-wrap:balance}
+p,li,.member-card p,.onboarding-help,.welcome-intro p{text-wrap:pretty}
+
+.desk-invite{margin:0 auto 14px;width:min(720px,100%);padding:16px 20px;border:1px solid rgba(199,154,82,.4);border-radius:14px;background:#FFF6E6}
+.desk-invite p{margin:0 0 .6rem;font-size:.92rem;line-height:1.5}
+.desk-invite .welcome-actions{justify-content:flex-start;margin:0}
+.desk-invite a{text-decoration:none}
