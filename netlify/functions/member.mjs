@@ -13,33 +13,35 @@ function memberPage() {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/member.css?v=1" />
+  <link rel="stylesheet" href="/assets/member.css?v=4" />
 </head>
 <body data-auth-page="member">
   <header class="member-header">
     <a href="/member" class="member-brand">Practice Village</a>
-    <nav><a href="#rooms" class="member-link">Village map</a><button id="logoutButton" class="text-button" type="button">Sign out</button></nav>
+    <nav><a href="#rooms" class="member-link">The Village map</a><button id="logoutButton" class="text-button" type="button">Sign out</button></nav>
   </header>
   <main class="member-main">
     <section class="member-welcome">
-      <p class="eyebrow">Your member lobby</p>
+      <p class="eyebrow">Your Village</p>
       <h1>Welcome back<span id="memberName"></span>.</h1>
       <p>Start where you are. You do not need to use every room or finish anything today.</p>
       <span id="memberPlan" class="member-plan">Checking membership…</span>
     </section>
-    <section class="member-grid" aria-label="Member shortcuts">
-      <article class="member-card member-card--wide"><p class="eyebrow">Front desk</p><h2 id="conciergeCardTitle">Meet your Concierge</h2><p id="conciergeCardCopy">Start with a short, optional welcome conversation. Talk or type, skip any question, and save nothing unless you choose.</p><a id="conciergeCardLink" href="/welcome">Start your welcome conversation</a></article>
-      <article class="member-card"><p class="eyebrow">Continue</p><h2>Your saved practices and plans</h2><p>Your Personal Intelligence Layer will appear here as member saving rolls out.</p><span class="member-state">Rolling out</span></article>
-      <article class="member-card"><p class="eyebrow">Live</p><h2>Upcoming events</h2><p>Live classes with JoYi begin February 7, 2027. Member registration details will appear here.</p><span class="member-state">Included</span></article>
-      <article class="member-card"><p class="eyebrow">Rebuild Arc Workshop</p><h2>Your membership-year voucher</h2><p id="voucherSummary">Checking your voucher allowance…</p><span id="voucherYear" class="member-state">Membership year</span></article>
+    <section class="member-grid" aria-label="Front desk and your things">
+      <article class="member-card member-card--wide"><p class="eyebrow">The front desk</p><h2 id="conciergeCardTitle">Your Concierge</h2><p id="conciergeCardCopy">Talk or type about what you are facing, or take the short optional welcome conversation. Skip anything. Nothing is saved unless you choose.</p><a id="conciergeCardLink" href="/welcome">Open the front desk</a></article>
+      <article class="member-card"><p class="eyebrow">Rebuild Arc Workshop</p><h2>Your voucher</h2><p id="voucherSummary">Checking your voucher allowance…</p><p class="room-note">First series: Saturdays October 31 and November 7, 14, 21 · 3:00 pm Central on Zoom. Registering uses your voucher; cancel more than 48 hours ahead to keep it.</p><span id="voucherYear" class="member-state">Membership year</span></article>
+      <article class="member-card"><p class="eyebrow">Live</p><h2>Coming up</h2><p>The first Rebuild Arc Workshop series starts October 31. Live classes with JoYi begin February 7, 2027, included with your membership.</p><span class="member-state">Included</span></article>
+      <article class="member-card"><p class="eyebrow">Continue</p><h2>Your saved things</h2><p>Practices, plans, and Concierge cards you choose to keep will live here as member saving rolls out.</p><span class="member-state">Rolling out</span></article>
     </section>
     <section class="member-section" id="rooms">
-      <div class="section-heading"><div><p class="eyebrow">Your rooms</p><h2>Open the door you need.</h2></div></div>
+      <div class="section-heading"><div><p class="eyebrow">The Village map</p><h2>Open the door you need.</h2></div></div>
       <div class="room-grid">
-        <a class="room-card" href="/moxie-studio/"><b>Moxie Studios</b><span>Yoga, meditation, Bott Om, and the mirror</span></a>
-        <a class="room-card" href="https://plantluck.org/"><b>The Kitchen</b><span>Plant nutrition support for a full week</span></a>
-        <a class="room-card" href="https://hush-aidedeq.netlify.app/"><b>HUSH</b><span>The free sixty-second app, plus member mindfulness apps and resources as they open</span></a>
-        <a class="room-card" href="/safety-hall/"><b>Safety Hall</b><span>Record what happened, check for patterns, and find options</span></a>
+        <a class="room-card" href="/safety-hall"><span class="room-tag room-tag--open">Open</span><b>Safety Hall</b><span>Record what happened, check for patterns, map what is yours to carry, and find support options. Private on your device.</span><span class="room-note">Opens here; your lobby stays one tap back.</span></a>
+        <a class="room-card" href="https://plantluck.org/" target="_blank" rel="noopener"><span class="room-tag room-tag--open">Open</span><b>The Kitchen</b><span>PlantLuck: a week of plant-forward meals from what is already in your pantry.</span><span class="room-note">Opens in a new tab so the Village stays open.</span></a>
+        <a class="room-card" href="https://hush-aidedeq.netlify.app/" target="_blank" rel="noopener"><span class="room-tag room-tag--open">Open</span><b>HUSH</b><span>Sixty seconds of calm, free for everyone. Member mindfulness apps and resources join as they open.</span><span class="room-note">Opens in a new tab so the Village stays open.</span></a>
+        <div class="room-card room-card--soon"><span class="room-tag room-tag--soon">Member entrance being confirmed</span><b>Moxie Studios</b><span>Yoga and meditation with Bott Om and the mirror. Your member door is being connected; we will not hand you a marketing page instead.</span></div>
+        <div class="room-card room-card--soon"><span class="room-tag room-tag--soon">Being connected</span><b>cur.AI.ted starter</b><span>Starter access to the cur.AI.ted studio for members.</span></div>
+        <div class="room-card room-card--soon"><span class="room-tag room-tag--soon">Rolling out</span><b>Your Record</b><span>Your Personal Intelligence Layer: what you choose to keep, portable and yours.</span></div>
       </div>
     </section>
     <section class="member-section account-section">
