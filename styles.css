@@ -1513,3 +1513,11 @@ body{
 .nav.is-crowded.is-open .nav__links{
   position:static;
 }
+
+/* ===== room cards carry their rooms (2026-08-14): product photos on the fronts ===== */
+.room__img{ width:calc(100% + 2 * 1.15rem); margin:-1.15rem -1.15rem .8rem; display:block;
+  height:132px; object-fit:cover; object-position:top center;
+  border-radius:14px 14px 0 0; border-bottom:1px solid var(--line); }
+.room__front{ overflow:hidden; }
+.room--soon .room__front{ padding-top:1.15rem; }
+@media (max-width:600px){ .room__img{ height:110px; } }
