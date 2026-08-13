@@ -123,6 +123,33 @@ The member account opens with the minimum information required for payment and a
 - The member chooses once whether to save that note or keep the entire conversation private. Raw onboarding conversation and audio are not saved.
 - Public display of a Founding Villager's name remains a separate, explicit choice and is never inferred from onboarding.
 
+## Copy standard
+
+- Use direct, clear, kind, confronting, and educational language as the moment requires.
+- Use only words that help the Villager understand, decide, or act.
+- Do not use em dashes.
+- Do not use generic AI phrasing, slogans, decorative explanations, or labels that describe what the interface already makes clear.
+- Prevent orphaned words in headings, buttons, cards, and short display copy at supported screen sizes.
+- Read every screen aloud before release. Remove any sentence that does not change what the Villager knows or can do.
+
+## Onboarding punch list from the August 13 walkthrough
+
+1. Replace the large welcome explanation with one warm greeting, one purpose sentence, and the first question.
+2. Remove "A conversation, not a form" and other copy that explains the interface instead of helping the Villager use it.
+3. Set and state a clear onboarding length. Target three optional questions and about two minutes.
+4. Show progress in plain language, such as "Question 1 of up to 3."
+5. Redesign Talk so listening does not end without notice. Show listening state, elapsed time, a Stop button, and a clear message when listening ends.
+6. Preserve all voice results in the text box so a pause does not replace or lose earlier words.
+7. Keep voice review before Send. Do not send automatically.
+8. Use onboarding answers to make a useful first handoff. Yoga, movement, meditation, or poses should offer Moxie Studios.
+9. Show the destination before leaving onboarding. Do not send the Villager to a generic page without explaining the next step.
+10. Add optional paths for volunteering, teaching in Moxie Studios, product testing, and other Village participation.
+11. Ask eligible Founding Villagers separately whether they want their name on the public landing page. Default to no public name. Include the exact display name and a removal path before publishing.
+12. Decide which onboarding answers are useful enough to save. Do not turn onboarding into a diary or store the raw conversation.
+13. Fix desktop spacing, heading measure, chat height, and action alignment. Test mobile separately.
+14. Add a clear finish point and tell the Villager what happens after saving or keeping the note private.
+15. Test each answer route, each privacy choice, voice ending, skip, finish, and return behavior before production.
+
 ## Roles
 
 - `member`: active monthly membership
