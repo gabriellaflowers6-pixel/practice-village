@@ -195,3 +195,7 @@ Review checkpoint: JoYi performs the final experience walkthrough. Technical che
 ## Next action
 
 Implement Phase 1 only after JoYi confirms that the approved onboarding architecture above is captured correctly.
+
+## Added to the list (JoYi, 2026-08-14)
+
+- Landing page, Meet your Concierge section: layout is wrong. The bullets (Ask anything, Answers you can trace, You are wise, The porch saves nothing, It routes you) belong to the RIGHT of the porch card, and "The Concierge handles the logistics. The Village helps with the human part." belongs UNDER the card. Currently the bullets render full-width below the card. Restore the two-column conciergerow before the final release pass.
