@@ -1438,6 +1438,13 @@ body{
   .hero__flora--r{ display:none; }
 }
 @media (max-width:560px){ .hero__flora--cluster{ display:none; } }
+@media (max-width:560px){
+  .hero__title .mark{
+    white-space:normal;
+    -webkit-box-decoration-break:clone;
+    box-decoration-break:clone;
+  }
+}
 .prefooter{ position:relative; margin-top:clamp(26px,4vw,52px); line-height:0; }
 .prefooter__wave{ display:block; width:100%; height:clamp(52px,8vw,110px); }
 .prefooter__grass{
