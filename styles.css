@@ -1484,19 +1484,32 @@ body{
 /* room titles were washing out: serif at weight 400 with no explicit color */
 .room__front h4{ color:var(--ink); font-weight:600; }
 
-/* nav overflow guard: script.js sets .is-crowded when the row cannot fit,
-   whatever the visitor's font size or zoom. Reuses the menu-button layout. */
+/* nav overflow guard: when the single row cannot fit, use the compact desktop
+   bar instead of treating a desktop window like a phone. */
 .nav__brand{ flex:0 0 auto; }
 .nav__cta{ flex:0 0 auto; }
 .nav__links{ flex:0 1 auto; min-width:0; }
-.nav.is-crowded .nav__links,
-.nav.is-crowded .nav__cta{ display:none; }
-.nav.is-crowded .nav__menu{ display:flex; }
-.nav.is-crowded.is-open .nav__links{
-  display:flex; flex-direction:column; gap:1.1rem;
-  position:absolute; top:100%; left:0; right:0;
-  background:var(--paper); padding:1.4rem var(--pad);
-  border-bottom:2px solid var(--line); box-shadow:var(--shadow-lg);
+.nav.is-crowded{
+  flex-wrap:wrap;
+  gap:.65rem 1rem;
+  padding-bottom:0;
 }
-.nav.is-crowded.is-open .nav__menu span:first-child{ transform:translateY(3.7px) rotate(45deg); }
-.nav.is-crowded.is-open .nav__menu span:last-child{ transform:translateY(-3.7px) rotate(-45deg); }
+.nav.is-crowded .nav__cta{ display:inline-flex; }
+.nav.is-crowded .nav__menu{ display:none; }
+.nav.is-crowded .nav__links{
+  order:3;
+  display:flex;
+  width:calc(100% + (var(--pad) * 2));
+  margin-inline:calc(var(--pad) * -1);
+  padding:.72rem var(--pad);
+  justify-content:center;
+  gap:clamp(.55rem,1.5vw,1rem);
+  background:var(--clay);
+}
+.nav.is-crowded .nav__links a{
+  color:#FFF8EC;
+  font-size:clamp(.72rem,1.35vw,.84rem);
+}
+.nav.is-crowded.is-open .nav__links{
+  position:static;
+}
