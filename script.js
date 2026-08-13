@@ -248,17 +248,29 @@
     explore:  "Stay open. Experiment. Be curious about what you like, what you want, and what actually works for you instead of automatically following what works for someone else.",
     choose:   "Practice authentic responsibility. Notice where you have handed away your power, decide what is yours to carry, and use your ability to choose the life you want to live."
   };
-  var rawSteps = document.getElementById("rawSteps");
-  var rawExplain = document.getElementById("rawExplain");
-  if (rawSteps && rawExplain) {
-    rawSteps.querySelectorAll("li").forEach(function (li) {
-      li.addEventListener("click", function () {
-        rawSteps.querySelectorAll("li").forEach(function (x) { x.classList.remove("is-on"); });
+  var RAW_WEEKS = {
+    w1: "Presence, welcome, mindfulness, and awareness. Where am I now, and what can I see when I stop long enough to pay attention?",
+    w2: "Support and action. Who and what helps me move forward, and what do I need to practice instead of simply understand?",
+    w3: "Curiosity, experimentation, authentic responsibility, and personal power. What works for me, what is mine to decide, and where do I want to take my power back?",
+    w4: "Bring the Arc together. Identify what you want to continue practicing, what you are choosing now, and how you want to use the Rebuild Arc when life changes again."
+  };
+  function wireSteps(listId, textId, table, attr) {
+    var list = document.getElementById(listId), out = document.getElementById(textId);
+    if (!list || !out) return;
+    list.querySelectorAll("li").forEach(function (li) {
+      li.setAttribute("tabindex", "0");
+      li.setAttribute("role", "button");
+      var show = function () {
+        list.querySelectorAll("li").forEach(function (x) { x.classList.remove("is-on"); });
         li.classList.add("is-on");
-        rawExplain.textContent = RAW_EXPLAIN[li.getAttribute("data-k")] || "";
-      });
+        out.textContent = table[li.getAttribute(attr)] || "";
+      };
+      li.addEventListener("click", show);
+      li.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); show(); } });
     });
   }
+  wireSteps("rawSteps", "rawExplain", RAW_EXPLAIN, "data-k");
+  wireSteps("rawWeeks", "rawWeekText", RAW_WEEKS, "data-w");
 
   /* ============ card stack (PIL) ============ */
   var cardNext = document.getElementById("cardNext");

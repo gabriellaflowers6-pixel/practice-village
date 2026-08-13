@@ -1295,22 +1295,45 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
 /* nav items never break their own words */
 .nav__links a, .nav__cta { white-space:nowrap; }
 
-/* ===== Rebuild Arc: tappable steps + weeks (2026-08-13) ===== */
-.raw__steps li{ cursor:pointer; transition:background .2s, border-color .2s; }
+/* ===== Rebuild Arc: two pill groups, one detail panel each (2026-08-13) ===== */
+.raw__steps li{ cursor:pointer; transition:background .2s, border-color .2s, color .2s; }
 .raw__steps li:hover{ border-color:var(--clay); }
+.raw__steps li:focus-visible{ outline:2px solid var(--clay); outline-offset:2px; }
 .raw__steps li.is-on{ background:var(--clay); color:#FBF9F4; border-color:var(--clay); }
 .raw__steps li.is-on::before{ background:#FBF9F4; color:var(--clay); }
-.raw__explain{ margin:0 0 1.3rem; max-width:62ch; font-size:1rem; line-height:1.6; min-height:3.2em; }
-.raw__weeks{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.8rem; margin:0 0 1.3rem; }
-@media (max-width:1050px){ .raw__weeks{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
-@media (max-width:600px){ .raw__weeks{ grid-template-columns:1fr; } }
-.raw__week{ background:#FBF6EA; border:1px solid rgba(26,21,30,.14); border-radius:14px; padding:.9rem 1rem; }
-.raw__week b{ display:block; margin-bottom:.35rem; font-size:.92rem; }
-.raw__week p{ margin:0; font-size:.86rem; line-height:1.5; color:var(--ink-soft); }
-.raw__voucher{ max-width:none; margin:.5rem 0 0; font-size:.9rem; line-height:1.6; opacity:.9; }
+.raw__explain{
+  margin:0 0 1.6rem; max-width:64ch; font-size:1rem; line-height:1.65;
+  min-height:3.3em; padding-left:1rem; border-left:2px solid var(--rule-gold,#C5A880);
+}
+.raw__weeksblock{ margin:0 0 1.5rem; }
+.raw__label{
+  display:block; margin:0 0 .55rem; font-size:.72rem; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--ink-soft); opacity:.75;
+}
+/* week pills carry no numeral prefix: their names already say the order.
+   grid, never flex-wrap: four across or two by two, never three and an orphan */
+.raw__steps--weeks{ counter-reset:none; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.55rem; }
+.raw__steps--weeks li::before{ display:none; }
+.raw__steps--weeks li{ padding:.55em .9em; text-align:center; font-size:.9rem; }
+@media (max-width:900px){ .raw__steps--weeks{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+/* disclosure: the logistics stay folded until asked for */
+.raw__details{ border-top:1px solid rgba(26,21,30,.14); padding-top:1rem; margin-top:.4rem; }
+.raw__details summary{
+  cursor:pointer; list-style:none; font-weight:600; font-size:.95rem; color:var(--clay-deep,#9E3F22);
+  display:flex; align-items:center; gap:.5rem;
+}
+.raw__details summary::-webkit-details-marker{ display:none; }
+.raw__details summary::after{ content:"+"; margin-left:auto; font-size:1.15rem; line-height:1; opacity:.6; transition:transform .2s; }
+.raw__details[open] summary::after{ content:"−"; }
+.raw__details summary:focus-visible{ outline:2px solid var(--clay); outline-offset:3px; border-radius:4px; }
+.raw__detailsbody{ margin-top:.9rem; display:grid; gap:.7rem; max-width:66ch; }
+.raw__detailsbody p{ margin:0; font-size:.92rem; line-height:1.65; color:var(--ink-soft); }
+.raw__detailsbody strong{ color:var(--ink); }
 /* the gap left by the removed logo between the Concierge row and the Center */
 .hardlayer{ padding-bottom:clamp(28px,3.5vw,44px); }
 .center{ padding-top:clamp(30px,4vw,48px); }
-/* JoYi's bio under the team */
-.builders__bio{ max-width:56ch; margin:1.6rem auto 0; text-align:left; }
-.builders__bio p{ margin:0 0 .8rem; line-height:1.65; }
+
+/* ===== no orphaned words: headings balance, paragraphs never widow ===== */
+h1, h2, h3, h4, .section__title, .hero__title, .raw__title, .conciergerow__title,
+.ticket__head h3, .room__front h4, .room__back h4{ text-wrap:balance; }
+p, li, .hero__lede, .section__intro, .raw__explain{ text-wrap:pretty; }
