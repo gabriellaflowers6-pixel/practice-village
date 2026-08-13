@@ -1,4 +1,8 @@
-### 2026-08-13 — Landing page warm-palette restyle from JoYi's reference mocks (JoYi's bot, STARTED 19:30 JST)
+### 2026-08-13 — Landing page warm-palette restyle from JoYi's reference mocks (JoYi's bot, STARTED 19:30, STOPPED 20:05 JST)
+RESULT: DONE locally, commit d586b66 on main, NOT pushed, NOT deployed — awaiting
+JoYi's preview approval. Full-page desktop + mobile QA passed (no horizontal
+overflow, all sections re-toned, hero matches the mock, logo center dot = CTA
+orange #A84214). Cache-buster bumped styles.css?v=94.
 UI ONLY, landing page. New palette from "TPV header example.png" + "MoxieStudiosHeader.png"
 (Downloads): warm cream ground, deep chocolate brown dark panels, metallic gold accents,
 deeper burnt orange CTAs (#A84214), navy kept for the Practice Village wordmark; logo
