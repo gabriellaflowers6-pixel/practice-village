@@ -114,16 +114,22 @@ The member lobby is the working Village map. It uses the same visual language as
 
 The member account opens with the minimum information required for payment and access. Onboarding happens afterward as an optional conversation with the Concierge, not as an intake form.
 
-- The member can talk or type.
-- Voice becomes a transcript the member can review before sending. Practice Village does not keep the audio.
-- The Concierge asks one useful, optional question at a time and no more than three questions in the first visit.
-- The member can skip any question, finish for now, or return later without losing access.
-- Questions follow what the member says. They may cover what would make membership useful, the first room she wants, how she likes support paced, the name she wants used, or an access need she wants remembered.
+- The member can talk, type, or skip each question.
+- Voice becomes a transcript the member can review before sending. Practice Village does not retain the raw voice audio.
+- Do not collect information simply because it might be useful later. Ask only what improves the Villager's experience now, and ask permission before remembering it.
+- A preferred name is optional account setup before onboarding when the account does not already have one. It is not one of the three onboarding questions.
+- The Concierge asks no more than three optional onboarding questions. The expected time is about two minutes.
+- If the Villager chooses a specific need, the Concierge can stop onboarding and help immediately. Access never depends on finishing onboarding or agreeing to memory.
+- The three-question arc is: What do you need? How can we make this easier for you? What should we remember?
 - State or zip is requested only when the member wants local resources. A street address is not part of onboarding.
 - The Concierge does not seek medical details, account numbers, employer information, immigration information, or a trauma history for onboarding.
-- At the end, the Concierge offers one short welcome note containing only useful details the member deliberately shared.
-- The member chooses once whether to save that note or keep the entire conversation private. Raw onboarding conversation and audio are not saved.
+- The Concierge proposes only enduring preferences for memory. A need for yoga today is a current destination, not an enduring preference unless the Villager says it is.
+- The Villager sees each proposed memory and chooses Remember these or Not now.
+- A destination appears whether or not the Villager agrees to memory.
+- The Concierge explains why a destination fits before offering the link.
+- Practice Village does not retain the raw onboarding conversation. State this with the raw-audio fact in Privacy or Help, not as required reading during onboarding.
 - Public display of a Founding Villager's name remains a separate, explicit choice and is never inferred from onboarding.
+- The invitation to volunteer, teach, test products, or share feedback happens after someone has experienced the Village. It is not part of onboarding.
 
 ## Copy standard
 
@@ -134,23 +140,106 @@ The member account opens with the minimum information required for payment and a
 - Prevent orphaned words in headings, buttons, cards, and short display copy at supported screen sizes.
 - Read every screen aloud before release. Remove any sentence that does not change what the Villager knows or can do.
 
-## Onboarding punch list from the August 13 walkthrough
+## Approved onboarding sequence
 
-1. Replace the large welcome explanation with one warm greeting, one purpose sentence, and the first question.
-2. Remove "A conversation, not a form" and other copy that explains the interface instead of helping the Villager use it.
-3. Set and state a clear onboarding length. Target three optional questions and about two minutes.
-4. Show progress in plain language, such as "Question 1 of up to 3."
-5. Redesign Talk so listening does not end without notice. Show listening state, elapsed time, a Stop button, and a clear message when listening ends.
-6. Preserve all voice results in the text box so a pause does not replace or lose earlier words.
-7. Keep voice review before Send. Do not send automatically.
-8. Use onboarding answers to make a useful first handoff. Yoga, movement, meditation, or poses should offer Moxie Studios.
-9. Show the destination before leaving onboarding. Do not send the Villager to a generic page without explaining the next step.
-10. Add optional paths for volunteering, teaching in Moxie Studios, product testing, and other Village participation.
-11. Ask eligible Founding Villagers separately whether they want their name on the public landing page. Default to no public name. Include the exact display name and a removal path before publishing.
-12. Decide which onboarding answers are useful enough to save. Do not turn onboarding into a diary or store the raw conversation.
+Opening:
+
+> Welcome, [name].
+>
+> We have a few optional onboarding questions to help improve your Practice Village experience.
+>
+> You can talk, type, or skip any question.
+>
+> It should only take about two minutes.
+
+Use "Welcome." when no preferred name is available.
+
+Optional preferred-name setup before the three questions:
+
+> What should we call you?
+
+Question 1:
+
+> What would be useful today?
+
+Choices: Give me an orientation; Yoga or meditation; A little quiet; Food support; Sort something out; Safety or patterns; Work with my photos; Something else.
+
+If the Villager chooses something specific, stop onboarding when appropriate and help with that need. "Give me an orientation" starts a real guided orientation.
+
+Question 2:
+
+> Is there anything that would make the Village easier for you to use?
+
+Choices: Keep answers brief; I prefer voice; I prefer typing; Let me explain; Nothing right now. A typed answer is always available.
+
+Question 3:
+
+> Is there anything you'd like the Village to remember for next time?
+
+Choices: Something I'm working through; A practice that helps me; Something I don't want to explain again; Let me tell you; Nothing right now.
+
+Memory confirmation:
+
+> Would you like the Village to remember these for next time?
+
+Show only proposed enduring memories. Choices: Remember these; Not now.
+
+Founding Villager public-name consent is separate from onboarding:
+
+> Would you like your name included with the 108 Founding Villagers on the public Practice Village landing page?
+
+Choices: Yes; No. If yes, ask what name to display, show the exact public display name, and offer Yes, use this name; Change it; Don't list my name. State: "You can ask us to remove your name later."
+
+Destination example for yoga:
+
+> Start in Moxie Studios. Bott Om can help you begin privately with beginner yoga or meditation and practice at your own pace.
+
+Actions: Open Moxie Studios; Explore the Village. Show the destination regardless of the memory decision.
+
+## Approved onboarding check balance
+
+What the Villager gives:
+
+- Up to three optional onboarding answers
+- A preferred name only when one is unavailable and the Villager wants to provide one
+- A separate public-name decision for an eligible Founding Villager
+- About two minutes
+
+What the Village returns:
+
+- A useful place to begin
+- Guidance based on what the Villager needs today
+- Preferences remembered only with permission
+- The ability to return without explaining useful things again
+- A clear next action
+
+What onboarding does not ask for:
+
+- Trauma history
+- Medical history
+- Employer information
+- Demographic intake
+- Home address
+- Unnecessary personal history
+
+Privacy and Help state separately that Practice Village does not retain raw onboarding voice audio or the raw onboarding conversation.
+
+## Onboarding implementation checklist
+
+1. Remove "A conversation, not a form" and unnecessary interface explanation.
+2. Add the approved opening, optional preferred-name setup, three questions, and choices.
+3. Allow talk, type, skip, and free text for every question.
+4. Allow a specific current need to interrupt onboarding and receive help immediately.
+5. Redesign Talk with listening state, elapsed time, Stop, transcript preservation, a clear ending message, and a 60-second limit.
+6. Keep transcript review before Send. Never send automatically.
+7. Separate current destination from enduring memory.
+8. Show and confirm each proposed memory. Save nothing when the Villager chooses Not now.
+9. Explain the destination before routing. Never make access depend on memory consent.
+10. Add the separate Founding Villager public-name consent flow.
+11. Keep participation invitations out of onboarding and surface them after the Villager has used the Village.
+12. Put raw conversation and raw voice-audio retention facts in Privacy or Help.
 13. Fix desktop spacing, heading measure, chat height, and action alignment. Test mobile separately.
-14. Add a clear finish point and tell the Villager what happens after saving or keeping the note private.
-15. Test each answer route, each privacy choice, voice ending, skip, finish, and return behavior before production.
+14. Test each answer route, voice ending, skip, interruption, memory choice, name choice, and return behavior before production.
 
 ## Roles
 
