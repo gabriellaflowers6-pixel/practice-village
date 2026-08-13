@@ -238,6 +238,28 @@
     });
   }
 
+
+  /* ============ Rebuild Arc pills: tap a step, read what it means ============ */
+  var RAW_EXPLAIN = {
+    arrive:   "Come into the present. Feel what it is like to be welcomed in your own body, your own space, and your own life.",
+    notice:   "Build awareness without rushing to fix anything. Notice what you feel, what you need, what you repeat, and what is asking for your attention.",
+    connect:  "Reach toward people, practices, resources, and relationships that support who you are becoming.",
+    practice: "Move from knowing to doing. Try new responses, new habits, and new ways of being until they become available to you in daily life.",
+    explore:  "Stay open. Experiment. Be curious about what you like, what you want, and what actually works for you instead of automatically following what works for someone else.",
+    choose:   "Practice authentic responsibility. Notice where you have handed away your power, decide what is yours to carry, and use your ability to choose the life you want to live."
+  };
+  var rawSteps = document.getElementById("rawSteps");
+  var rawExplain = document.getElementById("rawExplain");
+  if (rawSteps && rawExplain) {
+    rawSteps.querySelectorAll("li").forEach(function (li) {
+      li.addEventListener("click", function () {
+        rawSteps.querySelectorAll("li").forEach(function (x) { x.classList.remove("is-on"); });
+        li.classList.add("is-on");
+        rawExplain.textContent = RAW_EXPLAIN[li.getAttribute("data-k")] || "";
+      });
+    });
+  }
+
   /* ============ card stack (PIL) ============ */
   var cardNext = document.getElementById("cardNext");
   var stack = document.getElementById("cardstack");

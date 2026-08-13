@@ -1294,3 +1294,23 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
 @media (max-width:600px){ .raw__steps{ grid-template-columns:repeat(2,minmax(0,auto)); } }
 /* nav items never break their own words */
 .nav__links a, .nav__cta { white-space:nowrap; }
+
+/* ===== Rebuild Arc: tappable steps + weeks (2026-08-13) ===== */
+.raw__steps li{ cursor:pointer; transition:background .2s, border-color .2s; }
+.raw__steps li:hover{ border-color:var(--clay); }
+.raw__steps li.is-on{ background:var(--clay); color:#FBF9F4; border-color:var(--clay); }
+.raw__steps li.is-on::before{ background:#FBF9F4; color:var(--clay); }
+.raw__explain{ margin:0 0 1.3rem; max-width:62ch; font-size:1rem; line-height:1.6; min-height:3.2em; }
+.raw__weeks{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:.8rem; margin:0 0 1.3rem; }
+@media (max-width:1050px){ .raw__weeks{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:600px){ .raw__weeks{ grid-template-columns:1fr; } }
+.raw__week{ background:#FBF6EA; border:1px solid rgba(26,21,30,.14); border-radius:14px; padding:.9rem 1rem; }
+.raw__week b{ display:block; margin-bottom:.35rem; font-size:.92rem; }
+.raw__week p{ margin:0; font-size:.86rem; line-height:1.5; color:var(--ink-soft); }
+.raw__voucher{ max-width:none; margin:.5rem 0 0; font-size:.9rem; line-height:1.6; opacity:.9; }
+/* the gap left by the removed logo between the Concierge row and the Center */
+.hardlayer{ padding-bottom:clamp(28px,3.5vw,44px); }
+.center{ padding-top:clamp(30px,4vw,48px); }
+/* JoYi's bio under the team */
+.builders__bio{ max-width:56ch; margin:1.6rem auto 0; text-align:left; }
+.builders__bio p{ margin:0 0 .8rem; line-height:1.65; }
