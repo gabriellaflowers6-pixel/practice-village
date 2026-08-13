@@ -85,6 +85,14 @@ MEMBER WELCOME MODE: This is a private, optional welcome conversation with a pai
 - If there is nothing useful to save, onboardingSummary must be null. Never pressure her to produce a note.
 - Outside member welcome mode, onboardingSummary must be null.`;
 
+const MEMBER_HELP_PROMPT = `
+
+MEMBER HELP MODE: A signed-in Villager paused optional onboarding because she wants help now.
+- Address what she needs now. Do not continue onboarding and do not ask profile questions.
+- Do not suggest saving anything from this exchange.
+- Recommend a Village room only when it clearly fits. Explain why before naming the room.
+- Keep the response brief. The website controls the destination link.`;
+
 const SCHEMA = {
   type: "OBJECT",
   properties: {
@@ -196,7 +204,7 @@ async function gemini(messages, mode) {
     signal: AbortSignal.timeout(12000),
     headers: { "Content-Type": "application/json", "x-goog-api-key": process.env.GEMINI_API_KEY },
     body: JSON.stringify({
-      systemInstruction: { parts: [{ text: SYSTEM_PROMPT + (mode === "member_onboarding" ? MEMBER_ONBOARDING_PROMPT : "") }] },
+      systemInstruction: { parts: [{ text: SYSTEM_PROMPT + (mode === "member_onboarding" ? MEMBER_ONBOARDING_PROMPT : mode === "member_help" ? MEMBER_HELP_PROMPT : "") }] },
       contents: messages.map((m) => ({ role: m.role, parts: [{ text: m.text }] })),
       generationConfig: {
         responseMimeType: "application/json",
@@ -232,8 +240,8 @@ export default async (req) => {
   if (req.method !== "POST") return json({ ok: false, error: "bad request" });
   let o;
   try { o = await req.json(); } catch { return json({ ok: false, error: "bad request" }); }
-  const mode = o.mode === "member_onboarding" ? "member_onboarding" : "standard";
-  if (mode === "member_onboarding") {
+  const mode = o.mode === "member_onboarding" ? "member_onboarding" : o.mode === "member_help" ? "member_help" : "standard";
+  if (mode === "member_onboarding" || mode === "member_help") {
     const user = await getUser();
     const roles = Array.isArray(user?.roles) ? user.roles : [];
     if (!user || !roles.some((role) => ["member", "founding_villager", "admin", "test_member"].includes(role))) {

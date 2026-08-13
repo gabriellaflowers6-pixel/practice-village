@@ -8,12 +8,12 @@ function welcomePage() {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome conversation · Practice Village</title>
+  <title>Member onboarding · Practice Village</title>
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/member.css?v=2" />
+  <link rel="stylesheet" href="/assets/member.css?v=5" />
 </head>
 <body data-auth-page="welcome">
   <header class="member-header">
@@ -21,39 +21,40 @@ function welcomePage() {
     <nav><a href="/member" class="member-link">Member lobby</a><button id="logoutButton" class="text-button" type="button">Sign out</button></nav>
   </header>
   <main class="welcome-main">
-    <section class="welcome-copy" aria-labelledby="welcomeTitle">
-      <p class="eyebrow">A conversation, not a form</p>
-      <h1 id="welcomeTitle">What would make the Village useful right now?</h1>
-      <p>Talk or type. The Concierge will ask one optional question at a time. You can skip anything or finish whenever you want.</p>
-      <ul class="welcome-facts">
-        <li>Your membership is already open.</li>
-        <li>Your voice becomes text you can check before sending.</li>
-        <li>Practice Village does not keep the audio.</li>
-        <li>Nothing from this conversation is saved unless you choose at the end.</li>
-      </ul>
+    <section class="welcome-intro" aria-labelledby="welcomeTitle">
+      <h1 id="welcomeTitle">Welcome.</h1>
+      <p>We have a few optional onboarding questions to help improve your Practice Village experience.</p>
+      <p>You can <strong>talk, type, or skip</strong> any question.</p>
+      <p>It should only take about two minutes.</p>
     </section>
-    <section class="welcome-chat" aria-label="Welcome conversation with the Concierge">
-      <div id="welcomeThread" class="welcome-thread" aria-live="polite">
-        <div class="chat-message chat-message--concierge">You are in. What would make your membership useful to you right now?</div>
-      </div>
-      <div id="welcomeSummary" class="welcome-summary" hidden></div>
-      <div class="welcome-controls" id="welcomeControls">
-        <label class="sr-only" for="welcomeInput">Tell the Concierge what would help</label>
-        <textarea id="welcomeInput" rows="3" maxlength="1000" placeholder="Type here, or use Talk…"></textarea>
+
+    <section class="onboarding-card" aria-label="Practice Village onboarding">
+      <p id="onboardingProgress" class="onboarding-progress" aria-live="polite"></p>
+      <h2 id="onboardingQuestion"></h2>
+      <p id="onboardingHelp" class="onboarding-help"></p>
+      <div id="onboardingChoices" class="onboarding-choices"></div>
+
+      <div id="welcomeResponse" class="welcome-response">
+        <label class="sr-only" for="welcomeInput">Your answer</label>
+        <textarea id="welcomeInput" rows="3" maxlength="1000" placeholder="Type your answer"></textarea>
         <div class="welcome-actions">
           <button id="talkButton" class="secondary-button" type="button">Talk</button>
           <button id="sendWelcome" class="primary-button" type="button">Send</button>
         </div>
-        <p id="voiceStatus" class="voice-status">Voice is optional. You can review the transcript before sending.</p>
-        <div class="welcome-exits">
-          <button id="skipWelcome" class="text-button" type="button">Skip this question</button>
-          <button id="finishWelcome" class="text-button" type="button">Finish for now</button>
-          <a href="/member">Return to the lobby</a>
-        </div>
+        <p id="voiceStatus" class="voice-status" aria-live="polite">Voice is optional. Review the transcript before you send it.</p>
       </div>
+
+      <div id="onboardingPanel" class="onboarding-panel" hidden></div>
+
+      <div class="welcome-exits">
+        <button id="skipWelcome" class="text-button" type="button">Skip this question</button>
+        <a href="/member">Explore the Village</a>
+      </div>
+      <p class="onboarding-privacy"><a href="/privacy#concierge-onboarding">How onboarding information is handled</a></p>
+      <p id="onboardingStatus" class="auth-status" role="status" aria-live="polite"></p>
     </section>
   </main>
-  <script type="module" src="/assets/member-auth.bundle.js?v=4"></script>
+  <script type="module" src="/assets/member-auth.bundle.js?v=5"></script>
 </body>
 </html>`;
 }

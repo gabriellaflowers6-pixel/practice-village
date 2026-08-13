@@ -1,5 +1,5 @@
 import { getUser } from "@netlify/identity";
-import { memberKeyForEmail, membershipStore } from "./_shared/membership.mjs";
+import { memberKeyForEmail, membershipStore, sha256 } from "./_shared/membership.mjs";
 
 export default async function handler() {
   const user = await getUser();
@@ -8,6 +8,7 @@ export default async function handler() {
   const record = await store.get(await memberKeyForEmail(user.email), { type: "json" });
   const roles = Array.isArray(user.roles) ? user.roles : [];
   if (!record && roles.some((role) => ["admin", "test_member"].includes(role))) {
+    const testRecord = await store.get(`test-onboarding/${await sha256(user.email)}`, { type: "json" });
     return Response.json({ ok: true, membership: {
       plan: "admin",
       planLabel: "Village team",
@@ -21,7 +22,7 @@ export default async function handler() {
       workshopVoucherAllowance: 0,
       foundingBonusEligible: false,
       foundingSequence: null,
-      onboardingStatus: "not_started",
+      onboardingStatus: testRecord?.onboarding?.status || "not_started",
       testAccount: true,
     } });
   }
