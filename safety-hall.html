@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Safety Hall is a private tool for recording what happened, checking for patterns, and finding support options." />
+  <title>Something Feels Wrong · Safety Hall</title>
+  <link rel="canonical" href="https://thepracticevillage.org/safety-hall/" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/safety-hall.css?v=16" />
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="hall-header">
+    <a class="brand" href="/#center" aria-label="Back to Practice Village">
+      <svg viewBox="0 0 40 40" width="34" height="34" aria-hidden="true"><circle cx="20" cy="8" r="2.8" fill="#1A1A4E"/><circle cx="30.4" cy="14" r="2.8" fill="#1A1A4E"/><circle cx="30.4" cy="26" r="2.8" fill="#1A1A4E"/><circle cx="20" cy="32" r="2.8" fill="#1A1A4E"/><circle cx="9.6" cy="26" r="2.8" fill="#1A1A4E"/><circle cx="9.6" cy="14" r="2.8" fill="#1A1A4E"/><circle cx="20" cy="20" r="5.5" fill="#C9862B"/></svg>
+      <span><b>Practice Village</b><small>Safety Hall</small></span>
+    </a>
+    <div class="header-tools">
+      <button class="header-tool" id="safetyInfo" type="button">Device safety</button>
+      <button class="header-tool" id="discreetMode" type="button">Discreet view</button>
+      <button class="quick-exit" id="quickExit" type="button">Quick exit</button>
+    </div>
+  </header>
+
+  <section class="discreet-cover" id="discreetCover" hidden>
+    <span class="eyebrow">Private daily notes</span>
+    <h1>Your notes are hidden.</h1>
+    <p>Return only when it feels safe.</p>
+    <button class="primary" id="returnFromDiscreet" type="button">Return to my notes</button>
+  </section>
+
+  <main>
+    <section class="hall-intro" id="top">
+      <div>
+        <span class="eyebrow">Safety is part of life here</span>
+        <h1>What would help you right now?</h1>
+        <p>Start by recording what happened. You do not have to organize it, explain it, or know what to call it.</p>
+      </div>
+      <aside class="privacy-note">
+        <span aria-hidden="true">⌂</span>
+        <p><strong>This prototype saves private notes on this device.</strong> Typed notes, recordings, and uploaded files may be visible to anyone with access to this browser profile.</p>
+      </aside>
+    </section>
+
+    <section class="hall-orientation" aria-labelledby="orientationTitle">
+      <div class="hall-orientation__intro">
+        <span class="eyebrow">What this is</span>
+        <h2 id="orientationTitle">Record what happened and check whether it is repeating.</h2>
+        <p>Safety Hall helps you keep a private record, review possible patterns, decide what you can do, and find outside support when you want it.</p>
+      </div>
+      <div class="hall-orientation__steps" aria-label="How to use Safety Hall">
+        <div><span>1</span><p><b>Record what happened.</b> Type, record, or add a file. One sentence is enough.</p></div>
+        <div><span>2</span><p><b>Add context only when ready.</b> Dates, people, power, and consequences are optional.</p></div>
+        <div><span>3</span><p><b>Look across your record.</b> You decide whether a suggested pattern fits.</p></div>
+        <div><span>4</span><p><b>Choose a next step.</b> Keep it private, set a boundary, or look for workplace, community, or legal information.</p></div>
+      </div>
+      <p class="hall-orientation__boundary"><b>What this is not:</b> an emergency service, diagnosis, legal ruling, or automatic report to an employer. Nothing is sent from this prototype.</p>
+    </section>
+
+    <section class="support-menu" aria-label="Safety Hall support options">
+      <button class="support-card" data-route="information"><span>01</span><b>I need information</b><small>Browse trusted resources</small></button>
+      <button class="support-card is-active" data-route="document"><span>02</span><b>I want to record what happened</b><small>Start a private entry</small></button>
+      <button class="support-card" data-route="script"><span>03</span><b>I need a script</b><small>Find words for a conversation</small></button>
+      <button class="support-card" data-route="calm"><span>04</span><b>I need to calm my body</b><small>Take a grounding pause</small></button>
+      <button class="support-card" data-route="step"><span>05</span><b>I need one next step</b><small>Sort only what comes next</small></button>
+      <button class="support-card" data-route="unsure"><span>06</span><b>I’m not sure yet</b><small>Start with one small step</small></button>
+    </section>
+
+    <section class="tracker" id="tracker">
+      <div class="tracker-head">
+        <div>
+          <span class="hand">record first · review later</span>
+          <h2>Something Feels Wrong</h2>
+          <p>Type, record, upload, or mix them together. Your unfinished note is still a real note, and it is autosaved as you go.</p>
+        </div>
+        <button class="text-button" id="viewEntries" type="button">My private entries <span id="entryCount">0</span></button>
+      </div>
+
+      <div class="workspace">
+        <article class="capture-card" id="captureCard">
+          <div class="capture-status-row">
+            <span class="draft-label" id="draftLabel">Private entry</span>
+            <span class="save-state" id="saveState" role="status" aria-live="polite">Ready when you are</span>
+          </div>
+
+          <div class="capture-opening">
+            <h3>Record what happened.</h3>
+            <p>It does not have to be neat, balanced, or complete. Start anywhere.</p>
+          </div>
+
+          <label class="field field--story">
+            <span class="sr-only">What happened or what feels wrong?</span>
+            <textarea id="storyText" rows="10" placeholder="Type here. You can write one sentence, paste messages, or tell the whole story…"></textarea>
+            <small><span id="wordCount">0</span> words · no minimum</small>
+          </label>
+
+          <div class="capture-row">
+            <button class="capture-button" type="button" data-record data-record-label="What happened" data-default-text="Record what happened">● Record what happened</button>
+            <label class="capture-button" for="entryFiles">＋ Add screenshots or files</label>
+            <input id="entryFiles" type="file" accept="image/*,audio/*,.pdf,.txt,.doc,.docx" multiple hidden />
+          </div>
+          <p class="capture-note">Recordings and files stay on this device in this prototype. Nothing is sent to Practice Village.</p>
+          <div class="mic-session" id="micSession" hidden>
+            <span><i aria-hidden="true"></i> Microphone ready for this page</span>
+            <button type="button" id="releaseMicrophone">Release microphone</button>
+          </div>
+          <div class="storage-summary" aria-label="Where this entry is stored">
+            <span><b>Stored here:</b> this browser on this device</span>
+            <span><b>Backup:</b> none</span>
+            <span id="storageProtection">Browser storage protection: checking…</span>
+            <button type="button" id="storageDetails">Storage details</button>
+          </div>
+          <p class="attachment-summary" id="attachmentSummary" role="status" aria-live="polite"></p>
+          <div class="media-list" id="draftMediaList" aria-live="polite"></div>
+          <div class="capture-error" id="captureError" role="alert"></div>
+
+          <div class="capture-decisions" aria-label="What would help next">
+            <button class="primary" id="doneNow" type="button">I’m done for now</button>
+            <button class="secondary" id="showContext" type="button" aria-expanded="false" aria-controls="contextPanel">Help me add context</button>
+            <button class="secondary" id="showSense" type="button" aria-expanded="false" aria-controls="sensePanel">Help me make sense of this</button>
+          </div>
+          <p class="already-saved">You do not have to press a button to keep this draft. These choices only change what you see next.</p>
+
+          <section class="optional-panel" id="contextPanel" hidden>
+            <div class="panel-heading">
+              <span class="eyebrow">Optional context</span>
+              <h3>Add only what future-you may want.</h3>
+              <p>Every field can stay blank. You can type, add another recording, or stop.</p>
+            </div>
+            <label class="field">
+              <span>What do you want future-you to remember?</span>
+              <textarea id="contextRemember" rows="4" placeholder="The part you may want to return to later…"></textarea>
+            </label>
+            <label class="field field--spaced">
+              <span>What happened before or afterward? <em>optional</em></span>
+              <textarea id="contextAfter" rows="3" placeholder="A change, response, consequence, or nothing obvious yet…"></textarea>
+            </label>
+            <label class="field field--spaced">
+              <span>Who was involved or present? <em>optional</em></span>
+              <input id="contextPeople" type="text" placeholder="Names, roles, witnesses, or leave blank" />
+            </label>
+            <label class="field field--date">
+              <span>When did it happen? <em>optional</em></span>
+              <input id="contextDate" type="datetime-local" />
+            </label>
+            <span class="field-label">What part of life is this connected to? <em>optional</em></span>
+            <div class="choice-grid choice-grid--compact" id="areaGrid">
+              <button type="button" data-area="Work">Work</button><button type="button" data-area="Family">Family</button>
+              <button type="button" data-area="Money">Money</button><button type="button" data-area="Body / health">Body / health</button>
+              <button type="button" data-area="Home">Home</button><button type="button" data-area="Digital life">Digital life</button>
+              <button type="button" data-area="Safety / stress">Safety / stress</button><button type="button" data-area="Not sure">Not sure</button>
+            </div>
+            <div class="panel-actions">
+              <button class="capture-button" type="button" data-record data-record-label="Additional context" data-default-text="Record an additional detail">● Record an additional detail</button>
+              <button class="secondary" type="button" data-hide-panel="contextPanel">Close context</button>
+            </div>
+          </section>
+
+          <section class="optional-panel optional-panel--sense" id="sensePanel" hidden>
+            <div class="panel-heading">
+              <span class="eyebrow">Optional reflection</span>
+              <h3>Help me sort what belongs where.</h3>
+              <p>This is not about blaming yourself. You can decide what to do next while still holding other people responsible for their actions.</p>
+            </div>
+
+            <div class="safety-check">
+              <b>Is this still happening or affecting work, money, housing, health, legal status, reputation, or safety?</b>
+              <div class="choice-row" id="safetyChoice">
+                <button type="button" data-safety="Yes">Yes</button>
+                <button type="button" data-safety="Not sure">Not sure</button>
+                <button type="button" data-safety="No">No</button>
+                <button type="button" data-safety="Prefer not to answer">Prefer not to answer</button>
+              </div>
+              <div class="support-first" id="supportFirst" hidden>
+                <strong>Support can come before reflection.</strong>
+                <p>You do not have to wait for a pattern, confront anyone, or complete personal work before asking an advocate, union, ombuds, trusted professional, or legal-information service to help you look at this.</p>
+                <button class="secondary secondary--small" type="button" data-route-inline="support">See support directions</button>
+              </div>
+            </div>
+
+            <details class="reflection-group">
+              <summary>Name behaviors, power, or consequences <span>optional</span></summary>
+              <p>These descriptions are not diagnoses or legal findings.</p>
+              <span class="field-label">Do any behavior descriptions fit?</span>
+              <div class="behavior-grid" id="behaviorGrid">
+                <button type="button" data-behavior="Denial or rewriting"><b>Denial or rewriting</b><small>What happened was denied, minimized, or rewritten.</small></button>
+                <button type="button" data-behavior="Changing rules or expectations"><b>Changing rules</b><small>The standard moved after you responded.</small></button>
+                <button type="button" data-behavior="Credibility undermining"><b>Credibility undermining</b><small>Your memory, judgment, competence, or stability was attacked.</small></button>
+                <button type="button" data-behavior="Interruption, exclusion, or stereotyping"><b>Interruption, exclusion, or stereotyping</b><small>You were dismissed, left out, talked over, or treated through an assumption.</small></button>
+                <button type="button" data-behavior="Identity-linked slight or double standard"><b>Identity-linked slight or double standard</b><small>A comment, assumption, burden, or standard seemed connected to identity or belonging.</small></button>
+                <button type="button" data-behavior="Promises and actions did not match"><b>Promises and actions did not match</b><small>What was said would happen differed from what later happened.</small></button>
+                <button type="button" data-behavior="Information or access control"><b>Information or access control</b><small>Information, opportunity, support, or access was withheld.</small></button>
+                <button type="button" data-behavior="Pressure or leverage"><b>Pressure or leverage</b><small>Work, money, care, housing, reputation, or belonging narrowed your choices.</small></button>
+                <button type="button" data-behavior="Monitoring or isolation"><b>Monitoring or isolation</b><small>You were watched, separated from allies, or discouraged from checking with others.</small></button>
+                <button type="button" data-behavior="Escalation after resistance"><b>Escalation after resistance</b><small>A question, correction, boundary, or report was followed by punishment.</small></button>
+                <button type="button" data-behavior="Nothing here fits yet"><b>Nothing fits yet</b><small>You can leave this unnamed.</small></button>
+              </div>
+              <span class="field-label">Did someone have influence over something important?</span>
+              <div class="choice-grid" id="powerGrid">
+                <button type="button" data-power="Job, evaluation, or opportunity">Job, evaluation, or opportunity</button><button type="button" data-power="Pay or schedule">Pay or schedule</button>
+                <button type="button" data-power="Information or access">Information or access</button><button type="button" data-power="Housing, healthcare, or care">Housing, healthcare, or care</button>
+                <button type="button" data-power="Immigration or legal status">Immigration or legal status</button><button type="button" data-power="Reputation or belonging">Reputation or belonging</button>
+                <button type="button" data-power="None or not sure">None or not sure</button>
+              </div>
+              <span class="field-label">Did any consequence follow?</span>
+              <div class="choice-grid" id="consequenceGrid">
+                <button type="button" data-consequence="Job or evaluation changed">Job or evaluation changed</button><button type="button" data-consequence="Pay or schedule changed">Pay or schedule changed</button>
+                <button type="button" data-consequence="Access or information withheld">Access or information withheld</button><button type="button" data-consequence="Threat, punishment, or pressure">Threat, punishment, or pressure</button>
+                <button type="button" data-consequence="Health or safety effect">Health or safety effect</button><button type="button" data-consequence="No clear change yet">No clear change yet</button>
+              </div>
+            </details>
+
+            <details class="reflection-group responsibility-practice">
+              <summary>Sort responsibility and next steps <span>optional</span></summary>
+              <p>Write only where it helps. Your original account above remains the record of what you experienced.</p>
+              <div class="map-grid">
+                <label class="map-field"><b>What belongs to them or the system?</b><small>Their conduct, choices, duties, repair, or accountability.</small><textarea id="mapTheirs" rows="3"></textarea></label>
+                <label class="map-field"><b>What can’t I control?</b><small>Their honesty, apology, agreement, insight, or willingness to change.</small><textarea id="mapCannot" rows="3"></textarea></label>
+                <label class="map-field"><b>What can I choose now?</b><small>What I save, who I trust, whether I respond, and what may help me feel safer.</small><textarea id="mapMine" rows="3"></textarea></label>
+                <label class="map-field"><b>Who or what could help?</b><small>A trusted person, advocate, policy, professional, union, or community group.</small><textarea id="mapSupport" rows="3"></textarea></label>
+                <label class="map-field map-field--wide"><b>What do I want to happen?</b><small>Name a need, boundary, change, or goal. You do not have to know how it will happen yet.</small><textarea id="mapHope" rows="3"></textarea></label>
+              </div>
+              <button class="capture-button" type="button" data-record data-record-label="Responsibility and response reflection" data-default-text="Record this reflection">● Record this reflection</button>
+            </details>
+
+            <div class="panel-actions">
+              <button class="secondary" type="button" data-hide-panel="sensePanel">Close reflection</button>
+            </div>
+          </section>
+        </article>
+
+        <aside class="side-panel">
+          <div class="side-card">
+            <span class="side-label">A short note is enough</span>
+            <ul>
+              <li>One sentence counts</li><li>An unfinished draft counts</li><li>Voice and files are optional</li><li>No reflection is required</li>
+            </ul>
+          </div>
+          <div class="side-card side-card--practice">
+            <span class="side-label">How this works</span>
+            <p>Record what happened without judging yourself. You choose what to do next. Other people and organizations remain responsible for their actions.</p>
+          </div>
+          <div class="side-card side-card--pattern">
+            <span class="side-label">Pattern review</span>
+            <p>You decide when to look. Safety and outside support never have to wait for three entries.</p>
+            <button class="secondary secondary--small" id="reviewAnytime" type="button">Look at my record</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="entries" id="entries" hidden>
+      <div class="entries-head">
+        <div><span class="hand">your record · yours to keep</span><h2>Private entries</h2></div>
+        <div class="entries-tools"><button class="secondary secondary--small" id="prepareHandoff" type="button">Prepare a support handoff</button><button class="secondary secondary--small" id="exportEntries" type="button">Export text data</button><button class="text-danger" id="clearEntries" type="button">Delete all</button></div>
+      </div>
+      <div class="empty-state" id="emptyState"><b>No completed entries yet.</b><p>Your current draft is already autosaved above. Choose “I’m done for now” when you want it added here.</p></div>
+      <div class="entry-list" id="entryList"></div>
+    </section>
+  </main>
+
+  <footer class="hall-footer">
+    <div class="hall-footer__brand">
+      <a href="/" aria-label="Practice Village home">
+        <svg viewBox="0 0 40 40" width="30" height="30" aria-hidden="true"><circle cx="20" cy="8" r="2.8" fill="#F4EEE1"/><circle cx="30.4" cy="14" r="2.8" fill="#F4EEE1"/><circle cx="30.4" cy="26" r="2.8" fill="#F4EEE1"/><circle cx="20" cy="32" r="2.8" fill="#F4EEE1"/><circle cx="9.6" cy="26" r="2.8" fill="#F4EEE1"/><circle cx="9.6" cy="14" r="2.8" fill="#F4EEE1"/><circle cx="20" cy="20" r="5.5" fill="#C9862B"/></svg>
+        <span>Practice&nbsp;Village</span>
+      </a>
+      <p>Safety Hall is one room in the Practice Village digital community center.</p>
+    </div>
+    <nav aria-label="Safety Hall footer">
+      <a href="/#center">Explore the Village</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+      <a href="mailto:info@aidedeq.org">Contact</a>
+    </nav>
+    <p>© 2026 AIdedEQ · Educational support. This is not emergency, medical, legal, or financial advice.</p>
+  </footer>
+
+  <dialog class="dialog" id="afterSaveDialog">
+    <button class="dialog-close" type="button" data-close aria-label="Close">×</button>
+    <span class="dialog-mark">✓</span><h2 id="afterSaveTitle">Saved. You can stop here.</h2>
+    <p>Your entry stays on this device. You can leave it alone, return later, or choose what kind of help comes next.</p>
+    <div class="dialog-actions">
+      <button type="button" data-after="new">Start a new private entry</button>
+      <button type="button" data-after="sense">Help me sort what belongs where</button>
+      <button type="button" data-after="pattern">Look at my record</button>
+      <button type="button" data-close>Leave it here for now</button>
+    </div>
+  </dialog>
+
+  <dialog class="dialog dialog--pattern" id="patternDialog">
+    <button class="dialog-close" type="button" data-close aria-label="Close">×</button>
+    <span class="hand">only if you want to look</span><h2 id="patternTitle">Your record</h2><p id="patternCopy"></p>
+    <div class="pattern-summary" id="patternSummary"></div>
+    <div class="dialog-actions dialog-actions--row"><button type="button" data-pattern-action="handoff">Prepare a support handoff</button><button type="button" data-pattern-action="support">Find outside support</button><button type="button" data-pattern-action="script">Get an optional script</button><button type="button" data-pattern-action="pil">Add to my Personal Intelligence Layer</button><button type="button" data-close>Not now</button></div>
+    <p class="dialog-status" id="patternStatus" aria-live="polite"></p>
+  </dialog>
+
+  <dialog class="dialog dialog--handoff" id="handoffDialog">
+    <button class="dialog-close" type="button" data-close aria-label="Close">×</button>
+    <span class="hand">share only what helps</span>
+    <h2>Prepare a support handoff</h2>
+    <p>Select the incidents and details you want another person to see. Nothing is sent from Safety Hall.</p>
+    <section id="handoffBuilder">
+      <div class="handoff-context-grid">
+        <label class="field"><span>Who is this for? <em>optional</em></span><select id="handoffRecipient"><option value="">Leave unnamed</option><option>Advocate or worker center</option><option>Union representative</option><option>Ombuds or independent reviewer</option><option>Legal aid or attorney</option><option>HR or an employer process</option><option>Trusted person</option><option>Other support person</option></select></label>
+        <label class="field"><span>What help do you want? <em>optional</em></span><input id="handoffPurpose" type="text" placeholder="For example: understand options or preserve a timeline" /></label>
+      </div>
+      <fieldset class="handoff-fieldset"><legend>Choose incidents to include</legend><p>No incident is selected automatically.</p><div class="handoff-entry-list" id="handoffEntryList"></div></fieldset>
+      <fieldset class="handoff-fieldset"><legend>Choose details to include</legend><p>Date and life area are always included. Original recordings and files are never placed inside this text handoff.</p>
+        <div class="handoff-options">
+          <label><input id="handoffIncludeAccount" type="checkbox" checked /> <span><b>My account and what changed</b><small>User-authored incident text and before/after context</small></span></label>
+          <label><input id="handoffIncludePeople" type="checkbox" /> <span><b>People or roles</b><small>May expose names, witnesses, or relationships</small></span></label>
+          <label><input id="handoffIncludeTags" type="checkbox" checked /> <span><b>Descriptions I selected</b><small>Behavior, power, and consequence descriptions</small></span></label>
+          <label><input id="handoffIncludePattern" type="checkbox" checked /> <span><b>Observations I marked “This fits”</b><small>Plus my private pattern note, if I wrote one</small></span></label>
+          <label><input id="handoffIncludeMediaManifest" type="checkbox" /> <span><b>Media names and fingerprints</b><small>A manifest only; it does not attach the files</small></span></label>
+          <label><input id="handoffIncludeDerivedMedia" type="checkbox" /> <span><b>My transcripts and screenshot context</b><small>Notes you created, not the original audio or image</small></span></label>
+          <label class="handoff-sensitive"><input id="handoffIncludeReflection" type="checkbox" /> <span><b>My personal responsibility reflections</b><small>Usually keep private; these can be misunderstood or used to shift responsibility back to you</small></span></label>
+        </div>
+      </fieldset>
+      <div class="handoff-safety"><b>Before sharing attachments</b><p>Download originals or reviewed redacted copies separately. Check screenshots, file names, transcripts, and quoted messages again. This handoff cannot redact files for you.</p></div>
+      <div class="dialog-actions"><button type="button" id="previewHandoff" disabled>Review the exact handoff</button><button type="button" data-close>Not now</button></div>
+      <p class="dialog-status" id="handoffBuilderStatus" role="status" aria-live="polite">Choose at least one incident.</p>
+    </section>
+    <section id="handoffReview" hidden>
+      <div class="handoff-review-heading"><div><span class="eyebrow">Exact text preview</span><h3>Only the text below will be downloaded</h3></div><button type="button" id="editHandoff">Change selections</button></div>
+      <pre class="handoff-preview" id="handoffPreview" tabindex="0"></pre>
+      <label class="consent-check"><input id="handoffReviewCheck" type="checkbox" /> <span>I reviewed the entire handoff and want to create this separate text file.</span></label>
+      <p class="transcript-separation"><b>Attachments remain separate:</b> no audio, image, document, or redacted screenshot is embedded or sent.</p>
+      <div class="dialog-actions dialog-actions--row"><button type="button" id="downloadHandoff" disabled>Download reviewed handoff</button><button type="button" id="prepareAttachments">Prepare separate attachments</button><button type="button" id="editHandoffBottom">Change selections</button><button type="button" data-close>Keep it private</button></div>
+      <p class="dialog-status" id="handoffReviewStatus" role="status" aria-live="polite"></p>
+    </section>
+  </dialog>
+
+  <dialog class="dialog dialog--attachments" id="attachmentPacketDialog">
+    <button class="dialog-close" type="button" data-close aria-label="Close">×</button>
+    <span class="hand">files stay separate</span>
+    <h2>Prepare attachments</h2>
+    <p>Choose the version you intend to share and review every selected file. Safety Hall will create a list. It will not create a bundle or send a message.</p>
+    <section id="attachmentBuilder">
+      <div class="attachment-boundary"><b>Default: keep private</b><p>Originals may contain names, metadata, notifications, background details, or unrelated messages. A redacted image is a separate copy; the original remains unchanged.</p></div>
+      <div class="attachment-decision-list" id="attachmentDecisionList"></div>
+      <div class="dialog-actions"><button type="button" id="previewAttachmentManifest" disabled>Review attachment manifest</button><button type="button" data-close>Leave files private</button></div>
+      <p class="dialog-status" id="attachmentBuilderStatus" role="status" aria-live="polite"></p>
+    </section>
+    <section id="attachmentReview" hidden>
+      <div class="handoff-review-heading"><div><span class="eyebrow">Exact manifest preview</span><h3>No file is embedded</h3></div><button type="button" id="editAttachmentDecisions">Change decisions</button></div>
+      <pre class="handoff-preview" id="attachmentManifestPreview" tabindex="0"></pre>
+      <label class="consent-check"><input id="attachmentManifestReviewCheck" type="checkbox" /> <span>I reviewed this manifest and understand that I must attach each reviewed file separately.</span></label>
+      <div class="dialog-actions dialog-actions--row"><button type="button" id="downloadAttachmentManifest" disabled>Download reviewed manifest</button><button type="button" id="editAttachmentDecisionsBottom">Change decisions</button><button type="button" data-close>Keep files private</button></div>
+      <p class="dialog-status" id="attachmentReviewStatus" role="status" aria-live="polite"></p>
+    </section>
+  </dialog>
+
+  <dialog class="dialog" id="routeDialog">
+    <button class="dialog-close" type="button" data-close aria-label="Close">×</button><span class="hand">Safety Hall</span><h2 id="routeTitle"></h2><p id="routeCopy"></p><div id="routeBody"></div>
+  </dialog>
+
+  <dialog class="dialog" id="transcriptDialog">
+    <button class="dialog-close" type="button" data-close aria-label="Close">×</button>
+    <span class="hand">original audio stays separate</span>
+    <h2>Your optional transcript</h2>
+    <p>A transcript can make a recording easier to search and review. You can edit it, but it is not the original recording.</p>
+    <section class="transcript-consent" id="transcriptConsent">
+      <div class="safety-list">
+        <p><b>This prototype will not send or automatically transcribe your audio.</b> Automatic transcription stays unavailable until Safety Hall can name the processor, retention policy, and privacy boundary.</p>
+        <p><b>You can write or paste a transcript now.</b> It will be stored with this entry in the same browser. Your original recording will remain separate and unchanged.</p>
+      </div>
+      <label class="consent-check"><input id="transcriptConsentCheck" type="checkbox" /> <span>I understand that I am creating an editable transcript myself and no audio is being sent.</span></label>
+      <div class="dialog-actions"><button type="button" id="beginTranscript" disabled>Write or paste a transcript</button></div>
+    </section>
+    <section class="transcript-editor" id="transcriptEditor" hidden>
+      <label class="field"><span>Editable transcript</span><textarea id="transcriptText" rows="10" placeholder="Type or paste what was said. You can correct or leave out anything you do not want here."></textarea></label>
+      <p class="transcript-separation"><b>Original audio:</b> unchanged and stored separately on this device.</p>
+      <div class="dialog-actions dialog-actions--row"><button type="button" id="saveTranscript">Save transcript</button><button type="button" id="removeTranscript">Remove transcript text</button><button type="button" data-close>Not now</button></div>
+      <p class="dialog-status" id="transcriptStatus" role="status" aria-live="polite"></p>
+    </section>
+  </dialog>
+
+  <dialog class="dialog" id="imageDetailsDialog">
+    <button class="dialog-close" type="button" data-close aria-label="Close">×</button>
+    <span class="hand">original image stays separate</span>
+    <h2>Optional screenshot details</h2>
+    <p>Add only what will help future-you understand or organize this image. Nothing here changes the original screenshot.</p>
+    <div class="image-details-grid">
+      <label class="field"><span>What kind of item is this? <em>optional</em></span><select id="imageArtifactType"><option value="">Leave unnamed</option><option>Email</option><option>Text or chat conversation</option><option>Poster or public notice</option><option>Handwritten or visual note</option><option>Photograph</option><option>Social media</option><option>Document</option><option>Other</option></select></label>
+      <label class="field"><span>Related group or conversation <em>optional</em></span><input id="imageGroupLabel" type="text" placeholder="For example: May emails or team chat" /></label>
+      <label class="field"><span>Order within that group <em>optional</em></span><input id="imageSequence" type="number" min="1" step="1" inputmode="numeric" placeholder="1" /></label>
+      <label class="field"><span>Displayed sender, people, or audience <em>optional</em></span><input id="imageDisplayedPeople" type="text" placeholder="Only what is visibly shown or known to you" /></label>
+      <label class="field"><span>Displayed date or time <em>optional</em></span><input id="imageDisplayedAt" type="text" placeholder="Keep it as shown in the image" /></label>
+      <label class="field"><span>Where it came from or where you saw it <em>optional</em></span><input id="imageSourceContext" type="text" placeholder="Email inbox, workplace wall, group chat…" /></label>
+      <label class="field image-details-wide"><span>What should future-you know about this image? <em>optional</em></span><textarea id="imageContextNote" rows="3" placeholder="What happened before or afterward, why you saved it, or nothing yet…"></textarea></label>
+      <label class="field image-details-wide"><span>Visible words you want searchable <em>optional</em></span><textarea id="imageVisibleText" rows="5" placeholder="Type or paste only what you want stored. No text is extracted automatically."></textarea><small>User-authored text · not OCR</small></label>
+      <label class="field image-details-wide"><span>Your description of imagery, placement, or symbols <em>optional</em></span><textarea id="imageVisualDescription" rows="4" placeholder="A photo, layout, gesture, symbol, who could see it, or what stood out…"></textarea></label>
+    </div>
+    <p class="transcript-separation"><b>Original screenshot:</b> unchanged and stored separately on this device. Names and dates are saved as context. Safety Hall does not verify them.</p>
+    <div class="dialog-actions dialog-actions--row"><button type="button" id="saveImageDetails">Save added details</button><button type="button" id="removeImageDetails">Remove added details</button><button type="button" data-close>Not now</button></div>
+    <p class="dialog-status" id="imageDetailsStatus" role="status" aria-live="polite"></p>
+  </dialog>
+
+  <dialog class="dialog dialog--redaction" id="redactionDialog">
+    <button class="dialog-close" type="button" data-close aria-label="Close">×</button>
+    <span class="hand">make a separate share copy</span>
+    <h2>Cover what you do not want to share</h2>
+    <p>Drag over names, faces, account details, unrelated messages, or anything else that should stay private. Safety Hall creates a new PNG on this device; your original screenshot remains unchanged.</p>
+    <div class="redaction-safety">
+      <b>Look beyond the obvious.</b>
+      <span>Check quoted replies, notification previews, avatars, signatures, dates, file names, QR codes, addresses, and details visible around the main message.</span>
+    </div>
+    <div class="redaction-stage" id="redactionStage" aria-busy="true">
+      <canvas id="redactionCanvas" tabindex="0" role="img" aria-label="Screenshot redaction preview. Drag across the image to add an opaque cover."></canvas>
+      <p id="redactionLoading">Preparing a local preview…</p>
+    </div>
+    <p class="redaction-help">Mouse or touch: drag to add a solid cover. Covers are permanently flattened into the downloaded copy and cannot be uncovered from that PNG.</p>
+    <div class="redaction-toolbar">
+      <button type="button" id="undoRedaction" disabled>Undo last cover</button>
+      <button type="button" id="clearRedactions" disabled>Clear covers</button>
+      <span id="redactionCount" role="status" aria-live="polite">No areas covered yet</span>
+    </div>
+    <details class="redaction-keyboard">
+      <summary>Add a cover without dragging</summary>
+      <p>Enter percentages of the image. Left and top locate the cover; width and height set its size.</p>
+      <div class="redaction-number-grid">
+        <label class="field"><span>Left %</span><input id="redactionLeft" type="number" min="0" max="99" step="1" value="0" /></label>
+        <label class="field"><span>Top %</span><input id="redactionTop" type="number" min="0" max="99" step="1" value="0" /></label>
+        <label class="field"><span>Width %</span><input id="redactionWidth" type="number" min="1" max="100" step="1" value="25" /></label>
+        <label class="field"><span>Height %</span><input id="redactionHeight" type="number" min="1" max="100" step="1" value="10" /></label>
+      </div>
+      <button class="secondary secondary--small" type="button" id="addNumericRedaction">Add this cover</button>
+    </details>
+    <label class="consent-check redaction-review"><input id="redactionReviewCheck" type="checkbox" disabled /> <span>I reviewed the entire share copy and covered everything I do not want included.</span></label>
+    <p class="transcript-separation"><b>Privacy boundary:</b> No OCR, face detection, or automatic guessing is used. This tool cannot know what is sensitive. The downloaded PNG is a new file and may be resized to keep local processing reliable.</p>
+    <div class="dialog-actions dialog-actions--row"><button type="button" id="downloadRedacted" disabled>Download reviewed redacted copy</button><button type="button" data-close>Keep original only</button></div>
+    <p class="dialog-status" id="redactionStatus" role="status" aria-live="polite"></p>
+  </dialog>
+
+  <dialog class="dialog" id="safetyDialog">
+    <button class="dialog-close" type="button" data-close aria-label="Close">×</button><span class="hand">know what this prototype can protect</span><h2>Device safety</h2>
+    <div class="safety-list">
+      <p><b>Text, recordings, and uploaded files stay in this browser.</b> They are not sent to Practice Village, but anyone with access to this browser profile may be able to find them.</p>
+      <p><b>Quick exit replaces this page.</b> It does not erase browser history, downloads, device backups, or activity visible to an administrator.</p>
+      <p><b>A personal device is safest.</b> Avoid a work or shared device when documenting sensitive experiences.</p>
+      <p><b>Microphone access is reused only while this page stays open.</b> You can release it at any time. Safety Hall also releases it when you use discreet view, quick exit, or leave the page.</p>
+      <p><b>Screenshots are kept as their original local files.</b> This prototype does not read them, extract their text, or analyze their contents.</p>
+      <p><b>Exports contain authored text, editable transcripts, screenshot context, and metadata only.</b> Download original recordings or files separately from a saved entry. Redacted screenshots are created only when you choose and downloaded as separate PNG copies.</p>
+    </div>
+    <div class="storage-check">
+      <b>Browser storage protection</b>
+      <p id="storageCheckCopy">Checking whether this browser may automatically clear local Safety Hall data…</p>
+      <button type="button" id="requestStorageProtection">Ask this browser to protect local data</button>
+      <p class="dialog-status" id="storageCheckStatus" role="status" aria-live="polite"></p>
+      <small>This can reduce automatic browser cleanup. It is not a backup and does not prevent someone from clearing browser data.</small>
+    </div>
+    <div class="dialog-actions dialog-actions--row"><button type="button" id="safetyDiscreet">Use discreet view</button><button type="button" id="safetyDelete">Delete all Safety Hall data</button><button type="button" data-close>Close</button></div>
+  </dialog>
+
+  <template id="entryTemplate">
+    <article class="saved-entry">
+      <div class="saved-entry__meta"><span class="saved-entry__area"></span><time></time></div><h3></h3><p></p>
+      <div class="saved-entry__tags"></div><div class="saved-entry__media"></div>
+      <div class="saved-entry__actions"><button type="button" data-entry-action="open">Open or add more</button><button type="button" data-entry-action="pil">Add to PIL</button><button type="button" data-entry-action="delete">Delete</button></div>
+    </article>
+  </template>
+
+  <script src="/safety-controls.js?v=2"></script>
+  <script src="/safety-resources.js?v=2"></script>
+  <script src="/safety-hall.js?v=17"></script>
+</body>
+</html>
