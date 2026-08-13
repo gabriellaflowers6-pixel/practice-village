@@ -2,6 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <script>
+    // Netlify Identity sends invitation and recovery links to the site root.
+    // Move those links to the account screen without losing the secure token.
+    if (/^#(?:invite_token|recovery_token|confirmation_token|email_change_token)=/.test(window.location.hash)) {
+      window.location.replace("/login" + window.location.hash);
+    }
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Practice Village: a digital community center for women, built the way a YWCA serves a town</title>
   <meta name="description" content="Practice Village is a digital community center for women, built the way a YWCA serves a town. Women focused, open to all. One membership opens every room: Moxie Studios, the Kitchen, HUSH, and more. Your Concierge clears the confusion so you can take the next step." />
