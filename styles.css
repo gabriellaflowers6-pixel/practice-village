@@ -1448,6 +1448,9 @@ body{
 .prefooter__grass--l{ left:0.5%; transform:scaleX(-1); opacity:.8; }
 .footer{ border-top:0; }
 
+/* room titles were washing out: serif at weight 400 with no explicit color */
+.room__front h4{ color:var(--ink); font-weight:600; }
+
 /* nav overflow guard: script.js sets .is-crowded when the row cannot fit,
    whatever the visitor's font size or zoom. Reuses the menu-button layout. */
 .nav__brand{ flex:0 0 auto; }
