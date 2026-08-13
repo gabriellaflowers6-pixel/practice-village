@@ -23,7 +23,7 @@ function welcomePage() {
   <main class="welcome-main">
     <section class="welcome-intro" aria-labelledby="welcomeTitle">
       <h1 id="welcomeTitle">Welcome.</h1>
-      <p>We have a few optional onboarding questions to help improve your Practice Village experience.</p>
+      <p>We have a few optional onboarding questions to help improve your Practice&nbsp;Village&nbsp;experience.</p>
       <p>You can <strong>talk, type, or skip</strong> any question.</p>
       <p>It should only take about two minutes.</p>
     </section>
