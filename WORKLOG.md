@@ -3,6 +3,11 @@ RESULT: DONE locally, commit d586b66 on main, NOT pushed, NOT deployed — await
 JoYi's preview approval. Full-page desktop + mobile QA passed (no horizontal
 overflow, all sections re-toned, hero matches the mock, logo center dot = CTA
 orange #A84214). Cache-buster bumped styles.css?v=94.
+UPDATE 20:50 JST: botanicals restored per JoYi (they were in the mock + old live hero).
+Extracted from the reference mock: hero branch + dried-flower cluster (transparent
+PNGs, assets/flora-branch.png + flora-cluster.png) and golden grasses riding a new
+CSS wave divider above the footer (assets/flora-grass.png + .prefooter block).
+styles.css?v=95. Still local only, no push/deploy.
 UI ONLY, landing page. New palette from "TPV header example.png" + "MoxieStudiosHeader.png"
 (Downloads): warm cream ground, deep chocolate brown dark panels, metallic gold accents,
 deeper burnt orange CTAs (#A84214), navy kept for the Practice Village wordmark; logo
