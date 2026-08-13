@@ -463,4 +463,33 @@
 
   var y = document.getElementById("year");
   if (y) y.textContent = new Date().getFullYear();
+
+  /* ============ nav overflow guard (2026-08-13) ============
+     Width breakpoints alone cannot predict this: the row's real width depends
+     on the visitor's font rendering, browser zoom, and minimum-font-size
+     setting. Measure the row and fall back to the menu button whenever the
+     links plus the CTA would not fit, whatever the viewport says. */
+  (function () {
+    var navEl = document.getElementById("nav");
+    if (!navEl) return;
+    var brand = navEl.querySelector(".nav__brand");
+    var links = navEl.querySelector(".nav__links");
+    var cta = navEl.querySelector(".nav__cta");
+    if (!brand || !links || !cta) return;
+
+    function fitNav() {
+      if (navEl.classList.contains("is-open")) return;
+      navEl.classList.remove("is-crowded");
+      if (getComputedStyle(links).display === "none") return; // CSS already compact
+      var cs = getComputedStyle(navEl);
+      var gap = parseFloat(cs.columnGap || cs.gap) || 0;
+      var room = navEl.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      var needed = brand.offsetWidth + links.scrollWidth + cta.offsetWidth + gap * 2;
+      if (needed > room - 8) navEl.classList.add("is-crowded");
+    }
+
+    fitNav();
+    window.addEventListener("resize", fitNav, { passive: true });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitNav).catch(function () {});
+  })();
 })();

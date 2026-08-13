@@ -8,6 +8,15 @@ Extracted from the reference mock: hero branch + dried-flower cluster (transpare
 PNGs, assets/flora-branch.png + flora-cluster.png) and golden grasses riding a new
 CSS wave divider above the footer (assets/flora-grass.png + .prefooter block).
 styles.css?v=95. Still local only, no push/deploy.
+UPDATE 21:15 JST: JoYi rejected that pass (washed-out ghosts, not the reference).
+Redone properly: the tall gold leaf sprays were extracted from MoxieStudiosHeader.png
+(1122x1402 source, local-contrast keyed off the dark ground, baked in gold, bbox
+trimmed) and now frame the hero left and right like the reference card.
+flora-branch.png + flora-cluster.png DELETED. Also fixed the nav clipping JoYi
+screenshotted: breakpoints cannot predict it (visitor font size / zoom / min-font
+setting change the row width), so script.js now measures the row and falls back to
+the menu button via .is-crowded. Verified by forcing oversized nav type: collapses
+cleanly, menu opens, zero page overflow. styles.css?v=97, script.js?v=38.
 UI ONLY, landing page. New palette from "TPV header example.png" + "MoxieStudiosHeader.png"
 (Downloads): warm cream ground, deep chocolate brown dark panels, metallic gold accents,
 deeper burnt orange CTAs (#A84214), navy kept for the Practice Village wordmark; logo
