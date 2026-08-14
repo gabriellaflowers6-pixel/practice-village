@@ -203,3 +203,7 @@ p,li,.member-card p,.onboarding-help,.welcome-intro p{text-wrap:pretty}
 .saved-card__notelabel{display:grid;gap:5px;font-size:.8rem;font-weight:650}
 .saved-card__notelabel textarea{width:100%;resize:vertical;border:1px solid var(--line);border-radius:10px;padding:10px;font:.95rem/1.5 var(--sans);color:var(--ink);background:#fff}
 .saved-card__notelabel textarea:focus{outline:3px solid rgba(199,154,82,.22);border-color:var(--gold)}
+
+/* short standalone lines hold together on desktop instead of breaking mid-thought */
+.shelf-close{max-width:none;margin-top:18px}
+@media(min-width:921px){.shelf-close{white-space:nowrap}}

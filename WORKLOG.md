@@ -1,3 +1,16 @@
+### 2026-08-15 — K1 closing line + K1 AND L4 TO PROD (JoYi's bot, STARTED 04:15 JST)
+JoYi's walkthrough note: the Kitchen closing line must hold ONE line on desktop, with a
+standing instruction to stop breaking sentences like it. Root cause: .record-note caps
+at 640px, and the line only needs 769px of the 1121px available, so the cap alone was
+breaking it. New .shelf-close class (max-width:none, nowrap at min-width:921px only).
+Verified: one line at 1161px, three lines on mobile 375px, no overflow at either.
+Recorded as a durable rule in the PHASES copy gate: short standalone display lines hold
+on one line at desktop; never break a closing line because a max-width was inherited
+from a paragraph style.
+PROD: shipping K1 (the Kitchen room, ten verified entries in two groups, JoYi's copy),
+L4 (What happened notes) which was already prod, and the scoped nowrap fix that stops
+/hush and /record scrolling sideways. Verify appended below.
+
 ### 2026-08-15 — K1 BUILT: the Kitchen room, and a nowrap regression caught (JoYi's bot, STARTED 03:20, STOPPED 04:10 JST)
 K1 on JoYi's GO. Shelf approved by her from the proposed list: PCRM CUT by JoYi;
 MyPlate and CDC Nutrition dropped because both return Forbidden from our network and

@@ -34,7 +34,9 @@ This file is only the order of work and the method for walking through it.
    in one place. Plain language, first person, specific enough to act on, no therapy
    voice. "Heaviest," "pressure point," and their whole family of polished AI language
    are banned. Nobody walks up to a front desk and performs insight; she says
-   "I need help with housing," and the system helps.
+   "I need help with housing," and the system helps. Short standalone display lines
+   hold on one line at desktop widths: never break a closing line mid-thought because
+   a max-width was inherited from a paragraph style.
 
 ---
 
@@ -158,8 +160,9 @@ and every link. Does not check: resource data structure.
 
 ## Phase K1: The Kitchen room (added on JoYi's ruling 2026-08-15)
 
-**Status: BUILT 2026-08-15. Shelf approved by JoYi (PCRM cut by her; MyPlate and CDC
-dropped as unverifiable). Room copy is JoYi's verbatim. On draft.**
+**Status: SHIPPED 2026-08-15. Shelf approved by JoYi (PCRM cut by her; MyPlate and CDC
+dropped as unverifiable). Room copy is JoYi's verbatim. She walked the draft, asked for
+the closing line to hold one line on desktop, and gave the GO.**
 
 The Kitchen gets exactly what HUSH got: a member room holding the app plus a vetted
 shelf. PlantLuck alone is not the room.
