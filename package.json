@@ -7,6 +7,7 @@
   "dependencies": {
     "@netlify/blobs": "^10.7.13",
     "@netlify/identity": "latest",
+    "pdf-lib": "^1.17.1",
     "stripe": "^22.5.0"
   },
   "devDependencies": {

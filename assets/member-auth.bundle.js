@@ -1231,6 +1231,74 @@ function initSavedCards() {
   function unavailable() {
     wrap.replaceChildren(line("Your Record is temporarily unavailable. Nothing has been removed."));
     state.textContent = "Temporarily unavailable";
+    document.getElementById("recordActions")?.replaceChildren();
+  }
+  function markdownFile() {
+    const now = /* @__PURE__ */ new Date();
+    const longDate = now.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+    const lines = [
+      "# Your Record",
+      "",
+      "The Personal Intelligence Layer",
+      "Practice Village \xB7 thepracticevillage.org",
+      `Downloaded: ${longDate}`,
+      "",
+      "Entries in this record were chosen and kept by the member from conversations with the Practice Village Concierge. Verify details before acting on them.",
+      "",
+      "---",
+      ""
+    ];
+    for (const card of cards) {
+      lines.push(`## ${card.text}`, "");
+      const date = savedOn(card.savedAt);
+      if (date) lines.push(`Kept: ${date}`, "");
+      const detail = card.detail;
+      if (detail?.kind === "search") {
+        lines.push("Run this search:", "", "```", detail.query, "```", "");
+        if (detail.trustNote) lines.push(detail.trustNote, "");
+        if (detail.steps?.length) {
+          lines.push("Steps:");
+          for (const step of detail.steps) lines.push(`- [ ] ${step}`);
+          lines.push("");
+        }
+      } else if (detail?.kind === "resources") {
+        lines.push("Places to look:");
+        for (const item of detail.items || []) lines.push(`- [${item.name}](${item.href})${item.detail ? ` \xB7 ${item.detail}` : ""}`);
+        lines.push("");
+        if (detail.sourceNote) lines.push(detail.sourceNote, "");
+      }
+      lines.push("---", "");
+    }
+    return { name: `your-record-${now.toISOString().slice(0, 10)}.md`, content: lines.join("\n") };
+  }
+  function downloadMarkdown() {
+    const file = markdownFile();
+    const url = URL.createObjectURL(new Blob([file.content], { type: "text/markdown" }));
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = file.name;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 4e3);
+  }
+  function renderActions() {
+    const actions = document.getElementById("recordActions");
+    if (!actions) return;
+    if (!cards.length) {
+      actions.replaceChildren();
+      return;
+    }
+    const markdown = document.createElement("button");
+    markdown.type = "button";
+    markdown.className = "secondary-button";
+    markdown.textContent = "Download as Markdown";
+    markdown.addEventListener("click", downloadMarkdown);
+    const pdf = document.createElement("a");
+    pdf.className = "secondary-button";
+    pdf.href = "/record-export";
+    pdf.textContent = "Download as PDF";
+    actions.replaceChildren(markdown, pdf);
   }
   async function removeCard(card, item) {
     item.replaceChildren(line(card.text, "saved-card__text"), line("Removing\u2026", "saved-card__status"));
@@ -1330,6 +1398,7 @@ function initSavedCards() {
     if (!cards.length) {
       wrap.replaceChildren(line("You have not kept anything yet. At the end of a conversation at the front desk, you choose what to keep. It lands here."));
       state.textContent = "Nothing kept yet";
+      renderActions();
       return;
     }
     const list = document.createElement("ul");
@@ -1355,6 +1424,7 @@ function initSavedCards() {
     }
     wrap.append(line("Removing something here clears it from your Record. It does not change what the Concierge remembers about you.", "room-note"));
     state.textContent = cards.length === 1 ? "1 kept" : `${cards.length} kept`;
+    renderActions();
   }
   return (async () => {
     try {

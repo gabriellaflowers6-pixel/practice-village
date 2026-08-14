@@ -1,3 +1,27 @@
+### 2026-08-14 — R2 BUILT: the Record downloads, Markdown + PDF (JoYi's bot, STARTED 16:30, STOPPED 17:15 JST)
+Phase R2 on JoYi's GO. Footer ruling captured after her best-practice question: every
+page carries Practice Village · thepracticevillage.org · downloaded date · Page N of M;
+the provenance line (entries chosen and kept by the member from Concierge conversations,
+verify before acting) appears once under the title, both formats.
+FILES: netlify/functions/_shared/record-pdf.mjs (new, pdf-lib composition: WinAnsi
+sanitizing, word wrap with char-break for long queries/URLs, two-pass footer stamping),
+netlify/functions/record-export.mjs (new, gated /record-export, same auth + test-key
+read pattern as member-onboarding, 404 when nothing kept, attachment
+your-record-YYYY-MM-DD.pdf), member-auth.js (markdownFile + downloadMarkdown built in
+the browser from the on-screen record, nothing sent; renderActions row on /record only,
+clears when the record empties), netlify/functions/member-record.mjs (recordActions div),
+assets/member.css (.record-actions), package.json (+pdf-lib), busters member.css v13 +
+bundle v11.
+MARKDOWN SHAPE (second brain): # Your Record header w/ brand + download date + verify
+line, ## per kept thing with Kept date, searches as fenced code + checklist steps,
+resources as [name](href) · detail lists.
+VERIFIED: 3-page fixture PDF composed locally and READ page by page (title block, clay
+accents, entries with links/steps, footer with page counts on every page); harness on
+/record markup renders both buttons and the captured .md blob matches the shape exactly,
+with JoYi's real saved cards in the fixture. Unauth /record-export = 401 (verified on
+draft below). NOT verified without JoYi: her authed download round trip.
+SHARED SURFACES: package.json dependency added (pdf-lib). Draft only.
+
 ### 2026-08-14 — R1 TO PROD on JoYi's GO (JoYi's bot, STARTED 16:00 JST)
 JoYi walked the fixed draft, saw her two cards in the Record room, ready to move on.
 Pushing main and deploying prod: R1 complete (consent-pattern capture, the ending,

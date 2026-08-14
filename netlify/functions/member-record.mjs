@@ -13,7 +13,7 @@ function recordPage() {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/member.css?v=12" />
+  <link rel="stylesheet" href="/assets/member.css?v=13" />
 </head>
 <body data-auth-page="record">
   <header class="member-header">
@@ -27,7 +27,7 @@ function recordPage() {
       <p>Everything you chose to keep, from the front desk and across the Village. Yours to read, remove, and take with you.</p>
     </section>
     <section class="member-grid" aria-label="Your Record">
-      <article class="member-card member-card--record"><div id="savedCards" class="saved-cards"><p id="savedCardsCopy">Checking your Record…</p></div><span id="savedCardsState" class="member-state">Yours to keep or clear</span></article>
+      <article class="member-card member-card--record"><div id="savedCards" class="saved-cards"><p id="savedCardsCopy">Checking your Record…</p></div><div id="recordActions" class="record-actions"></div><span id="savedCardsState" class="member-state">Yours to keep or clear</span></article>
     </section>
     <section class="member-section">
       <p class="eyebrow">Privacy</p>
@@ -35,7 +35,7 @@ function recordPage() {
       <p class="record-note">What you keep here travels with your membership. What you document in Safety Hall stays on your device and is never sent to us. Removing something here removes it for good.</p>
     </section>
   </main>
-  <script type="module" src="/assets/member-auth.bundle.js?v=10"></script>
+  <script type="module" src="/assets/member-auth.bundle.js?v=11"></script>
 </body>
 </html>`;
 }
