@@ -1,3 +1,7 @@
+### 2026-08-14 — R3 TO PROD on JoYi's GO (JoYi's bot, STARTED 19:00 JST)
+HUSH room live: /hush gated room, her copy verbatim, app hero, 7-entry shelf with the
+Moxie space. Pushing main + prod deploy. Verify appended below.
+
 ### 2026-08-14 — HUSH room copy: JoYi's words, verbatim (JoYi's bot, STARTED 18:40, STOPPED 18:55 JST)
 JoYi supplied the room copy after the draft walkthrough started. Applied verbatim to
 netlify/functions/member-hush.mjs: welcome "Calm is a skill." + her two intro

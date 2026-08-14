@@ -137,6 +137,9 @@ Practice Village. Does not check: file-generation code.
 
 ## Phase R3: The HUSH room
 
+**Status: SHIPPED 2026-08-14. Shelf list approved with JoYi's Moxie addition; room
+copy is JoYi's verbatim; her GO sent it to prod.**
+
 **Governing lines:** MEMBERSHIP_ACCESS_PLAN.md (additional HUSH mindfulness apps and
 resources as they open); AUGUST_13_SESSION_AUDIT.md product rule 7 (HUSH is the room
 and the app); CONCIERGE_SCOPE.md HUSH tier list: UCLA MARC, Palouse Mindfulness,
