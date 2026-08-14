@@ -1,3 +1,16 @@
+### 2026-08-15 — The prompt now speaks the house voice it enforces (JoYi's bot, STARTED 00:50, STOPPED 01:10 JST)
+JoYi caught "which is louder" surviving copy rule after copy rule. ROOT CAUSE, owned:
+the ban lists named words while the prompt's own TOPIC GUIDANCE still spoke in the
+banned voice ("ask which is louder," "sandwich load," "one thread pulled," my own
+"take the weight off"), and the model copies its instructions' diction far more than
+it obeys a ban list. STRUCTURAL FIX in concierge.mjs: (1) every guidance sentence
+rewritten in the register (housing: "ask which is the bigger problem right now";
+caregiving: plain naming + AAA source; stuck: "pick one thing to work on first";
+core pattern: "shrink it to what is in front of her today"); (2) the metaphor FAMILY
+banned by pattern: no sensory metaphors for her problems, nothing louder, heavier,
+noisier, or sitting with her; ask about facts, amounts, dates, and choices.
+Live-tested on the draft below. SHARED SURFACES: none. Draft only.
+
 ### 2026-08-15 — TRACEABLE, ALWAYS: sources named in the sentence and carried into the PIL (JoYi's bot, STARTED 00:25, STOPPED 00:45 JST)
 JoYi's ruling: no blowing smoke; every fact traceable. Three layers, two built this
 pass, one verified already true:
