@@ -4,7 +4,10 @@ downloads above the danger, and the two-deletion split with type-to-confirm on b
 This closes MEMBERSHIP_ACCESS_PLAN release boundary item 4. Pushing main + prod deploy.
 STANDING CAUTION carried forward: the close-account path is destructive and has still
 never been run end to end against a real account. Walk it with a test member before
-anyone relies on it. Verify appended below.
+anyone relies on it. PROD VERIFIED LIVE (pushed f820906..e593908): /, /login, /safety-hall, /privacy,
+/terms all 200; /member, /account, /record, /kitchen, /hush, /welcome all 302 gates;
+/member-practice, /member-onboarding, /record-export all 401; an unauthenticated
+close_account POST returns 401; member.css v23 + bundle v18 serve 200. STOPPED 06:15 JST.
 
 ### 2026-08-15 — R5 BUILT: account controls (JoYi's bot, STARTED 05:00, STOPPED 05:50 JST)
 Phase R5 on JoYi's GO, her two rulings applied: TWO-DELETION SPLIT, and login-side
