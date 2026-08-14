@@ -19,7 +19,12 @@ opens focused, guard line present, Save renders the note and flips the button to
 Cancel keeps the existing note, Remove note clears the note and leaves the card, the
 Markdown download carries "**What happened:** ...", no horizontal overflow.
 NOT verified without JoYi: her authed round trip.
-PROD: pushing main and deploying everything from today. Verify appended below.
+PROD VERIFIED LIVE (pushed 22f0eb3..5bba6f1, deploy from repo root): /, /login,
+/safety-hall 200; /member, /record, /hush, /welcome all 302 gates; member.css v20 +
+bundle v16 + script.js v39 serve 200; /member-practice, /member-onboarding,
+/record-export all 401 unauthenticated; bundle carries Add what happened, the come-back
+question, My Practice, Village Member; zero heaviest/PIL leftovers on the landing; live
+porch answers housing in the register with no banned words. STOPPED 03:05 JST.
 
 ### 2026-08-15 — L2 BUILT: the desk trade (JoYi's bot, STARTED 01:30, STOPPED 02:20 JST)
 Phase L2 on JoYi's GO, plus K1 added to PHASES on her Kitchen ruling.
