@@ -1378,19 +1378,71 @@ function initSavedCards() {
     if (detail.sourceNote) box.append(line(detail.sourceNote, "saved-card__note"));
     return box;
   }
+  function comeBackRow(card, item) {
+    const question = line("When do you want this back in front of you?", "saved-card__status");
+    const actions = document.createElement("span");
+    actions.className = "saved-card__actions";
+    const status = line("", "saved-card__status");
+    const send = async (when, date) => {
+      status.textContent = "Adding\u2026";
+      try {
+        await practiceApi({ action: "add_item", item: { title: card.text.slice(0, 160), when, ...date ? { date } : {}, href: "/record", linkLabel: "Open your Record", source: "record" } });
+        status.textContent = "Added to My Practice.";
+        window.setTimeout(() => fillRow(card, item), 1200);
+      } catch {
+        status.textContent = "That did not add. It is still kept here.";
+      }
+    };
+    const option = (label, handler) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "text-button";
+      button.textContent = label;
+      button.addEventListener("click", handler);
+      return button;
+    };
+    const dayInput = document.createElement("input");
+    dayInput.type = "date";
+    dayInput.className = "saved-card__day";
+    dayInput.hidden = true;
+    dayInput.addEventListener("change", () => {
+      if (dayInput.value) send("date", dayInput.value);
+    });
+    const tomorrow = () => {
+      const date = /* @__PURE__ */ new Date();
+      date.setDate(date.getDate() + 1);
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+    };
+    actions.append(
+      option("Tomorrow", () => send("date", tomorrow())),
+      option("This week", () => send("this_week")),
+      option("Choose a day", () => {
+        dayInput.hidden = false;
+        dayInput.focus();
+      }),
+      option("Back", () => fillRow(card, item))
+    );
+    item.replaceChildren(line(card.text, "saved-card__text"), question, actions, dayInput, status);
+  }
   function fillRow(card, item) {
     const text = line(card.text, "saved-card__text");
     const meta = document.createElement("span");
     meta.className = "saved-card__meta";
     const date = savedOn(card.savedAt);
     if (date) meta.textContent = `Kept ${date}`;
+    const comeBack = document.createElement("button");
+    comeBack.type = "button";
+    comeBack.className = "text-button saved-card__remove";
+    comeBack.textContent = "Come back to this";
+    comeBack.setAttribute("aria-label", `Come back to this: ${card.text}`);
+    comeBack.addEventListener("click", () => comeBackRow(card, item));
     const remove = document.createElement("button");
     remove.type = "button";
     remove.className = "text-button saved-card__remove";
     remove.textContent = "Remove";
     remove.setAttribute("aria-label", `Remove: ${card.text}`);
     remove.addEventListener("click", () => confirmRow(card, item));
-    meta.append(remove);
+    meta.append(comeBack, remove);
     if (card.detail) item.replaceChildren(text, detailNode(card.detail), meta);
     else item.replaceChildren(text, meta);
   }
@@ -1439,6 +1491,257 @@ function initSavedCards() {
     }
   })();
 }
+var practiceLocalDay = (date = /* @__PURE__ */ new Date()) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+var practiceAddDays = (day, count) => {
+  const [y, m, d] = day.split("-").map(Number);
+  const date = new Date(y, m - 1, d + count);
+  return practiceLocalDay(date);
+};
+async function practiceApi(body) {
+  const options = body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : { headers: { Accept: "application/json" } };
+  const response = await fetch("/member-practice", options);
+  const payload = await response.json().catch(() => null);
+  if (!response.ok || !payload?.ok) throw new Error(payload?.error || "My Practice is temporarily unavailable.");
+  return payload;
+}
+function practiceIcs(item) {
+  const escapeText = (t) => String(t).replace(/\\/g, "\\\\").replace(/[,;]/g, (ch) => `\\${ch}`);
+  const today = practiceLocalDay().replace(/-/g, "");
+  const start = item.when === "date" ? item.date.replace(/-/g, "") : today;
+  const stamp = (/* @__PURE__ */ new Date()).toISOString().replace(/[-:]/g, "").replace(/\.\d+Z$/, "Z");
+  const lines = [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Practice Village//My Practice//EN",
+    "BEGIN:VEVENT",
+    `UID:${item.id}@thepracticevillage.org`,
+    `DTSTAMP:${stamp}`,
+    `DTSTART;VALUE=DATE:${start}`,
+    ...item.when === "daily" ? ["RRULE:FREQ=DAILY"] : [],
+    `SUMMARY:${escapeText(item.title)}`,
+    ...item.href && /^https?:/i.test(item.href) ? [`URL:${item.href}`] : [],
+    "END:VEVENT",
+    "END:VCALENDAR"
+  ];
+  const url = URL.createObjectURL(new Blob([lines.join("\r\n")], { type: "text/calendar" }));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `my-practice-${item.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "item"}.ics`;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 4e3);
+}
+var VILLAGE_DATES = [
+  { id: "rebuild-arc-2026", title: "Rebuild Arc begins Oct 31", date: "2026-10-31", voucherLine: true, cta: { label: "Take a look", href: "#voucher" } },
+  { id: "live-classes-2027", title: "Live classes with JoYi begin February 7, 2027", date: "2027-02-07" }
+];
+function initMyPractice() {
+  const body = document.getElementById("practiceBody");
+  const villageWrap = document.getElementById("villageDates");
+  const listButton = document.getElementById("practiceViewList");
+  const weekButton = document.getElementById("practiceViewWeek");
+  if (!body || !listButton) return null;
+  let view = "list";
+  let items = [];
+  let voucherCovers = false;
+  let failed = false;
+  const el = (tag, className, text) => {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text != null) node.textContent = text;
+    return node;
+  };
+  const whenLabel = (item, today) => {
+    if (item.when !== "date") return null;
+    if (item.date <= today) return "Today";
+    if (item.date === practiceAddDays(today, 1)) return "Tomorrow";
+    const [y, m, d] = item.date.split("-").map(Number);
+    return new Date(y, m - 1, d).toLocaleDateString(void 0, { month: "short", day: "numeric" });
+  };
+  async function act(payload) {
+    try {
+      const result = await practiceApi(payload);
+      items = result.items;
+      view = result.view;
+      render();
+      return result;
+    } catch (error) {
+      const note = el("p", "practice-note", error.message);
+      body.prepend(note);
+      window.setTimeout(() => note.remove(), 4e3);
+      return null;
+    }
+  }
+  function itemRow(item, today, compact = false) {
+    const row = el(compact ? "span" : "li", compact ? "practice-chip" : "practice-item");
+    const check = el("button", "practice-check");
+    check.type = "button";
+    const doneToday = item.doneOn === today;
+    check.setAttribute("aria-pressed", String(doneToday));
+    check.setAttribute("aria-label", doneToday ? `${item.title}: done for today` : `Mark ${item.title} done for today`);
+    check.textContent = doneToday ? "\u2713" : "";
+    check.addEventListener("click", () => act({ action: "toggle_done", id: item.id, today }));
+    row.append(check);
+    const main = el(compact ? "span" : "div", "practice-item__main");
+    main.append(el("span", "practice-title", item.title));
+    if (!compact && item.href && item.linkLabel) {
+      const link = el("a", "practice-link", item.linkLabel);
+      link.href = item.href;
+      if (/^https?:/i.test(item.href)) {
+        link.target = "_blank";
+        link.rel = "noopener";
+      }
+      main.append(link);
+    }
+    if (!compact) {
+      const label = whenLabel(item, today);
+      if (label) main.append(el("span", "practice-when", label));
+      if (doneToday) main.append(el("span", "practice-done", "Done for today"));
+      const tools = el("span", "practice-tools");
+      const calendar = el("button", "text-button", "Add to my calendar");
+      calendar.type = "button";
+      calendar.addEventListener("click", () => practiceIcs(item));
+      const remove = el("button", "text-button", "Remove");
+      remove.type = "button";
+      remove.addEventListener("click", () => act({ action: "remove_item", id: item.id }));
+      tools.append(calendar, document.createTextNode(" \xB7 "), remove);
+      main.append(tools);
+    }
+    row.append(main);
+    return row;
+  }
+  function renderList(today) {
+    const groups = [
+      ["Today", items.filter((i) => i.when === "daily" || i.when === "date" && i.date <= today)],
+      ["Later this week", items.filter((i) => i.when === "this_week" || i.when === "date" && i.date > today && i.date <= practiceAddDays(today, 6))],
+      ["Later", items.filter((i) => i.when === "date" && i.date > practiceAddDays(today, 6))]
+    ];
+    for (const [name, groupItems] of groups) {
+      if (!groupItems.length) continue;
+      body.append(el("p", "practice-group", name));
+      const list = el("ul", "practice-list");
+      for (const item of groupItems) list.append(itemRow(item, today));
+      body.append(list);
+    }
+  }
+  function renderWeek(today) {
+    const grid = el("div", "practice-week");
+    for (let offset = 0; offset < 7; offset += 1) {
+      const day = practiceAddDays(today, offset);
+      const [y, m, d] = day.split("-").map(Number);
+      const cell = el("div", "practice-day");
+      cell.append(el("p", "practice-group", offset === 0 ? "Today" : new Date(y, m - 1, d).toLocaleDateString(void 0, { weekday: "short", day: "numeric" })));
+      const dayItems = items.filter((i) => i.when === "daily" || i.when === "date" && (offset === 0 ? i.date <= today : i.date === day));
+      for (const item of dayItems) cell.append(offset === 0 ? itemRow(item, today, false) : el("span", "practice-chip practice-chip--plain", item.title));
+      grid.append(cell);
+    }
+    body.append(grid);
+    const sometime = items.filter((i) => i.when === "this_week");
+    if (sometime.length) {
+      body.append(el("p", "practice-group", "Sometime this week"));
+      const list = el("ul", "practice-list");
+      for (const item of sometime) list.append(itemRow(item, today));
+      body.append(list);
+    }
+    const further = items.filter((i) => i.when === "date" && i.date > practiceAddDays(today, 6));
+    if (further.length) {
+      body.append(el("p", "practice-group", "Further out"));
+      const list = el("ul", "practice-list");
+      for (const item of further) list.append(itemRow(item, today));
+      body.append(list);
+    }
+  }
+  function render() {
+    const today = practiceLocalDay();
+    listButton.setAttribute("aria-pressed", String(view === "list"));
+    weekButton.setAttribute("aria-pressed", String(view === "week"));
+    body.replaceChildren();
+    if (failed) {
+      body.append(el("p", "practice-note", "My Practice is temporarily unavailable. Nothing has changed."));
+      return;
+    }
+    if (!items.length) {
+      body.append(el("p", "practice-note", "Nothing here yet."));
+      body.append(el("p", "practice-note", "When there's something you want to return to, you can add it from a room, your Record, or the Concierge."));
+      return;
+    }
+    if (view === "week") renderWeek(today);
+    else renderList(today);
+  }
+  function renderVillage() {
+    if (!villageWrap) return;
+    villageWrap.replaceChildren();
+    for (const event of VILLAGE_DATES) {
+      const row = el("div", "village-date");
+      row.append(el("b", null, event.title));
+      if (event.voucherLine && voucherCovers) row.append(el("span", "room-note", "Your voucher covers this."));
+      const actions = el("span", "village-date__actions");
+      if (event.cta) {
+        const cta = el("a", "text-button", event.cta.label);
+        cta.href = event.cta.href;
+        actions.append(cta);
+      }
+      const already = items.some((item) => item.source === "village" && item.title === event.title);
+      if (already) {
+        actions.append(el("span", "room-note", "Added to My Practice."));
+      } else {
+        const add = el("button", "text-button", "Add to My Practice");
+        add.type = "button";
+        add.addEventListener("click", async () => {
+          const result = await act({ action: "add_item", item: { title: event.title, when: "date", date: event.date, source: "village" } });
+          if (result) renderVillage();
+        });
+        actions.append(add);
+      }
+      row.append(actions);
+      villageWrap.append(row);
+    }
+  }
+  listButton.addEventListener("click", () => {
+    if (view !== "list") {
+      view = "list";
+      render();
+      act({ action: "set_view", view: "list" });
+    }
+  });
+  weekButton.addEventListener("click", () => {
+    if (view !== "week") {
+      view = "week";
+      render();
+      act({ action: "set_view", view: "week" });
+    }
+  });
+  (async () => {
+    try {
+      const result = await practiceApi();
+      items = result.items;
+      view = result.view;
+    } catch {
+      failed = true;
+    }
+    render();
+    renderVillage();
+  })();
+  return {
+    refresh: async () => {
+      try {
+        const r = await practiceApi();
+        items = r.items;
+        view = r.view;
+        failed = false;
+      } catch {
+        failed = true;
+      }
+      render();
+      renderVillage();
+    },
+    setVoucher: (covers) => {
+      voucherCovers = Boolean(covers);
+      renderVillage();
+    }
+  };
+}
 async function initMemberLobby() {
   const user = await getUser();
   if (!user || !hasMemberAccess(user)) {
@@ -1449,6 +1752,22 @@ async function initMemberLobby() {
   document.getElementById("memberName").textContent = name ? `, ${name.split(/\s+/)[0]}` : "";
   const roles = rolesFor(user);
   document.getElementById("memberPlan").textContent = roles.includes("founding_villager") ? "Founding Villager" : roles.some((role) => ["admin", "test_member"].includes(role)) ? "Village team" : "Member";
+  const practice = initMyPractice();
+  const plantluckAdd = document.getElementById("addPlantluckDaily");
+  plantluckAdd?.addEventListener("click", async () => {
+    plantluckAdd.disabled = true;
+    try {
+      await practiceApi({ action: "add_item", item: { title: "PlantLuck", when: "daily", href: "https://plantluck.org/", linkLabel: "Open PlantLuck", source: "kitchen" } });
+      document.getElementById("plantluckAddStatus").hidden = false;
+      plantluckAdd.hidden = true;
+      await practice?.refresh();
+    } catch {
+      plantluckAdd.disabled = false;
+      const status = document.getElementById("plantluckAddStatus");
+      status.textContent = "That did not add. Try again in a moment.";
+      status.hidden = false;
+    }
+  });
   try {
     const response = await fetch("/member-status", { headers: { Accept: "application/json" } });
     if (response.ok) {
@@ -1460,6 +1779,7 @@ async function initMemberLobby() {
         document.getElementById("voucherYear").textContent = "Test account";
       } else {
         const count = membership.workshopVoucherAllowance;
+        practice?.setVoucher(count >= 1);
         document.getElementById("voucherSummary").textContent = count === 2 ? "You have two workshop vouchers in this membership year, including the Founding Villager exception." : "You have one workshop voucher in this membership year.";
         const start = new Date(membership.membershipYearStart).toLocaleDateString(void 0, { month: "short", day: "numeric", year: "numeric" });
         const end = new Date(membership.membershipYearEnd).toLocaleDateString(void 0, { month: "short", day: "numeric", year: "numeric" });
@@ -2222,6 +2542,20 @@ async function initRoomShell() {
   document.getElementById("logoutButton")?.addEventListener("click", async () => {
     await logout();
     window.location.replace("/");
+  });
+  const hushAdd = document.getElementById("addHushDaily");
+  hushAdd?.addEventListener("click", async () => {
+    hushAdd.disabled = true;
+    try {
+      await practiceApi({ action: "add_item", item: { title: "HUSH \xB7 60 seconds", when: "daily", href: "https://hush-aidedeq.netlify.app/", linkLabel: "Open HUSH", source: "hush" } });
+      document.getElementById("hushAddStatus").hidden = false;
+      hushAdd.hidden = true;
+    } catch {
+      hushAdd.disabled = false;
+      const status = document.getElementById("hushAddStatus");
+      status.textContent = "That did not add. Try again in a moment.";
+      status.hidden = false;
+    }
   });
 }
 if (page === "login") initLogin();

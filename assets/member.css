@@ -115,3 +115,39 @@ p,li,.member-card p,.onboarding-help,.welcome-intro p{text-wrap:pretty}
 .shelf-item--soon{background:rgba(255,253,248,.6)}
 .shelf-item .room-tag{justify-self:start}
 @media(max-width:680px){.shelf{grid-template-columns:1fr}}
+/* My Practice: what she chose to keep within reach */
+.member-card--desk{grid-column:auto}
+.member-card--practice{display:grid;gap:10px;align-content:start}
+.practice-head{display:flex;justify-content:space-between;gap:14px;align-items:start}
+.practice-head h2{font-size:clamp(1.6rem,3vw,2.2rem)}
+.practice-head>div>p:not(.eyebrow){margin:.2rem 0 0;color:var(--soft);font-size:.92rem}
+.practice-toggle{display:flex;gap:6px;align-items:center;font-size:.82rem;color:var(--soft);white-space:nowrap;padding-top:.4rem}
+.practice-toggle .text-button{font-size:.82rem}
+.practice-toggle .text-button[aria-pressed="true"]{text-decoration:underline;color:var(--clay)}
+.practice-body{display:grid;gap:6px}
+.practice-note{margin:0;color:var(--soft);font-size:.9rem;line-height:1.5}
+.practice-group{margin:.5rem 0 0;font:700 .72rem var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--clay)}
+.practice-list{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.practice-item{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#FFFDF8}
+.practice-check{flex:0 0 auto;width:22px;height:22px;margin-top:.1rem;border:1.5px solid var(--line);border-radius:50%;background:#fff;color:var(--clay);font-size:.8rem;line-height:1;cursor:pointer;display:grid;place-items:center}
+.practice-check[aria-pressed="true"]{border-color:var(--clay);background:rgba(168,66,20,.08)}
+.practice-item__main{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;font-size:.92rem}
+.practice-title{font-weight:650}
+.practice-link{font-size:.82rem;font-weight:650}
+.practice-when,.practice-done{font-size:.76rem;color:var(--soft)}
+.practice-done{color:var(--clay);font-weight:650}
+.practice-tools{flex-basis:100%;font-size:.76rem;color:var(--soft)}
+.practice-tools .text-button{font-size:.76rem;text-decoration:underline;opacity:.85}
+.practice-week{display:grid;gap:8px}
+.practice-day{padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#FFFDF8}
+.practice-chip,.practice-chip--plain{display:inline-block;margin:.25rem .4rem 0 0;font-size:.82rem;color:var(--ink)}
+.village-dates{margin-top:6px;padding-top:12px;border-top:1px solid var(--line);display:grid;gap:6px}
+.village-dates__list{display:grid;gap:10px}
+.village-date{display:grid;gap:3px;font-size:.92rem}
+.village-date b{font-weight:650}
+.village-date__actions{display:flex;gap:14px;align-items:baseline;font-size:.8rem}
+.village-date__actions .text-button{font-size:.8rem;text-decoration:underline}
+.room-add{justify-self:start;text-decoration:underline;font-size:.8rem;color:var(--clay);text-align:left;padding:0}
+.room-add--ondark{color:#F5E8D4}
+.saved-card__day{width:max-content;margin-top:.4rem;padding:.5rem .6rem;border:1px solid var(--line);border-radius:8px;font:1rem var(--sans);color:var(--ink);background:#fff}
+@media(max-width:680px){.practice-head{flex-direction:column}.practice-toggle{padding-top:0}}

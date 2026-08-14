@@ -39,7 +39,7 @@ export function hushPage() {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/member.css?v=14" />
+  <link rel="stylesheet" href="/assets/member.css?v=15" />
 </head>
 <body data-auth-page="room">
   <header class="member-header">
@@ -54,7 +54,7 @@ export function hushPage() {
       <p>The goal is not to stay calm all the time. It is to get better at finding your way back.</p>
     </section>
     <section class="member-grid" aria-label="The HUSH app">
-      <article class="member-card member-card--wide"><p class="eyebrow">The app</p><h2>Sixty seconds. Let it settle.</h2><p>Shake the globe and watch, listen, and breathe. For one minute, there is nothing to answer, fix, finish, or get right. Just stop adding to the noise and notice what happens.</p><a href="https://hush-aidedeq.netlify.app/" target="_blank" rel="noopener">Open HUSH</a><p class="room-note">Free for everyone. No account. Nothing tracked.</p><p class="room-note">Best on your phone. Opens in a new tab so the Village stays open.</p></article>
+      <article class="member-card member-card--wide"><p class="eyebrow">The app</p><h2>Sixty seconds. Let it settle.</h2><p>Shake the globe and watch, listen, and breathe. For one minute, there is nothing to answer, fix, finish, or get right. Just stop adding to the noise and notice what happens.</p><a href="https://hush-aidedeq.netlify.app/" target="_blank" rel="noopener">Open HUSH</a><p class="room-note">Free for everyone. No account. Nothing tracked.</p><p class="room-note">Best on your phone. Opens in a new tab so the Village stays open.</p><button id="addHushDaily" class="text-button room-add room-add--ondark" type="button">Add HUSH daily</button><span id="hushAddStatus" class="room-note" hidden>Added. HUSH will be here each day.</span></article>
     </section>
     <section class="member-section">
       <div class="section-heading"><div><p class="eyebrow">The shelf</p><h2>More places to practice.</h2></div></div>
@@ -64,7 +64,7 @@ export function hushPage() {
       </div>
     </section>
   </main>
-  <script type="module" src="/assets/member-auth.bundle.js?v=12"></script>
+  <script type="module" src="/assets/member-auth.bundle.js?v=13"></script>
 </body>
 </html>`;
 }

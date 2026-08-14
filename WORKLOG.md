@@ -1,3 +1,31 @@
+### 2026-08-14 — L1 BUILT: My Practice (JoYi's bot, STARTED 21:00, STOPPED 22:10 JST)
+Phase L1 on JoYi's GO, her copy spec verbatim throughout (MEMBER_LOBBY_PRD.md is the
+contract). FILES: netlify/functions/member-practice.mjs (new, /member-practice: add,
+toggle done, remove, set_view on the member record, same auth + test-key pattern,
+50-item cap, dated items done before today are pruned, no history kept),
+netlify/functions/member.mjs (lobby layout: desk + My Practice side by side, Kitchen
+card gains Add PlantLuck daily, voucher moves below the rooms, Coming up card retired,
+its dates now live In the Village), netlify/functions/member-hush.mjs (Add HUSH daily
+on the app card), member-auth.js (initMyPractice: List | Week views defaulting List
+with the choice remembered, groups Today / Later this week / Later, In the Village
+subsection with voucher-aware line + Add to My Practice, Done for today with recurring
+return, Add to my calendar generating a device calendar file with daily recurrence,
+Remove; Record rows gain Come back to this with Tomorrow / This week / Choose a day;
+kitchen + hush add wiring), assets/member.css (practice styles), busters member.css
+v15 + bundle v13 on all five pages.
+GROUPS NOTE FOR JOYI: her spec named Today / Later this week / Ongoing; dates beyond
+this week (like an added Village date) needed a home, so a plain "Later" group exists;
+Ongoing appears when non-daily rhythms exist. Flag for her walkthrough.
+VERIFIED in harnesses running the real extracted source with the server contract
+stubbed: empty state verbatim; Kitchen add lands in Today with Open PlantLuck; daily
+calendar file carries FREQ=DAILY + URL; dated file carries the date; Done for today
+toggles and the label appears; Week view: 7 days, daily chips across, view choice
+survives reload; Remove works; village adds land in Later and the row flips to "Added
+to My Practice."; voucher line renders only when covered; Record flow posts exactly
+{title, when, date, href:/record} and restores the row; Back restores; no horizontal
+overflow. One robustness fix pre-deploy: the Kitchen handler now awaits the refresh.
+SHARED SURFACES: none. Draft only. L2 (desk trade) not started.
+
 ### 2026-08-14 — My Practice: JoYi's full copy spec recorded, L1-L3 phased (JoYi's bot, STARTED 20:30, STOPPED 20:50 JST)
 DOCS ONLY. JoYi named the personalized lobby area My Practice and supplied the complete
 copy spec verbatim (recorded in MEMBER_LOBBY_PRD.md as the build contract): List | Week
