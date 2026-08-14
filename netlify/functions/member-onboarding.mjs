@@ -143,7 +143,7 @@ export default async function handler(request) {
     const existing = Array.isArray(record.savedCards) ? record.savedCards : [];
     const kept = existing.filter((entry) => entry?.text !== text);
     if (kept.length === existing.length) {
-      return Response.json({ ok: false, error: "That is not in your saved things" }, { status: 404 });
+      return Response.json({ ok: false, error: "That is not in your Record" }, { status: 404 });
     }
     record.savedCards = kept;
   } else if (body.action === "founder_listing") {

@@ -296,6 +296,9 @@ JoYi checks: one test alert arrives; the public Concierge feels unchanged.
 
 ## Phase R7: Final pass
 
+**Status: TECHNICAL AUDIT DONE 2026-08-15, fixes on draft, awaiting JoYi's final
+experience walkthrough (hers by contract).**
+
 **Governing lines:** audit Phase 7 unchanged, plus: every link on both maps live or
 truthfully labeled; the landing, the plans, and the rooms tell one truth; the
 Meet your Concierge two-column layout verified on prod.

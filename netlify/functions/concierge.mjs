@@ -26,7 +26,7 @@ const MAX_CHARS = 1000;
 const FETCH_TIMEOUT = 6000;
 
 const ROUTES = {
-  moxie_studios: { label: "Moxie Studios, the Village's movement room", href: "/moxie-studio/" },
+  moxie_studios: { label: "Moxie Studios, the Village's movement room", href: "https://moxiestudio.netlify.app/" },
   kitchen: { label: "the Kitchen (PlantLuck), for meals from what you have", href: "https://plantluck.org/" },
   quiet_room: { label: "HUSH, free, for sixty seconds of calm", href: "https://hush-aidedeq.netlify.app/" },
   safety_hall: { label: "Safety Hall, open and free, for planning safety in everyday life", href: "/safety-hall" },

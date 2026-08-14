@@ -1,3 +1,34 @@
+### 2026-08-15 — R7 TECHNICAL AUDIT: every link, every word, every width (JoYi's bot, STARTED 07:40, STOPPED 08:40 JST)
+The final pass's technical half, per the phase contract (JoYi keeps the experience
+walkthrough). RESULTS AS PASS / FIXED / FOLLOW-UP:
+PASS: all 9 external destinations answer 200 (aidedeq, curaited, HUSH app, Moxie
+landing + demo, PlantLuck, Sources of Wholeness, TPC, WellBEing); all internal routes
+correct on prod (public 200, member 302, endpoints 401); zero em dashes in any
+member-facing copy; zero heaviest/pressure point/Quiet Room outside the prompt's own
+ban text; every img on every surface carries alt; every member page has exactly one
+h1, lang=en, robots noindex; Meet your Concierge renders two columns at desktop on the
+draft (grid, 497px + 497px at 1161); landing and all five member pages show zero
+horizontal overflow at 375px.
+FIXED (on draft): (1) terms.html + privacy.html served styles.css v93, nine versions
+stale since the warm-palette restyle, now v102; (2) the Concierge's moxie_studios
+route sent people to the retired /moxie-studio/ marketing copy against the standing
+all-Moxie-links-open-the-live-landing ruling, now moxiestudio.netlify.app; (3) landing
+"Step into the Studio" x2 (banned phrase) now "Open the Studio"; (4) landing Record
+card un-dimmed, tag "Rolling out" now "Open with membership", and the built-yet FAQ
+now tells today's truth (HUSH shelf exists, Kitchen shelf exists, Record open with
+membership); (5) a leftover "saved things" in a member-onboarding error string now
+says "your Record".
+FOLLOW-UP, JoYi's judgment, NOT changed: (a) landing FAQ "Is this therapy or
+coaching?" uses "coaching" to deny it; the no-coach rule was written for naming our
+people, so this may be fine, her call; (b) landing cur.AI.ted card says "Starter tier
+included" while the connection is pending on the Cur.AI.ted side (the member map says
+Being connected; the landing states the offer); (c) landing Record back-face says
+"your next chapter", imagery-adjacent, hers to keep or cut.
+DEEPER A11Y left as follow-up work, honestly: keyboard-only walk and screen-reader
+pass have not been performed; this audit covered the mechanical layer only.
+FILES: index.html, privacy.html, terms.html, netlify/functions/concierge.mjs (route),
+netlify/functions/member-onboarding.mjs (string), PHASES.md, WORKLOG.md. Draft only.
+
 ### 2026-08-15 — R4.1 wiring TO PROD on JoYi's GO (JoYi's bot, STARTED 07:10 JST)
 Pushing main + prod deploy of the Cur.AI.ted notify wiring. Door stays "Being
 connected" until the entitlements branch reaches curaited.org. PROD VERIFIED LIVE (pushed f43a5ba..338aac7): the membership webhook still rejects
