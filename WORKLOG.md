@@ -9,7 +9,11 @@ on one line at desktop; never break a closing line because a max-width was inher
 from a paragraph style.
 PROD: shipping K1 (the Kitchen room, ten verified entries in two groups, JoYi's copy),
 L4 (What happened notes) which was already prod, and the scoped nowrap fix that stops
-/hush and /record scrolling sideways. Verify appended below.
+/hush and /record scrolling sideways. PROD VERIFIED LIVE (pushed 305c193..b9f7bee): /, /login, /safety-hall 200; /member,
+/kitchen, /hush, /record, /welcome all 302 gates; member.css v22 + bundle v17 serve
+200; /member-practice, /member-onboarding, /record-export all 401 unauthenticated;
+the scoped nowrap rule and .shelf-close both present in the live stylesheet, so the
+sideways scroll on /hush and /record is fixed on prod. STOPPED 04:35 JST.
 
 ### 2026-08-15 — K1 BUILT: the Kitchen room, and a nowrap regression caught (JoYi's bot, STARTED 03:20, STOPPED 04:10 JST)
 K1 on JoYi's GO. Shelf approved by her from the proposed list: PCRM CUT by JoYi;
