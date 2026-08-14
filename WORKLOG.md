@@ -3,7 +3,9 @@ JoYi's walkthrough ruling: the PDF document title is "My PIL" (subtitle carries 
 name "My Personal Intelligence Layer · Practice Village"); filename now my-pil-DATE.pdf
 to match. Title-block change verified by composing and reading a fresh local PDF.
 Markdown file header stays "# Your Record" (she scoped the ruling to the PDF; one word
-to change if she wants them matched). Pushing main + prod deploy. Verify appended below.
+to change if she wants them matched). PROD VERIFIED LIVE: /, /login 200; /record 302 gate; /record-export 401 unauth;
+member.css v13 + bundle v11 (with both download buttons) serve 200. R2 marked shipped
+in PHASES.md. STOPPED 17:40 JST.
 
 ### 2026-08-14 — R2 BUILT: the Record downloads, Markdown + PDF (JoYi's bot, STARTED 16:30, STOPPED 17:15 JST)
 Phase R2 on JoYi's GO. Footer ruling captured after her best-practice question: every
