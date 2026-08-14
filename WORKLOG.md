@@ -1,3 +1,28 @@
+### 2026-08-15 — cur.AI.ted on the MEMBER side: door opened + backfill built (JoYi's bot, STARTED 09:00, STOPPED 09:30 JST)
+JoYi caught the inversion: the public landing promised "Starter tier included" and
+linked to curaited.org, while the member map, where the entitlement actually lands,
+showed a dead "Being connected" card. The person who paid had less than the person who
+had not. Her instinct on the mechanism is right and now documented: the Stripe webhook
+is what makes it real access (checkout -> notifyCuraited -> entitlement keyed to her
+email), so the member page is the door and the landing is the advertisement.
+(1) MEMBER DOOR OPEN: the map card is now a link to curaited.org, tagged "Included
+with membership", copy "Find the story in your camera roll. Starter access comes with
+your membership.", plus the honest note "Sign in with this email. Your included access
+attaches as the connection completes." and the standard new-tab note. curaited.org is
+the app itself, so this does not violate the no-marketing-page rule the Moxie card
+states.
+(2) BACKFILL BUILT, and it closes a gap I flagged: notifyCuraited is fire-and-forget
+with NO retry, so every membership event fired while curaited.org 404s is lost forever,
+including anyone who joins in the gap. New netlify/functions/admin-curaited-backfill.mjs,
+admin-role only, POST only, DEFAULTS TO dryRun so it reports before it ever sends.
+It walks member/ blobs, skips inactive or subscription-less records, and replays
+membership.activated with a stable per-member event id (backfill_<subId>) so a repeat
+run deduplicates on the Cur.AI.ted side. Run it with {"dryRun":false} the day the
+entitlements branch deploys.
+FILES: netlify/functions/member.mjs (the card), netlify/functions/admin-curaited-backfill.mjs
+(new), busters member.css v24 + bundle v19 across the member pages, PHASES.md.
+SHARED SURFACES: the Cur.AI.ted contract only. Draft deploy.
+
 ### 2026-08-15 — R7 TECHNICAL AUDIT: every link, every word, every width (JoYi's bot, STARTED 07:40, STOPPED 08:40 JST)
 The final pass's technical half, per the phase contract (JoYi keeps the experience
 walkthrough). RESULTS AS PASS / FIXED / FOLLOW-UP:

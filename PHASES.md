@@ -194,9 +194,16 @@ Work, each when its destination is confirmed, honestly labeled until then:
    pv-integration kit (Cur.AI.ted repo, app/pv-integration): the membership webhook
    now notifies Cur.AI.ted on activate/update/cancel, HMAC-signed, fire-and-forget,
    idempotent by Stripe event id; CURAITED_WEBHOOK_SECRET already on the site.
-   BLOCKED on the Cur.AI.ted side going live: curaited.org/api/webhooks/practice-village
-   returns 404 because the entitlements branch is not deployed to prod. When it
-   deploys, PV needs zero changes; the lobby door then opens on JoYi's GO.
+   MEMBER DOOR OPEN 2026-08-15 on JoYi's call: the member map card links to
+   curaited.org (the app itself, not a marketing page), tagged "Included with
+   membership", and says plainly that access attaches to that email as the
+   connection completes.
+   STILL BLOCKED on the Cur.AI.ted side: curaited.org/api/webhooks/practice-village
+   returns 404 because the entitlements branch is not deployed to prod, so no
+   entitlement is being recorded yet. notifyCuraited never retries, so every event
+   sent during the gap is lost; admin-curaited-backfill.mjs exists to replay
+   membership.activated for all active members once the endpoint is live. Run it
+   (dryRun first) the day that branch deploys.
 2. Moxie Studios member door (needs the confirmed member destination).
 3. Consistent return navigation from every room, internal and external.
 
