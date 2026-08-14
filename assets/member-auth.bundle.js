@@ -2213,7 +2213,19 @@ async function initRecordPage() {
   });
   initSavedCards();
 }
+async function initRoomShell() {
+  const user = await getUser();
+  if (!user || !hasMemberAccess(user)) {
+    window.location.replace("/login");
+    return;
+  }
+  document.getElementById("logoutButton")?.addEventListener("click", async () => {
+    await logout();
+    window.location.replace("/");
+  });
+}
 if (page === "login") initLogin();
 if (page === "member") initMemberLobby();
 if (page === "record") initRecordPage();
+if (page === "room") initRoomShell();
 if (page === "welcome") initWelcome();

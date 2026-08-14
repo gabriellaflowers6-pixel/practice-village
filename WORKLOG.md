@@ -1,3 +1,25 @@
+### 2026-08-14 — R3 BUILT: the HUSH room (JoYi's bot, STARTED 17:50, STOPPED 18:30 JST)
+Phase R3 on JoYi's GO with the approved shelf list plus her addition: Moxie Studios
+(beginner mindful meditation) holds a labeled space on the shelf, "Being connected",
+NO invented link, free demo link meanwhile, same honesty pattern as the lobby card.
+FILES: netlify/functions/_shared/hush-resources.mjs (new, shelf data: approved-by
+header, reviewBy 2026-11-14, every URL curl-verified live today),
+netlify/functions/member-hush.mjs (new, gated /hush room page, server-rendered),
+member-auth.js (initRoomShell dispatch for data-auth-page="room": guard + sign out),
+netlify/functions/member.mjs (member map HUSH card now opens /hush "Opens here"),
+assets/member.css (.shelf styles), busters member.css v14 + bundle v12.
+THE ROOM: welcome "A little quiet." / app hero card first ("Sixty seconds. Three
+breaths.", opens the free app, best-on-phone note) / the shelf: Moxie space + UCLA MARC
++ Palouse MBSR + Healthy Minds + NIH NCCIH + VA Mindfulness Coach + OWH stress page.
+Every entry: org, what it is good for, "Where it stops:" limits line, cost, languages,
+Reviewed date. Exclusion rule stated on the page: free tiers that exist to sell a
+subscription are not shelved. Public landing HUSH card unchanged: still points straight
+at the free app; members gain the shelf, nobody gains a paywall.
+VERIFIED: harness render of the real hushPage() html: all 7 entries, Moxie unlinked with
+demo link, 6 external links target=_blank rel=noopener, limits on every entry, no
+horizontal overflow. All 7 URLs returned 200 today. Draft verify below.
+SHARED SURFACES: none. Draft only.
+
 ### 2026-08-14 — R2 TO PROD on JoYi's GO; PDF titled My PIL (JoYi's bot, STARTED 17:25 JST)
 JoYi's walkthrough ruling: the PDF document title is "My PIL" (subtitle carries the full
 name "My Personal Intelligence Layer · Practice Village"); filename now my-pil-DATE.pdf
