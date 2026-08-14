@@ -1,3 +1,26 @@
+### 2026-08-14 — Lobby polish + the anti-pandering rule (JoYi's bot, STARTED 23:20, STOPPED 23:55 JST)
+JoYi's four walkthrough notes on the embedded-desk draft, all built:
+(1) The member Concierge card now matches the landing Your Concierge visual: dark card
+(rgba(30,19,9,.94)), light border, flower avatar + "Your Concierge" + live dot line
+"the front desk", translucent chips with clay hover, remapped desk palette for dark
+(messages, blocks, code, links, notes), Ask button clay for contrast.
+(2) "Start where you are..." holds one line at desktop (min-width 921px nowrap,
+welcome max-width released).
+(3) THE TONE RULE, her demand, now standing in concierge.mjs VOICE: register is plain,
+direct, kind, CONFRONTING. New CONFRONTING-NOT-SOOTHING block: never comfort with a
+claim that may be false in her life; "you do not have to do this alone" and its whole
+family banned; many women ARE carrying the whole load and being told otherwise is
+pandering; comfort must be earned by a fact or an action in the same breath; a
+sentence that only soothes gets cut. Caregiving register example included.
+(4) In the Village: Take a look / Add to My Practice unbolded (weight 400), button
+default padding zeroed so anchor and button align, row gaps tightened.
+FILES: netlify/functions/member.mjs (card header markup), assets/member.css,
+netlify/functions/concierge.mjs (prompt), busters member.css v17 (bundle unchanged).
+VERIFIED in the lobby harness: dark card renders with header + chips + clay Ask,
+welcome line single-line at 1161px, village links aligned and unbolded, My Practice
+untouched. Live Gemini under the new rule needs JoYi's read on the draft.
+SHARED SURFACES: none. Draft only.
+
 ### 2026-08-14 — LOBBY SIMPLIFIED: the Concierge lives on the member home (JoYi's bot, STARTED 22:20, STOPPED 23:15 JST)
 JoYi's directive, built on her GO: no hallway between a returning resident and help.
 The promotional Front Desk card, its Open-the-front-desk CTA, and the second hello are

@@ -152,8 +152,33 @@ p,li,.member-card p,.onboarding-help,.welcome-intro p{text-wrap:pretty}
 .saved-card__day{width:max-content;margin-top:.4rem;padding:.5rem .6rem;border:1px solid var(--line);border-radius:8px;font:1rem var(--sans);color:var(--ink);background:#fff}
 @media(max-width:680px){.practice-head{flex-direction:column}.practice-toggle{padding-top:0}}
 /* the Concierge lives on the member home: no hallway between her and help */
-.member-card--desk-embed{display:grid;gap:10px;align-content:start;background:#FFFDF8}
+.member-card--desk-embed{display:grid;gap:10px;align-content:start;background:rgba(30,19,9,.94);border:1px solid rgba(247,244,238,.2);border-radius:22px;color:#F7F4EE;box-shadow:0 30px 60px -24px rgba(30,19,9,.4)}
+.desk-embed-head{display:flex;align-items:center;gap:.7rem;padding-bottom:.9rem;border-bottom:1px solid rgba(247,244,238,.14)}
+.desk-embed-head strong{font-family:var(--serif);font-size:1.15rem;display:block;color:#FBF9F4}
+.desk-embed-avatar{width:38px;height:38px;border-radius:50%;background:#FBF9F4;display:grid;place-items:center;flex:0 0 auto}
+.desk-embed-live{font-size:.74rem;color:rgba(247,244,238,.62);display:flex;align-items:center;gap:.4em}
+.desk-embed-live i{width:7px;height:7px;border-radius:50%;background:#8FBF7F;display:inline-block}
 .member-card--desk-embed .desk-thread{max-height:430px;overflow-y:auto;display:grid;gap:9px;padding-right:2px}
+.member-card--desk-embed .desk-q{color:#FBF9F4}
+.member-card--desk-embed .desk-msg--me{background:rgba(247,244,238,.14)}
+.member-card--desk-embed .desk-msg--c{background:rgba(199,154,82,.2)}
+.member-card--desk-embed .desk-chips button{background:rgba(247,244,238,.09);border:1px solid rgba(247,244,238,.22);color:#F7F4EE}
+.member-card--desk-embed .desk-chips button:hover,.member-card--desk-embed .desk-chips button:focus-visible{background:var(--clay);border-color:var(--clay);color:#fff;outline:none}
+.member-card--desk-embed .desk-note,.member-card--desk-embed .desk-pending,.member-card--desk-embed .onboarding-privacy{color:rgba(247,244,238,.6)}
+.member-card--desk-embed .desk-query code{background:rgba(247,244,238,.12);color:#F7F4EE}
+.member-card--desk-embed .desk-found a{color:#E9B872}
+.member-card--desk-embed .desk-label{color:#E9B872}
+.member-card--desk-embed .text-button{color:#F7F4EE}
+.member-card--desk-embed .desk-wrapitem{color:#F7F4EE}
+.member-card--desk-embed .desk-ask input{background:#FFFDF8;border-color:rgba(247,244,238,.3)}
 .member-card--desk-embed .onboarding-privacy{margin:2px 0 0;font-size:.76rem}
-.member-card--desk-embed .desk-invite{width:auto;margin:0 0 6px}
+.member-card--desk-embed .desk-invite{width:auto;margin:0 0 6px;color:var(--ink)}
 .account-links .member-plan{font-size:.75rem}
+/* the welcome line under the greeting holds one line on desktop */
+@media(min-width:921px){.member-welcome{max-width:none}.member-welcome>p:not(.eyebrow){white-space:nowrap}}
+/* In the Village: quiet links, aligned, unbolded */
+.village-date__actions .text-button{padding:0;font-weight:400}
+.village-date{gap:4px}
+.village-date__actions{gap:16px}
+.member-card--desk-embed .desk-ask .primary-button{background:var(--clay)}
+.member-card--desk-embed .desk-ask .primary-button:hover{background:#8f3811}
