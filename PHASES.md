@@ -70,7 +70,9 @@ Two stores by design, one idea:
 
 ## Phase R1: The Record captures the way the scope says
 
-**Status: next. Corrects today's draft before it goes near prod.**
+**Status: SHIPPED 2026-08-14. JoYi walked the draft; the save-read bug and the
+duplicate Record card found in that walkthrough were fixed and re-walked; her GO
+sent it to prod.**
 **Governing lines:** CONCIERGE_SCOPE.md, PIL consent pattern (2026-08-12): never a
 save decision per exchange; candidates accumulate quietly; one review at session end;
 Keep this private available as an interrupt. MEMBERSHIP_ACCESS_PLAN.md member lobby
@@ -116,15 +118,19 @@ JoYi does not check: storage internals, auth, bundle mechanics, responsive inter
 ## Phase R2: The Record downloads
 
 **Governing lines:** MEMBERSHIP_ACCESS_PLAN.md member lobby list (export control);
-Release boundary item 4; the delineation section above.
+Release boundary item 4; the delineation section above; JoYi's format ruling
+(2026-08-14): two formats, exactly.
 
-Work: a Download control in the Record. Formats: Markdown (for a therapist, a log,
-or anywhere she wants to paste it) and plain text. Built in the browser from what is
-already on screen, saved to her device, nothing sent. Same mechanism family as
-Safety Hall's downloads.
+Work: a Download control on the /record page.
+1. A Markdown file, built like a second brain: readable headings, each kept thing
+   with its date, searches with their steps, resources with their links. Built in
+   the browser from what is already on screen, nothing new sent anywhere.
+2. A neat PDF with Practice Village information in the footer of every page.
+   Composed from her record only; no third-party service ever sees it.
 
-JoYi checks: the downloaded file reads clean and complete, the formats open where
-she would take them. Does not check: file-generation code.
+JoYi checks: both files read clean and complete, the Markdown pastes where she would
+take it, the PDF looks like something she would hand a therapist, the footer says
+Practice Village. Does not check: file-generation code.
 
 ## Phase R3: The HUSH room
 

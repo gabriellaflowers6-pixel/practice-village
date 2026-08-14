@@ -1,3 +1,11 @@
+### 2026-08-14 — R1 TO PROD on JoYi's GO (JoYi's bot, STARTED 16:00 JST)
+JoYi walked the fixed draft, saw her two cards in the Record room, ready to move on.
+Pushing main and deploying prod: R1 complete (consent-pattern capture, the ending,
+Your Record naming on every surface, JoYi's copy picks, the test-account read fix,
+the one Record area at /record). PHASES.md R1 marked shipped; R2 spec updated to
+JoYi's format ruling: Markdown second-brain file + neat PDF with Practice Village
+footer. PROD VERIFY below in this entry once live.
+
 ### 2026-08-14 — R1 walkthrough fixes: the vanished save + one Record area (JoYi's bot, STARTED 15:00, STOPPED 15:40 JST)
 JoYi saved 2 things at the desk; the lobby showed nothing. THE SAVE WORKED: both cards
 verified present in Netlify Blobs (test-onboarding key, 01:32Z). The bug was the read:
