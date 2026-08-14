@@ -443,6 +443,9 @@ function initSavedCards() {
 
 // ---- My Practice: things she has chosen to come back to (MEMBER_LOBBY_PRD.md) ----
 
+// set by the lobby so the embedded desk can refresh the card it sits beside
+let memberPractice = null;
+
 const practiceLocalDay = (date = new Date()) =>
   `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 
@@ -700,6 +703,7 @@ async function initMemberLobby() {
   initDesk(user, { embedded: true, container: document.getElementById("deskEmbed") });
 
   const practice = initMyPractice();
+  memberPractice = practice;
 
   const plantluckAdd = document.getElementById("addPlantluckDaily");
   plantluckAdd?.addEventListener("click", async () => {
@@ -802,6 +806,7 @@ function initDesk(user, opts = {}) {
   let lastAdded = [];
   let lastKeptPrivate = false;
   let wrapOffered = false;
+  let keptThings = [];
 
   const esc = (t) => { const d = document.createElement("div"); d.textContent = t == null ? "" : t; return d.innerHTML; };
   const bubbles = () => msgs.map((m) => `<p class="desk-msg desk-msg--${m.role === "user" ? "me" : "c"}">${esc(m.text)}</p>`).join("");
@@ -866,10 +871,12 @@ function initDesk(user, opts = {}) {
           if (!r.ok) { wrapStatus.textContent = "Saving did not go through. Your things are still here."; return; }
         } catch { wrapStatus.textContent = "Saving did not go through. Your things are still here."; return; }
       }
+      keptThings = chosen;
       pending = [];
       renderEnd(chosen.length);
     });
     thread.querySelector("[data-discard]").addEventListener("click", () => {
+      keptThings = [];
       pending = [];
       if (leaving) { window.location.assign("/member"); return; }
       renderEnd(0);
@@ -887,9 +894,25 @@ function initDesk(user, opts = {}) {
       ? `<a class="secondary-button" href="${esc(lastRoute.href)}"${String(lastRoute.href).startsWith("#") || String(lastRoute.href).startsWith("/") ? "" : ' target="_blank" rel="noopener"'}>Open ${esc(lastRoute.label)}</a>`
       : "";
     const lobbyBtn = embedded ? "" : `<a class="primary-button" href="/member">Back to your lobby</a>`;
-    thread.innerHTML = `<div class="desk-end">${kept}<div class="welcome-actions">${lobbyBtn}${routeBtn}</div><p class="welcome-exits"><button type="button" class="text-button" data-again>Start another conversation</button></p></div>`;
+    // Session end is also where she may put something in front of herself again.
+    const comeBack = keptThings.length
+      ? `<div class="desk-comeback"><p class="desk-q">Anything here you want to come back to?</p><ul class="desk-comeback__list">${keptThings.map((thing, index) => `<li><span>${esc(thing.text)}</span><button type="button" class="text-button" data-practice="${index}">Add to My Practice</button></li>`).join("")}</ul></div>`
+      : "";
+    thread.innerHTML = `<div class="desk-end">${kept}${comeBack}<div class="welcome-actions">${lobbyBtn}${routeBtn}</div><p class="welcome-exits"><button type="button" class="text-button" data-again>Start another conversation</button></p></div>`;
+    thread.querySelectorAll("[data-practice]").forEach((button) => button.addEventListener("click", async () => {
+      const thing = keptThings[Number(button.dataset.practice)];
+      button.disabled = true;
+      try {
+        await practiceApi({ action: "add_item", item: { title: thing.text.slice(0, 160), when: "this_week", href: "/record", linkLabel: "Open your Record", source: "desk" } });
+        button.textContent = "Added to My Practice.";
+        await memberPractice?.refresh();
+      } catch {
+        button.disabled = false;
+        button.textContent = "That did not add. Try again.";
+      }
+    }));
     thread.querySelector("[data-again]").addEventListener("click", () => {
-      msgs = []; last = null; lastRoute = null; lastAdded = []; wrapOffered = false;
+      msgs = []; last = null; lastRoute = null; lastAdded = []; keptThings = []; wrapOffered = false;
       renderIdle();
     });
     thread.scrollTop = 0;

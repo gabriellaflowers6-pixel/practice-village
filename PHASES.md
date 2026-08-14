@@ -156,6 +156,29 @@ is built around it.
 JoYi checks: the shelf list first (separate GO), then the room page, entry language,
 and every link. Does not check: resource data structure.
 
+## Phase K1: The Kitchen room (added on JoYi's ruling 2026-08-15)
+
+The Kitchen gets exactly what HUSH got: a member room holding the app plus a vetted
+shelf. PlantLuck alone is not the room.
+
+**Governing lines:** CONCIERGE_SCOPE.md Kitchen tier list, already approved:
+NutritionFacts.org (free, science, non-commercial, JoYi's go-to), WHO and CDC nutrition
+guidance, USDA FoodData Central, USDA SNAP-Ed recipe library (public domain), SNAP
+retailer and farmers-market locators, food bank routing; T3 local pantry schedules and
+WIC walkthroughs. NEVER: meat-consumption guidance of any kind, subtraction framing,
+diet culture, calories. Plant-forward by addition. Plus the HUSH exclusion rule: any
+platform whose free tier exists to sell a subscription is not shelved.
+
+Work: /kitchen, member-gated, same shape as /hush. PlantLuck hero card first, then the
+shelf. Every entry carries organization, what it is good for, "Where it stops:" limits,
+cost, languages, review date, from one data file with an approved-by header. Every URL
+verified live before it ships. The member map's Kitchen card opens the room; the public
+landing keeps pointing straight at PlantLuck. Room copy comes from JoYi, the way the
+HUSH copy did.
+
+JoYi checks: the shelf list first (separate GO), then her copy, then the room and every
+link. Does not check: the data structure.
+
 ## Phase R4: The remaining doors
 
 **Governing lines:** audit Phase 4; guardrail 7.
@@ -201,6 +224,8 @@ calendar file landing on her phone, remove. Does not check: storage schema or
 calendar-file internals.
 
 ### Phase L2: the desk trade
+
+**Status: BUILT 2026-08-15, on draft, awaiting JoYi's walkthrough.**
 
 **Governing lines:** MEMBER_LOBBY_PRD.md spec: desk ending "Anything here you want
 to come back to?"; plan context joins the member desk prompt with the same consent

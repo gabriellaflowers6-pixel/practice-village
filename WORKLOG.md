@@ -1,3 +1,39 @@
+### 2026-08-15 — L2 BUILT: the desk trade (JoYi's bot, STARTED 01:30, STOPPED 02:20 JST)
+Phase L2 on JoYi's GO, plus K1 added to PHASES on her Kitchen ruling.
+K1 (docs only, no build): the Kitchen gets what HUSH got, a room with a vetted shelf,
+governed by the CONCIERGE_SCOPE Kitchen tier list already approved (NutritionFacts.org,
+WHO/CDC nutrition, USDA FoodData Central, SNAP-Ed public-domain recipes, SNAP and
+farmers-market locators, food bank routing; T3 pantry schedules + WIC). NEVER:
+meat-consumption guidance, subtraction framing, diet culture, calories. Shelf list and
+room copy go to JoYi for separate GOs, same as HUSH.
+L2 BUILT, three parts:
+(1) Ending panel: after the wrap-up saves, "Anything here you want to come back to?"
+with Add to My Practice per kept thing (when: this_week, links back to /record).
+Session end only. Discard path shows no come-back list. Start-another clears it.
+(2) Member desk context: My Practice titles now join the consented-notes block, with
+an explicit instruction that these are her CHOICES and NOT a record of what she did:
+the model may never say she practices often, keeps it up, or has been consistent.
+Porch unaffected.
+(3) EXPLORATION AND CONNECTION instruction in MEMBER DESK MODE: at most once per
+conversation, point outward to an untried room or a live moment with people, speaking
+only of what she chose; JoYi's approved register included verbatim; say nothing if
+nothing fits.
+FILES: netlify/functions/concierge.mjs (context + two prompt blocks), member-auth.js
+(keptThings through the wrap-up, come-back list, module-level memberPractice handle),
+assets/member.css, PHASES.md, busters member.css v19 + bundle v15.
+TWO FIXES DURING VERIFY: the first pass refreshed My Practice through a window event,
+which raced the snapshot; replaced with a direct awaited handle (memberPractice set by
+the lobby, awaited by the desk) so the card updates deterministically. Long kept titles
+got an overflow guard in the come-back list.
+VERIFIED in the lobby harness at 1161px: ending shows her line and the kept item, Add
+posts and confirms, My Practice re-renders with the item under Later this week, no
+horizontal overflow, discard path clean, start-another resets. NOTE ON METHOD: an
+earlier "overflow" reading was a false positive from a collapsed browser pane
+(clientWidth 0); re-measured at a real viewport before trusting it.
+NOT verified without JoYi: live Gemini honoring the once-per-conversation outward
+suggestion, and that it never claims she did anything.
+SHARED SURFACES: none. Draft only.
+
 ### 2026-08-15 — The prompt now speaks the house voice it enforces (JoYi's bot, STARTED 00:50, STOPPED 01:10 JST)
 JoYi caught "which is louder" surviving copy rule after copy rule. ROOT CAUSE, owned:
 the ban lists named words while the prompt's own TOPIC GUIDANCE still spoke in the

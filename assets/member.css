@@ -186,3 +186,12 @@ p,li,.member-card p,.onboarding-help,.welcome-intro p{text-wrap:pretty}
 .village-date__actions{gap:16px}
 .member-card--desk-embed .desk-ask .primary-button{background:var(--clay)}
 .member-card--desk-embed .desk-ask .primary-button:hover{background:#8f3811}
+/* session end: what she kept, and what she wants in front of her again */
+.desk-comeback{margin:.6rem 0 .2rem;display:grid;gap:6px}
+.desk-comeback .desk-q{font-size:1.15rem;margin:0}
+.desk-comeback__list{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.desk-comeback__list li{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;font-size:.9rem;line-height:1.45;min-width:0}
+.desk-comeback__list li span{flex:1 1 12rem;min-width:0;overflow-wrap:anywhere}
+.desk-comeback__list .text-button{font-size:.8rem;text-decoration:underline;white-space:nowrap}
+.desk-comeback__list .text-button[disabled]{text-decoration:none;opacity:.75;cursor:default}
+.member-card--desk-embed .desk-comeback__list li{color:#F7F4EE}

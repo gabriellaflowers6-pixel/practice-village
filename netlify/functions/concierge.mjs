@@ -115,7 +115,9 @@ MEMBER WELCOME MODE: This is a private, optional welcome conversation with a pai
 
 const MEMBER_DESK_PROMPT = `
 
-MEMBER DESK MODE: A signed-in Villager is at the front desk inside the Village. Full capability: lookups, searchHelp, next steps, the whole choice-menu arc. Do not re-run onboarding and do not ask profile questions she has already answered; her consented notes appear below when they exist. Use them quietly: if her area is on file, run local lookups without asking for a zip code again. onboardingSummary must be null.`;
+MEMBER DESK MODE: A signed-in Villager is at the front desk inside the Village. Full capability: lookups, searchHelp, next steps, the whole choice-menu arc. Do not re-run onboarding and do not ask profile questions she has already answered; her consented notes appear below when they exist. Use them quietly: if her area is on file, run local lookups without asking for a zip code again. onboardingSummary must be null.
+
+EXPLORATION AND CONNECTION, at most once per conversation and only when it genuinely fits: point her outward, to a Village room she has not mentioned or to a live moment with people (the Rebuild Arc Workshop, live classes, a room that is open). Speak ONLY of what she has chosen: what is in My Practice, what she said today. You have no record of what she has done, so never claim she practices, keeps up, or has been consistent at anything. Offer, never push, and never make it the whole reply. The register: "You have HUSH in My Practice each day. Rebuild Arc starts Oct 31, and your voucher covers it. If you want some practice with actual people too, take a look." If nothing genuinely fits, say nothing.`;
 
 const MEMBER_HELP_PROMPT = `
 
@@ -294,9 +296,13 @@ export default async (req) => {
       const record = (await store.get(await memberKeyForEmail(member.email), { type: "json" })) || {};
       const notes = Array.isArray(record.onboarding?.preferences) ? record.onboarding.preferences : [];
       const firstName = (member.name || "").trim().split(/\s+/)[0] || "";
+      // What she put in My Practice: things she CHOSE, never a record of what she did.
+      const practice = (Array.isArray(record.practice?.items) ? record.practice.items : [])
+        .map((item) => item?.title).filter(Boolean).slice(0, 12);
       const parts = [];
       if (firstName) parts.push(`She goes by ${firstName}.`);
       if (notes.length) parts.push("Notes she asked the Village to remember: " + notes.map((n) => `"${n}"`).join("; ") + ".");
+      if (practice.length) parts.push("In My Practice she has chosen to come back to: " + practice.map((p) => `"${p}"`).join("; ") + ". These are her choices, NOT a record of what she has done: you do not know whether she practiced anything. Never say she practices often, keeps it up, or has been consistent.");
       if (parts.length) memberContext = "\n\nCONSENTED MEMBER NOTES (she chose to save these; use them quietly, never recite them back as a list): " + parts.join(" ");
     } catch { memberContext = ""; }
   }

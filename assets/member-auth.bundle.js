@@ -1491,6 +1491,7 @@ function initSavedCards() {
     }
   })();
 }
+var memberPractice = null;
 var practiceLocalDay = (date = /* @__PURE__ */ new Date()) => `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 var practiceAddDays = (day, count) => {
   const [y, m, d] = day.split("-").map(Number);
@@ -1754,6 +1755,7 @@ async function initMemberLobby() {
   document.getElementById("memberPlan").textContent = roles.includes("founding_villager") ? "Founding Villager" : "Village Member";
   initDesk(user, { embedded: true, container: document.getElementById("deskEmbed") });
   const practice = initMyPractice();
+  memberPractice = practice;
   const plantluckAdd = document.getElementById("addPlantluckDaily");
   plantluckAdd?.addEventListener("click", async () => {
     plantluckAdd.disabled = true;
@@ -1849,6 +1851,7 @@ function initDesk(user, opts = {}) {
   let lastAdded = [];
   let lastKeptPrivate = false;
   let wrapOffered = false;
+  let keptThings = [];
   const esc = (t) => {
     const d = document.createElement("div");
     d.textContent = t == null ? "" : t;
@@ -1913,10 +1916,12 @@ function initDesk(user, opts = {}) {
           return;
         }
       }
+      keptThings = chosen;
       pending = [];
       renderEnd(chosen.length);
     });
     thread.querySelector("[data-discard]").addEventListener("click", () => {
+      keptThings = [];
       pending = [];
       if (leaving) {
         window.location.assign("/member");
@@ -1931,12 +1936,26 @@ function initDesk(user, opts = {}) {
     const kept = keptCount ? `<p class="desk-q">${keptCount === 1 ? "One thing" : `${keptCount} things`} kept in your Record.${embedded ? "" : " It is in your lobby whenever you want it."}</p>` : `<p class="desk-q">Nothing kept. This conversation stays private.</p>`;
     const routeBtn = lastRoute ? `<a class="secondary-button" href="${esc(lastRoute.href)}"${String(lastRoute.href).startsWith("#") || String(lastRoute.href).startsWith("/") ? "" : ' target="_blank" rel="noopener"'}>Open ${esc(lastRoute.label)}</a>` : "";
     const lobbyBtn = embedded ? "" : `<a class="primary-button" href="/member">Back to your lobby</a>`;
-    thread.innerHTML = `<div class="desk-end">${kept}<div class="welcome-actions">${lobbyBtn}${routeBtn}</div><p class="welcome-exits"><button type="button" class="text-button" data-again>Start another conversation</button></p></div>`;
+    const comeBack = keptThings.length ? `<div class="desk-comeback"><p class="desk-q">Anything here you want to come back to?</p><ul class="desk-comeback__list">${keptThings.map((thing, index) => `<li><span>${esc(thing.text)}</span><button type="button" class="text-button" data-practice="${index}">Add to My Practice</button></li>`).join("")}</ul></div>` : "";
+    thread.innerHTML = `<div class="desk-end">${kept}${comeBack}<div class="welcome-actions">${lobbyBtn}${routeBtn}</div><p class="welcome-exits"><button type="button" class="text-button" data-again>Start another conversation</button></p></div>`;
+    thread.querySelectorAll("[data-practice]").forEach((button) => button.addEventListener("click", async () => {
+      const thing = keptThings[Number(button.dataset.practice)];
+      button.disabled = true;
+      try {
+        await practiceApi({ action: "add_item", item: { title: thing.text.slice(0, 160), when: "this_week", href: "/record", linkLabel: "Open your Record", source: "desk" } });
+        button.textContent = "Added to My Practice.";
+        await memberPractice?.refresh();
+      } catch {
+        button.disabled = false;
+        button.textContent = "That did not add. Try again.";
+      }
+    }));
     thread.querySelector("[data-again]").addEventListener("click", () => {
       msgs = [];
       last = null;
       lastRoute = null;
       lastAdded = [];
+      keptThings = [];
       wrapOffered = false;
       renderIdle();
     });
