@@ -190,7 +190,13 @@ link. Does not check: the data structure.
 **Governing lines:** audit Phase 4; guardrail 7.
 
 Work, each when its destination is confirmed, honestly labeled until then:
-1. cur.AI.ted starter access (needs JoYi's definition of what starter access is).
+1. cur.AI.ted starter access. PV SIDE WIRED 2026-08-15 from JoYi's prepared
+   pv-integration kit (Cur.AI.ted repo, app/pv-integration): the membership webhook
+   now notifies Cur.AI.ted on activate/update/cancel, HMAC-signed, fire-and-forget,
+   idempotent by Stripe event id; CURAITED_WEBHOOK_SECRET already on the site.
+   BLOCKED on the Cur.AI.ted side going live: curaited.org/api/webhooks/practice-village
+   returns 404 because the entitlements branch is not deployed to prod. When it
+   deploys, PV needs zero changes; the lobby door then opens on JoYi's GO.
 2. Moxie Studios member door (needs the confirmed member destination).
 3. Consistent return navigation from every room, internal and external.
 

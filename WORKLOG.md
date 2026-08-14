@@ -1,3 +1,25 @@
+### 2026-08-15 — R4.1 PV SIDE WIRED: cur.AI.ted starter, from JoYi's prepared kit (JoYi's bot, STARTED 06:30, STOPPED 07:00 JST)
+JoYi prepared the integration in the Cur.AI.ted repo (app/pv-integration: README +
+curaited-notify.mjs, the kit her entitlements session built 2026-08-14). Brought in
+exactly as written: sender copied to netlify/functions/_shared/curaited-notify.mjs;
+stripe-membership-webhook.mjs now notifies Cur.AI.ted after saveMembershipRecord on
+checkout completion (membership.activated) and after grant/revoke on subscription
+change (membership.updated/cancelled), with the real Stripe event id passed down to
+handleSubscriptionChanged for idempotency (the kit's preferred option). Fire-and-forget:
+a Cur.AI.ted failure logs and never touches the membership grant. HMAC-signed with
+CURAITED_WEBHOOK_SECRET, confirmed already set on this Netlify site.
+TRUTH CHECK BEFORE OPENING THE DOOR: curaited.org/api/webhooks/practice-village
+returns 404. The entitlement system is still on the Cur.AI.ted `entitlements` branch,
+not deployed to prod. So the lobby's cur.AI.ted card STAYS "Being connected": opening
+it now would promise access the other side cannot yet attach. The moment the branch
+deploys, PV needs zero changes; sender failures will flip to deliveries on their own.
+Until then every membership event logs a curaited-notify rejected/unreachable line,
+which is expected and harmless.
+FILES: netlify/functions/_shared/curaited-notify.mjs (new, verbatim from her kit),
+netlify/functions/stripe-membership-webhook.mjs, PHASES.md. No UI change, no busters.
+SHARED SURFACES: the Stripe webhook function (additive, after the record save) and the
+cross-site contract with Cur.AI.ted (secret set both sides 2026-08-14). Draft deploy.
+
 ### 2026-08-15 — R5 TO PROD on JoYi's GO (JoYi's bot, STARTED 06:00 JST)
 Account controls live: /account with membership facts, the Stripe billing portal,
 downloads above the danger, and the two-deletion split with type-to-confirm on both.

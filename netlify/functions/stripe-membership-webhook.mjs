@@ -1,4 +1,5 @@
 import Stripe from "stripe";
+import { notifyCuraited } from "./_shared/curaited-notify.mjs";
 import {
   FOUNDING_CUTOFF,
   FOUNDING_LIMIT,
@@ -74,6 +75,14 @@ async function handleCheckoutCompleted(stripe, store, session, event) {
   };
 
   await saveMembershipRecord(store, record);
+  await notifyCuraited({
+    stripeEventId: event.id,
+    eventType: "membership.activated",
+    email: record.email,
+    memberId: record.stripeSubscriptionId,
+    membershipStatus: record.status,
+    accessEndsAt: record.currentPeriodEnd,
+  });
   if (isActiveStripeStatus(record.status)) {
     const identity = await grantIdentityRole(record);
     return { plan: record.plan, status: record.status, accountSetupEmailSent: identity.accountSetupEmailSent };
@@ -81,7 +90,7 @@ async function handleCheckoutCompleted(stripe, store, session, event) {
   return { plan: record.plan, status: record.status };
 }
 
-async function handleSubscriptionChanged(store, subscription) {
+async function handleSubscriptionChanged(store, subscription, event) {
   const record = await getRecordBySubscription(store, subscription.id);
   if (!record) return { ignored: true, reason: "subscription is not linked to a Practice Village membership" };
 
@@ -98,6 +107,14 @@ async function handleSubscriptionChanged(store, subscription) {
 
   if (isActiveStripeStatus(record.status)) await grantIdentityRole(record);
   else await revokeIdentityMembership(record);
+  await notifyCuraited({
+    stripeEventId: event?.id || `${subscription.id}:${subscription.status}`,
+    eventType: isActiveStripeStatus(record.status) ? "membership.updated" : "membership.cancelled",
+    email: record.email,
+    memberId: record.stripeSubscriptionId,
+    membershipStatus: record.status,
+    accessEndsAt: record.currentPeriodEnd,
+  });
   return { plan: record.plan, status: record.status };
 }
 
@@ -118,7 +135,7 @@ export default async function handler(request) {
     if (["checkout.session.completed", "checkout.session.async_payment_succeeded"].includes(event.type)) {
       result = await handleCheckoutCompleted(stripe, store, event.data.object, event);
     } else if (["customer.subscription.updated", "customer.subscription.deleted"].includes(event.type)) {
-      result = await handleSubscriptionChanged(store, event.data.object);
+      result = await handleSubscriptionChanged(store, event.data.object, event);
     }
 
     await store.setJSON(eventKey, { type: event.type, processedAt: new Date().toISOString(), result });
