@@ -110,6 +110,11 @@ export default async function handler(request) {
     const merged = [...existing];
     for (const card of cards) if (!merged.some((entry) => entry.text === card.text)) merged.push({ ...card, savedAt: now });
     record.savedCards = merged.slice(-100);
+  } else if (body.action === "skip") {
+    // orientation goes quiet once declined: never re-ask, always reachable from the account row
+    if (!["complete", "complete_private"].includes(record.onboarding?.status)) {
+      record.onboarding = { status: "skipped", preferences: [], completedAt: null, skippedAt: now };
+    }
   } else if (body.action === "remove_card") {
     const text = String(body.text || "").trim().slice(0, 180);
     if (!text) return Response.json({ ok: false, error: "Nothing to remove" }, { status: 400 });

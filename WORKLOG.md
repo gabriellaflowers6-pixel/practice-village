@@ -1,3 +1,37 @@
+### 2026-08-14 — LOBBY SIMPLIFIED: the Concierge lives on the member home (JoYi's bot, STARTED 22:20, STOPPED 23:15 JST)
+JoYi's directive, built on her GO: no hallway between a returning resident and help.
+The promotional Front Desk card, its Open-the-front-desk CTA, and the second hello are
+gone. /member's main row = the WORKING Concierge (left) beside My Practice (right).
+ONE BRAIN, NO FORK: initDesk gained an embedded mode (render target + furniture flags);
+all desk logic (chips, quiet accumulation, counter, wrap-up, keep-private, ending) is
+the same code. Embedded drops the desk page greeting, the exits row, the before-you-go
+interception (home has no gates, her ruling), and the ending's Back-to-your-lobby
+button; the ending's kept line loses "It is in your lobby" when she is already there.
+Helper line added per her spec: "Talk or type. Keep only what you choose." AI
+disclosure line retained.
+ORIENTATION GOES QUIET: plain /welcome now redirects to /member (?onboarding=start and
+review still work). The offer banner appears on the member home ONLY while
+onboardingStatus is not_started; "Not now" POSTs new member-onboarding action "skip"
+(status: skipped, never re-asked, reachable forever from the account row's new Review
+onboarding choices link). Completed statuses are never overwritten by skip.
+BADGE: memberPlan pill moved out of the welcome block into the account row. Reads
+"Founding Villager" for founding roles, "Village Member" for everyone else (her call;
+"Village team" retired). Quiet status, no achievement framing.
+FILES: member-auth.js (initDesk embedded mode, initMemberLobby embed + offer + badge,
+initWelcome redirect), netlify/functions/member.mjs (layout + account row),
+netlify/functions/member-onboarding.mjs (skip action), assets/member.css
+(desk-embed styles), busters member.css v16 + bundle v14 on all five pages.
+VERIFIED in the lobby harness running the real extracted initDesk+initMyPractice with
+/concierge stubbed: opener + her six chips render inside the card, both helper lines,
+no exits row, ask -> reply -> quiet counter, wrap-up saves the search walkthrough with
+detail, embedded ending has NO lobby button and the corrected kept line, Not now clears
+the offer and posts skip exactly once, My Practice + In the Village unaffected, badge
+sits in the account row, no horizontal overflow at 1161px. Screenshot matches her
+hierarchy: welcome, working row, (map), voucher, account.
+CONSENT MODEL UNTOUCHED, verified in the same pass: nothing saved without her choosing
+at the wrap-up; no auto-adds to My Practice; porch unchanged.
+SHARED SURFACES: none. Draft only.
+
 ### 2026-08-14 — L1 BUILT: My Practice (JoYi's bot, STARTED 21:00, STOPPED 22:10 JST)
 Phase L1 on JoYi's GO, her copy spec verbatim throughout (MEMBER_LOBBY_PRD.md is the
 contract). FILES: netlify/functions/member-practice.mjs (new, /member-practice: add,

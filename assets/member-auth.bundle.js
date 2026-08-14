@@ -1751,7 +1751,8 @@ async function initMemberLobby() {
   const name = user.name?.trim();
   document.getElementById("memberName").textContent = name ? `, ${name.split(/\s+/)[0]}` : "";
   const roles = rolesFor(user);
-  document.getElementById("memberPlan").textContent = roles.includes("founding_villager") ? "Founding Villager" : roles.some((role) => ["admin", "test_member"].includes(role)) ? "Village team" : "Member";
+  document.getElementById("memberPlan").textContent = roles.includes("founding_villager") ? "Founding Villager" : "Village Member";
+  initDesk(user, { embedded: true, container: document.getElementById("deskEmbed") });
   const practice = initMyPractice();
   const plantluckAdd = document.getElementById("addPlantluckDaily");
   plantluckAdd?.addEventListener("click", async () => {
@@ -1773,7 +1774,19 @@ async function initMemberLobby() {
     if (response.ok) {
       const payload = await response.json();
       const membership = payload.membership;
-      document.getElementById("memberPlan").textContent = membership.planLabel;
+      if (membership.onboardingStatus === "not_started") {
+        const offer = document.getElementById("orientationOffer");
+        if (offer) {
+          offer.innerHTML = `<div class="desk-invite" id="deskInvite"><p>New to the Village? There is a short, optional welcome conversation: three questions, talk or type, skip anything.</p><div class="welcome-actions"><a class="secondary-button" href="/welcome?onboarding=start">Start the welcome conversation</a><button type="button" class="text-button" id="dismissInvite">Not now</button></div></div>`;
+          document.getElementById("dismissInvite").addEventListener("click", async () => {
+            offer.replaceChildren();
+            try {
+              await fetch("/member-onboarding", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "skip" }) });
+            } catch {
+            }
+          });
+        }
+      }
       if (membership.testAccount) {
         document.getElementById("voucherSummary").textContent = "Test access does not create or use workshop vouchers.";
         document.getElementById("voucherYear").textContent = "Test account";
@@ -1784,11 +1797,6 @@ async function initMemberLobby() {
         const start = new Date(membership.membershipYearStart).toLocaleDateString(void 0, { month: "short", day: "numeric", year: "numeric" });
         const end = new Date(membership.membershipYearEnd).toLocaleDateString(void 0, { month: "short", day: "numeric", year: "numeric" });
         document.getElementById("voucherYear").textContent = `${start} to ${end}`;
-      }
-      if (["complete", "complete_private"].includes(membership.onboardingStatus)) {
-        document.getElementById("conciergeCardTitle").textContent = "Your Concierge";
-        document.getElementById("conciergeCardCopy").textContent = "The full Concierge is at the desk: lookups from official sources, walkthroughs, and next steps. Your onboarding choices stay reviewable anytime.";
-        document.getElementById("conciergeCardLink").textContent = "Open the front desk";
       }
     }
   } catch (error) {
@@ -1802,25 +1810,31 @@ async function initMemberLobby() {
   document.getElementById("logoutButtonBottom").addEventListener("click", signOut);
 }
 function initDesk(user, opts = {}) {
-  const main = document.querySelector(".welcome-main");
+  const embedded = Boolean(opts.embedded);
+  const main = embedded ? opts.container : document.querySelector(".welcome-main");
   if (!main) return;
   const firstName = (user.name || "").trim().split(/\s+/)[0];
-  main.innerHTML = `
-    <section class="welcome-intro">
-      <p class="eyebrow">The front desk</p>
-      <h1>${firstName ? "Hello, " + firstName + "." : "The Concierge is in."}</h1>
-      <p>Talk about what you are facing. Lookups, walkthroughs, and next steps happen here, and nothing is kept unless you choose it.</p>
-    </section>
-    ${opts.inviteOnboarding && !sessionStorage.getItem("pvSkipInvite") ? `<div class="desk-invite" id="deskInvite"><p>New to the Village? There is a short, optional welcome conversation: three questions, talk or type, skip anything.</p><div class="welcome-actions"><a class="secondary-button" href="/welcome?onboarding=start">Start the welcome conversation</a><button type="button" class="text-button" id="dismissInvite">Not now</button></div></div>` : ""}
-    <section class="onboarding-card desk-card" aria-label="Your Concierge">
+  const deskCore = `
       <div class="desk-thread" id="deskThread" aria-live="polite"></div>
       <form class="desk-ask" id="deskAsk">
         <input type="text" id="deskInput" maxlength="1000" placeholder="Say it in your own words\u2026" aria-label="Tell the Concierge what you are facing" />
         <button type="submit" class="primary-button">Ask</button>
       </form>
-      <p class="onboarding-privacy">Live AI, powered by Gemini. The Concierge reflects, routes, and looks things up from official sources. It does not give legal or medical advice.</p>
+      ${embedded ? `<p class="onboarding-privacy">Talk or type. Keep only what you choose.</p>` : ""}
+      <p class="onboarding-privacy">Live AI, powered by Gemini. The Concierge reflects, routes, and looks things up from official sources. It does not give legal or medical advice.</p>`;
+  if (embedded) {
+    main.innerHTML = deskCore;
+  } else {
+    main.innerHTML = `
+    <section class="welcome-intro">
+      <p class="eyebrow">The front desk</p>
+      <h1>${firstName ? "Hello, " + firstName + "." : "The Concierge is in."}</h1>
+      <p>Talk about what you are facing. Lookups, walkthroughs, and next steps happen here, and nothing is kept unless you choose it.</p>
+    </section>
+    <section class="onboarding-card desk-card" aria-label="Your Concierge">${deskCore}
       <div class="welcome-exits"><a href="/member">Back to your lobby</a><a href="/welcome?onboarding=review">Review onboarding choices</a></div>
     </section>`;
+  }
   const thread = document.getElementById("deskThread");
   const form = document.getElementById("deskAsk");
   const input = document.getElementById("deskInput");
@@ -1914,9 +1928,10 @@ function initDesk(user, opts = {}) {
     thread.scrollTop = 0;
   }
   function renderEnd(keptCount) {
-    const kept = keptCount ? `<p class="desk-q">${keptCount === 1 ? "One thing" : `${keptCount} things`} kept in your Record. It is in your lobby whenever you want it.</p>` : `<p class="desk-q">Nothing kept. This conversation stays private.</p>`;
+    const kept = keptCount ? `<p class="desk-q">${keptCount === 1 ? "One thing" : `${keptCount} things`} kept in your Record.${embedded ? "" : " It is in your lobby whenever you want it."}</p>` : `<p class="desk-q">Nothing kept. This conversation stays private.</p>`;
     const routeBtn = lastRoute ? `<a class="secondary-button" href="${esc(lastRoute.href)}"${String(lastRoute.href).startsWith("#") || String(lastRoute.href).startsWith("/") ? "" : ' target="_blank" rel="noopener"'}>Open ${esc(lastRoute.label)}</a>` : "";
-    thread.innerHTML = `<div class="desk-end">${kept}<div class="welcome-actions"><a class="primary-button" href="/member">Back to your lobby</a>${routeBtn}</div><p class="welcome-exits"><button type="button" class="text-button" data-again>Start another conversation</button></p></div>`;
+    const lobbyBtn = embedded ? "" : `<a class="primary-button" href="/member">Back to your lobby</a>`;
+    thread.innerHTML = `<div class="desk-end">${kept}<div class="welcome-actions">${lobbyBtn}${routeBtn}</div><p class="welcome-exits"><button type="button" class="text-button" data-again>Start another conversation</button></p></div>`;
     thread.querySelector("[data-again]").addEventListener("click", () => {
       msgs = [];
       last = null;
@@ -1981,20 +1996,18 @@ function initDesk(user, opts = {}) {
     input.value = "";
     ask(t);
   });
-  document.getElementById("dismissInvite")?.addEventListener("click", () => {
-    sessionStorage.setItem("pvSkipInvite", "1");
-    document.getElementById("deskInvite").remove();
-  });
-  main.querySelectorAll('a[href="/member"]').forEach((a) => a.addEventListener("click", (e) => {
-    if (!pending.length || wrapOffered) return;
-    e.preventDefault();
-    wrapOffered = true;
-    renderWrap(true);
-  }));
-  document.getElementById("logoutButton")?.addEventListener("click", async () => {
-    await logout();
-    window.location.replace("/");
-  });
+  if (!embedded) {
+    main.querySelectorAll('a[href="/member"]').forEach((a) => a.addEventListener("click", (e) => {
+      if (!pending.length || wrapOffered) return;
+      e.preventDefault();
+      wrapOffered = true;
+      renderWrap(true);
+    }));
+    document.getElementById("logoutButton")?.addEventListener("click", async () => {
+      await logout();
+      window.location.replace("/");
+    });
+  }
   renderIdle();
 }
 async function initWelcome() {
@@ -2005,17 +2018,7 @@ async function initWelcome() {
   }
   const onboardingParam = new URLSearchParams(window.location.search).get("onboarding");
   if (onboardingParam !== "review" && onboardingParam !== "start") {
-    let complete = false;
-    try {
-      const check = await fetch("/member-onboarding", { headers: { Accept: "application/json" } });
-      if (check.ok) {
-        const data = await check.json();
-        complete = ["complete", "complete_private"].includes(data.onboarding?.status);
-      }
-    } catch {
-      complete = false;
-    }
-    initDesk(user, { inviteOnboarding: !complete });
+    window.location.replace("/member");
     return;
   }
   const title = document.getElementById("welcomeTitle");

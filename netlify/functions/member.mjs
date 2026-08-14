@@ -13,7 +13,7 @@ function memberPage() {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/member.css?v=15" />
+  <link rel="stylesheet" href="/assets/member.css?v=16" />
 </head>
 <body data-auth-page="member">
   <header class="member-header">
@@ -25,10 +25,9 @@ function memberPage() {
       <p class="eyebrow">Your Village</p>
       <h1>Welcome back<span id="memberName"></span>.</h1>
       <p>Start where you are. You do not need to use every room or finish anything today.</p>
-      <span id="memberPlan" class="member-plan">Checking membership…</span>
     </section>
-    <section class="member-grid" aria-label="Front desk and My Practice">
-      <article class="member-card member-card--wide member-card--desk"><p class="eyebrow">The front desk</p><h2 id="conciergeCardTitle">Your Concierge</h2><p id="conciergeCardCopy">Talk or type about what you are facing, or take the short optional welcome conversation. Skip anything. Nothing is saved unless you choose.</p><a id="conciergeCardLink" href="/welcome">Open the front desk</a></article>
+    <section class="member-grid" aria-label="The Concierge and My Practice">
+      <article class="member-card member-card--desk-embed"><p class="eyebrow">The Concierge</p><div id="orientationOffer"></div><div id="deskEmbed"><p class="practice-note">The Concierge is stepping to the desk…</p></div></article>
       <article class="member-card member-card--practice">
         <div class="practice-head"><div><h2>My Practice</h2><p>Things you've chosen to come back to.</p></div><div class="practice-toggle" role="group" aria-label="My Practice view"><button id="practiceViewList" class="text-button" type="button" aria-pressed="true">List</button><span aria-hidden="true">|</span><button id="practiceViewWeek" class="text-button" type="button" aria-pressed="false">Week</button></div></div>
         <p class="room-note">Nothing gets added here unless you add it.</p>
@@ -54,10 +53,10 @@ function memberPage() {
     </section>
     <section class="member-section account-section">
       <div><p class="eyebrow">Your account</p><h2>Privacy and membership</h2></div>
-      <div class="account-links"><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="mailto:info@aidedeq.org?subject=Practice%20Village%20membership">Membership help or cancellation</a><button id="logoutButtonBottom" class="text-button" type="button">Sign out</button></div>
+      <div class="account-links"><span id="memberPlan" class="member-plan">Checking membership…</span><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/welcome?onboarding=review">Review onboarding choices</a><a href="mailto:info@aidedeq.org?subject=Practice%20Village%20membership">Membership help or cancellation</a><button id="logoutButtonBottom" class="text-button" type="button">Sign out</button></div>
     </section>
   </main>
-  <script type="module" src="/assets/member-auth.bundle.js?v=13"></script>
+  <script type="module" src="/assets/member-auth.bundle.js?v=14"></script>
 </body>
 </html>`;
 }

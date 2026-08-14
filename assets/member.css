@@ -151,3 +151,9 @@ p,li,.member-card p,.onboarding-help,.welcome-intro p{text-wrap:pretty}
 .room-add--ondark{color:#F5E8D4}
 .saved-card__day{width:max-content;margin-top:.4rem;padding:.5rem .6rem;border:1px solid var(--line);border-radius:8px;font:1rem var(--sans);color:var(--ink);background:#fff}
 @media(max-width:680px){.practice-head{flex-direction:column}.practice-toggle{padding-top:0}}
+/* the Concierge lives on the member home: no hallway between her and help */
+.member-card--desk-embed{display:grid;gap:10px;align-content:start;background:#FFFDF8}
+.member-card--desk-embed .desk-thread{max-height:430px;overflow-y:auto;display:grid;gap:9px;padding-right:2px}
+.member-card--desk-embed .onboarding-privacy{margin:2px 0 0;font-size:.76rem}
+.member-card--desk-embed .desk-invite{width:auto;margin:0 0 6px}
+.account-links .member-plan{font-size:.75rem}
