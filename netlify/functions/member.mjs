@@ -13,7 +13,7 @@ function memberPage() {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/member.css?v=17" />
+  <link rel="stylesheet" href="/assets/member.css?v=18" />
 </head>
 <body data-auth-page="member">
   <header class="member-header">
@@ -28,7 +28,7 @@ function memberPage() {
     </section>
     <section class="member-grid" aria-label="The Concierge and My Practice">
       <article class="member-card member-card--desk-embed">
-        <div class="desk-embed-head"><span class="desk-embed-avatar" aria-hidden="true"><svg viewBox="0 0 40 40" width="30" height="30"><circle cx="20" cy="8" r="2.8" fill="#1A1A4E"/><circle cx="30.4" cy="14" r="2.8" fill="#1A1A4E"/><circle cx="30.4" cy="26" r="2.8" fill="#1A1A4E"/><circle cx="20" cy="32" r="2.8" fill="#1A1A4E"/><circle cx="9.6" cy="26" r="2.8" fill="#1A1A4E"/><circle cx="9.6" cy="14" r="2.8" fill="#1A1A4E"/><circle cx="20" cy="20" r="5.5" fill="#A84214"/></svg></span><div><strong>Your Concierge</strong><span class="desk-embed-live"><i></i> the front desk</span></div></div>
+        <div class="desk-embed-head"><span class="desk-embed-avatar" aria-hidden="true"><svg viewBox="0 0 40 40" width="30" height="30"><circle cx="20" cy="8" r="2.8" fill="#1A1A4E"/><circle cx="30.4" cy="14" r="2.8" fill="#1A1A4E"/><circle cx="30.4" cy="26" r="2.8" fill="#1A1A4E"/><circle cx="20" cy="32" r="2.8" fill="#1A1A4E"/><circle cx="9.6" cy="26" r="2.8" fill="#1A1A4E"/><circle cx="9.6" cy="14" r="2.8" fill="#1A1A4E"/><circle cx="20" cy="20" r="5.5" fill="#A84214"/></svg></span><div><strong>My Concierge</strong></div></div>
         <div id="orientationOffer"></div>
         <div id="deskEmbed"><p class="practice-note">The Concierge is stepping to the desk…</p></div>
       </article>

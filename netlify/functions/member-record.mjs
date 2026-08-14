@@ -13,7 +13,7 @@ function recordPage() {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/member.css?v=17" />
+  <link rel="stylesheet" href="/assets/member.css?v=18" />
 </head>
 <body data-auth-page="record">
   <header class="member-header">

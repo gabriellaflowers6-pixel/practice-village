@@ -1,3 +1,15 @@
+### 2026-08-15 — My Concierge rename + dark-card legibility (JoYi's bot, STARTED 00:00, STOPPED 00:20 JST)
+JoYi's notes on the polish draft: card header renamed "My Concierge" (front desk line
+removed; membership container, matches My Practice). ROOT CAUSE of the unreadable
+text: .member-card p:not(.eyebrow) paints every paragraph var(--soft), a dark brown,
+so desk messages inside the dark card were brown-on-brown. Scoped overrides now paint
+all desk text light (#F7F4EE family), bubbles brightened, helper lines lifted to .72
+opacity. Verified in harness: message color computes rgb(247,244,238), full
+conversation legible. FILES: member.mjs, member.css (v18), busters on 5 pages.
+Her question on advice sourcing answered in chat (topic guidance authored from
+CONCIERGE_SCOPE Tier-2 caregiving list; model phrasing is register, not citation;
+specifics only from lookups/walkthroughs by hard rule). SHARED SURFACES: none. Draft.
+
 ### 2026-08-14 — Lobby polish + the anti-pandering rule (JoYi's bot, STARTED 23:20, STOPPED 23:55 JST)
 JoYi's four walkthrough notes on the embedded-desk draft, all built:
 (1) The member Concierge card now matches the landing Your Concierge visual: dark card
