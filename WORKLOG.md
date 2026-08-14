@@ -1,6 +1,8 @@
 ### 2026-08-14 — R3 TO PROD on JoYi's GO (JoYi's bot, STARTED 19:00 JST)
 HUSH room live: /hush gated room, her copy verbatim, app hero, 7-entry shelf with the
-Moxie space. Pushing main + prod deploy. Verify appended below.
+Moxie space. PROD VERIFIED LIVE: /hush + /record + /member 302 gates; /, /login, /safety-hall 200;
+member.css v14 + bundle v12 serve 200; the HUSH app and the Moxie demo link both answer
+200. STOPPED 19:15 JST.
 
 ### 2026-08-14 — HUSH room copy: JoYi's words, verbatim (JoYi's bot, STARTED 18:40, STOPPED 18:55 JST)
 JoYi supplied the room copy after the draft walkthrough started. Applied verbatim to
