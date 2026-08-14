@@ -1,3 +1,7 @@
+### 2026-08-15 — R4.1 wiring TO PROD on JoYi's GO (JoYi's bot, STARTED 07:10 JST)
+Pushing main + prod deploy of the Cur.AI.ted notify wiring. Door stays "Being
+connected" until the entitlements branch reaches curaited.org. Verify appended below.
+
 ### 2026-08-15 — R4.1 PV SIDE WIRED: cur.AI.ted starter, from JoYi's prepared kit (JoYi's bot, STARTED 06:30, STOPPED 07:00 JST)
 JoYi prepared the integration in the Cur.AI.ted repo (app/pv-integration: README +
 curaited-notify.mjs, the kit her entitlements session built 2026-08-14). Brought in
