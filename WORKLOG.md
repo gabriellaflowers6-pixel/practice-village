@@ -1,3 +1,13 @@
+### 2026-08-14 — HUSH room copy: JoYi's words, verbatim (JoYi's bot, STARTED 18:40, STOPPED 18:55 JST)
+JoYi supplied the room copy after the draft walkthrough started. Applied verbatim to
+netlify/functions/member-hush.mjs: welcome "Calm is a skill." + her two intro
+paragraphs; app card "Sixty seconds. Let it settle." + "Shake the globe..." + "Free for
+everyone. No account. Nothing tracked."; shelf "More places to practice." + her shelf
+paragraph ending "No upsell shelf." One line I kept that she did not write, flagged for
+her: "Best on your phone. Opens in a new tab so the Village stays open." (the practical
+label-before-click note; cut on her word). Verified every string verbatim by test before
+deploy. Redeploying the draft. SHARED SURFACES: none.
+
 ### 2026-08-14 — R3 BUILT: the HUSH room (JoYi's bot, STARTED 17:50, STOPPED 18:30 JST)
 Phase R3 on JoYi's GO with the approved shelf list plus her addition: Moxie Studios
 (beginner mindful meditation) holds a labeled space on the shelf, "Being connected",

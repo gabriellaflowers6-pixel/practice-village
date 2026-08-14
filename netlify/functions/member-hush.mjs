@@ -49,15 +49,16 @@ export function hushPage() {
   <main class="member-main">
     <section class="member-welcome">
       <p class="eyebrow">HUSH</p>
-      <h1>A little quiet.</h1>
-      <p>The sixty-second app plus a vetted shelf of places to practice. Everything here is free and sells you nothing.</p>
+      <h1>Calm is a skill.</h1>
+      <p>Stillness gives you a little more room between what happens and what you do next. Practicing that pause can help you notice tension sooner, bring your attention back when it scatters, and choose your next move instead of simply reacting.</p>
+      <p>The goal is not to stay calm all the time. It is to get better at finding your way back.</p>
     </section>
     <section class="member-grid" aria-label="The HUSH app">
-      <article class="member-card member-card--wide"><p class="eyebrow">The app</p><h2>Sixty seconds. Three breaths.</h2><p>Shake your phone, watch the dust settle, and breathe until it lands. Free for everyone, no account, nothing tracked.</p><a href="https://hush-aidedeq.netlify.app/" target="_blank" rel="noopener">Open HUSH</a><p class="room-note">Best on your phone. Opens in a new tab so the Village stays open.</p></article>
+      <article class="member-card member-card--wide"><p class="eyebrow">The app</p><h2>Sixty seconds. Let it settle.</h2><p>Shake the globe and watch, listen, and breathe. For one minute, there is nothing to answer, fix, finish, or get right. Just stop adding to the noise and notice what happens.</p><a href="https://hush-aidedeq.netlify.app/" target="_blank" rel="noopener">Open HUSH</a><p class="room-note">Free for everyone. No account. Nothing tracked.</p><p class="room-note">Best on your phone. Opens in a new tab so the Village stays open.</p></article>
     </section>
     <section class="member-section">
-      <div class="section-heading"><div><p class="eyebrow">The shelf</p><h2>Vetted, free, no upsells.</h2></div></div>
-      <p class="record-note">Each entry says what it is good for and where it stops. Platforms whose free tier exists to sell a subscription are not shelved.</p>
+      <div class="section-heading"><div><p class="eyebrow">The shelf</p><h2>More places to practice.</h2></div></div>
+      <p class="record-note">Meditation, sound, breath, rest, and other ways to practice stillness. Each resource tells you what it offers, what it is useful for, and what to know before you leave the Village. Useful on its own. Free means free. No upsell shelf.</p>
       <div class="shelf">
         ${HUSH_SHELF.map(shelfItem).join("\n        ")}
       </div>
