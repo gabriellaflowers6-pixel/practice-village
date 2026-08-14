@@ -41,7 +41,7 @@ export default async function handler() {
   return new Response(pdf, {
     headers: {
       "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename="your-record-${stamp}.pdf"`,
+      "Content-Disposition": `attachment; filename="my-pil-${stamp}.pdf"`,
       "Cache-Control": "private, no-store",
     },
   });

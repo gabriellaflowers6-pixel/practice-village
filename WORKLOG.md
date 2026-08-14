@@ -1,3 +1,10 @@
+### 2026-08-14 — R2 TO PROD on JoYi's GO; PDF titled My PIL (JoYi's bot, STARTED 17:25 JST)
+JoYi's walkthrough ruling: the PDF document title is "My PIL" (subtitle carries the full
+name "My Personal Intelligence Layer · Practice Village"); filename now my-pil-DATE.pdf
+to match. Title-block change verified by composing and reading a fresh local PDF.
+Markdown file header stays "# Your Record" (she scoped the ruling to the PDF; one word
+to change if she wants them matched). Pushing main + prod deploy. Verify appended below.
+
 ### 2026-08-14 — R2 BUILT: the Record downloads, Markdown + PDF (JoYi's bot, STARTED 16:30, STOPPED 17:15 JST)
 Phase R2 on JoYi's GO. Footer ruling captured after her best-practice question: every
 page carries Practice Village · thepracticevillage.org · downloaded date · Page N of M;

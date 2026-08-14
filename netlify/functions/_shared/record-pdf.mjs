@@ -56,7 +56,7 @@ function wrap(text, font, size, maxWidth) {
 
 export async function composeRecordPdf(cards, { downloadedOn }) {
   const doc = await PDFDocument.create();
-  doc.setTitle("Your Record · Practice Village");
+  doc.setTitle("My PIL · Practice Village");
   doc.setProducer("Practice Village");
   doc.setCreator("Practice Village");
 
@@ -92,8 +92,8 @@ export async function composeRecordPdf(cards, { downloadedOn }) {
   };
 
   // Title block
-  put("Your Record", { font: serifBold, size: 26, gap: 6 });
-  put("The Personal Intelligence Layer", { font: sansBold, size: 10, color: CLAY, gap: 8 });
+  put("My PIL", { font: serifBold, size: 26, gap: 6 });
+  put("My Personal Intelligence Layer · Practice Village", { font: sansBold, size: 10, color: CLAY, gap: 8 });
   put(
     "Entries in this record were chosen and kept by the member from conversations with the Practice Village Concierge. Verify details before acting on them.",
     { size: 9, color: SOFT, gap: 3 },

@@ -117,6 +117,9 @@ JoYi does not check: storage internals, auth, bundle mechanics, responsive inter
 
 ## Phase R2: The Record downloads
 
+**Status: SHIPPED 2026-08-14. JoYi walked the draft; PDF title changed to My PIL on
+her ruling; her GO sent it to prod.**
+
 **Governing lines:** MEMBERSHIP_ACCESS_PLAN.md member lobby list (export control);
 Release boundary item 4; the delineation section above; JoYi's format ruling
 (2026-08-14): two formats, exactly.
