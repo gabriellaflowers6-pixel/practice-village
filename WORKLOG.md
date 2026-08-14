@@ -4,7 +4,10 @@ Pushing main and deploying prod: R1 complete (consent-pattern capture, the endin
 Your Record naming on every surface, JoYi's copy picks, the test-account read fix,
 the one Record area at /record). PHASES.md R1 marked shipped; R2 spec updated to
 JoYi's format ruling: Markdown second-brain file + neat PDF with Practice Village
-footer. PROD VERIFY below in this entry once live.
+footer. PROD VERIFIED LIVE (deploy 6a7e7351, pushed db7f337..8d64057): /, /login, /safety-hall
+200; /record + /member gate to /login; script.js v39 + member.css v12 + bundle v10
+serve 200; zero heaviest/PIL leftovers on the landing or porch; live porch Gemini
+answers housing in the new register with no banned words. STOPPED 16:20 JST.
 
 ### 2026-08-14 — R1 walkthrough fixes: the vanished save + one Record area (JoYi's bot, STARTED 15:00, STOPPED 15:40 JST)
 JoYi saved 2 things at the desk; the lobby showed nothing. THE SAVE WORKED: both cards
