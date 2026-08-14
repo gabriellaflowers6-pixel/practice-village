@@ -109,6 +109,63 @@ Q6. **The boundary list:** confirm what is banned from the lobby forever: market
 Q7. **Layout hierarchy:** what does she see FIRST, above the fold: the front desk
     card (talk to someone), or the map (go somewhere)? Today it is desk first.
 
+## The personalized area: proposed design (from JoYi's direction, 2026-08-14)
+
+JoYi's rulings, recorded: the front desk stays first after Welcome back. Beside it
+sits her personal area: her calendar, what she is working on, what she has saved to
+work FROM. Not the Record itself; the Record (PIL) stays a room at the bottom of the
+map. The voucher moves below the rooms. Coming up merges into the calendar or sits
+small beneath it. The area holds commitments she chooses: a thirty-day yoga path,
+HUSH every day, PlantLuck daily, returning to a resource the desk surfaced.
+
+**The shape: one dataset, her choice of view.**
+A plan item is something she chose: title, an optional link into the Village (a room,
+a Record entry, a resource), a rhythm (today only, daily, weekly, a date), and the
+room it came from. She sees her items as a week (a calendar) or as a list (a to-do),
+one toggle, her preference remembered because she set it. If she likes a calendar it
+is a calendar; if she likes a list it is a list.
+
+**Where Add to my calendar lives (one click, preset, editable):**
+- The HUSH room app card: Practice HUSH daily.
+- The Kitchen card: PlantLuck each day.
+- Moxie, when the door opens: the thirty-day beginner path.
+- Every Record entry on /record: Put this on my calendar.
+- The desk ending panel: after the wrap-up, one more route offers the just-kept
+  things for her calendar. Never mid-conversation, never per reply.
+
+**Her real calendar too:** every plan item can download as an .ics file, so it lands
+on her phone's own calendar with recurrence. Built like the Record downloads: in her
+browser, sent nowhere.
+
+**Village dates live inside the same card:** the Rebuild Arc dates and the February
+opening appear under her items as "On the Village calendar." Coming up stops being a
+separate static card. The voucher becomes a compact card below the rooms.
+
+**The trade (JoYi's words: encourage exploration and connection):** her plan is part
+of her consented member record, so the member desk may see it exactly the way it sees
+her consented notes. In return the Concierge gets one standing instruction: when it
+fits, point to a room she has not tried, or to a live moment with people: a workshop
+date, a class, the Commons when it opens. Gently, at most once a conversation, never
+as pressure. The porch never sees any of it.
+
+**What this area will never do:** streaks, missed-day language, completion
+percentages, usage graphs, guilt copy. Checking something off is hers; history is not
+kept in v1. Nothing on this surface measures her.
+
+**Build phasing (proposed, becomes PHASES entries on JoYi's GO):**
+- L1: the area itself: plan storage on the member record, list + week views, the
+  one-click adds from HUSH, Kitchen, and /record, Village dates section, .ics
+  download, edit and remove. Voucher card moves below the rooms; Coming up card
+  retires into the calendar.
+- L2: the desk: ending-panel add, plan context into the member desk prompt, the
+  exploration-and-connection instruction.
+- L3: Moxie thirty-day path add (waits on the member door), room-completion links.
+
+**Open before L1 builds:**
+- The area's name on the page.
+- Default view: list or week.
+- Coming up fully merged, or voucher and a small Coming up both below the calendar.
+
 ## Out of scope for this worksheet
 
 Room interiors, the Concierge brain, Stripe flows, the public landing page.
