@@ -1,3 +1,30 @@
+### 2026-08-14 — R1 walkthrough fixes: the vanished save + one Record area (JoYi's bot, STARTED 15:00, STOPPED 15:40 JST)
+JoYi saved 2 things at the desk; the lobby showed nothing. THE SAVE WORKED: both cards
+verified present in Netlify Blobs (test-onboarding key, 01:32Z). The bug was the read:
+member-onboarding fabricated a fresh empty record for admin/test accounts instead of
+reading the stored test blob, so every GET saw nothing and a second save would have
+clobbered the first. One line: read the test key back before fabricating. Real paying
+members (with membership records) were never affected; member-status already read the
+test blob correctly, member-onboarding did not.
+SECOND (JoYi's ruling on the duplicate): the Village map's Your PIL card is the ONLY
+Record area. The lobby grid card is REMOVED. The map card is now a real door: tag Open,
+opens /record, a member-gated Record room page (new netlify/functions/member-record.mjs)
+holding the full list (read + remove; download lands here in R2) plus the what-stays-
+where privacy note (membership Record vs Safety Hall on-device).
+FILES: netlify/functions/member-onboarding.mjs (the read fix),
+netlify/functions/member-record.mjs (new, /record), netlify/functions/member.mjs (grid
+card removed, map card live, aria label), member-auth.js (initRecordPage, lobby no
+longer renders the list), assets/member.css (record card + note), busters member.css
+v12 + bundle v10 everywhere including the new page.
+NEW STRINGS: record page h1 "Your Personal Intelligence Layer.", intro "Everything you
+chose to keep, from the front desk and across the Village. Yours to read, remove, and
+take with you.", privacy heading "What stays where" + note, map card note "Opens here;
+your lobby stays one tap back."
+VERIFIED: harness renders the record page with JoYi's actual two saved cards (resource
+detail + links intact) at 1161px; blob store inspected directly to confirm the data was
+never lost. NOT verified without JoYi: her authed round trip on the draft.
+SHARED SURFACES: none. Draft only.
+
 ### 2026-08-14 — R1 SHIPPED TO DRAFT: consent pattern, the ending, Your Record, copy sweep (JoYi's bot, STARTED 13:20, STOPPED 14:20 JST)
 Phase R1 of PHASES.md, built on JoYi's GO with her verbatim copy picks.
 FILES: member-auth.js, assets/member.css, assets/member-auth.bundle.js,

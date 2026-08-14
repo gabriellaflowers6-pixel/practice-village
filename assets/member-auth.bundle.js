@@ -1404,7 +1404,6 @@ async function initMemberLobby() {
   } catch (error) {
     document.getElementById("voucherSummary").textContent = "Voucher details are temporarily unavailable. Your membership has not changed.";
   }
-  initSavedCards();
   const signOut = async () => {
     await logout();
     window.location.replace("/");
@@ -2132,6 +2131,19 @@ async function initWelcome() {
   }
   renderQuestion();
 }
+async function initRecordPage() {
+  const user = await getUser();
+  if (!user || !hasMemberAccess(user)) {
+    window.location.replace("/login");
+    return;
+  }
+  document.getElementById("logoutButton")?.addEventListener("click", async () => {
+    await logout();
+    window.location.replace("/");
+  });
+  initSavedCards();
+}
 if (page === "login") initLogin();
 if (page === "member") initMemberLobby();
+if (page === "record") initRecordPage();
 if (page === "welcome") initWelcome();

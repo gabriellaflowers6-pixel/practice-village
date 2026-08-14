@@ -13,7 +13,7 @@ function memberPage() {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/member.css?v=11" />
+  <link rel="stylesheet" href="/assets/member.css?v=12" />
 </head>
 <body data-auth-page="member">
   <header class="member-header">
@@ -27,11 +27,10 @@ function memberPage() {
       <p>Start where you are. You do not need to use every room or finish anything today.</p>
       <span id="memberPlan" class="member-plan">Checking membership…</span>
     </section>
-    <section class="member-grid" aria-label="Front desk and your things">
+    <section class="member-grid" aria-label="Front desk and your membership">
       <article class="member-card member-card--wide"><p class="eyebrow">The front desk</p><h2 id="conciergeCardTitle">Your Concierge</h2><p id="conciergeCardCopy">Talk or type about what you are facing, or take the short optional welcome conversation. Skip anything. Nothing is saved unless you choose.</p><a id="conciergeCardLink" href="/welcome">Open the front desk</a></article>
       <article class="member-card"><p class="eyebrow">Rebuild Arc Workshop</p><h2>Your voucher</h2><p id="voucherSummary">Checking your voucher allowance…</p><p class="room-note">First series: Saturdays October 31 and November 7, 14, 21 · 3:00 pm Central on Zoom. Registering uses your voucher; cancel more than 48 hours ahead to keep it.</p><span id="voucherYear" class="member-state">Membership year</span></article>
       <article class="member-card"><p class="eyebrow">Live</p><h2>Coming up</h2><p>The first Rebuild Arc Workshop series starts October 31. Live classes with JoYi begin February 7, 2027, included with your membership.</p><span class="member-state">Included</span></article>
-      <article class="member-card member-card--saved"><p class="eyebrow">Continue</p><h2>Your Record</h2><p class="room-note">Your Personal Intelligence Layer: what you chose to keep.</p><div id="savedCards" class="saved-cards"><p id="savedCardsCopy">Checking your Record…</p></div><span id="savedCardsState" class="member-state">Yours to keep or clear</span></article>
     </section>
     <section class="member-section" id="rooms">
       <div class="section-heading"><div><p class="eyebrow">The Village map</p><h2>Open the door you need.</h2></div></div>
@@ -41,7 +40,7 @@ function memberPage() {
         <a class="room-card" href="https://hush-aidedeq.netlify.app/" target="_blank" rel="noopener"><img class="room-card__img" src="/assets/rooms/hush.jpg?v=2" alt="" loading="lazy" /><span class="room-tag room-tag--open">Open</span><b>HUSH</b><span>Sixty seconds of calm, free for everyone. Member mindfulness apps and resources join as they open.</span><span class="room-note">Opens in a new tab so the Village stays open.</span></a>
         <div class="room-card room-card--soon"><img class="room-card__img" src="/assets/rooms/moxie.jpg?v=2" alt="" loading="lazy" /><span class="room-tag room-tag--soon">Member entrance being confirmed</span><b>Moxie Studios</b><span>Yoga and meditation with Bott Om and the mirror. Your member door is being connected; we will not hand you a marketing page instead.</span><a class="room-note" href="https://moxiestudio.netlify.app/zenbottom-schedule.html?demo=1" target="_blank" rel="noopener">Try the free studio demo meanwhile →</a></div>
         <div class="room-card room-card--soon"><img class="room-card__img" src="/assets/rooms/curaited.jpg?v=2" alt="" loading="lazy" /><span class="room-tag room-tag--soon">Being connected</span><b>cur.AI.ted starter</b><span>Starter access to the cur.AI.ted studio for members.</span></div>
-        <div class="room-card room-card--soon"><img class="room-card__img" src="/assets/rooms/pil.jpg?v=2" alt="" loading="lazy" /><span class="room-tag room-tag--soon">Rolling out</span><b>Your Record</b><span>Your Personal Intelligence Layer: what you choose to keep, portable and yours.</span></div>
+        <a class="room-card" href="/record"><img class="room-card__img" src="/assets/rooms/pil.jpg?v=2" alt="" loading="lazy" /><span class="room-tag room-tag--open">Open</span><b>Your Record</b><span>Your Personal Intelligence Layer: what you choose to keep, portable and yours.</span><span class="room-note">Opens here; your lobby stays one tap back.</span></a>
       </div>
     </section>
     <section class="member-section account-section">
@@ -49,7 +48,7 @@ function memberPage() {
       <div class="account-links"><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="mailto:info@aidedeq.org?subject=Practice%20Village%20membership">Membership help or cancellation</a><button id="logoutButtonBottom" class="text-button" type="button">Sign out</button></div>
     </section>
   </main>
-  <script type="module" src="/assets/member-auth.bundle.js?v=9"></script>
+  <script type="module" src="/assets/member-auth.bundle.js?v=10"></script>
 </body>
 </html>`;
 }

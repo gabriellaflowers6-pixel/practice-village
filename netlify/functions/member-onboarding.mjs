@@ -43,7 +43,8 @@ export default async function handler(request) {
   const { store } = membership;
   const isAdminTest = roles.some((role) => ["admin", "test_member"].includes(role)) && !membership.record;
   const key = isAdminTest ? `test-onboarding/${await sha256(user.email)}` : membership.key;
-  const record = membership.record || (isAdminTest ? { email: user.email, testAccount: true } : null);
+  // Test accounts store their record under the test key: read it back, never fabricate a fresh one
+  const record = membership.record || (isAdminTest ? (await store.get(key, { type: "json" })) || { email: user.email, testAccount: true } : null);
   if (!record) return Response.json({ ok: false, error: "Membership not found" }, { status: 404 });
 
   const foundingEligible = roles.includes("founding_villager") || record.plan === "founding_villager" || (isAdminTest && roles.includes("test_member"));
