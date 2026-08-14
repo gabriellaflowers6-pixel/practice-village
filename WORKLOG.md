@@ -1,3 +1,15 @@
+### 2026-08-14 — PHASES.md: rewritten phase order + walkthrough guardrails (JoYi's bot, STARTED 12:20, STOPPED 12:50 JST)
+JoYi called the mess: building ahead of the docs. Full re-read of MEMBERSHIP_ACCESS_PLAN.md
+and CONCIERGE_SCOPE.md surfaced a real conflict: today's per-block "Keep this" buttons and
+per-reply close question violate the approved PIL consent pattern (2026-08-12: never a save
+decision per exchange, quiet accumulation, one review at session end). Phase R1 corrects
+this BEFORE the draft goes near prod. FILES: PHASES.md (new), NEXT-SESSION.md (pointer),
+WORKLOG.md. Doc only: no build, no deploy, both drafts unchanged. PHASES.md holds the
+delineation (landing / lobby / linked rooms / Your Record = the PIL, two stores by design),
+seven phases R1-R7 each with governing doc lines, a scope fence, and what JoYi checks vs
+does not check, plus an out-of-fence log so mid-phase discoveries wait their turn.
+SHARED SURFACES: none.
+
 ### 2026-08-14 — The desk closes, and what it produced can be kept (JoYi's bot, STARTED 10:40, STOPPED 11:45 JST)
 JoYi walked the draft and found the real defect: saving was gated entirely on the model
 choosing to emit a twelve-word `card`. Her tiredness conversation produced a

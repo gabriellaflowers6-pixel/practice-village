@@ -4,9 +4,11 @@
 1. Read the shared bot worklog BEFORE any task: Google Doc `1l72hQDZR0AeamW16ECULzvtzT3JO7g0RF35KVfw7Hv0`
    (Gabby's bot tab = hands-off files; write only in JoYi's tab; the Drive connector can read but
    not edit it, so mirror entries in this repo's WORKLOG.md, which both bots read).
-2. One source of truth for product rules: MEMBERSHIP_ACCESS_PLAN.md. Phased punch list:
-   AUGUST_13_SESSION_AUDIT.md. Concierge architecture: CONCIERGE_SCOPE.md. One phase at a time,
-   JoYi checkpoint per phase, DO NOT SKIP. Handoffs report: done / check / don't check / open.
+2. One source of truth for product rules: MEMBERSHIP_ACCESS_PLAN.md. Phase order and
+   walkthrough method: PHASES.md (2026-08-14, supersedes the audit's sequencing).
+   Concierge architecture: CONCIERGE_SCOPE.md. Read ALL THREE fully before building;
+   the PIL consent pattern in CONCIERGE_SCOPE.md is binding on any save/keep UI.
+   One phase at a time, JoYi checkpoint per phase, DO NOT SKIP.
 3. JoYi is the director: outline → her GO → build → draft deploy → her walkthrough → prod.
    Never invent links: unconfirmed destinations stay labeled unavailable.
 
