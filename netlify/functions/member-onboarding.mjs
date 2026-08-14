@@ -3,6 +3,35 @@ import { getMembershipRecordByEmail, sha256 } from "./_shared/membership.mjs";
 
 const MEMBER_ROLES = ["member", "founding_villager", "admin", "test_member"];
 
+const str = (value, max) => String(value == null ? "" : value).trim().slice(0, max);
+const safeHref = (value) => {
+  const href = str(value, 400);
+  return /^https?:\/\//i.test(href) ? href : null;
+};
+
+// A kept card may carry the thing itself: the search she should run, or the places to look.
+// Everything is bounded here, because this is member-supplied content going into the record.
+function cleanDetail(detail) {
+  if (!detail || typeof detail !== "object") return null;
+  if (detail.kind === "search") {
+    const query = str(detail.query, 300);
+    if (!query) return null;
+    const steps = (Array.isArray(detail.steps) ? detail.steps : []).map((step) => str(step, 300)).filter(Boolean).slice(0, 6);
+    const trustNote = str(detail.trustNote, 300);
+    return { kind: "search", query, ...(trustNote ? { trustNote } : {}), ...(steps.length ? { steps } : {}) };
+  }
+  if (detail.kind === "resources") {
+    const items = (Array.isArray(detail.items) ? detail.items : [])
+      .map((item) => ({ name: str(item?.name, 160), href: safeHref(item?.href), detail: str(item?.detail, 240) }))
+      .filter((item) => item.name && item.href)
+      .slice(0, 8);
+    if (!items.length) return null;
+    const sourceNote = str(detail.sourceNote, 300);
+    return { kind: "resources", items, ...(sourceNote ? { sourceNote } : {}) };
+  }
+  return null;
+}
+
 export default async function handler(request) {
   const user = await getUser();
   const roles = Array.isArray(user?.roles) ? user.roles : [];
@@ -30,7 +59,7 @@ export default async function handler(request) {
   } : null;
   const savedCardsView = () => (Array.isArray(record.savedCards) ? record.savedCards : [])
     .filter((entry) => entry && typeof entry.text === "string" && entry.text.trim())
-    .map((entry) => ({ text: entry.text, savedAt: entry.savedAt || null }))
+    .map((entry) => ({ text: entry.text, savedAt: entry.savedAt || null, ...(entry.detail ? { detail: entry.detail } : {}) }))
     .reverse();
 
   if (request.method === "GET") {
@@ -65,13 +94,20 @@ export default async function handler(request) {
       completedAt: now,
     };
   } else if (body.action === "save_cards") {
-    const cards = Array.isArray(body.cards)
-      ? [...new Set(body.cards.map((item) => String(item || "").trim().slice(0, 180)).filter(Boolean))].slice(0, 12)
-      : [];
+    const cards = [];
+    const seen = new Set();
+    for (const item of Array.isArray(body.cards) ? body.cards.slice(0, 12) : []) {
+      const source = typeof item === "string" ? { text: item } : item;
+      const text = String(source?.text || "").trim().slice(0, 300);
+      if (!text || seen.has(text)) continue;
+      seen.add(text);
+      const detail = cleanDetail(source?.detail);
+      cards.push(detail ? { text, detail } : { text });
+    }
     if (!cards.length) return Response.json({ ok: false, error: "Nothing to save" }, { status: 400 });
     const existing = Array.isArray(record.savedCards) ? record.savedCards : [];
     const merged = [...existing];
-    for (const card of cards) if (!merged.some((entry) => entry.text === card)) merged.push({ text: card, savedAt: now });
+    for (const card of cards) if (!merged.some((entry) => entry.text === card.text)) merged.push({ ...card, savedAt: now });
     record.savedCards = merged.slice(-100);
   } else if (body.action === "remove_card") {
     const text = String(body.text || "").trim().slice(0, 180);

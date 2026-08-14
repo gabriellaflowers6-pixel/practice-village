@@ -216,6 +216,48 @@ function initSavedCards() {
     yes.focus();
   }
 
+  // a kept card can carry the thing itself, not just a line about it
+  function detailNode(detail) {
+    const box = document.createElement("div");
+    box.className = "saved-card__detail";
+    if (detail.kind === "search") {
+      const code = document.createElement("code");
+      code.textContent = detail.query;
+      const query = document.createElement("p");
+      query.className = "saved-card__query";
+      query.append(code);
+      box.append(query);
+      if (detail.trustNote) box.append(line(detail.trustNote, "saved-card__note"));
+      if (detail.steps?.length) {
+        const steps = document.createElement("ol");
+        steps.className = "saved-card__steps";
+        for (const step of detail.steps) {
+          const li = document.createElement("li");
+          li.textContent = step;
+          steps.append(li);
+        }
+        box.append(steps);
+      }
+      return box;
+    }
+    const list = document.createElement("ul");
+    list.className = "saved-card__places";
+    for (const place of detail.items || []) {
+      const li = document.createElement("li");
+      const link = document.createElement("a");
+      link.href = place.href;
+      link.target = "_blank";
+      link.rel = "noopener";
+      link.textContent = place.name;
+      li.append(link);
+      if (place.detail) li.append(document.createTextNode(` · ${place.detail}`));
+      list.append(li);
+    }
+    box.append(list);
+    if (detail.sourceNote) box.append(line(detail.sourceNote, "saved-card__note"));
+    return box;
+  }
+
   function fillRow(card, item) {
     const text = line(card.text, "saved-card__text");
     const meta = document.createElement("span");
@@ -229,7 +271,8 @@ function initSavedCards() {
     remove.setAttribute("aria-label", `Remove: ${card.text}`);
     remove.addEventListener("click", () => confirmRow(card, item));
     meta.append(remove);
-    item.replaceChildren(text, meta);
+    if (card.detail) item.replaceChildren(text, detailNode(card.detail), meta);
+    else item.replaceChildren(text, meta);
   }
 
   function render() {
@@ -340,7 +383,7 @@ function initDesk(user, opts = {}) {
       <h1>${firstName ? "Hello, " + firstName + "." : "The Concierge is in."}</h1>
       <p>Talk about what you are facing. Lookups, walkthroughs, and next steps happen here, and nothing is kept unless you choose it.</p>
     </section>
-    ${opts.inviteOnboarding && !sessionStorage.getItem("pvSkipInvite") ? `<div class="desk-invite" id="deskInvite"><p>New to the Village? There is a short, optional welcome conversation: three questions, talk or type, skip anything.</p><div class="welcome-actions"><a class="secondary-button" href="/welcome?onboarding=start">Take the welcome conversation</a><button type="button" class="text-button" id="dismissInvite">Not now</button></div></div>` : ""}
+    ${opts.inviteOnboarding && !sessionStorage.getItem("pvSkipInvite") ? `<div class="desk-invite" id="deskInvite"><p>New to the Village? There is a short, optional welcome conversation: three questions, talk or type, skip anything.</p><div class="welcome-actions"><a class="secondary-button" href="/welcome?onboarding=start">Start the welcome conversation</a><button type="button" class="text-button" id="dismissInvite">Not now</button></div></div>` : ""}
     <section class="onboarding-card desk-card" aria-label="Your Concierge">
       <div class="desk-thread" id="deskThread" aria-live="polite"></div>
       <form class="desk-ask" id="deskAsk">
@@ -361,6 +404,7 @@ function initDesk(user, opts = {}) {
   let pending = [];
   let last = null;
   let busy = false;
+  const keepables = new Map();
 
   const esc = (t) => { const d = document.createElement("div"); d.textContent = t == null ? "" : t; return d.innerHTML; };
   const bubbles = () => msgs.map((m) => `<p class="desk-msg desk-msg--${m.role === "user" ? "me" : "c"}">${esc(m.text)}</p>`).join("");
@@ -370,22 +414,45 @@ function initDesk(user, opts = {}) {
     wire();
   }
 
+  const detailSummary = (detail) => detail.kind === "search"
+    ? (detail.steps?.length ? `the search and ${detail.steps.length} ${detail.steps.length === 1 ? "step" : "steps"}` : "the search")
+    : `${detail.items?.length || 0} ${detail.items?.length === 1 ? "place" : "places"} to look`;
+
+  const isKept = (entry) => pending.some((p) => p.text === entry.text);
+  const keepButton = (key, entry) => {
+    keepables.set(key, entry);
+    return isKept(entry)
+      ? `<button type="button" class="text-button desk-keep" disabled>✓ kept for the wrap-up</button>`
+      : `<button type="button" class="text-button desk-keep" data-keep-block="${esc(key)}">Keep this</button>`;
+  };
+
+  // the desk closes once it has handed her something, instead of re-offering the menu
+  const closeLine = (d) => (d.nextStep || d.searchHelp || d.results?.items?.length)
+    ? `<p class="desk-close">Would you like to keep any of this for your PIL?</p>`
+    : "";
+
   function render(d) {
+    keepables.clear();
     let html = bubbles();
     if (d) {
-      if (d.nextStep) html += `<div class="desk-block"><span class="desk-label">your clear next step</span><p class="desk-act">${esc(d.nextStep)}</p></div>`;
+      if (d.nextStep) {
+        html += `<div class="desk-block"><span class="desk-label">your clear next step</span><p class="desk-act">${esc(d.nextStep)}</p>${keepButton("step", { text: d.nextStep })}</div>`;
+      }
       if (d.results && d.results.items) {
-        html += `<div class="desk-block"><span class="desk-label">${esc(d.results.title)}</span><ul class="desk-found">${d.results.items.map((it) => `<li><a href="${esc(it.href)}" target="_blank" rel="noopener">${esc(it.name)}</a> · ${esc(it.detail)}</li>`).join("")}</ul><p class="desk-note">${esc(d.results.sourceNote)}</p></div>`;
+        const entry = { text: d.results.title, detail: { kind: "resources", items: d.results.items.map((it) => ({ name: it.name, href: it.href, detail: it.detail })), sourceNote: d.results.sourceNote } };
+        html += `<div class="desk-block"><span class="desk-label">${esc(d.results.title)}</span><ul class="desk-found">${d.results.items.map((it) => `<li><a href="${esc(it.href)}" target="_blank" rel="noopener">${esc(it.name)}</a> · ${esc(it.detail)}</li>`).join("")}</ul><p class="desk-note">${esc(d.results.sourceNote)}</p>${keepButton("results", entry)}</div>`;
       }
       if (d.searchHelp) {
-        html += `<div class="desk-block"><span class="desk-label">search this, together</span><p class="desk-query"><code>${esc(d.searchHelp.query)}</code></p><p class="desk-note">${esc(d.searchHelp.trustNote)}</p>${d.searchHelp.steps?.length ? `<ol class="desk-steps">${d.searchHelp.steps.map((st) => `<li>${esc(st)}</li>`).join("")}</ol>` : ""}</div>`;
+        const entry = { text: `Search: ${d.searchHelp.query}`, detail: { kind: "search", query: d.searchHelp.query, trustNote: d.searchHelp.trustNote, steps: d.searchHelp.steps || [] } };
+        html += `<div class="desk-block"><span class="desk-label">search this, together</span><p class="desk-query"><code>${esc(d.searchHelp.query)}</code></p><p class="desk-note">${esc(d.searchHelp.trustNote)}</p>${d.searchHelp.steps?.length ? `<ol class="desk-steps">${d.searchHelp.steps.map((st) => `<li>${esc(st)}</li>`).join("")}</ol>` : ""}${keepButton("search", entry)}</div>`;
       }
       if (d.route) html += `<p class="desk-route">when you want it: <b><a href="${esc(d.route.href)}"${String(d.route.href).startsWith("#") || String(d.route.href).startsWith("/") ? "" : ' target="_blank" rel="noopener"'}>${esc(d.route.label)}</a></b></p>`;
+      html += closeLine(d);
       if (d.quickReplies?.length) html += `<div class="desk-chips desk-chips--quick">${d.quickReplies.map((q) => `<button type="button" data-seed="${esc(q)}">${esc(q)}</button>`).join("")}</div>`;
       const menu = (d.choices || []).filter((c) => c !== "save_this");
       if (menu.length) html += `<div class="desk-chips">${menu.map((c) => `<button type="button" data-choice="${c}">${esc(CHOICE_LABELS[c] || c)}</button>`).join("")}</div>`;
     }
-    if (pending.length) html += `<p class="desk-pending">${pending.length} ${pending.length === 1 ? "moment" : "moments"} set aside · <button type="button" class="text-button" data-wrap>wrap up and review</button></p>`;
+    if (pending.length) html += `<p class="desk-pending">${pending.length} ${pending.length === 1 ? "thing" : "things"} set aside · <button type="button" class="text-button" data-wrap>wrap up and review</button></p>`;
     html += `<button type="button" class="text-button desk-reset" data-reset>↺ start over</button>`;
     thread.innerHTML = html;
     wire();
@@ -393,7 +460,7 @@ function initDesk(user, opts = {}) {
   }
 
   function renderWrap() {
-    thread.innerHTML = `<p class="desk-q">Keep any of this in your Village record?</p><div class="desk-wraplist">${pending.map((c, i) => `<label class="desk-wrapitem"><input type="checkbox" checked data-i="${i}"> ${esc(c)}</label>`).join("")}</div><div class="welcome-actions"><button type="button" class="primary-button" data-keep>Keep the checked ones</button><button type="button" class="secondary-button" data-discard>Keep nothing</button></div><p class="onboarding-privacy" id="wrapStatus" role="status"></p>`;
+    thread.innerHTML = `<p class="desk-q">Would you like to keep any of this for your PIL?</p><div class="desk-wraplist">${pending.map((c, i) => `<label class="desk-wrapitem"><input type="checkbox" checked data-i="${i}"> ${esc(c.text)}${c.detail ? `<span class="desk-wrapnote">${esc(detailSummary(c.detail))}</span>` : ""}</label>`).join("")}</div><div class="welcome-actions"><button type="button" class="primary-button" data-keep>Keep the checked ones</button><button type="button" class="secondary-button" data-discard>Keep nothing</button></div><p class="onboarding-privacy" id="wrapStatus" role="status"></p>`;
     thread.querySelector("[data-keep]").addEventListener("click", async () => {
       const chosen = [...thread.querySelectorAll("input[data-i]:checked")].map((cb) => pending[Number(cb.dataset.i)]);
       const wrapStatus = document.getElementById("wrapStatus");
@@ -418,6 +485,12 @@ function initDesk(user, opts = {}) {
       if (c === "keep_private") { pending.pop(); b.disabled = true; b.textContent = "✓ kept private"; return; }
       if (CHOICE_SENDS[c]) ask(CHOICE_SENDS[c]);
     }));
+    thread.querySelectorAll("[data-keep-block]").forEach((b) => b.addEventListener("click", () => {
+      const entry = keepables.get(b.dataset.keepBlock);
+      if (!entry || isKept(entry)) return;
+      pending.push(entry);
+      render(last);
+    }));
     thread.querySelector("[data-wrap]")?.addEventListener("click", renderWrap);
     thread.querySelector("[data-reset]")?.addEventListener("click", () => { msgs = []; last = null; renderIdle(); });
   }
@@ -434,7 +507,7 @@ function initDesk(user, opts = {}) {
       busy = false;
       if (!d.ok) { msgs.pop(); render(last); thread.insertAdjacentHTML("beforeend", `<p class="desk-msg desk-msg--c">${esc(d.error || "The Concierge is away from the desk. Try again in a moment.")}</p>`); return; }
       msgs.push({ role: "model", text: d.reply });
-      if (d.card && !pending.includes(d.card)) pending.push(d.card);
+      if (d.card && !pending.some((p) => p.text === d.card)) pending.push({ text: d.card });
       last = d;
       render(d);
     } catch {

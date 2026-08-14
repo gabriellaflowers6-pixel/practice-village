@@ -84,3 +84,15 @@ p,li,.member-card p,.onboarding-help,.welcome-intro p{text-wrap:pretty}
 .saved-card__actions .text-button{font-size:.8rem;text-decoration:underline}
 .saved-cards .text-button{justify-self:start;font-size:.8rem;text-decoration:underline}
 .member-card--saved .room-note{margin:0}
+/* keeping what the desk produced, and showing it again in the lobby */
+.desk-keep{display:inline-block;margin-top:.6rem;font-size:.78rem;text-decoration:underline;color:var(--clay)}
+.desk-keep[disabled]{color:var(--soft);text-decoration:none;cursor:default;opacity:.75}
+.desk-close{margin:1rem 0 .2rem;font:600 1rem/1.45 var(--sans);color:var(--ink)}
+.desk-wrapnote{display:block;margin-top:.15rem;font-size:.76rem;color:var(--soft)}
+.saved-card__detail{margin:.5rem 0 0;padding:.6rem .7rem;border-left:2px solid rgba(199,154,82,.55);background:rgba(245,232,212,.45);border-radius:0 8px 8px 0}
+.saved-card__query{margin:0!important;font-size:.8rem}
+.saved-card__query code{word-break:break-word;font-size:.78rem}
+.saved-card__note{margin:.35rem 0 0!important;font-size:.74rem;color:var(--soft)!important}
+.saved-card__steps,.saved-card__places{margin:.4rem 0 0;padding-left:1.1rem;font-size:.8rem;line-height:1.45;color:var(--soft)}
+.saved-card__steps li,.saved-card__places li{margin:.2rem 0}
+.saved-card__places a{font-weight:650;color:var(--ink)}

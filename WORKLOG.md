@@ -1,3 +1,37 @@
+### 2026-08-14 — The desk closes, and what it produced can be kept (JoYi's bot, STARTED 10:40, STOPPED 11:45 JST)
+JoYi walked the draft and found the real defect: saving was gated entirely on the model
+choosing to emit a twelve-word `card`. Her tiredness conversation produced a
+womenshealth.gov walkthrough and no card, so no "moments set aside" line ever appeared,
+nothing could be saved, and Your saved things stayed empty. The walkthrough itself, the
+most useful thing the desk made, had no save path at all. The desk also re-offered the
+choice menu after delivering, so a session had no ending.
+FILES: member-auth.js (desk keep controls, close line, richer pending entries, saved-card
+detail rendering, banner copy), netlify/functions/member-onboarding.mjs (save_cards accepts
+a card that carries its detail, bounded and sanitized server-side),
+netlify/functions/concierge.mjs (CLOSING rule + porch override), assets/member.css,
+assets/member-auth.bundle.js. Busters: member.css v10, bundle v8.
+WHAT CHANGED: (1) Keep this sits on each thing the desk produces, the next step, the search
+walkthrough, the resource list, so keeping is hers, not the model's. Model-written cards
+still accumulate as before. (2) A kept entry can carry the thing itself: the query, the
+trust note, up to 6 steps, or up to 8 resource links. Server bounds every field and only
+accepts http(s) hrefs. The lobby renders it back, so the search she kept is the search she
+gets. (3) The desk closes: after nextStep, searchHelp, or results the model sets choices
+and quickReplies to [] and names what she has, and the UI asks JoYi's line, "Would you like
+to keep any of this for your PIL?". (4) "Take the welcome conversation" is now "Start".
+PORCH UNCHANGED AND STILL HONEST: the CLOSING rule is explicitly overridden in porch mode,
+which keeps nothing and must never mention keeping, saving, or a record.
+VERIFIED in a scratchpad harness running the real initDesk and initSavedCards source with
+/concierge and /member-onboarding stubbed, replaying JoYi's exact failure: the walkthrough
+is keepable, the close appears, the menu does not come back, the wrap-up saves the query
+plus all three steps, and all three kinds (search, plain card, resources) round-trip into
+the lobby with links carrying target=_blank rel=noopener. Removing a detail card still
+removes cleanly. No horizontal overflow at 1161px or 375px.
+NOT verified without JoYi: live Gemini actually honoring the CLOSING rule. That is her
+walkthrough, and it is the one thing to watch.
+OPEN QUESTION FOR JOYI: naming. The desk now says PIL, the lobby card says Your saved
+things, and the member map says Your Record. Three names for one thing.
+SHARED SURFACES: none. No schema, no env, no Stripe. Draft deploy only.
+
 ### 2026-08-14 — Saved things in the member lobby, with a Remove that really removes (JoYi's bot, STARTED 09:10 JST, STOPPED 10:05 JST)
 JoYi's GO on the outline. The lobby card that said "Rolling out" now shows what the
 Villager actually kept. Backend already saved cards (member-onboarding action
