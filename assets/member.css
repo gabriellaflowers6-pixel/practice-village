@@ -179,7 +179,7 @@ p,li,.member-card p,.onboarding-help,.welcome-intro p{text-wrap:pretty}
 .member-card--desk-embed .desk-invite{width:auto;margin:0 0 6px;color:var(--ink)}
 .account-links .member-plan{font-size:.75rem}
 /* the welcome line under the greeting holds one line on desktop */
-@media(min-width:921px){.member-welcome{max-width:none}.member-welcome>p:not(.eyebrow){white-space:nowrap}}
+@media(min-width:921px){body[data-auth-page="member"] .member-welcome{max-width:none}body[data-auth-page="member"] .member-welcome>p:not(.eyebrow){white-space:nowrap}}
 /* In the Village: quiet links, aligned, unbolded */
 .village-date__actions .text-button{padding:0;font-weight:400}
 .village-date{gap:4px}

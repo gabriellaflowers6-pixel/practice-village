@@ -766,22 +766,6 @@ async function initMemberLobby() {
   const practice = initMyPractice();
   memberPractice = practice;
 
-  const plantluckAdd = document.getElementById("addPlantluckDaily");
-  plantluckAdd?.addEventListener("click", async () => {
-    plantluckAdd.disabled = true;
-    try {
-      await practiceApi({ action: "add_item", item: { title: "PlantLuck", when: "daily", href: "https://plantluck.org/", linkLabel: "Open PlantLuck", source: "kitchen" } });
-      document.getElementById("plantluckAddStatus").hidden = false;
-      plantluckAdd.hidden = true;
-      await practice?.refresh();
-    } catch {
-      plantluckAdd.disabled = false;
-      const status = document.getElementById("plantluckAddStatus");
-      status.textContent = "That did not add. Try again in a moment.";
-      status.hidden = false;
-    }
-  });
-
   try {
     const response = await fetch("/member-status", { headers: { Accept: "application/json" } });
     if (response.ok) {
@@ -1604,6 +1588,24 @@ async function initRoomShell() {
     return;
   }
   document.getElementById("logoutButton")?.addEventListener("click", async () => { await logout(); window.location.replace("/"); });
+
+  const roomAdd = (buttonId, statusId, item) => {
+    const button = document.getElementById(buttonId);
+    button?.addEventListener("click", async () => {
+      button.disabled = true;
+      try {
+        await practiceApi({ action: "add_item", item });
+        document.getElementById(statusId).hidden = false;
+        button.hidden = true;
+      } catch {
+        button.disabled = false;
+        const status = document.getElementById(statusId);
+        status.textContent = "That did not add. Try again in a moment.";
+        status.hidden = false;
+      }
+    });
+  };
+  roomAdd("addPlantluckDailyRoom", "plantluckRoomStatus", { title: "PlantLuck", when: "daily", href: "https://plantluck.org/", linkLabel: "Open PlantLuck", source: "kitchen" });
 
   const hushAdd = document.getElementById("addHushDaily");
   hushAdd?.addEventListener("click", async () => {

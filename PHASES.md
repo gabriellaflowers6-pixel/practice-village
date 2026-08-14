@@ -158,6 +158,9 @@ and every link. Does not check: resource data structure.
 
 ## Phase K1: The Kitchen room (added on JoYi's ruling 2026-08-15)
 
+**Status: BUILT 2026-08-15. Shelf approved by JoYi (PCRM cut by her; MyPlate and CDC
+dropped as unverifiable). Room copy is JoYi's verbatim. On draft.**
+
 The Kitchen gets exactly what HUSH got: a member room holding the app plus a vetted
 shelf. PlantLuck alone is not the room.
 

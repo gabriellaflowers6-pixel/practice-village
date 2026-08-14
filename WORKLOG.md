@@ -1,3 +1,29 @@
+### 2026-08-15 — K1 BUILT: the Kitchen room, and a nowrap regression caught (JoYi's bot, STARTED 03:20, STOPPED 04:10 JST)
+K1 on JoYi's GO. Shelf approved by her from the proposed list: PCRM CUT by JoYi;
+MyPlate and CDC Nutrition dropped because both return Forbidden from our network and
+could not be verified (noted in the data file, offered for re-add if they load for
+her). Ten entries, all curl-verified 200 today, in two groups: learn (NutritionFacts,
+WHO healthy diet, USDA FoodData Central, NIH B12, NIH Iron, SNAP-Ed Recipes) and food
+(SNAP retailer locator, USDA Farmers Market Directory, Feeding America, USDA WIC).
+Her descriptions used verbatim as the "what it is good for" line; I wrote each "Where
+it stops" limit, including the honest one on SNAP-Ed: not every recipe is plant-based.
+ROOM COPY IS JOYI'S, VERBATIM, verified string by string before deploy.
+FILES: netlify/functions/_shared/kitchen-resources.mjs (new, approved-by header,
+reviewBy 2026-11-15), netlify/functions/member-kitchen.mjs (new, gated /kitchen),
+netlify/functions/member.mjs (map card opens /kitchen), member-auth.js (Add PlantLuck
+daily moved from the map card into the room beside the HUSH pattern, via a shared
+roomAdd helper), assets/member.css, busters member.css v21 + bundle v17.
+REGRESSION FOUND AND FIXED, MINE, AND IT IS LIVE ON PROD RIGHT NOW: the one-line
+welcome rule shipped in member.css v17 applied white-space:nowrap to .member-welcome
+paragraphs on EVERY member page, not just the lobby. JoYi's long Kitchen intro forced
+a 1550px line on a 1161px page. Confirmed the unscoped rule is serving on prod at
+v20, which means /hush and /record have been scrolling sideways since that deploy.
+Rule now scoped to body[data-auth-page="member"]. Verified after: kitchen 1161/1161,
+hush 1161/1161, both clean.
+METHOD NOTE: caught only because I re-measured a page I had not re-tested after a
+later CSS change. Room pages need a re-check whenever shared member CSS moves.
+SHARED SURFACES: none. Draft only.
+
 ### 2026-08-15 — L4 BUILT: What happened (outcome notes) + WHOLE STACK TO PROD (JoYi's bot, STARTED 02:40 JST)
 JoYi asked for pros and cons of notes in the PIL, then said go. Built as OUTCOME NOTES
 attached to an entry, not a notes section: her stated shape ("a note can pop up") was
