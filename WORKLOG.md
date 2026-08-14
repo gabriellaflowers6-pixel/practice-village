@@ -1,3 +1,41 @@
+### 2026-08-15 — R5 BUILT: account controls (JoYi's bot, STARTED 05:00, STOPPED 05:50 JST)
+Phase R5 on JoYi's GO, her two rulings applied: TWO-DELETION SPLIT, and login-side
+password reset is enough (the account row links to /login for it, no separate control).
+Closes MEMBERSHIP_ACCESS_PLAN's release boundary item 4: a member can see how to
+cancel, export, and delete.
+NEW /account, member-gated, one function serving the page on GET and the actions on
+POST. FOUR PARTS: (1) membership in plain facts, plan label and period end from the
+record, plus an explicit line when a cancellation is already scheduled; (2) Manage
+billing and cancel, opening a real Stripe billing portal session created server-side
+from her customer ID, return_url back to /account, with the mailto kept underneath as
+the human path; (3) export surfaced here as well as on /record, above the erasures,
+with "Download your Record first"; (4) the two erasures.
+THE TWO ERASURES, deliberately separate: "Erase my Record" (new member-onboarding
+action erase_record: wipes savedCards, practice, and onboarding preferences; membership
+continues) and "Close my membership and erase everything" (cancels the Stripe
+subscription FIRST and aborts the whole operation if that fails, then strips member
+roles from Identity, then deletes the member blob and its subscription/customer
+pointers, then signs her out). Both require typing a word: ERASE or CLOSE, enforced on
+the client AND revalidated server-side. Never a checkbox, never one click.
+HONEST LINE ON THE PAGE: Safety Hall is on her device, so neither erasure touches it,
+and she clears it from inside Safety Hall.
+FILES: netlify/functions/member-account.mjs (new), member-onboarding.mjs (erase_record),
+member.mjs (account row now links Your account, replacing the bare mailto),
+member-record.mjs (Your account in the header), member-auth.js (initAccountPage +
+dangerFlow), assets/member.css, busters member.css v23 + bundle v18.
+VERIFIED in a harness running the real initAccountPage against a stubbed API: facts
+render from status, confirm button disabled until the exact word is typed and rejects
+a wrong word for both flows, Keep everything restores the button, erase posts
+{action:erase_record, confirm:ERASE} and confirms membership is unchanged, billing
+posts and actually navigated the browser to the returned Stripe URL (proof the flow
+completes; the test session errored at Stripe as expected), no horizontal overflow.
+Structure confirmed by DOM read, not pixels, per the stale-screenshot gotcha.
+NOT verified without JoYi: a real Stripe portal session against her live customer, and
+the close-account path end to end. THE CLOSE PATH IS DESTRUCTIVE AND HAS NEVER BEEN RUN
+against a real account: it should be walked on the draft with a test member first.
+SHARED SURFACES: Stripe (billing portal session + subscription cancel) uses the existing
+STRIPE_SECRET_KEY. No schema change. Draft only.
+
 ### 2026-08-15 — K1 closing line + K1 AND L4 TO PROD (JoYi's bot, STARTED 04:15 JST)
 JoYi's walkthrough note: the Kitchen closing line must hold ONE line on desktop, with a
 standing instruction to stop breaking sentences like it. Root cause: .record-note caps

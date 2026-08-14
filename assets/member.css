@@ -207,3 +207,13 @@ p,li,.member-card p,.onboarding-help,.welcome-intro p{text-wrap:pretty}
 /* short standalone lines hold together on desktop instead of breaking mid-thought */
 .shelf-close{max-width:none;margin-top:18px}
 @media(min-width:921px){.shelf-close{white-space:nowrap}}
+/* the account page: facts, then two erasures that are never one click */
+.account-actions{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0 6px;align-items:center}
+.account-actions .secondary-button{text-decoration:none;display:inline-block}
+.account-danger{color:var(--clay);text-decoration:underline;font-weight:650}
+.account-danger[disabled]{color:var(--soft);text-decoration:none;cursor:default;opacity:.7}
+.account-danger-form{display:grid;gap:8px;margin-top:4px}
+.account-danger-form input{width:min(220px,100%);padding:.6rem .7rem;border:1px solid var(--line);border-radius:10px;font:1rem var(--sans);color:var(--ink);background:#fff;letter-spacing:.08em}
+.account-danger-form input:focus{outline:3px solid rgba(168,66,20,.25);border-color:var(--clay)}
+.account-error{color:var(--clay)!important;font-weight:650}
+.member-card h3{margin:0 0 .3rem;font:600 1.5rem/1.15 var(--serif)}

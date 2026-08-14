@@ -1580,6 +1580,159 @@ async function initRecordPage() {
   initSavedCards();
 }
 
+// The account page: facts, billing, and two erasures that are never one click.
+async function initAccountPage() {
+  const user = await getUser();
+  if (!user || !hasMemberAccess(user)) {
+    window.location.replace("/login");
+    return;
+  }
+  const signOut = async () => { await logout(); window.location.replace("/"); };
+  document.getElementById("logoutButton")?.addEventListener("click", signOut);
+  document.getElementById("logoutButtonBottom")?.addEventListener("click", signOut);
+
+  const roles = rolesFor(user);
+  document.getElementById("memberPlan").textContent = roles.includes("founding_villager") ? "Founding Villager" : "Village Member";
+
+  const longDate = (iso) => {
+    if (!iso) return null;
+    const date = new Date(iso);
+    return Number.isNaN(date.getTime()) ? null : date.toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" });
+  };
+
+  try {
+    const response = await fetch("/member-status", { headers: { Accept: "application/json" } });
+    if (!response.ok) throw new Error("status");
+    const { membership } = await response.json();
+    document.getElementById("accountPlan").textContent = membership.planLabel || "Your membership";
+    const period = document.getElementById("accountPeriod");
+    if (membership.testAccount) {
+      period.textContent = "Test access. No payment is attached to this account.";
+    } else {
+      const ends = longDate(membership.currentPeriodEnd);
+      period.textContent = ends ? `Your current period runs through ${ends}.` : "Your membership is active.";
+      if (membership.cancelAtPeriodEnd && ends) {
+        const note = document.getElementById("accountCancelNote");
+        note.textContent = `Your membership is set to end. Your access continues through ${ends}.`;
+        note.hidden = false;
+      }
+    }
+  } catch {
+    document.getElementById("accountPlan").textContent = "Your membership";
+    document.getElementById("accountPeriod").textContent = "Membership details are temporarily unavailable. Nothing has changed.";
+  }
+
+  const billing = document.getElementById("openBilling");
+  billing?.addEventListener("click", async () => {
+    billing.disabled = true;
+    const original = billing.textContent;
+    billing.textContent = "Opening Stripe…";
+    try {
+      const response = await fetch("/account", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ action: "billing_portal" }),
+      });
+      const payload = await response.json().catch(() => null);
+      if (!response.ok || !payload?.ok) throw new Error(payload?.error || "Billing is temporarily unavailable.");
+      window.location.assign(payload.url);
+    } catch (error) {
+      billing.disabled = false;
+      billing.textContent = original;
+      const note = document.createElement("p");
+      note.className = "room-note account-error";
+      note.textContent = error.message;
+      billing.parentElement.after(note);
+    }
+  });
+
+  // both erasures: type the word, read what it does, then it happens
+  function dangerFlow({ boxId, startId, word, prompt, endpoint, payloadFor, onDone }) {
+    const box = document.getElementById(boxId);
+    const start = document.getElementById(startId);
+    start?.addEventListener("click", () => {
+      const form = document.createElement("div");
+      form.className = "account-danger-form";
+      const label = document.createElement("label");
+      label.className = "saved-card__notelabel";
+      label.textContent = prompt;
+      const input = document.createElement("input");
+      input.type = "text";
+      input.autocomplete = "off";
+      input.setAttribute("aria-label", prompt);
+      label.append(input);
+      const status = document.createElement("p");
+      status.className = "saved-card__status";
+      const actions = document.createElement("div");
+      actions.className = "account-actions";
+      const confirm = document.createElement("button");
+      confirm.type = "button";
+      confirm.className = "text-button account-danger";
+      confirm.textContent = start.textContent;
+      confirm.disabled = true;
+      const cancel = document.createElement("button");
+      cancel.type = "button";
+      cancel.className = "text-button";
+      cancel.textContent = "Keep everything";
+      cancel.addEventListener("click", () => { box.replaceChildren(start); });
+      input.addEventListener("input", () => { confirm.disabled = input.value.trim().toUpperCase() !== word; });
+      confirm.addEventListener("click", async () => {
+        confirm.disabled = true;
+        status.textContent = "Working…";
+        try {
+          const response = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            body: JSON.stringify(payloadFor(input.value.trim())),
+          });
+          const payload = await response.json().catch(() => null);
+          if (!response.ok || !payload?.ok) throw new Error(payload?.error || "That did not go through. Nothing has changed.");
+          onDone(box);
+        } catch (error) {
+          confirm.disabled = false;
+          status.textContent = error.message;
+        }
+      });
+      actions.append(confirm, cancel);
+      form.append(label, actions, status);
+      box.replaceChildren(form);
+      input.focus();
+    });
+  }
+
+  dangerFlow({
+    boxId: "eraseRecordBox",
+    startId: "eraseRecordStart",
+    word: "ERASE",
+    prompt: "Type ERASE to confirm.",
+    endpoint: "/member-onboarding",
+    payloadFor: (confirm) => ({ action: "erase_record", confirm }),
+    onDone: (box) => {
+      const done = document.createElement("p");
+      done.className = "saved-card__status";
+      done.textContent = "Your Record is erased. Your membership is unchanged.";
+      box.replaceChildren(done);
+    },
+  });
+
+  dangerFlow({
+    boxId: "closeAccountBox",
+    startId: "closeAccountStart",
+    word: "CLOSE",
+    prompt: "Type CLOSE to confirm.",
+    endpoint: "/account",
+    payloadFor: (confirm) => ({ action: "close_account", confirm }),
+    onDone: async (box) => {
+      const done = document.createElement("p");
+      done.className = "saved-card__status";
+      done.textContent = "Your membership is closed and your Record is erased. Signing you out.";
+      box.replaceChildren(done);
+      await logout().catch(() => {});
+      window.setTimeout(() => window.location.replace("/"), 1800);
+    },
+  });
+}
+
 // server-rendered member room pages: guard the door, wire sign out and room adds
 async function initRoomShell() {
   const user = await getUser();
@@ -1626,5 +1779,6 @@ async function initRoomShell() {
 if (page === "login") initLogin();
 if (page === "member") initMemberLobby();
 if (page === "record") initRecordPage();
+if (page === "account") initAccountPage();
 if (page === "room") initRoomShell();
 if (page === "welcome") initWelcome();

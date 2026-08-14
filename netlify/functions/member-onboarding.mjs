@@ -124,6 +124,14 @@ export default async function handler(request) {
       delete entry.note;
       delete entry.notedAt;
     }
+  } else if (body.action === "erase_record") {
+    // Erase my Record: what she kept, My Practice, and her consented notes. Membership stays.
+    if (String(body.confirm || "").trim().toUpperCase() !== "ERASE") {
+      return Response.json({ ok: false, error: "Type ERASE to confirm" }, { status: 400 });
+    }
+    delete record.savedCards;
+    delete record.practice;
+    record.onboarding = { status: "erased", preferences: [], completedAt: null, erasedAt: now };
   } else if (body.action === "skip") {
     // orientation goes quiet once declined: never re-ask, always reachable from the account row
     if (!["complete", "complete_private"].includes(record.onboarding?.status)) {
