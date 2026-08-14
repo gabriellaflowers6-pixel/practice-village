@@ -266,8 +266,9 @@ it, removing a note leaves the entry intact. Does not check: storage.
 
 ## Phase R5: Account controls complete
 
-**Status: BUILT 2026-08-15, on draft. JoYi's rulings: two-deletion split (not one), and
-the login-side password reset is enough (no change-password control on the page).**
+**Status: SHIPPED 2026-08-15. JoYi's rulings: two-deletion split (not one), and the
+login-side password reset is enough. She walked the draft and gave the GO. The close
+path remains untested against a real account by design; walk it with a test member.**
 
 **Governing lines:** MEMBERSHIP_ACCESS_PLAN.md build order 7 and Release boundary:
 a member can see how to cancel, export, and delete.

@@ -1,3 +1,11 @@
+### 2026-08-15 — R5 TO PROD on JoYi's GO (JoYi's bot, STARTED 06:00 JST)
+Account controls live: /account with membership facts, the Stripe billing portal,
+downloads above the danger, and the two-deletion split with type-to-confirm on both.
+This closes MEMBERSHIP_ACCESS_PLAN release boundary item 4. Pushing main + prod deploy.
+STANDING CAUTION carried forward: the close-account path is destructive and has still
+never been run end to end against a real account. Walk it with a test member before
+anyone relies on it. Verify appended below.
+
 ### 2026-08-15 — R5 BUILT: account controls (JoYi's bot, STARTED 05:00, STOPPED 05:50 JST)
 Phase R5 on JoYi's GO, her two rulings applied: TWO-DELETION SPLIT, and login-side
 password reset is enough (the account row links to /login for it, no separate control).
