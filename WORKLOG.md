@@ -1,3 +1,19 @@
+### 2026-08-15 — TRACEABLE, ALWAYS: sources named in the sentence and carried into the PIL (JoYi's bot, STARTED 00:25, STOPPED 00:45 JST)
+JoYi's ruling: no blowing smoke; every fact traceable. Three layers, two built this
+pass, one verified already true:
+(1) concierge.mjs prompt, new TRACEABLE ALWAYS block: every factual claim about a
+program, service, right, or resource names its source in the same sentence (the
+institution or program, plainly); if the Concierge cannot name the source it may not
+state the fact, and offers the walkthrough instead. Links arrive via searchHelp or
+lookups, never invented.
+(2) /record page states the guarantee: "Searches and resource lists you keep carry
+their sources and links with them, here and in every download."
+(3) Verified already true: kept search/resource entries store trustNote, sourceNote,
+and hrefs, and both the Markdown and the My PIL PDF render them (checked in the R2
+fixtures). The PDF's provenance note + this makes every export self-documenting.
+FILES: netlify/functions/concierge.mjs, netlify/functions/member-record.mjs.
+Live register verified on the draft below. SHARED SURFACES: none. Draft only.
+
 ### 2026-08-15 — My Concierge rename + dark-card legibility (JoYi's bot, STARTED 00:00, STOPPED 00:20 JST)
 JoYi's notes on the polish draft: card header renamed "My Concierge" (front desk line
 removed; membership container, matches My Practice). ROOT CAUSE of the unreadable

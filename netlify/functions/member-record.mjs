@@ -33,6 +33,7 @@ function recordPage() {
       <p class="eyebrow">Privacy</p>
       <h2>What stays where</h2>
       <p class="record-note">What you keep here travels with your membership. What you document in Safety Hall stays on your device and is never sent to us. Removing something here removes it for good.</p>
+      <p class="record-note">Searches and resource lists you keep carry their sources and links with them, here and in every download.</p>
     </section>
   </main>
   <script type="module" src="/assets/member-auth.bundle.js?v=14"></script>
