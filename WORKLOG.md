@@ -1,3 +1,35 @@
+### 2026-08-15 — P1 MEMBER POLISH: the member area earns the landing's restraint (JoYi's bot, STARTED 09:50, STOPPED 10:40 JST)
+JoYi's call: the membership page is subpar to the landing; make it richer. She named
+the cur.AI.ted pill (big, off-colour), the rounded buttons, the weak Open sign, and
+the landing's scroll feel. DIAGNOSIS, and it explains all four: the member area copied
+the landing's shapes without its restraint. The landing's .room__tag is NOT a pill, it
+is uppercase letterspaced text with no fill, colour-coded. The member area added filled
+999px pills, which is why "Open" reads weak and "Included with membership" became a
+blob (long text in a pill is always a blob).
+BUILT (assets/member.css appended per house rules, plus initReveal in member-auth.js):
+(1) status pills become label text, moss #6E7F55 open / #99876F pending; (2) the
+8px 9px hard offset shadow (a sticker look) becomes layered soft elevation with a 3px
+lift and a gold border warm-up on hover; (3) light cards get backdrop blur + saturate
+so they layer over the cream ground; (4) the landing's reveal comes to every member
+page, same curve and timing, staggered .07s per sibling capped at 5; (5) secondary
+buttons drop the pill for a hairline border at 10px radius, primary keeps its round
+filled shape and gains a soft clay glow; (6) a gradient scrim under the top of each
+room card so titles never sit on a busy photo edge. Reduced-motion honoured.
+NO copy, layout, or logic changed. Busters member.css v25 + bundle v21.
+THE IMPORTANT PART, caught in verification: .pv-reveal sets opacity 0, so if the
+IntersectionObserver ever fails to fire, the entire member area stays invisible. The
+harness reproduced exactly that (a backgrounded pane throttles the observer, the known
+gotcha), with 11 targets hidden and none revealed. A cosmetic effect must never be able
+to hide the Village, so initReveal now reveals everything after 2s regardless, on
+visibilitychange, on any thrown error, and when IntersectionObserver is absent.
+Re-verified with the observer still throttled: 11 hidden immediately, 0 hidden after
+the fail-safe, every target computed opacity 1.
+VERIFIED: open tag renders as text (no background, no padding, no radius), soon tag
+muted, cards carry the layered shadow and blur, stagger sequence 0 / .07 / .14 / .21 /
+.28 / .35, no horizontal overflow at 1161px.
+NOT verified without JoYi: the felt quality against the landing, which is the point.
+SHARED SURFACES: none. Draft only.
+
 ### 2026-08-15 — cur.AI.ted on the MEMBER side: door opened + backfill built (JoYi's bot, STARTED 09:00, STOPPED 09:30 JST)
 JoYi caught the inversion: the public landing promised "Starter tier included" and
 linked to curaited.org, while the member map, where the entitlement actually lands,

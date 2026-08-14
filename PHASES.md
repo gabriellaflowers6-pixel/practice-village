@@ -301,6 +301,23 @@ no Cloud Run move for the Concierge, no member data in Firestore.
 
 JoYi checks: one test alert arrives; the public Concierge feels unchanged.
 
+## Phase P1: Member polish (added on JoYi's ruling 2026-08-15)
+
+**Status: BUILT 2026-08-15, on draft.** JoYi: the member area felt subpar to the
+landing. Diagnosis: it borrowed the landing's shapes without its restraint. The
+landing's status indicator is not a pill at all, it is quiet uppercase text, so the
+member area's filled pills read weak on "Open" and became a blob on longer labels.
+Changes, CSS-only plus one script: status pills become label text (moss for open,
+muted for pending); the hard offset shadow becomes real soft elevation with a lift on
+hover; light cards gain backdrop blur so they sit on the ground rather than in it; the
+landing's scroll reveal comes to the member pages with a per-row stagger; secondary
+buttons trade the 999px pill for a hairline border at 10px; a gradient scrim keeps
+titles off busy photo edges. No copy, no layout, no logic changed.
+FAIL-SAFE, non-negotiable: .pv-reveal sets opacity 0, so the reveal must never be able
+to hide the Village. It reveals everything after 2s regardless, on visibilitychange,
+on any thrown error, and when IntersectionObserver is missing. Verified with the
+observer fully throttled: all 11 targets opaque within the timeout.
+
 ## Phase R7: Final pass
 
 **Status: TECHNICAL AUDIT DONE 2026-08-15, fixes on draft, awaiting JoYi's final

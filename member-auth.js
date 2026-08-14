@@ -1776,6 +1776,41 @@ async function initRoomShell() {
   });
 }
 
+// The landing's reveal, brought to the member area: sections and cards arrive
+// on scroll with a stagger, same curve and timing as styles.css .reveal.
+// FAIL-SAFE BY CONSTRUCTION: .pv-reveal hides content, so anything that could stop
+// the observer (throttled background tab, an older browser, a thrown error) must
+// still end with everything visible. A timer and a catch guarantee it.
+function initReveal() {
+  const targets = document.querySelectorAll(".member-welcome, .member-grid > *, .member-section, .room-grid > *, .shelf > *");
+  if (!targets.length) return;
+  const revealAll = () => targets.forEach((el) => el.classList.add("in"));
+  try {
+    for (const el of targets) {
+      el.classList.add("pv-reveal");
+      // stagger only within a row of siblings, so a long page never feels slow
+      const position = [...(el.parentElement?.children || [])].indexOf(el);
+      el.style.setProperty("--d", `${Math.min(position, 5) * 0.07}s`);
+    }
+    if (!("IntersectionObserver" in window)) { revealAll(); return; }
+    const io = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.add("in");
+        io.unobserve(entry.target);
+      }
+    }, { threshold: 0.1, rootMargin: "0px 0px -6% 0px" });
+    targets.forEach((el) => io.observe(el));
+    // nothing stays hidden: whatever has not arrived on its own arrives anyway
+    window.setTimeout(revealAll, 2000);
+    document.addEventListener("visibilitychange", () => { if (!document.hidden) revealAll(); }, { once: true });
+  } catch {
+    revealAll();
+  }
+}
+
+if (["member", "record", "account", "room", "welcome"].includes(page)) initReveal();
+
 if (page === "login") initLogin();
 if (page === "member") initMemberLobby();
 if (page === "record") initRecordPage();

@@ -2797,6 +2797,37 @@ async function initRoomShell() {
     }
   });
 }
+function initReveal() {
+  const targets = document.querySelectorAll(".member-welcome, .member-grid > *, .member-section, .room-grid > *, .shelf > *");
+  if (!targets.length) return;
+  const revealAll = () => targets.forEach((el) => el.classList.add("in"));
+  try {
+    for (const el of targets) {
+      el.classList.add("pv-reveal");
+      const position = [...el.parentElement?.children || []].indexOf(el);
+      el.style.setProperty("--d", `${Math.min(position, 5) * 0.07}s`);
+    }
+    if (!("IntersectionObserver" in window)) {
+      revealAll();
+      return;
+    }
+    const io = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.add("in");
+        io.unobserve(entry.target);
+      }
+    }, { threshold: 0.1, rootMargin: "0px 0px -6% 0px" });
+    targets.forEach((el) => io.observe(el));
+    window.setTimeout(revealAll, 2e3);
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) revealAll();
+    }, { once: true });
+  } catch {
+    revealAll();
+  }
+}
+if (["member", "record", "account", "room", "welcome"].includes(page)) initReveal();
 if (page === "login") initLogin();
 if (page === "member") initMemberLobby();
 if (page === "record") initRecordPage();

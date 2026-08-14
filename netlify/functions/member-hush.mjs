@@ -39,7 +39,7 @@ export function hushPage() {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/member.css?v=24" />
+  <link rel="stylesheet" href="/assets/member.css?v=25" />
 </head>
 <body data-auth-page="room">
   <header class="member-header">
@@ -64,7 +64,7 @@ export function hushPage() {
       </div>
     </section>
   </main>
-  <script type="module" src="/assets/member-auth.bundle.js?v=19"></script>
+  <script type="module" src="/assets/member-auth.bundle.js?v=21"></script>
 </body>
 </html>`;
 }
