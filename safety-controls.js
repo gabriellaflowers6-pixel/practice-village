@@ -68,3 +68,21 @@
     setBeforeExit: function (callback) { beforeExit = typeof callback === "function" ? callback : function () {}; }
   };
 })();
+
+/* Return navigation (PHASES R4.3, 2026-08-14): a member who entered from her lobby
+   leaves through the same door. The visible text never changes, so nothing on this
+   page signals membership on a shared screen; only the brand link's destination
+   moves from the public landing to /member. Remembered per tab, never stored. */
+(function () {
+  "use strict";
+  try {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get("from") === "member") sessionStorage.setItem("pvFromLobby", "1");
+    if (sessionStorage.getItem("pvFromLobby") !== "1") return;
+    var brand = document.querySelector(".hall-header .brand");
+    if (brand) {
+      brand.setAttribute("href", "/member");
+      brand.setAttribute("aria-label", "Back to your lobby");
+    }
+  } catch (error) { /* Navigation help must never break the safety page. */ }
+})();

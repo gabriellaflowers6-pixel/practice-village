@@ -1,3 +1,20 @@
+### 2026-08-14 — R4.3 return navigation + lobby PRD worksheet (JoYi's bot, STARTED 19:20, STOPPED 20:00 JST)
+R4.3 BUILT: every internal room returns to the lobby. /welcome, /record, /hush already
+had header links; Safety Hall now quietly retargets its brand link to /member when the
+Villager arrived from the lobby (/safety-hall?from=member, remembered per tab in
+sessionStorage, never stored). Deliberate: NO new visible link on Safety Hall, so
+nothing on that screen signals membership on a shared device; only the existing brand
+link's destination changes. FILES: safety-controls.js (additive block, v3),
+safety-hall.html (buster only), netlify/functions/member.mjs (lobby link carries
+?from=member). External rooms keep the new-tab pattern by design.
+ALSO: MEMBER_LOBBY_PRD.md (new, DRAFT for JoYi): the lobby purpose boundary, the
+contract's 9 promised items vs what exists (2 missing: continue-where-you-left-off,
+new-in-the-Village; 3 partial: events static, account controls pre-R5, orientation),
+best practices from membership/community-center research filtered through Village
+values (no streaks, no metrics, no upsells, personalization only from explicit saves),
+6 assumptions, 7 questions for JoYi. Becomes the lobby PRD when her answers land.
+SHARED SURFACES: none. Draft deploy for the safety-hall return check.
+
 ### 2026-08-14 — R3 TO PROD on JoYi's GO (JoYi's bot, STARTED 19:00 JST)
 HUSH room live: /hush gated room, her copy verbatim, app hero, 7-entry shelf with the
 Moxie space. PROD VERIFIED LIVE: /hush + /record + /member 302 gates; /, /login, /safety-hall 200;
