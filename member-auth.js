@@ -212,6 +212,7 @@ function initSavedCards() {
         lines.push("");
         if (detail.sourceNote) lines.push(detail.sourceNote, "");
       }
+      if (card.note) lines.push("**What happened:** " + card.note, "");
       lines.push("---", "");
     }
     return { name: `your-record-${now.toISOString().slice(0, 10)}.md`, content: lines.join("\n") };
@@ -370,6 +371,52 @@ function initSavedCards() {
     item.replaceChildren(line(card.text, "saved-card__text"), question, actions, dayInput, status);
   }
 
+  // "Add what happened": her own words on a thing she acted on. Offered, never demanded.
+  function noteEditor(card, item) {
+    const wrapNote = document.createElement("div");
+    wrapNote.className = "saved-card__noteedit";
+    const label = document.createElement("label");
+    label.className = "saved-card__notelabel";
+    label.textContent = "What happened?";
+    const field = document.createElement("textarea");
+    field.maxLength = 600;
+    field.rows = 3;
+    field.value = card.note || "";
+    field.placeholder = "Called Tuesday. Waitlist until September.";
+    label.append(field);
+    const guard = line("Anything you want kept off our servers belongs in Safety Hall. This note travels with your membership.", "saved-card__note");
+    const actions = document.createElement("span");
+    actions.className = "saved-card__actions";
+    const status = line("", "saved-card__status");
+    const send = async (value) => {
+      status.textContent = "Saving…";
+      try {
+        const response = await fetch("/member-onboarding", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "note_card", text: card.text, note: value }),
+        });
+        const payload = await response.json().catch(() => null);
+        if (!response.ok || !payload?.ok) { status.textContent = "That did not save. Your note is still here."; return; }
+        cards = Array.isArray(payload.savedCards) ? payload.savedCards : cards;
+        render();
+      } catch { status.textContent = "That did not save. Your note is still here."; }
+    };
+    const button = (text, handler, className = "text-button") => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = className;
+      b.textContent = text;
+      b.addEventListener("click", handler);
+      return b;
+    };
+    actions.append(button("Save", () => send(field.value.trim())), button("Cancel", () => fillRow(card, item)));
+    if (card.note) actions.append(button("Remove note", () => send("")));
+    wrapNote.append(label, guard, actions, status);
+    item.replaceChildren(line(card.text, "saved-card__text"), wrapNote);
+    field.focus();
+  }
+
   function fillRow(card, item) {
     const text = line(card.text, "saved-card__text");
     const meta = document.createElement("span");
@@ -388,9 +435,23 @@ function initSavedCards() {
     remove.textContent = "Remove";
     remove.setAttribute("aria-label", `Remove: ${card.text}`);
     remove.addEventListener("click", () => confirmRow(card, item));
-    meta.append(comeBack, remove);
-    if (card.detail) item.replaceChildren(text, detailNode(card.detail), meta);
-    else item.replaceChildren(text, meta);
+    const noteButton = document.createElement("button");
+    noteButton.type = "button";
+    noteButton.className = "text-button saved-card__remove";
+    noteButton.textContent = card.note ? "Edit what happened" : "Add what happened";
+    noteButton.setAttribute("aria-label", `${card.note ? "Edit" : "Add"} what happened: ${card.text}`);
+    noteButton.addEventListener("click", () => noteEditor(card, item));
+    meta.append(noteButton, comeBack, remove);
+    const parts = [text];
+    if (card.detail) parts.push(detailNode(card.detail));
+    if (card.note) {
+      const noteBlock = document.createElement("div");
+      noteBlock.className = "saved-card__note-shown";
+      noteBlock.append(line("What happened", "saved-card__notehead"), line(card.note, "saved-card__notebody"));
+      parts.push(noteBlock);
+    }
+    parts.push(meta);
+    item.replaceChildren(...parts);
   }
 
   function render() {

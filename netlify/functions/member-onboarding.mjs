@@ -60,7 +60,7 @@ export default async function handler(request) {
   } : null;
   const savedCardsView = () => (Array.isArray(record.savedCards) ? record.savedCards : [])
     .filter((entry) => entry && typeof entry.text === "string" && entry.text.trim())
-    .map((entry) => ({ text: entry.text, savedAt: entry.savedAt || null, ...(entry.detail ? { detail: entry.detail } : {}) }))
+    .map((entry) => ({ text: entry.text, savedAt: entry.savedAt || null, ...(entry.detail ? { detail: entry.detail } : {}), ...(entry.note ? { note: entry.note, notedAt: entry.notedAt || null } : {}) }))
     .reverse();
 
   if (request.method === "GET") {
@@ -110,6 +110,20 @@ export default async function handler(request) {
     const merged = [...existing];
     for (const card of cards) if (!merged.some((entry) => entry.text === card.text)) merged.push({ ...card, savedAt: now });
     record.savedCards = merged.slice(-100);
+  } else if (body.action === "note_card") {
+    // what happened when she acted on a kept thing: her words, attached to that entry
+    const text = str(body.text, 300);
+    const note = str(body.note, 600);
+    const existing = Array.isArray(record.savedCards) ? record.savedCards : [];
+    const entry = existing.find((item) => item?.text === text);
+    if (!entry) return Response.json({ ok: false, error: "That is not in your Record" }, { status: 404 });
+    if (note) {
+      entry.note = note;
+      entry.notedAt = now;
+    } else {
+      delete entry.note;
+      delete entry.notedAt;
+    }
   } else if (body.action === "skip") {
     // orientation goes quiet once declined: never re-ask, always reachable from the account row
     if (!["complete", "complete_private"].includes(record.onboarding?.status)) {

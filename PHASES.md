@@ -237,6 +237,27 @@ only of what she scheduled, never of what she did. Porch sees nothing.
 Waits on the Moxie member door. "Want the 30-day Moxie path in My Practice?" No
 automatic enrollment.
 
+### Phase L4: What happened (outcome notes)
+
+**Status: BUILT 2026-08-15, on draft. From JoYi's ruling: the Record told her what to
+do and never learned what happened.**
+
+Deliberately NOT a notes section and NOT a pop-up. An outcome note attaches to an
+entry she already acted on, offered as a quiet link, never a modal, never a blank
+canvas waiting to be filled. Rejected in design: freeform notes anywhere, prompts on
+check-off, journaling surfaces. Reason: an empty field manufactures obligation the
+same way a streak does, and unbounded free text invites Safety Hall content onto our
+servers, which is the one promise the Village must not weaken.
+
+Work: "Add what happened" on each Record entry, one note per entry (600 chars),
+editable, removable without touching the entry. The note renders under its entry in
+the Record, in the Markdown, and in the My PIL PDF, so the document reads as: here is
+what I was told, here is what I did. At the point of writing, one line: anything she
+wants kept off our servers belongs in Safety Hall.
+
+JoYi checks: the link never nags, the note reads back correctly, both downloads carry
+it, removing a note leaves the entry intact. Does not check: storage.
+
 ## Phase R5: Account controls complete
 
 **Governing lines:** MEMBERSHIP_ACCESS_PLAN.md build order 7 and Release boundary:

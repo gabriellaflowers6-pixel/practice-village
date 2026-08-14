@@ -195,3 +195,11 @@ p,li,.member-card p,.onboarding-help,.welcome-intro p{text-wrap:pretty}
 .desk-comeback__list .text-button{font-size:.8rem;text-decoration:underline;white-space:nowrap}
 .desk-comeback__list .text-button[disabled]{text-decoration:none;opacity:.75;cursor:default}
 .member-card--desk-embed .desk-comeback__list li{color:#F7F4EE}
+/* what happened: her words on a thing she acted on */
+.saved-card__note-shown{margin:.5rem 0 0;padding:.5rem .7rem;border-left:2px solid var(--clay);background:rgba(168,66,20,.06);border-radius:0 8px 8px 0}
+.saved-card__notehead{margin:0!important;font:700 .68rem var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--clay)!important}
+.saved-card__notebody{margin:.2rem 0 0!important;font-size:.9rem;line-height:1.45;color:var(--ink)!important;white-space:pre-wrap}
+.saved-card__noteedit{display:grid;gap:8px;margin-top:.5rem}
+.saved-card__notelabel{display:grid;gap:5px;font-size:.8rem;font-weight:650}
+.saved-card__notelabel textarea{width:100%;resize:vertical;border:1px solid var(--line);border-radius:10px;padding:10px;font:.95rem/1.5 var(--sans);color:var(--ink);background:#fff}
+.saved-card__notelabel textarea:focus{outline:3px solid rgba(199,154,82,.22);border-color:var(--gold)}

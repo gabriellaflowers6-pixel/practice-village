@@ -26,7 +26,7 @@ export default async function handler() {
 
   const cards = (Array.isArray(record?.savedCards) ? record.savedCards : [])
     .filter((entry) => entry && typeof entry.text === "string" && entry.text.trim())
-    .map((entry) => ({ text: entry.text, keptOn: keptOn(entry.savedAt), detail: entry.detail || null }))
+    .map((entry) => ({ text: entry.text, keptOn: keptOn(entry.savedAt), detail: entry.detail || null, note: entry.note || null }))
     .reverse();
 
   if (!cards.length) {

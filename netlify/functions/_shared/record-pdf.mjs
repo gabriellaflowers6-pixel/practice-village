@@ -123,6 +123,11 @@ export async function composeRecordPdf(cards, { downloadedOn }) {
       if (detail.sourceNote) put(detail.sourceNote, { size: 9, color: SOFT, indent: 12, gap: 4 });
     }
 
+    if (card.note) {
+      put("What happened:", { size: 9, color: SOFT, indent: 12, gap: 4 });
+      put(card.note, { size: 9.5, indent: 12, gap: 4 });
+    }
+
     space(8);
     rule();
     space(6);

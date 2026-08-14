@@ -1,3 +1,26 @@
+### 2026-08-15 — L4 BUILT: What happened (outcome notes) + WHOLE STACK TO PROD (JoYi's bot, STARTED 02:40 JST)
+JoYi asked for pros and cons of notes in the PIL, then said go. Built as OUTCOME NOTES
+attached to an entry, not a notes section: her stated shape ("a note can pop up") was
+deliberately narrowed after the analysis, because a pop-up repeats the per-action
+nagging her consent architecture bans, an empty field manufactures obligation the way
+a streak does, and unbounded free text invites Safety Hall content (an abuser's name,
+a diagnosis, immigration status) onto our servers, weakening the one promise the
+Village must not weaken. She agreed to the narrowed design.
+FILES: netlify/functions/member-onboarding.mjs (note_card action, note in the view),
+member-auth.js (noteEditor + "Add what happened"/"Edit what happened", note rendered
+on the entry, note in the Markdown), netlify/functions/record-export.mjs +
+_shared/record-pdf.mjs (note in the PDF under its entry), assets/member.css.
+Busters member.css v20 + bundle v16.
+GUARD COPY at the point of writing: "Anything you want kept off our servers belongs in
+Safety Hall. This note travels with your membership."
+VERIFIED: PDF fixture composed and READ (note prints under its entry, entries without
+notes unchanged, footer intact); harness on the real /record source: Add what happened
+opens focused, guard line present, Save renders the note and flips the button to Edit,
+Cancel keeps the existing note, Remove note clears the note and leaves the card, the
+Markdown download carries "**What happened:** ...", no horizontal overflow.
+NOT verified without JoYi: her authed round trip.
+PROD: pushing main and deploying everything from today. Verify appended below.
+
 ### 2026-08-15 — L2 BUILT: the desk trade (JoYi's bot, STARTED 01:30, STOPPED 02:20 JST)
 Phase L2 on JoYi's GO, plus K1 added to PHASES on her Kitchen ruling.
 K1 (docs only, no build): the Kitchen gets what HUSH got, a room with a vetted shelf,
