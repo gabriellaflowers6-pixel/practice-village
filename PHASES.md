@@ -168,6 +168,50 @@ Work, each when its destination is confirmed, honestly labeled until then:
 JoYi checks: each confirmed link and what a Villager sees on arrival. Does not
 approve placeholders.
 
+## The lobby phases (added 2026-08-14, governed by MEMBER_LOBBY_PRD.md)
+
+### Phase L1: My Practice
+
+**Governing lines:** MEMBER_LOBBY_PRD.md, "My Practice: JoYi's copy spec" (the build
+contract, her words verbatim) and the core language rule.
+
+Work:
+1. The My Practice card beside the front desk: List | Week views, default List,
+   her view choice remembered on her record. List groups Today / Later this week /
+   Ongoing.
+2. Plan items on the member record: title, optional Village link, rhythm, source.
+   Added only by her, removable, checkable ("Done for today"), recurring items
+   return tomorrow. No history kept.
+3. One-click adds: HUSH room ("Add HUSH daily"), the Kitchen map card (assumption:
+   "Add PlantLuck daily", JoYi to confirm the string), /record entries ("Come back
+   to this" with Tomorrow / This week / Choose a day).
+4. In the Village subsection inside the card: Rebuild Arc and February dates, her
+   copy, visually separate from her items, optional Add to My Practice.
+5. Add to my calendar on every item: a calendar file downloaded to her device,
+   nothing synced back.
+6. Layout: voucher card moves below the rooms, Coming up card retires.
+
+Scope fence: member-auth.js, assets/member.css, netlify/functions/member.mjs,
+netlify/functions/member-practice.mjs (new), netlify/functions/member-hush.mjs,
+netlify/functions/member-record.mjs (page hook only), cache busters.
+
+JoYi checks: every string against her spec, the empty state, both add flows, the
+List | Week toggle, the In the Village separation, Done for today behavior, one
+calendar file landing on her phone, remove. Does not check: storage schema or
+calendar-file internals.
+
+### Phase L2: the desk trade
+
+**Governing lines:** MEMBER_LOBBY_PRD.md spec: desk ending "Anything here you want
+to come back to?"; plan context joins the member desk prompt with the same consent
+as member notes; the outward instruction uses JoYi's approved register and speaks
+only of what she scheduled, never of what she did. Porch sees nothing.
+
+### Phase L3: Moxie path add
+
+Waits on the Moxie member door. "Want the 30-day Moxie path in My Practice?" No
+automatic enrollment.
+
 ## Phase R5: Account controls complete
 
 **Governing lines:** MEMBERSHIP_ACCESS_PLAN.md build order 7 and Release boundary:

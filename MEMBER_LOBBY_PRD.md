@@ -161,10 +161,53 @@ kept in v1. Nothing on this surface measures her.
   exploration-and-connection instruction.
 - L3: Moxie thirty-day path add (waits on the member door), room-completion links.
 
-**Open before L1 builds:**
-- The area's name on the page.
-- Default view: list or week.
-- Coming up fully merged, or voucher and a small Coming up both below the calendar.
+## My Practice: JoYi's copy spec (2026-08-14, verbatim, this is the build contract)
+
+**The name is My Practice.** Not My Plan (productivity and obligation), not Your Week
+(one view, not the thing). My Practice says: these are the things I chose to return
+to. Views are simply **List | Week**. Default List; once she chooses Week, remember it.
+
+**Coming Up merges into My Practice** with Village dates in their own labeled
+subsection, **In the Village**. Personal items and Village dates never visually blur:
+one is "I chose this," the other is "this is happening around me."
+
+**Surface copy, hers, exact:**
+- Header: "My Practice" / "Things you've chosen to come back to."
+- Helper: "Nothing gets added here unless you add it."
+- Empty state: "Nothing here yet." / "When there's something you want to return to,
+  you can add it from a room, your Record, or the Concierge."
+- HUSH room button: "Add HUSH daily" / confirmation: "Added. HUSH will be here each
+  day." / on My Practice: "HUSH · 60 seconds" + "Open HUSH" / after checking:
+  "Done for today". Recurring items simply come back tomorrow. No applause machine.
+- Record entries: NOT "Put this on my calendar" (makes the calendar sound like the
+  product). Use "Come back to this" then "When do you want this back in front of
+  you?" [Tomorrow] [This week] [Choose a day] / confirmation: "Added to My Practice."
+- Desk ending: "Anything here you want to come back to?" with "Add to My Practice"
+  per eligible item. Maintains the consent rhythm; never interrupts the conversation.
+- In the Village: "Things happening around the Village that may be worth knowing
+  about." / "Rebuild Arc begins Oct 31" / if eligible: "Your voucher covers this." /
+  CTA "Take a look" / optional "Add to My Practice". Village events appear because
+  they are Village information; they join My Practice only when she says so.
+- External calendar: "Add to my calendar" / helper: "Downloads to your device as a
+  calendar file. Nothing is synced back to the Village." Never lead with ".ics".
+- List groups: Today / Later this week / Ongoing (or by Village area if testing
+  proves it better).
+- Moxie, at L3: "Want the 30-day Moxie path in My Practice?" / "Add the 30-day
+  path". No automatic enrollment because the door opened.
+
+**Concierge outward line, corrected by JoYi:** v1 keeps no completion history, so the
+Concierge cannot truthfully say "you practice most days." It knows only what she
+explicitly scheduled. The approved register:
+"You've got HUSH in My Practice each day. Rebuild Arc starts Oct 31, and your voucher
+covers it. If you want some practice with actual people too, take a look."
+It sounds like the Concierge, not a recommendation engine.
+
+**The core language rule for this whole feature:**
+Reserved words: Choose. Add. Return. Come back. Practice. Open. Remove.
+Banned words: Goals. Progress. Consistency. Missed. Completed. Performance.
+Engagement. Streak. Habit score. Optimization.
+The product is not asking "How well are you doing?" It is asking "What do you want
+to keep within reach?"
 
 ## Out of scope for this worksheet
 

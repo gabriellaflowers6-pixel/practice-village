@@ -1,3 +1,17 @@
+### 2026-08-14 — My Practice: JoYi's full copy spec recorded, L1-L3 phased (JoYi's bot, STARTED 20:30, STOPPED 20:50 JST)
+DOCS ONLY. JoYi named the personalized lobby area My Practice and supplied the complete
+copy spec verbatim (recorded in MEMBER_LOBBY_PRD.md as the build contract): List | Week
+views defaulting to List, In the Village subsection for Village dates (never blurred
+with her items), every surface string (HUSH add, Record "Come back to this" flow, desk
+ending "Anything here you want to come back to?", calendar-file helper), the Moxie
+no-auto-enroll rule, and the core language rule (reserved: choose/add/return/come
+back/practice/open/remove; banned: goals/progress/streak/completed/engagement etc.).
+Her logic correction adopted: v1 keeps no completion history, so the Concierge speaks
+only of what she scheduled, never of what she did. PHASES.md gains L1 (My Practice),
+L2 (desk trade), L3 (Moxie path, waits on the door) between R4 and R5.
+One assumption flagged for her: the Kitchen one-click add string ("Add PlantLuck
+daily"), her pattern, her word pending. SHARED SURFACES: none. No build, no deploy.
+
 ### 2026-08-14 — R4.3 return navigation + lobby PRD worksheet (JoYi's bot, STARTED 19:20, STOPPED 20:00 JST)
 R4.3 BUILT: every internal room returns to the lobby. /welcome, /record, /hush already
 had header links; Safety Hall now quietly retargets its brand link to /member when the
