@@ -172,7 +172,7 @@ function initSavedCards() {
   };
 
   function unavailable() {
-    wrap.replaceChildren(line("Your saved things are temporarily unavailable. Nothing has been removed."));
+    wrap.replaceChildren(line("Your Record is temporarily unavailable. Nothing has been removed."));
     state.textContent = "Temporarily unavailable";
   }
 
@@ -303,7 +303,7 @@ function initSavedCards() {
       wrap.append(toggle);
     }
 
-    wrap.append(line("Removing something here clears it from your saved things. It does not change what the Concierge remembers about you.", "room-note"));
+    wrap.append(line("Removing something here clears it from your Record. It does not change what the Concierge remembers about you.", "room-note"));
     state.textContent = cards.length === 1 ? "1 kept" : `${cards.length} kept`;
   }
 
@@ -399,18 +399,21 @@ function initDesk(user, opts = {}) {
   const input = document.getElementById("deskInput");
   const CHOICE_LABELS = { understand: "Help me understand what's happening", one_action: "One small action today", trusted_resource: "A trusted resource", keep_private: "Keep this private" };
   const CHOICE_SENDS = { understand: "Help me understand what is happening first.", one_action: "Give me one small action I can take today.", trusted_resource: "Point me to a trusted resource for this." };
-  const SEEDS = [["Money", "Money feels heaviest this week."], ["Housing", "Housing feels heaviest this week."], ["Work", "Work feels heaviest this week."], ["Family", "Family feels heaviest this week."], ["I feel stuck", "I feel stuck. Everything is heavy at once."], ["My body", "My body feels heaviest this week."]];
+  const SEEDS = [["Money", "I need help with money."], ["Housing", "I need help with housing."], ["Work", "I need help with work."], ["Family", "I need help with a family situation."], ["I feel stuck", "I don't know what to do."], ["My body", "Something doesn't feel right with my body."]];
   let msgs = [];
   let pending = [];
   let last = null;
   let busy = false;
-  const keepables = new Map();
+  let lastRoute = null;
+  let lastAdded = [];
+  let lastKeptPrivate = false;
+  let wrapOffered = false;
 
   const esc = (t) => { const d = document.createElement("div"); d.textContent = t == null ? "" : t; return d.innerHTML; };
   const bubbles = () => msgs.map((m) => `<p class="desk-msg desk-msg--${m.role === "user" ? "me" : "c"}">${esc(m.text)}</p>`).join("");
 
   function renderIdle() {
-    thread.innerHTML = `<p class="desk-q">What feels heaviest this week?</p><div class="desk-chips">${SEEDS.map(([label, seed]) => `<button type="button" data-seed="${esc(seed)}">${esc(label)}</button>`).join("")}</div>`;
+    thread.innerHTML = `<p class="desk-q">What do you need help with this week?</p><div class="desk-chips">${SEEDS.map(([label, seed]) => `<button type="button" data-seed="${esc(seed)}">${esc(label)}</button>`).join("")}</div>`;
     wire();
   }
 
@@ -418,80 +421,100 @@ function initDesk(user, opts = {}) {
     ? (detail.steps?.length ? `the search and ${detail.steps.length} ${detail.steps.length === 1 ? "step" : "steps"}` : "the search")
     : `${detail.items?.length || 0} ${detail.items?.length === 1 ? "place" : "places"} to look`;
 
-  const isKept = (entry) => pending.some((p) => p.text === entry.text);
-  const keepButton = (key, entry) => {
-    keepables.set(key, entry);
-    return isKept(entry)
-      ? `<button type="button" class="text-button desk-keep" disabled>✓ kept for the wrap-up</button>`
-      : `<button type="button" class="text-button desk-keep" data-keep-block="${esc(key)}">Keep this</button>`;
-  };
-
-  // the desk closes once it has handed her something, instead of re-offering the menu
-  const closeLine = (d) => (d.nextStep || d.searchHelp || d.results?.items?.length)
-    ? `<p class="desk-close">Would you like to keep any of this for your PIL?</p>`
-    : "";
+  // Everything the desk produces accumulates quietly as a candidate for her Record.
+  // No save decision per exchange: one review at the wrap-up (CONCIERGE_SCOPE, PIL consent pattern).
+  function collectCandidates(d) {
+    lastAdded = [];
+    lastKeptPrivate = false;
+    const add = (entry) => {
+      if (!entry.text || pending.some((p) => p.text === entry.text)) return;
+      pending.push(entry);
+      lastAdded.push(entry.text);
+    };
+    if (d.card) add({ text: d.card });
+    if (d.nextStep) add({ text: d.nextStep });
+    if (d.searchHelp) add({ text: `Search: ${d.searchHelp.query}`, detail: { kind: "search", query: d.searchHelp.query, trustNote: d.searchHelp.trustNote, steps: d.searchHelp.steps || [] } });
+    if (d.results?.items?.length) add({ text: d.results.title, detail: { kind: "resources", items: d.results.items.map((it) => ({ name: it.name, href: it.href, detail: it.detail })), sourceNote: d.results.sourceNote } });
+    if (d.route) lastRoute = d.route;
+  }
 
   function render(d) {
-    keepables.clear();
     let html = bubbles();
     if (d) {
-      if (d.nextStep) {
-        html += `<div class="desk-block"><span class="desk-label">your clear next step</span><p class="desk-act">${esc(d.nextStep)}</p>${keepButton("step", { text: d.nextStep })}</div>`;
-      }
+      if (d.nextStep) html += `<div class="desk-block"><span class="desk-label">your clear next step</span><p class="desk-act">${esc(d.nextStep)}</p></div>`;
       if (d.results && d.results.items) {
-        const entry = { text: d.results.title, detail: { kind: "resources", items: d.results.items.map((it) => ({ name: it.name, href: it.href, detail: it.detail })), sourceNote: d.results.sourceNote } };
-        html += `<div class="desk-block"><span class="desk-label">${esc(d.results.title)}</span><ul class="desk-found">${d.results.items.map((it) => `<li><a href="${esc(it.href)}" target="_blank" rel="noopener">${esc(it.name)}</a> · ${esc(it.detail)}</li>`).join("")}</ul><p class="desk-note">${esc(d.results.sourceNote)}</p>${keepButton("results", entry)}</div>`;
+        html += `<div class="desk-block"><span class="desk-label">${esc(d.results.title)}</span><ul class="desk-found">${d.results.items.map((it) => `<li><a href="${esc(it.href)}" target="_blank" rel="noopener">${esc(it.name)}</a> · ${esc(it.detail)}</li>`).join("")}</ul><p class="desk-note">${esc(d.results.sourceNote)}</p></div>`;
       }
       if (d.searchHelp) {
-        const entry = { text: `Search: ${d.searchHelp.query}`, detail: { kind: "search", query: d.searchHelp.query, trustNote: d.searchHelp.trustNote, steps: d.searchHelp.steps || [] } };
-        html += `<div class="desk-block"><span class="desk-label">search this, together</span><p class="desk-query"><code>${esc(d.searchHelp.query)}</code></p><p class="desk-note">${esc(d.searchHelp.trustNote)}</p>${d.searchHelp.steps?.length ? `<ol class="desk-steps">${d.searchHelp.steps.map((st) => `<li>${esc(st)}</li>`).join("")}</ol>` : ""}${keepButton("search", entry)}</div>`;
+        html += `<div class="desk-block"><span class="desk-label">search this, together</span><p class="desk-query"><code>${esc(d.searchHelp.query)}</code></p><p class="desk-note">${esc(d.searchHelp.trustNote)}</p>${d.searchHelp.steps?.length ? `<ol class="desk-steps">${d.searchHelp.steps.map((st) => `<li>${esc(st)}</li>`).join("")}</ol>` : ""}</div>`;
       }
       if (d.route) html += `<p class="desk-route">when you want it: <b><a href="${esc(d.route.href)}"${String(d.route.href).startsWith("#") || String(d.route.href).startsWith("/") ? "" : ' target="_blank" rel="noopener"'}>${esc(d.route.label)}</a></b></p>`;
-      html += closeLine(d);
       if (d.quickReplies?.length) html += `<div class="desk-chips desk-chips--quick">${d.quickReplies.map((q) => `<button type="button" data-seed="${esc(q)}">${esc(q)}</button>`).join("")}</div>`;
       const menu = (d.choices || []).filter((c) => c !== "save_this");
-      if (menu.length) html += `<div class="desk-chips">${menu.map((c) => `<button type="button" data-choice="${c}">${esc(CHOICE_LABELS[c] || c)}</button>`).join("")}</div>`;
+      if (menu.length) html += `<div class="desk-chips">${menu.map((c) => `<button type="button" data-choice="${c}"${c === "keep_private" && lastKeptPrivate ? " disabled" : ""}>${c === "keep_private" && lastKeptPrivate ? "✓ kept private" : esc(CHOICE_LABELS[c] || c)}</button>`).join("")}</div>`;
     }
-    if (pending.length) html += `<p class="desk-pending">${pending.length} ${pending.length === 1 ? "thing" : "things"} set aside · <button type="button" class="text-button" data-wrap>wrap up and review</button></p>`;
+    if (pending.length) html += `<p class="desk-pending">${pending.length} ${pending.length === 1 ? "thing" : "things"} set aside for your Record · <button type="button" class="text-button" data-wrap>wrap up and review</button></p>`;
     html += `<button type="button" class="text-button desk-reset" data-reset>↺ start over</button>`;
     thread.innerHTML = html;
     wire();
     thread.scrollTop = thread.scrollHeight;
   }
 
-  function renderWrap() {
-    thread.innerHTML = `<p class="desk-q">Would you like to keep any of this for your PIL?</p><div class="desk-wraplist">${pending.map((c, i) => `<label class="desk-wrapitem"><input type="checkbox" checked data-i="${i}"> ${esc(c.text)}${c.detail ? `<span class="desk-wrapnote">${esc(detailSummary(c.detail))}</span>` : ""}</label>`).join("")}</div><div class="welcome-actions"><button type="button" class="primary-button" data-keep>Keep the checked ones</button><button type="button" class="secondary-button" data-discard>Keep nothing</button></div><p class="onboarding-privacy" id="wrapStatus" role="status"></p>`;
+  function renderWrap(leaving = false) {
+    thread.innerHTML = `<p class="desk-q">${leaving ? "Before you go: keep any of this in your Record?" : "Keep any of this in your Record?"}</p><div class="desk-wraplist">${pending.map((c, i) => `<label class="desk-wrapitem"><input type="checkbox" checked data-i="${i}"> ${esc(c.text)}${c.detail ? `<span class="desk-wrapnote">${esc(detailSummary(c.detail))}</span>` : ""}</label>`).join("")}</div><div class="welcome-actions"><button type="button" class="primary-button" data-keep>Keep the checked ones</button><button type="button" class="secondary-button" data-discard>${leaving ? "Keep nothing and go to your lobby" : "Keep nothing"}</button></div><p class="welcome-exits"><button type="button" class="text-button" data-back>${leaving ? "Stay at the desk" : "Back to the conversation"}</button></p><p class="onboarding-privacy" id="wrapStatus" role="status"></p>`;
     thread.querySelector("[data-keep]").addEventListener("click", async () => {
       const chosen = [...thread.querySelectorAll("input[data-i]:checked")].map((cb) => pending[Number(cb.dataset.i)]);
       const wrapStatus = document.getElementById("wrapStatus");
       if (chosen.length) {
-        wrapStatus.textContent = "Saving to your record…";
+        wrapStatus.textContent = "Saving to your Record…";
         try {
           const r = await fetch("/member-onboarding", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "save_cards", cards: chosen }) });
-          wrapStatus.textContent = r.ok ? "Kept in your Village record." : "Saving did not go through. Your cards are still here.";
-          if (!r.ok) return;
-        } catch { wrapStatus.textContent = "Saving did not go through. Your cards are still here."; return; }
+          if (!r.ok) { wrapStatus.textContent = "Saving did not go through. Your things are still here."; return; }
+        } catch { wrapStatus.textContent = "Saving did not go through. Your things are still here."; return; }
       }
-      pending = []; msgs = []; last = null;
-      window.setTimeout(renderIdle, chosen.length ? 900 : 0);
+      pending = [];
+      renderEnd(chosen.length);
     });
-    thread.querySelector("[data-discard]").addEventListener("click", () => { pending = []; msgs = []; last = null; renderIdle(); });
+    thread.querySelector("[data-discard]").addEventListener("click", () => {
+      pending = [];
+      if (leaving) { window.location.assign("/member"); return; }
+      renderEnd(0);
+    });
+    thread.querySelector("[data-back]").addEventListener("click", () => render(last));
+    thread.scrollTop = 0;
+  }
+
+  // The ending: what was kept, and where she can go. She chooses; nothing auto-navigates.
+  function renderEnd(keptCount) {
+    const kept = keptCount
+      ? `<p class="desk-q">${keptCount === 1 ? "One thing" : `${keptCount} things`} kept in your Record. It is in your lobby whenever you want it.</p>`
+      : `<p class="desk-q">Nothing kept. This conversation stays private.</p>`;
+    const routeBtn = lastRoute
+      ? `<a class="secondary-button" href="${esc(lastRoute.href)}"${String(lastRoute.href).startsWith("#") || String(lastRoute.href).startsWith("/") ? "" : ' target="_blank" rel="noopener"'}>Open ${esc(lastRoute.label)}</a>`
+      : "";
+    thread.innerHTML = `<div class="desk-end">${kept}<div class="welcome-actions"><a class="primary-button" href="/member">Back to your lobby</a>${routeBtn}</div><p class="welcome-exits"><button type="button" class="text-button" data-again>Start another conversation</button></p></div>`;
+    thread.querySelector("[data-again]").addEventListener("click", () => {
+      msgs = []; last = null; lastRoute = null; lastAdded = []; wrapOffered = false;
+      renderIdle();
+    });
+    thread.scrollTop = 0;
   }
 
   function wire() {
     thread.querySelectorAll("[data-seed]").forEach((b) => b.addEventListener("click", () => ask(b.dataset.seed)));
     thread.querySelectorAll("[data-choice]").forEach((b) => b.addEventListener("click", () => {
       const c = b.dataset.choice;
-      if (c === "keep_private") { pending.pop(); b.disabled = true; b.textContent = "✓ kept private"; return; }
+      if (c === "keep_private") {
+        // the interrupt: this exchange stays out of the Record entirely
+        pending = pending.filter((p) => !lastAdded.includes(p.text));
+        lastAdded = [];
+        lastKeptPrivate = true;
+        render(last);
+        return;
+      }
       if (CHOICE_SENDS[c]) ask(CHOICE_SENDS[c]);
     }));
-    thread.querySelectorAll("[data-keep-block]").forEach((b) => b.addEventListener("click", () => {
-      const entry = keepables.get(b.dataset.keepBlock);
-      if (!entry || isKept(entry)) return;
-      pending.push(entry);
-      render(last);
-    }));
-    thread.querySelector("[data-wrap]")?.addEventListener("click", renderWrap);
+    thread.querySelector("[data-wrap]")?.addEventListener("click", () => renderWrap(false));
     thread.querySelector("[data-reset]")?.addEventListener("click", () => { msgs = []; last = null; renderIdle(); });
   }
 
@@ -507,7 +530,7 @@ function initDesk(user, opts = {}) {
       busy = false;
       if (!d.ok) { msgs.pop(); render(last); thread.insertAdjacentHTML("beforeend", `<p class="desk-msg desk-msg--c">${esc(d.error || "The Concierge is away from the desk. Try again in a moment.")}</p>`); return; }
       msgs.push({ role: "model", text: d.reply });
-      if (d.card && !pending.some((p) => p.text === d.card)) pending.push({ text: d.card });
+      collectCandidates(d);
       last = d;
       render(d);
     } catch {
@@ -518,6 +541,13 @@ function initDesk(user, opts = {}) {
 
   form.addEventListener("submit", (e) => { e.preventDefault(); const t = input.value.trim(); if (!t) return; input.value = ""; ask(t); });
   document.getElementById("dismissInvite")?.addEventListener("click", () => { sessionStorage.setItem("pvSkipInvite", "1"); document.getElementById("deskInvite").remove(); });
+  // Before you go: leaving with candidates pending offers the review once. Never a gate.
+  main.querySelectorAll('a[href="/member"]').forEach((a) => a.addEventListener("click", (e) => {
+    if (!pending.length || wrapOffered) return;
+    e.preventDefault();
+    wrapOffered = true;
+    renderWrap(true);
+  }));
   document.getElementById("logoutButton")?.addEventListener("click", async () => { await logout(); window.location.replace("/"); });
   renderIdle();
 }

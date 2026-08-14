@@ -13,7 +13,7 @@ function memberPage() {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/member.css?v=10" />
+  <link rel="stylesheet" href="/assets/member.css?v=11" />
 </head>
 <body data-auth-page="member">
   <header class="member-header">
@@ -31,7 +31,7 @@ function memberPage() {
       <article class="member-card member-card--wide"><p class="eyebrow">The front desk</p><h2 id="conciergeCardTitle">Your Concierge</h2><p id="conciergeCardCopy">Talk or type about what you are facing, or take the short optional welcome conversation. Skip anything. Nothing is saved unless you choose.</p><a id="conciergeCardLink" href="/welcome">Open the front desk</a></article>
       <article class="member-card"><p class="eyebrow">Rebuild Arc Workshop</p><h2>Your voucher</h2><p id="voucherSummary">Checking your voucher allowance…</p><p class="room-note">First series: Saturdays October 31 and November 7, 14, 21 · 3:00 pm Central on Zoom. Registering uses your voucher; cancel more than 48 hours ahead to keep it.</p><span id="voucherYear" class="member-state">Membership year</span></article>
       <article class="member-card"><p class="eyebrow">Live</p><h2>Coming up</h2><p>The first Rebuild Arc Workshop series starts October 31. Live classes with JoYi begin February 7, 2027, included with your membership.</p><span class="member-state">Included</span></article>
-      <article class="member-card member-card--saved"><p class="eyebrow">Continue</p><h2>Your saved things</h2><div id="savedCards" class="saved-cards"><p id="savedCardsCopy">Checking what you have kept…</p></div><span id="savedCardsState" class="member-state">Yours to keep or clear</span></article>
+      <article class="member-card member-card--saved"><p class="eyebrow">Continue</p><h2>Your Record</h2><p class="room-note">Your Personal Intelligence Layer: what you chose to keep.</p><div id="savedCards" class="saved-cards"><p id="savedCardsCopy">Checking your Record…</p></div><span id="savedCardsState" class="member-state">Yours to keep or clear</span></article>
     </section>
     <section class="member-section" id="rooms">
       <div class="section-heading"><div><p class="eyebrow">The Village map</p><h2>Open the door you need.</h2></div></div>
@@ -49,7 +49,7 @@ function memberPage() {
       <div class="account-links"><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="mailto:info@aidedeq.org?subject=Practice%20Village%20membership">Membership help or cancellation</a><button id="logoutButtonBottom" class="text-button" type="button">Sign out</button></div>
     </section>
   </main>
-  <script type="module" src="/assets/member-auth.bundle.js?v=8"></script>
+  <script type="module" src="/assets/member-auth.bundle.js?v=9"></script>
 </body>
 </html>`;
 }

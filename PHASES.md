@@ -29,6 +29,12 @@ This file is only the order of work and the method for walking through it.
    no words that do not help her understand, decide, or act.
 7. **Links tell the truth.** A live link opens the working thing. An unconfirmed
    destination is labeled before she clicks. No invented links, ever.
+8. **The copy gate.** No phase reaches draft deploy until every new or changed string
+   is read against the copy standard, and the walkthrough note lists every new string
+   in one place. Plain language, first person, specific enough to act on, no therapy
+   voice. "Heaviest," "pressure point," and their whole family of polished AI language
+   are banned. Nobody walks up to a front desk and performs insight; she says
+   "I need help with housing," and the system helps.
 
 ---
 
@@ -83,11 +89,25 @@ Work:
    in the lobby; landing room card says the plain-language line; map card updated.
 6. Kept entries keep carrying their detail (query, steps, links), rendered in the
    Record, removable with one confirm. That part of today's build stands.
+7. The ending (JoYi walkthrough, 2026-08-14): after the wrap-up review, the desk
+   shows what was kept and where she can go: back to the lobby, the room this
+   conversation routed to when there is one, or start another conversation. She
+   chooses; nothing auto-navigates. Keep nothing gets the same ending without the
+   confirmation.
+8. The copy sweep (JoYi picks, 2026-08-14, verbatim): opener on desk and porch is
+   "What do you need help with this week?". Chip sends: Money "I need help with
+   money.", Housing "I need help with housing.", Work "I need help with work.",
+   Family "I need help with a family situation.", I feel stuck "I don't know what
+   to do.", My body "Something doesn't feel right with my body." Model register
+   example: "Money is the problem right now. We don't have to solve everything
+   today. Let's start with what needs attention first." Heaviest and pressure point
+   die on every surface, prompt included.
 
 Scope fence: member-auth.js, assets/member.css, netlify/functions/member.mjs,
 netlify/functions/member-welcome.mjs, netlify/functions/member-onboarding.mjs,
-netlify/functions/concierge.mjs (prompt only), index.html (Record card copy only),
-cache busters.
+netlify/functions/concierge.mjs (prompt only), index.html (Record card + Record FAQ
+naming + porch copy hooks only), script.js (copy strings only, JoYi authorized
+2026-08-14), cache busters.
 
 JoYi checks: the desk conversation end to end, the quiet accumulation, the wrap-up
 review, the before-you-go moment, the Record card in the lobby, every new string.

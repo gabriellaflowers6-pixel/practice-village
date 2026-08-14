@@ -20,7 +20,7 @@
   if (seatsEl) seatsEl.textContent = Math.max(0, 108 - CONFIG.seatsTaken);
 
   /* ============ the Concierge: one live conversation (02_MVP spec) ============
-     Chips seed it ("What feels heaviest this week?"), replies follow the spec:
+     Chips seed it ("What do you need help with this week?"), replies follow the spec:
      one reflection, one next-best question, a choice menu SHE picks from.
      Next-step ceremony only when she chose an action. Saves only by her choice. */
   var demoBody = document.getElementById("demoBody");
@@ -44,12 +44,12 @@
   }
 
   var SEEDS = {
-    money:   "Money feels heaviest this week.",
-    housing: "Housing feels heaviest this week.",
-    work:    "Work feels heaviest this week.",
-    family:  "Family feels heaviest this week.",
-    stuck:   "I feel stuck. Everything is heavy at once.",
-    body:    "My body feels heaviest this week."
+    money:   "I need help with money.",
+    housing: "I need help with housing.",
+    work:    "I need help with work.",
+    family:  "I need help with a family situation.",
+    stuck:   "I don't know what to do.",
+    body:    "Something doesn't feel right with my body."
   };
   var CHOICE_LABELS = {
     understand:       "Help me understand what's happening",
@@ -214,7 +214,7 @@
   function resetDemo() {
     demoBody.innerHTML =
       '<div class="fade-in">' +
-      '<p class="demo__q">What feels heaviest this week?</p>' +
+      '<p class="demo__q">What do you need help with this week?</p>' +
       '<div class="demo__chips" id="demoChips">' +
         '<button data-k="money">Money</button>' +
         '<button data-k="housing">Housing</button>' +

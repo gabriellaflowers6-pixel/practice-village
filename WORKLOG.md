@@ -1,3 +1,40 @@
+### 2026-08-14 — R1 SHIPPED TO DRAFT: consent pattern, the ending, Your Record, copy sweep (JoYi's bot, STARTED 13:20, STOPPED 14:20 JST)
+Phase R1 of PHASES.md, built on JoYi's GO with her verbatim copy picks.
+FILES: member-auth.js, assets/member.css, assets/member-auth.bundle.js,
+netlify/functions/member.mjs, netlify/functions/concierge.mjs (prompt),
+index.html (Record card + FAQ naming + porch), script.js (porch copy), login.html +
+member-welcome.mjs (busters), PHASES.md (guardrail 8 the copy gate; R1 items 7-8).
+Busters: member.css v11, bundle v9, script.js v39.
+(1) CONSENT PATTERN: per-block Keep buttons and the per-reply save question are gone.
+Everything the desk produces (card, next step, search walkthrough, resource list)
+accumulates quietly; soft counter "N things set aside for your Record"; one review at
+wrap-up; Keep this private now removes the whole latest exchange from candidates.
+(2) THE ENDING: wrap-up leads to a real ending: what was kept, Back to your lobby,
+Open [routed room] when the conversation pointed somewhere, Start another conversation.
+Nothing auto-navigates. Leaving for the lobby with candidates pending offers the review
+once (Before you go), never a gate, second click passes through.
+(3) NAMING: Your Record everywhere. Lobby card teaches the full name once (Your
+Personal Intelligence Layer). Landing card + FAQ swapped off "Your PIL". "Saved
+things" retired.
+(4) COPY SWEEP (JoYi's picks verbatim): opener "What do you need help with this week?"
+on desk AND porch; six chip sends rewritten; model register example replaced; heaviest
+and pressure point banned in the prompt itself.
+NEW STRINGS FOR THE WALKTHROUGH NOTE (guardrail 8): the opener, six chip sends, counter
+line, wrap headings ("Keep any of this in your Record?" / "Before you go:"), "Keep
+nothing and go to your lobby", "Stay at the desk", "Back to the conversation", ending
+lines ("N things kept in your Record. It is in your lobby whenever you want it." /
+"Nothing kept. This conversation stays private."), "Start another conversation",
+lobby card intro "Your Personal Intelligence Layer: what you chose to keep.", landing
+card "Your personal record of what helps. Yours to keep, download, and take with you."
+VERIFIED in the harness (real initDesk source, stubbed endpoints): quiet accumulation
+1→3, keep_private drops the exchange 3→1 and pins ✓ kept private, before-you-go
+intercepts once and Stay at the desk returns intact, normal wrap keeps 3 (search detail
+included) and lands on the ending with the Moxie route offered, discard ending stays
+private, start-another resets clean. One bug caught pre-deploy: the wrap button passed
+its click event into renderWrap and forced leaving mode.
+NOT verified without JoYi: live Gemini's register under the new prompt.
+SHARED SURFACES: none. Draft only, prod untouched.
+
 ### 2026-08-14 — PHASES.md: rewritten phase order + walkthrough guardrails (JoYi's bot, STARTED 12:20, STOPPED 12:50 JST)
 JoYi called the mess: building ahead of the docs. Full re-read of MEMBERSHIP_ACCESS_PLAN.md
 and CONCIERGE_SCOPE.md surfaced a real conflict: today's per-block "Keep this" buttons and
