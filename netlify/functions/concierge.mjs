@@ -98,7 +98,9 @@ reply: at most three short sentences total.`;
 
 const PORCH_PROMPT = `
 
-PORCH MODE: You are speaking with a visitor on the public page, not a member. You still reflect, ask the next-best question, and offer the choice menu. But the heavy lifting lives inside the Village for members: you cannot run lookups, cannot produce searchHelp walkthroughs, and never pretend otherwise. If she wants a resource, say warmly that the full Concierge inside the Village does that work, and that this porch is where we say hello. Never set lookup or searchHelp in porch mode. The porch keeps nothing, so never mention keeping, saving, or a record: the CLOSING rule's line about what she keeps does not apply here.`;
+PORCH MODE: You are speaking with a visitor on the public page, not a member. You still reflect, ask the next-best question, and offer the choice menu. But the heavy lifting lives inside the Village for members: you cannot run lookups, cannot produce searchHelp walkthroughs, and never pretend otherwise. If she wants a resource, say warmly that the full Concierge inside the Village does that work, and that this porch is where we say hello. Never set lookup or searchHelp in porch mode. The porch keeps nothing, so never mention keeping, saving, or a record: the CLOSING rule's line about what she keeps does not apply here.
+
+NEVER ASK FOR HER ZIP CODE, city, or any location detail on the porch. The zip rule in the trusted_resource section is for members only, because only the member Concierge can run the lookup. Asking a woman for her zip and then telling her the lookup lives behind a membership is a small betrayal at the moment she leaned in. When a local lookup is what she needs, say so plainly first: name the kind of help that exists, say that finding the specific people near her is the member Concierge's work, and let her decide. Never collect a detail you cannot use.`;
 
 const MEMBER_ONBOARDING_PROMPT = `
 
@@ -267,6 +269,18 @@ function scrub(text) {
   return t;
 }
 
+/* Quick replies are HER voice, not ours. "I can call now" is exactly what we
+   want her to be able to tap, so the BANNED correction above must never be
+   pasted into a chip, and an over-long chip is a malformed one. Drop, never
+   rewrite: filter(Boolean) removes anything this returns null for. */
+function scrubChip(text) {
+  if (typeof text !== "string") return null;
+  const t = text.replace(/\bthe quiet room\b/gi, "HUSH").replace(/\bquiet room\b/gi, "HUSH").replace(/—|–/g, ",").trim();
+  if (!t || t.length > 48) return null;
+  if (BANNED.test(t)) return null;
+  return t;
+}
+
 const json = (o) => new Response(JSON.stringify(o), { headers: { "content-type": "application/json" } });
 
 export default async (req) => {
@@ -358,7 +372,7 @@ export default async (req) => {
     nextStep: scrub(out?.nextStep),
     route: route ? { label: route.label, href: route.href } : null,
     card: isMember ? card : null,
-    quickReplies: (Array.isArray(out?.quickReplies) ? out.quickReplies : []).slice(0, 3).map((q) => scrub(q)).filter(Boolean),
+    quickReplies: (Array.isArray(out?.quickReplies) ? out.quickReplies : []).slice(0, 3).map((q) => scrubChip(q)).filter(Boolean),
     searchHelp: sh && typeof sh.query === "string" ? {
       query: sh.query.slice(0, 200),
       trustNote: scrub(sh.trustNote) || "Prefer results ending in .gov; close anything that asks for payment to apply.",
