@@ -843,3 +843,32 @@ body{
   font-weight:700 !important;
   color:#1F2E5C !important;
 }
+
+/* ---------------------------------------------------------------------------
+   .tracker, .entries and .optional-panel are structural sections, not cards.
+   My surfaces rule gave them a white fill, a border and a shadow while they
+   still had padding:0, so their headings sat flush on the border — and it also
+   nested cards inside cards, which is what made the whole block read muddy.
+   They go back to being transparent structure. The cards inside carry the
+   surface, which is the minimal reading of this room.
+   --------------------------------------------------------------------------- */
+.tracker,
+.entries,
+.optional-panel{
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  padding:0 !important;
+}
+.tracker,
+.entries{ margin-top:44px !important; }
+.optional-panel{ margin-top:32px !important; padding-top:28px !important; border-top:1px solid var(--line) !important; }
+
+/* body copy steps back from the 16.46:1 heading ink to 9.90:1, which is still
+   comfortably AAA and easier to read at length on a page people sit with. */
+.tracker p,
+.entries p,
+.hall-intro>div>p,
+.side-card p,
+.support-card small,
+.capture-card p{ color:var(--ink-soft) !important; }
