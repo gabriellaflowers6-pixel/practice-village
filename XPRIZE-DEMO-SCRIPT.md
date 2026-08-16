@@ -1,6 +1,6 @@
 # Practice Village — XPRIZE demo video
 
-**Deadline:** Sun Aug 17, 2026, 1:00 PM PT · **Runtime:** 2:55 as cut (hard cap 3:00)
+**Deadline:** Sun Aug 17, 2026, 1:00 PM PT · **Runtime:** cut to length from the recorded audio (hard cap 3:00)
 **Entry:** Practice Village · Build with Gemini XPRIZE · Education & Human Potential (Track 01)
 **Production order (JoYi's call):** script → voice + camera first → screen capture cut to match. Gabby supplies Moxie Studios footage.
 
@@ -14,9 +14,9 @@ Three equal thirds. The script hits each one on purpose, in this order.
 
 | Third | Where the video earns it | Seconds |
 |---|---|---|
-| **Category impact** (Education & Human Potential) | The Moxie Fitness closure, the community-center career, Moxie teaching a beginner privately, the Record that travels with her | 0:00–0:50, 1:21–2:24 |
-| **AI-native operations** | The Concierge on Gemini, the choice menu, the live HUD lookup from the official source, the refusals written into the system | 0:50–1:21 |
-| **Business viability** | Live checkout, founding memberships, revenue by month, workshop and February dates | 2:24–2:40 |
+| **Category impact** (Education & Human Potential) | Moxie teaching a beginner privately, Safety Hall, the Record she downloads, the Hilo credential | 1:04–2:11 |
+| **AI-native operations** | The Concierge on Gemini, she picks the help, the live HUD lookup from the official source, the refusals built in | 0:18–1:04 |
+| **Business viability** | Rooms open, memberships sold, pricing, workshop and February dates | 2:11–2:32 |
 
 ### Pass/fail gates the video must not undermine
 
@@ -52,160 +52,100 @@ The Concierge must never look like it is promising to secure benefits, fill form
 
 ---
 
-## Part 2 — The script
+## Part 2 — What a demo script has to do
 
-**Final: 352 spoken words, about 2:55 with the screen silences.** The rule: if the screen shows it, the voice does not say it. The bracketed silences are real. Do not fill them.
+Judged demos are not marketing videos. Five rules, and the old draft broke the first one.
+
+1. **The product runs by 0:20.** A judge watching thirty entries decides early whether this is real. The old cut spent 46 seconds on backstory before anything moved on screen.
+2. **One person, one problem, start to finish.** Not a tour of rooms. Follow one woman through one real flow and let the other rooms appear as she needs them.
+3. **Name the required tech out loud.** Gemini is a pass/fail gate. Say it plainly, once, early.
+4. **Say what is open and what is not.** Judges punish overclaiming and reward a builder who draws the line herself.
+5. **Founder story is evidence, not an opening.** It answers "why should she be the one building this," which is a question the judge asks after they believe the product, not before.
+
+So the story moved to 1:50, where it lands as proof. If you want it back at the top, it is a copy and paste.
 
 ---
 
-### 0:00 · CAMERA · 18s
+## Part 3 — The script
 
-> In 2020 I closed Moxie Fitness, my studio in Hilo.
->
-> It was where I stayed fit, taught meditation and forgiveness, and watched people get braver because of who they met there.
->
-> The building closed. The community went with it.
->
-> I lost that twice more, moving islands for work.
+Read at your own pace. I will time the recorded takes and cut to fit, so ignore the second counts below when you are in the booth.
 
-### 0:18 · CAMERA · 26s
+### 1 · CAMERA · ~18s
 
-> I have spent my career in YMCAs, YWCAs, and community centers. Those buildings work.
+> When somebody finally asks for help, they get sent from one place to another until they quit trying. I built Practice Village so that stops.
 >
-> The systems around them break. Staff change. Information gets old. Someone who finally asks for help gets sent from one place to another.
->
-> This year I started 200 hours of yoga teacher training at home, never sure I was doing the poses right.
+> It is a digital community center for women rebuilding parts of their lives. One membership, a lot of rooms, and real help inside them.
 
-### 0:44 · SCREEN · 6s
-*[Hero, then the rooms revealing. Card on screen: **Practice Village · a digital community center · Education & Human Potential**.]*
+### 2 · SCREEN · the Concierge · ~46s
+*[Signed in at /member. Let her type the problem on screen. Do not narrate what she typed.]*
 
-> So I built the building.
->
-> One membership, many rooms, help inside every one.
+> Every room shares one front desk, and the Concierge there runs on Gemini.
 
-### 0:50 · SCREEN · 31s — the Concierge
-*[Signed in at /member. Mostly watching.]*
+**[pause — the answer lands]**
 
-> Every room shares one front desk. It runs on Gemini.
->
-> *[Type the problem. 4s silence while the answer lands.]*
->
-> *[Click One small action today. 3s silence on "Your clear next step."]*
->
-> One clear step, and it asks before it keeps anything.
->
-> *[Cut to the ZIP lookup.]*
->
-> HUD-certified counselors by ZIP, from the official source, while she waits.
->
-> It will not say she qualifies for a benefit, fill her forms, or give legal or medical advice. That is built in. People act on what AI tells them.
+> It tells her what is going on in plain language, then she picks the kind of help she wants. She decides, not the machine.
 
-### 1:21 · SCREEN · 25s — Moxie Studios
-*[Gabby's footage. Card on screen: **Moxie Studios**. See the naming note below before you record this.]*
+**[pause — she picks one small action]**
 
-> Moxie teaches beginner yoga and meditation.
->
-> This is for the person who has not found a studio, or who has felt intimidated or irritated in one, and still knows this matters.
->
-> *[3s silence on the form check.]*
->
-> She teaches the basics, and the mirror lets you check your own form. It runs on your device. Nothing is recorded, nothing is sent.
->
-> Every pose was reviewed with a human teacher first.
+> She asks for one thing she can do today, and it gives her one. Nothing is saved unless she says keep.
 
-### 1:46 · SCREEN · 22s — Safety Hall
+**[pause — the zip lookup returns counselors]**
 
-> Safety Hall is a private place to document patterns you are noticing, before you decide what they mean or what to do about them.
+> When she needs somebody local, it pulls HUD-certified housing and money counselors by zip code, straight from the official source, while she waits.
 >
-> No account. No AI. Nothing leaves your device.
+> It will not tell her she qualifies for a benefit, fill out her forms, or give her legal or medical advice. We built those limits in on purpose, because people act on what AI tells them.
+
+### 3 · SCREEN · Moxie Studios · ~23s
+*[Gabby's footage: the practitioner and the form check both in frame.]*
+
+> Moxie teaches beginner yoga and meditation. She is for the person who has not found a studio yet, or who has been in one and felt intimidated or irritated, and still knows this matters.
 >
-> Documentation matters. What you write down now is what you will have later, for yourself, for HR, for a lawyer, or for someone you trust.
+> She takes you through the basics, and the mirror is there so you can check your own form. It runs on your device, and nothing is recorded or sent anywhere.
 
-### 2:08 · SCREEN · 16s — Your Record
+### 4 · SCREEN · Safety Hall · ~24s
+*[The entry screen with the exit and discreet view in frame, then the pattern log.]*
 
-> Your Record is the working file. What you were given, what you did, the sources it came from. Download it any time.
+> Safety Hall is where you document a pattern you are noticing, before you decide what it means or what to do about it. No account, no AI in that room, and nothing leaves your device.
 >
-> You should not have to rebuild your history from scratch every time you talk to someone new.
+> What you write down now is what you will have later, whether it stays with you or goes to HR, a lawyer, or somebody you trust.
 
-### 2:24 · SCREEN · 16s — the doors
+### 5 · SCREEN · Your Record · ~17s
+*[A kept card with its sources, then the download.]*
+
+> Everything she keeps lands in her Record: what she was given, what she did, and where it came from. She can download all of it.
+>
+> She should not have to rebuild her history from scratch every time she talks to somebody new.
+
+### 6 · CAMERA · why me · ~21s
+
+> I ran Moxie Fitness in Hilo until 2020. When the building closed, the community went with it.
+>
+> I spent my career in YMCAs, YWCAs, and community centers, so I know what these buildings do and I know what breaks. It is never the mission. It is the front line.
+
+### 7 · SCREEN · where we are · ~21s
 *[Pricing, then the dates.]*
 
-> We opened the doors this month with a handful of memberships. That was deliberate. The rooms had to be right before we sold them.
+> Four rooms are open today. We opened this month with a handful of memberships, on purpose, because the rooms had to be right before we sold them.
 >
-> $149 a year or $15 a month at thepracticevillage.org. The first workshop is October 31.
+> It is one hundred forty nine dollars a year or fifteen a month. The first workshop is October 31, and live classes start February 7.
 
-### 2:40 · CAMERA · 15s
+### 8 · CAMERA · ~8s
 
-> I am rebuilding the place I lost. This time it does not depend on one town, one building, one exhausted person holding all the answers.
+> Safety Hall and HUSH are free right now, no account.
 >
-> Safety Hall and HUSH are free today.
->
-> Walk in.
-
-**Out at about 2:55.** If your first read runs long, cut in this order: "Every pose was reviewed with a human teacher first," then "That was deliberate," then "moving islands for work."
+> thepracticevillage.org. Walk in.
 
 ---
 
-### This sweep, line by line
+### What came out of the old draft
 
-**Safety Hall was underwritten and is now the strongest room copy in the script.** The old line described a private notepad. Yours describes what the room is for: documenting a pattern before you have decided what it means, which is exactly the stage where people talk themselves out of writing anything down. The HR, lawyer, trusted person line does the educational work in eleven words. It tells a woman her notes have a future use without telling her what to do with them.
+Every line that described what the screen was already showing. The Concierge beat used to narrate the typed question; now she types it and you stay quiet. The Village definition beat is gone entirely, because beat 1 already says what this is and the room map says the rest.
 
-**"Everything she chose to keep" is gone.** It described the storage, not the point. "Your Record is the working file" names it in four words, and "you should not have to rebuild your history from scratch every time you talk to someone new" is the argument. That sentence is also the Track 01 claim: a portable learning record is education infrastructure, not a feature.
+"One clear step, and it asks before it keeps anything" and the rest of the clipped fragments are gone. Every line is a sentence a person says.
 
-**Moxie, not Bott Om.** Also gone: "for the person at home wondering, am I doing this right," which was too soft for what you described. The audience is specific: she has not found a studio, or she has been in those rooms and been condescended to or annoyed, and she still knows the practice matters. Naming the irritation is the confronting part, and it is why she trusts the room.
+The three-sentence backstory opening is now a twenty-second credential at 1:50. Same words, different job.
 
-**The mirror is hers, not ours.** "The mirror lets you check your own form" puts her in charge of the checking. "Nothing is recorded, nothing is sent" closes the door on the surveillance read before anyone has time to imagine it. Never "it watches you," never "the system sees."
-
-**Traction is stated, not apologized for.** "We opened the doors this month with a handful of memberships. That was deliberate. The rooms had to be right before we sold them." A judge scoring business viability respects a founder who chose readiness over a bigger number and says so in one line. Hedging reads worse than the small number does.
-
-### Naming: the one thing to settle before capture
-
-The live site says **Bott Om** four times on the landing page and throughout `/moxie-studio/`, including "Bott Om is the woman on our logo." If the voiceover says Moxie while the screen says Bott Om, judges see the seam. Three options:
-
-1. **Update the site copy before capture.** Text-only edits in four spots plus the Moxie page. Fast and safe by your own rules, but the name also lives on Gabby's site and in the Zen Bott Om brand, so it is a decision, not a typo fix. Say the word and I will do the Village side.
-2. **Do not hold that copy on screen.** Use Gabby's studio footage for this beat and never show the room card. Costs nothing, requires no rename tonight.
-3. **Name the room, not the teacher.** "Moxie Studios teaches beginner yoga and meditation." No mismatch either way, and it loses the warmth of a named guide.
-
-Option 2 for tonight, option 1 when the rename is a real decision, is my recommendation.
-
-## Part 3 — Shot list for capture day
-
-Record at 1920×1080, desktop browser at full width, browser chrome minimal, no bookmarks bar, no extensions visible, no other tabs with recognizable logos. Cursor moves slowly. Every screen beat needs 3 to 5 seconds of handle at each end so the edit can breathe.
-
-| # | Beat | Capture | Must be visible |
-|---|---|---|---|
-| 1 | 3 | thepracticevillage.org, hero to room map, one slow scroll | "Your digital community center," the room cards with their Open tags |
-| 2 | 4 | Member desk at /member. Type: **"I moved for a job, I do not know anyone here, and I stopped taking care of my body. I do not know where to start."** | The reply naming the situation, the quick replies, the two mode buttons |
-| 3 | 4 | Same conversation: click **One small action today**, then **wrap up and review**, then the keep prompt | "Your clear next step" in the gold rule, then "Keep any of this in your Record?" with the checkboxes and Keep nothing beside it |
-| 4 | 4 | A money or housing question with a zip code | The HUD counselors by name with the official source note underneath |
-| 5 | 5 | **Gabby** — see her shot list below | Live pose with on-screen form guidance |
-| 6 | 6 | /safety-hall, the entry screen, then the pattern log | Device safety, Discreet view, the crimson exit, and "Nothing is sent to Practice Village" |
-| 7 | 6 | /record, scroll one kept card, then Download as PDF | A card with its trust note and steps, "11 kept," and the download landing |
-| 8 | 7 | The three doors section, then the Rebuild Arc dates block | $149 / $15, the seat counter, October 31 and February 7 |
-| 9 | any | thepracticevillage.org in a clean address bar, for the end card | The domain, readable |
-
-**Do not capture:** the Stripe checkout page (its logo is a third-party trademark). Show your own pricing cards instead and say "checkout is live." Same rule for any partner logo, app store badge, or platform mark that is not yours or Google's.
-
-### Four things I found walking it, that will bite the capture
-
-1. **Sign in with a real member account, not the test one.** The test account prints "Test account" on the voucher card and "Test access does not create or use workshop vouchers." Judges reading that in frame will wonder what else is a test.
-2. **Wait two seconds after each page loads before you roll.** Rooms fade in on scroll reveal. My first Kitchen screenshot was an empty cream page; the second, moments later, was the full room.
-3. **The Record is already full.** Eleven kept cards with real sources, steps, and dates. Nothing to seed. Safety Hall is the one that needs an entry or two so the pattern log is not empty.
-4. **The Moxie card in the member map says "Member entrance being confirmed."** True and honest, but it is the wrong frame to hold on screen while the voiceover calls Moxie the flagship room. Cut from Gabby's studio footage straight to the next beat, and do not linger on that card.
-
-### For Gabby — Moxie Studios footage request
-
-Twenty seconds of usable material, cut to about twelve:
-
-1. The mirror reading a pose, on-screen guidance visible, from a camera angle where a viewer can see both the practitioner and the screen feedback.
-2. A tight shot of the guidance updating as the pose corrects.
-3. One clean frame of the Moxie Studios room inside the Village so the room reads as part of the building.
-
-Requirements: no third-party marks in frame, no recognizable music playing in the room, 1080p or better, and it must show the on-device behavior we claim, since the script says the video never leaves the machine.
-
----
-
-## Part 4 — Before you upload
+## Part 5 — Before you upload
 
 - [ ] Runtime under 3:00. Check the export, not the timeline.
 - [ ] Music is yours or royalty-free, and you can produce the license.

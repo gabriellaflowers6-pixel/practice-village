@@ -1704,3 +1704,67 @@ h1,h2,h3,.section__title,.hero__title{ overflow:visible; line-height:1.12; paddi
 /* one straggler: a bare h3 ("The Front Desk") was still set in Caveat.
    Headings are Cormorant everywhere. */
 h3{ font-family:var(--serif) !important; }
+
+/* ============================================================================
+   HERO + PREFOOTER (2026-08-16)
+   ============================================================================ */
+
+/* 1. THE CTA PAIR
+   The column is 460px. Primary measured 363px, secondary 121px, gap 16 = 500px,
+   so the row overflowed and flex-wrap orphaned "or $15/mo" onto its own line.
+   They were also different heights, 63px and 52px, so they never read as a pair.
+   One height, and the primary is allowed to shrink instead of forcing a wrap. */
+.hero__cta{ align-items:stretch; gap:12px; }
+.hero__cta .btn{
+  min-height:56px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding-block:0;
+}
+.hero__cta .btn--clay{ flex:1 1 auto; min-width:0; }
+.hero__cta .btn--ghost{ flex:0 0 auto; }
+@media (max-width:1080px){
+  /* below this the pair genuinely cannot sit on one line at full size,
+     so it becomes two equal-width buttons rather than one fat and one orphan */
+  .hero__cta{ flex-direction:column; align-items:stretch; }
+  .hero__cta .btn{ width:100%; }
+}
+
+/* 2. THE SEAM
+   The photo rendered square while the plaque beneath it was 18px. */
+.window,
+.window img,
+.window__frame{ border-radius:18px 18px 0 0 !important; overflow:hidden; }
+.window__plaque{ border-radius:0 0 18px 18px !important; }
+
+/* 3. THE COMPACT BAR
+   Between 681 and 1080 the links drop to a full-width strip. That is fine as a
+   layout, but it was solid clay, which reads as a second site sitting on top of
+   the first. Same strip, Village materials: cream, a hairline, ink-soft links. */
+@media (min-width:681px) and (max-width:1080px){
+  .nav__links,
+  .nav.is-crowded .nav__links{
+    background:rgba(251,243,232,.72);
+    border-top:1px solid var(--line);
+    backdrop-filter:blur(9px);
+    -webkit-backdrop-filter:blur(9px);
+  }
+  .nav__links a,
+  .nav.is-crowded .nav__links a{ color:var(--ink-soft); font-weight:600; }
+  .nav__links a:hover,
+  .nav.is-crowded .nav__links a:hover{ color:var(--clay-deep); }
+}
+.nav.is-crowded .nav__links{
+  background:rgba(251,243,232,.72);
+  border-top:1px solid var(--line);
+}
+.nav.is-crowded .nav__links a{ color:var(--ink-soft); }
+.nav.is-crowded .nav__links a:hover{ color:var(--clay-deep); }
+
+/* 4. THE PREFOOTER GRASS
+   flora-grass.png, the same image mirrored twice at the same height, 89px tall,
+   straddling the wave so half of it sat on cream and half on the dark footer.
+   At that size it read as speckled dirt rather than planting, and it is not
+   even the pencil botanical the hero uses. The wave alone is the transition. */
+.prefooter__grass{ display:none; }
