@@ -549,3 +549,13 @@ body[data-auth-page="member"]{
   backdrop-filter:none;
 }
 .room-card--soon{background:#FCFAF6}
+
+/* The Safety Hall door previews the room behind it. Every other room is warm;
+   that one is cool navy, and a member should not be surprised by the switch
+   when the door opens. A navy rule and tag, nothing more. */
+.room-card[href^="/safety-hall"]{
+  border-left:3px solid #1F2E5C;
+}
+.room-card[href^="/safety-hall"] .room-tag--open{ color:#1F2E5C; }
+.room-card[href^="/safety-hall"]:hover{ border-color:#33507A; }
+.room-card[href^="/safety-hall"]:hover{ border-left-color:#1F2E5C; }
