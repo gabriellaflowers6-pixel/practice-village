@@ -2142,7 +2142,7 @@ async function initWelcome() {
     },
     "Yoga or meditation": {
       heading: "Start in Moxie Studios.",
-      copy: "Bott Om can help you begin privately with beginner yoga or meditation and practice at your own pace.",
+      copy: "Moxie can help you begin privately with beginner yoga or meditation and practice at your own pace.",
       pending: "The member Studio link is being connected."
     },
     "A little quiet": {

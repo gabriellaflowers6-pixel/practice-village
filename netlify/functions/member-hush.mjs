@@ -64,7 +64,7 @@ export function hushPage() {
       </div>
     </section>
   </main>
-  <script type="module" src="/assets/member-auth.bundle.js?v=23"></script>
+  <script type="module" src="/assets/member-auth.bundle.js?v=24"></script>
 </body>
 </html>`;
 }

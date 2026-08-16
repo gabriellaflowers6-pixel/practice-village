@@ -36,7 +36,7 @@ function recordPage() {
       <p class="record-note">Searches and resource lists you keep carry their sources and links with them, here and in every download.</p>
     </section>
   </main>
-  <script type="module" src="/assets/member-auth.bundle.js?v=23"></script>
+  <script type="module" src="/assets/member-auth.bundle.js?v=24"></script>
 </body>
 </html>`;
 }

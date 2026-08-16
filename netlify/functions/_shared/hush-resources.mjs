@@ -18,7 +18,7 @@ export const HUSH_SHELF = [
     url: null,
     status: "connecting",
     statusLabel: "Being connected",
-    good: "Meditation with a teacher. Beginner mindful meditation taught in the Studio, with Bott Om beside you and live classes as they open.",
+    good: "Meditation with a teacher. Beginner mindful meditation taught in the Studio, with Moxie beside you and live classes as they open.",
     limits: "Your member door is being connected. We will not hand you a marketing page instead.",
     meanwhile: {
       label: "Try the free studio demo meanwhile",
