@@ -615,7 +615,7 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
 .hero {
   background:
     linear-gradient(100deg, rgba(22,16,18,.86) 0%, rgba(22,16,18,.58) 42%, rgba(22,16,18,.42) 100%),
-    url('assets/hero-meadow.jpg') center 42%/cover no-repeat;
+    url('assets/hero-meadow-web.jpg') center 42%/cover no-repeat;
   border-radius:28px;
 }
 .hero__title { color:var(--paper); }
@@ -706,7 +706,7 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
 
 /* --- upscale: Rebuild Arc as a forest-path band (complementary image) --- */
 .arc{
-  background:linear-gradient(180deg, rgba(20,14,22,.82), rgba(20,14,22,.66)), url('assets/forest-path.jpg') center 35%/cover no-repeat;
+  background:linear-gradient(180deg, rgba(20,14,22,.82), rgba(20,14,22,.66)), url('assets/forest-path-web.jpg') center 35%/cover no-repeat;
   border-radius:28px; color:#F7F4EE;
 }
 .arc .kicker{ color:#D7B987; }
@@ -735,7 +735,7 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
 
 /* --- upscale: Record section dawn-lake backdrop (complementary image) --- */
 .layer{
-  background:linear-gradient(180deg, rgba(249,248,245,.9), rgba(249,248,245,.8)), url('assets/dawn-lake.jpg') center 28%/cover no-repeat;
+  background:linear-gradient(180deg, rgba(249,248,245,.9), rgba(249,248,245,.8)), url('assets/dawn-lake-web.jpg') center 28%/cover no-repeat;
   border-radius:28px; padding:clamp(1.8rem,4vw,3rem) clamp(1.2rem,2.2vw,1.8rem);
 }
 
@@ -782,7 +782,7 @@ p, li, .ticket__sub, .map__desc, .hilo__inner p, .hero__lede, .section__intro { 
 /* --- a civic-hall photo behind "three ways in" (the doors into the place);
    same warm dark band as the hero, so the cream tickets float like the glass demo --- */
 .pricing{
-  background:linear-gradient(180deg, rgba(20,14,22,.9) 0%, rgba(20,14,22,.74) 52%, rgba(20,14,22,.82) 100%), url('assets/community-hall.jpg') center/cover no-repeat;
+  background:linear-gradient(180deg, rgba(20,14,22,.9) 0%, rgba(20,14,22,.74) 52%, rgba(20,14,22,.82) 100%), url('assets/community-hall-web.jpg') center/cover no-repeat;
   border-radius:28px;
 }
 .pricing .kicker{ color:#D7B987; }
@@ -1410,18 +1410,18 @@ body{
 .conciergerow__points li:nth-child(3)::before{ background:#7A5A20; }
 .arc{
   background:linear-gradient(180deg, rgba(32,20,8,.84), rgba(32,20,8,.68)),
-    url('assets/forest-path.jpg') center 35%/cover no-repeat;
+    url('assets/forest-path-web.jpg') center 35%/cover no-repeat;
 }
 .pricing{
   background:linear-gradient(180deg, rgba(30,19,9,.9) 0%, rgba(30,19,9,.74) 52%, rgba(30,19,9,.82) 100%),
-    url('assets/community-hall.jpg') center/cover no-repeat;
+    url('assets/community-hall-web.jpg') center/cover no-repeat;
 }
 .ticket, .ticket--feature{ background:rgba(32,21,10,.5); }
 .ticket--feature{ background:rgba(28,18,9,.56); border-color:rgba(213,168,128,.45); }
 .breathe{ background:radial-gradient(120% 90% at 50% 28%, #3A2A14, #140D05 74%); }
 .layer{
   background:linear-gradient(180deg, rgba(251,243,232,.9), rgba(251,243,232,.8)),
-    url('assets/dawn-lake.jpg') center 28%/cover no-repeat;
+    url('assets/dawn-lake-web.jpg') center 28%/cover no-repeat;
 }
 
 /* botanicals from the reference mock: branch + dried flowers in the hero,
@@ -1816,7 +1816,7 @@ h3{ font-family:var(--serif) !important; }
 
 /* ============================================================================
    HERO SCENE (2026-08-16)
-   The pencil sprigs are out. The hero lays over hero-meadow.jpg — golden-hour
+   The pencil sprigs are out. The hero lays over hero-meadow-web.jpg — golden-hour
    meadow, fine botanical silhouettes, already in the repo. The cream overlay is
    heaviest on the left where the copy sits and thins to the right and bottom so
    the scene carries all the way down to the edge of the panel.
@@ -1854,7 +1854,7 @@ h3{ font-family:var(--serif) !important; }
 /* ============================================================================
    FOOTER SCENE (2026-08-16)
    The footer was a flat slab of ink. Same treatment as the hero, different
-   image: forest-path.jpg under an ink overlay, so it reads as a place rather
+   image: forest-path-web.jpg under an ink overlay, so it reads as a place rather
    than a block, and lifts off the hard brown. Text stays cream on dark.
    ============================================================================ */
 .footer{
