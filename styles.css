@@ -1787,8 +1787,6 @@ h3{ font-family:var(--serif) !important; }
    cream. The photo is what makes the difference, so it comes down, and both
    columns align to the top instead of floating centred in the leftover space. */
 .hero{ align-items:start !important; }
-.window img,
-.window__frame img{ max-height:330px; object-fit:cover; object-position:center 22%; }
 @media (min-width:681px){
   .hero{ padding-block:clamp(32px,4vw,48px) !important; }
 }
@@ -1800,8 +1798,55 @@ h3{ font-family:var(--serif) !important; }
 .footer{ margin-top:0 !important; border-top:1px solid rgba(199,154,82,.4); }
 .gifts, .gifts + *{ margin-bottom:0; }
 
-/* The photo cap has to be on .window__frame, the anchor that wraps it.
-   Capping the img alone left the frame at 424px, so the right column stayed
-   625 against the copy column's 434 — that is the dead cream. */
-.window__frame{ max-height:300px !important; overflow:hidden; display:block; }
-.window__frame img.window__figure{ height:300px !important; max-height:300px !important; object-fit:cover; object-position:center 20%; }
+/* The copy column stretches to the window's height and breathes into it, so the
+   buttons and the Charter line finish level with the bottom of the Moxie sign
+   instead of stopping 191px short and leaving dead cream. The photo is never
+   cropped to achieve this. */
+@media (min-width:681px){
+  .hero__copy{
+    align-self:stretch;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    gap:clamp(18px,2.4vw,34px);
+  }
+  .hero__cta{ margin-top:auto; }
+  .hero__free{ margin-top:14px; }
+}
+
+/* ============================================================================
+   HERO SCENE (2026-08-16)
+   The pencil sprigs are out. The hero lays over hero-meadow.jpg — golden-hour
+   meadow, fine botanical silhouettes, already in the repo. The cream overlay is
+   heaviest on the left where the copy sits and thins to the right and bottom so
+   the scene carries all the way down to the edge of the panel.
+   ============================================================================ */
+.hero__flora{ display:none !important; }
+
+.hero{
+  background-image:
+    linear-gradient(100deg,
+      rgba(251,243,232,.94) 0%,
+      rgba(251,243,232,.88) 30%,
+      rgba(251,243,232,.55) 52%,
+      rgba(251,243,232,.18) 74%,
+      rgba(251,243,232,.06) 100%),
+    linear-gradient(to bottom,
+      rgba(251,243,232,.42) 0%,
+      rgba(251,243,232,.05) 48%,
+      rgba(251,243,232,0)   100%),
+    url("/assets/hero-meadow.jpg") !important;
+  background-size:cover !important;
+  background-position:center 78% !important;
+  background-repeat:no-repeat !important;
+}
+
+@media (max-width:680px){
+  /* on a phone the copy runs the full width, so the overlay stays heavy */
+  .hero{
+    background-image:
+      linear-gradient(rgba(251,243,232,.95), rgba(251,243,232,.88)),
+      url("/assets/hero-meadow.jpg") !important;
+    background-position:center 78% !important;
+  }
+}
