@@ -1096,9 +1096,15 @@ function rolesFor(user) {
 function hasMemberAccess(user) {
   return rolesFor(user).some((role) => memberRoles.includes(role));
 }
+var BAD_CREDENTIALS = /invalid[_ ](grant|credentials|login)|no user found|password invalid/i;
 function messageFor(error) {
-  if (error instanceof AuthError && error.status === 401) return "That email and password do not match.";
-  if (error instanceof AuthError) return error.message;
+  if (error instanceof AuthError) {
+    if (error.status === 401 || BAD_CREDENTIALS.test(error.message || "")) {
+      return "That email and password do not match.";
+    }
+    const plain = String(error.message || "").replace(/^[a-z0-9_]+:\s*/i, "").trim();
+    return plain || "Something went wrong. Try again or email info@aidedeq.org.";
+  }
   return "Something went wrong. Try again or email info@aidedeq.org.";
 }
 function goToMemberLobby(user) {

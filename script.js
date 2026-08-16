@@ -365,7 +365,14 @@
 
   /* ============ flip room tiles (the Center) ============ */
   document.querySelectorAll(".room").forEach(function (room) {
-    var flip = function () { room.classList.toggle("is-flipped"); };
+    /* The card already announces itself as a button and flips on Enter and
+       Space. Without aria-expanded a screen reader is never told it turned
+       over, so the back of the card arrives unannounced. */
+    room.setAttribute("aria-expanded", room.classList.contains("is-flipped") ? "true" : "false");
+    var flip = function () {
+      room.classList.toggle("is-flipped");
+      room.setAttribute("aria-expanded", room.classList.contains("is-flipped") ? "true" : "false");
+    };
     room.addEventListener("click", function (e) {
       if (e.target.closest("a")) return;   /* links inside a card navigate, never flip */
       flip();

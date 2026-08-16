@@ -21,9 +21,21 @@ function hasMemberAccess(user) {
   return rolesFor(user).some((role) => memberRoles.includes(role));
 }
 
+/* Supabase answers a wrong password with 400 invalid_grant, not 401, so the
+   status check alone let "invalid_grant: No user found with that email, or
+   password invalid." reach a member who simply mistyped. Match the meaning,
+   not the status code, and never show her a raw error code. */
+const BAD_CREDENTIALS = /invalid[_ ](grant|credentials|login)|no user found|password invalid/i;
+
 function messageFor(error) {
-  if (error instanceof AuthError && error.status === 401) return "That email and password do not match.";
-  if (error instanceof AuthError) return error.message;
+  if (error instanceof AuthError) {
+    if (error.status === 401 || BAD_CREDENTIALS.test(error.message || "")) {
+      return "That email and password do not match.";
+    }
+    // Anything else still gets said plainly: strip the leading machine code.
+    const plain = String(error.message || "").replace(/^[a-z0-9_]+:\s*/i, "").trim();
+    return plain || "Something went wrong. Try again or email info@aidedeq.org.";
+  }
   return "Something went wrong. Try again or email info@aidedeq.org.";
 }
 
