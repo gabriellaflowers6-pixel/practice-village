@@ -1850,3 +1850,21 @@ h3{ font-family:var(--serif) !important; }
     background-position:center 78% !important;
   }
 }
+
+/* ============================================================================
+   FOOTER SCENE (2026-08-16)
+   The footer was a flat slab of ink. Same treatment as the hero, different
+   image: forest-path.jpg under an ink overlay, so it reads as a place rather
+   than a block, and lifts off the hard brown. Text stays cream on dark.
+   ============================================================================ */
+.footer{
+  background-image:
+    linear-gradient(to bottom,
+      rgba(58,46,31,.86) 0%,
+      rgba(52,41,27,.74) 42%,
+      rgba(43,32,19,.86) 100%),
+    url("/assets/forest-path.jpg") !important;
+  background-size:cover !important;
+  background-position:center 14% !important;
+  background-repeat:no-repeat !important;
+}
