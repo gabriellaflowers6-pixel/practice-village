@@ -169,7 +169,11 @@
                 el("p", "drift-line", DATA.lines[lowest.key] || ""));
     root.append(card);
 
-    root.append(el("h2", null, COPY.mapTitle || "Your map"));
+    /* "Your five sources" is only true when all five were answered.
+       Skip a whole pillar and the heading has to drop the number. */
+    root.append(el("h2", null, scores.length === scoredKeys.length
+      ? (COPY.mapTitle || "Your map")
+      : (COPY.mapTitleShort || "Your map")));
     var map = el("div", "map");
     scores.slice().sort(function (a, b) { return b.score - a.score; }).forEach(function (s) {
       var row = el("div", "map-row" + (s.key === lowest.key ? " is-lowest" : ""));
