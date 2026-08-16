@@ -308,3 +308,157 @@ p,li,.member-card p,.onboarding-help,.welcome-intro p{text-wrap:pretty}
 }
 @media(max-width:600px){.room-card:before{height:112px}}
 .room-card>*:not(.room-card__img){position:relative;z-index:2}
+/* ============================================================================
+   MEMBER LOBBY — FOUNDATION ONLY
+   Navigation bar and colour. Nothing else is touched: no hero, no cards,
+   no grid, no spacing, no content. Every value below is measured from
+   thepracticevillage.org, not approximated.
+   ============================================================================ */
+
+/* ---------------------------------------------------------------------------
+   COLOUR — the ground
+   The lobby was painting its own gradient: radial-gradient(circle at 82% 8%,
+   rgba(201,134,4,...)) — a single gold circle top-right. That is the odd beige.
+   The landing uses two washes, gold from the top-left and CLAY from the right.
+   The clay wash is where the warmth in the landing's paper comes from.
+   --------------------------------------------------------------------------- */
+body[data-auth-page="member"]{
+  background:
+    radial-gradient(120% 80% at 12% -5%, rgba(199,154,82,.20), transparent 55%),
+    radial-gradient(120% 80% at 100% 8%, rgba(168,66,20,.10), transparent 50%),
+    #FBF3E8 !important;
+}
+
+/* the one measured contrast failure, shared with the landing */
+:root{ --ink-faint:#6E5F4A; }
+
+/* ---------------------------------------------------------------------------
+   NAVIGATION — exact parity with the landing's .nav
+   landing: sticky · 71px · padding 14.4px 64px · flex gap 32px
+            bg cream .84 · backdrop blur(9px)
+            border-bottom 1.5px transparent, line appears on scroll
+   lobby was: static · no blur · bg .94 · a permanent 1px line
+   --------------------------------------------------------------------------- */
+.member-header{
+  position:sticky !important; top:0; z-index:100;
+  height:71px !important;
+  padding:14.4px 64px !important;
+  display:flex !important; align-items:center !important; gap:32px !important;
+  background:rgba(251,243,232,.84) !important;
+  -webkit-backdrop-filter:blur(9px) !important;
+  backdrop-filter:blur(9px) !important;
+  border-bottom:1.5px solid transparent !important;
+  transition:border-color .3s ease !important;
+}
+.member-header.is-stuck{ border-bottom-color:rgba(58,40,16,.18) !important; }
+
+/* ---------------------------------------------------------------------------
+   THE BRAND — this is where the orange comes back.
+   The landing's brand is a 34px mark of six navy dots around a CLAY centre,
+   then the wordmark in Cormorant 21.6px/600, NAVY #1A1A4E.
+   The lobby had no mark at all and set the wordmark in brown at 24.8px.
+   The mark is decoration, so it is added as a background image: no markup
+   change, no new content, nothing moved.
+   --------------------------------------------------------------------------- */
+.member-brand{
+  display:inline-flex !important; align-items:center !important;
+  gap:8.8px !important;
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:21.6px !important;
+  font-weight:600 !important;
+  color:#1A1A4E !important;
+  text-decoration:none !important;
+  line-height:1 !important;
+}
+.member-brand::before{
+  content:"" !important;
+  width:34px !important; height:34px !important; flex:0 0 34px !important;
+  background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%20width%3D%2234%22%20height%3D%2234%22%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%228%22%20r%3D%222.8%22%20fill%3D%22%231A1A4E%22%2F%3E%3Ccircle%20cx%3D%2230.4%22%20cy%3D%2214%22%20r%3D%222.8%22%20fill%3D%22%231A1A4E%22%2F%3E%3Ccircle%20cx%3D%2230.4%22%20cy%3D%2226%22%20r%3D%222.8%22%20fill%3D%22%231A1A4E%22%2F%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%2232%22%20r%3D%222.8%22%20fill%3D%22%231A1A4E%22%2F%3E%3Ccircle%20cx%3D%229.6%22%20cy%3D%2226%22%20r%3D%222.8%22%20fill%3D%22%231A1A4E%22%2F%3E%3Ccircle%20cx%3D%229.6%22%20cy%3D%2214%22%20r%3D%222.8%22%20fill%3D%22%231A1A4E%22%2F%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%2220%22%20r%3D%225.5%22%20fill%3D%22%23A84214%22%2F%3E%3C%2Fsvg%3E") no-repeat center/contain !important;
+}
+
+/* ---------------------------------------------------------------------------
+   NAV LINKS — the landing's exact treatment
+   landing: Hanken 13.76px / 600 / #5D4F3E / no underline / gap 12.8px
+   lobby was: 14.08px / 600 / #2B2013 / UNDERLINED
+   --------------------------------------------------------------------------- */
+.member-header nav{
+  margin-left:auto !important;
+  display:flex !important; align-items:center !important;
+  gap:12.8px !important;
+}
+.member-header .member-link,
+.member-header #logoutButton,
+.member-header .text-button{
+  font-family:"Hanken Grotesk",system-ui,sans-serif !important;
+  font-size:13.76px !important;
+  font-weight:600 !important;
+  color:#5D4F3E !important;
+  text-decoration:none !important;
+  background:none !important;
+  border:0 !important;
+  padding:0 !important;
+  cursor:pointer;
+  transition:color .2s ease;
+}
+.member-header .member-link:hover,
+.member-header #logoutButton:hover{ color:#2B2013 !important; }
+
+/* ============================================================================
+   COMPOSITION — landing parity (2026-08-15)
+   Rhythm, headline scale, and one card treatment. No content, no grid changes.
+   ============================================================================ */
+
+/* 1. HEADLINE SCALE
+   Lobby h1 was clamp(3rem,8vw,5.5rem) = up to 88px. The landing's h1 renders
+   at 54px. An 88px headline on a short page is what opens the void under it. */
+.member-welcome h1{
+  font-size:clamp(2.3rem,4.6vw,3.375rem);
+  line-height:1.03;
+  letter-spacing:-.025em;
+}
+.member-welcome>p:not(.eyebrow){font-size:1.05rem;max-width:56ch}
+
+/* 2. VERTICAL RHYTHM
+   96px top padding + 48px welcome margin + 64px section margin is why the
+   sections drift apart. Tightened to the landing's density. */
+.member-main{padding:clamp(28px,3.4vw,52px) 0}
+.member-welcome{margin-bottom:30px}
+.member-section{margin-top:46px;padding-top:28px}
+
+/* 3. ONE CARD TREATMENT
+   The desk card was 22px with a 30px-deep shadow; the practice card was 18px
+   with no shadow at all. Two treatments side by side read as two designs. */
+.member-card,
+.member-card--desk-embed{
+  border-radius:18px;
+  border:1px solid var(--line);
+  box-shadow:0 16px 36px -18px rgba(43,32,19,.30);
+}
+.member-card--desk-embed{
+  border-color:rgba(247,244,238,.16);
+  box-shadow:0 18px 44px -20px rgba(30,19,9,.5);
+}
+
+/* 4. CONCIERGE CHIPS
+   Were heavy filled pills with weak contrast on the dark card. Now a quiet
+   chip set: translucent cream, hairline, smaller, still clearly tappable. */
+.member-card--desk-embed .desk-chips{gap:7px}
+.member-card--desk-embed .desk-chips button{
+  background:rgba(247,244,238,.10);
+  border:1px solid rgba(247,244,238,.26);
+  color:#F7F4EE;
+  border-radius:10px;
+  padding:.48rem .78rem;
+  font:600 .82rem var(--sans);
+}
+.member-card--desk-embed .desk-chips button:hover,
+.member-card--desk-embed .desk-chips button:focus-visible{
+  background:rgba(199,154,82,.22);
+  border-color:rgba(199,154,82,.55);
+  outline:none;
+}
+
+/* 5. GRID GAPS
+   18px in the top grid, 14px and 16px in the room grid. One value. */
+.member-grid{gap:18px}
+.room-grid{gap:18px}
