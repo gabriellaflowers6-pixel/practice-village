@@ -1835,7 +1835,7 @@ h3{ font-family:var(--serif) !important; }
       rgba(251,243,232,.42) 0%,
       rgba(251,243,232,.05) 48%,
       rgba(251,243,232,0)   100%),
-    url("/assets/hero-meadow.jpg") !important;
+    url("/assets/hero-meadow-web.jpg") !important;
   background-size:cover !important;
   background-position:center 78% !important;
   background-repeat:no-repeat !important;
@@ -1846,7 +1846,7 @@ h3{ font-family:var(--serif) !important; }
   .hero{
     background-image:
       linear-gradient(rgba(251,243,232,.95), rgba(251,243,232,.88)),
-      url("/assets/hero-meadow.jpg") !important;
+      url("/assets/hero-meadow-web.jpg") !important;
     background-position:center 78% !important;
   }
 }
@@ -1863,8 +1863,8 @@ h3{ font-family:var(--serif) !important; }
       rgba(58,46,31,.86) 0%,
       rgba(52,41,27,.74) 42%,
       rgba(43,32,19,.86) 100%),
-    url("/assets/forest-path.jpg") !important;
+    url("/assets/forest-path-web.jpg") !important;
   background-size:cover !important;
-  background-position:center 14% !important;
+  background-position:center !important;
   background-repeat:no-repeat !important;
 }

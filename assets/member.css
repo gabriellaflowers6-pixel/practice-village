@@ -666,7 +666,7 @@ body[data-room="kitchen"]{
       rgba(251,243,232,.40) 0%,
       rgba(251,243,232,.04) 55%,
       rgba(251,243,232,0) 100%),
-    url("/assets/hero-meadow.jpg");
+    url("/assets/hero-meadow-web.jpg");
   background-size:cover;
   background-position:center 74%;
   background-repeat:no-repeat;
@@ -675,7 +675,7 @@ body[data-room="kitchen"]{
   .member-welcome{
     background-image:
       linear-gradient(rgba(251,243,232,.95), rgba(251,243,232,.88)),
-      url("/assets/hero-meadow.jpg");
+      url("/assets/hero-meadow-web.jpg");
     background-position:center 80%;
   }
 }
