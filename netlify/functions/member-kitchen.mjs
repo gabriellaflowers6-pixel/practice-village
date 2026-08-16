@@ -31,9 +31,9 @@ export function kitchenPage() {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/member.css?v=29" />
+  <link rel="stylesheet" href="/assets/member.css?v=31" />
 </head>
-<body data-auth-page="room">
+<body data-auth-page="room" data-room="kitchen">
   <header class="member-header">
     <a href="/member" class="member-brand">Practice Village</a>
     <nav><a href="/member" class="member-link">Back to your lobby</a><button id="logoutButton" class="text-button" type="button">Sign out</button></nav>

@@ -595,3 +595,49 @@ body[data-auth-page]{
   border:1px solid var(--line) !important;
   border-radius:12px !important;
 }
+
+/* Cormorant has deep descenders. line-height:1.03 plus overflow:hidden on the
+   heading clipped the g in "Intelligence" by 4.9px. Headings get their
+   descender room back and stop clipping. */
+.member-welcome h1,
+.member-section h2,
+.member-card h2,
+.auth-card h1,
+.invite-success h2{
+  overflow:visible !important;
+  line-height:1.12 !important;
+  padding-bottom:.04em !important;
+}
+
+/* ============================================================================
+   THE KITCHEN — sage, restrained (2026-08-15)
+   Accents only. The cream ground, the geometry and the type are the Village's;
+   what changes is the colour the room answers in. No green paper, no leaves,
+   no vegetable iconography — the room is about learning to eat mostly plants,
+   and it can say that with one considered colour rather than a costume.
+     accent  #4A5A37  6.80:1 on cream
+     action  #3F5233  7.74:1 on cream, white on it 8.52:1 (AAA both ways)
+   ============================================================================ */
+body[data-room="kitchen"]{
+  --clay:#4A5A37;
+  --clay-deep:#3F5233;
+  --gold:#7C8A5E;
+}
+body[data-room="kitchen"] .eyebrow{ color:#4A5A37 !important; }
+body[data-room="kitchen"] .primary-button,
+body[data-room="kitchen"] .auth-form button{
+  background:#3F5233 !important;
+  box-shadow:0 6px 18px -8px rgba(63,82,51,.65) !important;
+}
+body[data-room="kitchen"] .primary-button:hover{ background:#33421F !important; }
+body[data-room="kitchen"] .room-tag--open{ color:#4A5A37 !important; }
+body[data-room="kitchen"] .member-card:hover,
+body[data-room="kitchen"] .shelf-item:hover{ border-color:#7C8A5E !important; }
+body[data-room="kitchen"] .member-state{ border-color:rgba(74,90,55,.34) !important; color:#3F5233 !important; }
+/* the sage stays a note, never the page: the ground is still the Village's */
+body[data-room="kitchen"]{
+  background:
+    radial-gradient(120% 80% at 12% -5%, rgba(124,138,94,.12), transparent 55%),
+    radial-gradient(120% 80% at 100% 8%, rgba(168,66,20,.05), transparent 50%),
+    #FBF3E8 !important;
+}

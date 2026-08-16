@@ -910,3 +910,12 @@ body{
   background:rgba(51,80,122,.055) !important;
   border-color:rgba(51,80,122,.26) !important;
 }
+
+/* same descender clip as the member rooms: Cormorant needs the room */
+.hall-intro h1,.discreet-cover h1,
+.tracker h2,.entries h2,.dialog h2,
+.support-card b{
+  overflow:visible !important;
+  line-height:1.12 !important;
+  padding-bottom:.04em !important;
+}
