@@ -26,6 +26,16 @@
   status = 200
 
 [[redirects]]
+  from = "/wellbeing-snapshot"
+  to = "/wellbeing-snapshot.html"
+  status = 200
+
+[[redirects]]
+  from = "/sources-of-wholeness"
+  to = "/sources-of-wholeness.html"
+  status = 200
+
+[[redirects]]
   from = "/login"
   to = "/login.html"
   status = 200

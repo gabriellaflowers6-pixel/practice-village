@@ -570,3 +570,128 @@ input,textarea,select{ border-radius:12px !important; }
 
 /* the base rule sets min-height:76px; the Village bar is 71 */
 .hall-header{ min-height:71px !important; }
+
+/* ============================================================================
+   SAFETY HALL — its own room (2026-08-15)
+   Supersedes the warm block above. This room is used for work situations, so
+   it leaves the Village's cream and brown and takes the navy already in the
+   palette (--navy #1A1A4E, the AIdedEQ indigo that carries the wordmark
+   everywhere else). Cool, minimal, professional. The brand mark stays exactly
+   as it is in every other room — that is the thread back to the Village.
+
+   Every value below clears AAA (7:1) on both the paper and the card:
+     ink       #14143A  16.46 / 17.63
+     ink-soft  #3B3B60   9.90 / 10.60
+     ink-muted #4E4E70   7.40 /  7.93
+     slate     #33507A   7.63 /  8.17
+     action    #1F2E5C  12.22 / 13.10   (white on it 13.10)
+     exit      #8E1B2E   8.35 /  8.95   (white on it  8.95)
+   ============================================================================ */
+
+:root{
+  --paper:#EFF1F6;
+  --paper-2:#E4E8F0;
+  --paper-3:#D8DEEA;
+  --ink:#14143A;
+  --ink-soft:#3B3B60;
+  --ink-faint:#4E4E70;
+  --clay:#33507A;        /* the numerals and eyebrows: slate, not orange */
+  --clay-deep:#1F2E5C;
+  --gold:#33507A;
+  --forest:#3B3B60;
+  --moss:#3B3B60;
+  --line:rgba(20,20,58,.14);
+  --shadow:0 16px 36px -18px rgba(20,20,58,.26);
+  --shadow-lg:0 22px 50px -24px rgba(20,20,58,.30);
+}
+
+/* the ground: cool and quiet, no warm wash at all */
+body{
+  background:
+    radial-gradient(120% 80% at 12% -5%, rgba(51,80,122,.09), transparent 55%),
+    radial-gradient(120% 80% at 100% 8%, rgba(26,26,78,.06), transparent 50%),
+    var(--paper) !important;
+}
+
+/* the bar keeps the Village geometry, in this room's colours */
+.hall-header{ background:rgba(239,241,246,.84) !important; }
+.hall-header.is-stuck{ border-bottom-color:var(--line) !important; }
+
+.eyebrow,.side-label{ color:#33507A !important; }
+
+/* surfaces */
+.support-card,.side-card,.capture-card,.resource-card,.entry-card,
+.optional-panel,.tracker,.entries,.dialog{
+  background:#FFFFFF !important;
+  border:1px solid var(--line) !important;
+  box-shadow:var(--shadow) !important;
+}
+
+/* ---------------------------------------------------------------------------
+   THE SIX CHOICES
+   Card 02 was rendering blank: .support-card.is-active sets color:white on a
+   dark ground, and the earlier white-surface rule flattened its background
+   without touching the text. Selected state is navy again, deliberately.
+   --------------------------------------------------------------------------- */
+.support-card{
+  border-radius:14px !important;
+  min-height:112px !important;
+  transition:transform .22s cubic-bezier(.2,.8,.2,1), box-shadow .22s, border-color .22s !important;
+}
+.support-card:hover,.support-card:focus-visible{
+  transform:translateY(-2px) !important;
+  border-color:#33507A !important;
+  box-shadow:var(--shadow-lg) !important;
+}
+.support-card.is-active{
+  background:#1F2E5C !important;
+  border-color:#1F2E5C !important;
+  color:#FFFFFF !important;
+}
+.support-card.is-active b{ color:#FFFFFF !important; }
+.support-card.is-active small{ color:rgba(255,255,255,.80) !important; }
+.support-card.is-active>span{ color:rgba(255,255,255,.72) !important; }
+.support-card>span{ color:#33507A !important; font-weight:700 !important; }
+.support-card small{ color:var(--ink-faint) !important; }
+
+/* actions */
+.primary{
+  background:#1F2E5C !important; color:#FFFFFF !important;
+  border:1px solid transparent !important;
+  box-shadow:0 6px 18px -8px rgba(31,46,92,.6) !important;
+}
+.primary:hover{ background:#14143A !important; }
+.header-tool{
+  background:#FFFFFF !important; border:1px solid var(--line) !important;
+  color:var(--ink) !important;
+}
+
+/* the exit stays the one warm-alert element on the page, on purpose:
+   it must never read as part of the calm palette. */
+.quick-exit{
+  background:#8E1B2E !important;
+  border:2px solid #FFFFFF !important;
+  box-shadow:0 8px 22px -8px rgba(20,20,58,.5) !important;
+}
+.quick-exit:hover,.quick-exit:focus-visible{
+  background:#7A1526 !important;
+  outline:3px solid rgba(51,80,122,.45) !important;
+}
+
+/* The caution bands were tinted with the old clay rgba(194,84,47,...). They
+   carry meaning (support first, sensitive handoff, redaction), so they keep a
+   warning tint — moved onto the exit's alert crimson so the room has exactly
+   one warm signal and it always means "pay attention". */
+.hall-orientation__boundary,
+.support-first,
+.handoff-sensitive,
+.handoff-safety,
+.redaction-safety,
+.what-this-is-not{
+  background:rgba(142,27,46,.06) !important;
+  border-color:rgba(142,27,46,.35) !important;
+}
+.support-first strong,
+.handoff-sensitive strong,
+.handoff-safety strong,
+.redaction-safety strong{ color:#7A1526 !important; }

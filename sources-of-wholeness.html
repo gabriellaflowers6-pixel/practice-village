@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Five places your wellbeing gets fed in real life: Essence, Connection, Belonging, Meaning, and Awe. See which one is steady and which needs attention. Free, no login, nothing stored." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23C9862B'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='15' font-weight='600' fill='%231A1A4E' text-anchor='middle'%3EPV%3C/text%3E%3C/svg%3E" />
+  <title>Sources of Wholeness · Practice Village</title>
+  <link rel="canonical" href="https://thepracticevillage.org/sources-of-wholeness" />
+  <meta property="og:title" content="Sources of Wholeness · Practice Village" />
+  <meta property="og:description" content="Name what supports you most, so you can reach for it on purpose. Free, no login, nothing stored." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://thepracticevillage.org/sources-of-wholeness" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/snapshot.css?v=1" />
+</head>
+<body>
+
+  <header class="snap-header">
+    <a class="brand" href="/">
+      <svg viewBox="0 0 40 40" width="34" height="34" aria-hidden="true"><circle cx="20" cy="8" r="2.8" fill="#1A1A4E"/><circle cx="30.4" cy="14" r="2.8" fill="#1A1A4E"/><circle cx="30.4" cy="26" r="2.8" fill="#1A1A4E"/><circle cx="20" cy="32" r="2.8" fill="#1A1A4E"/><circle cx="9.6" cy="26" r="2.8" fill="#1A1A4E"/><circle cx="9.6" cy="14" r="2.8" fill="#1A1A4E"/><circle cx="20" cy="20" r="5.5" fill="#C9862B"/></svg>
+      <span><b>Practice Village</b><small>Sources of Wholeness</small></span>
+    </a>
+    <a class="header-back" href="/#gifts">Back to the Village</a>
+  </header>
+
+  <main>
+    <section id="intro">
+      <p class="eyebrow">Our teaching, free</p>
+      <h1>Name what holds you up.</h1>
+      <p class="lede">Wellbeing gets fed in five places: Essence, Connection, Belonging, Meaning, and Awe. Twenty-nine short statements about the past seven days will show you which one is steady and which one has gone quiet, so you can reach for it on purpose.</p>
+
+      <ul class="promises">
+        <li><span class="mark" aria-hidden="true">✓</span><span><b>Free, and finished.</b> The whole result appears when you are done. There is nothing to unlock.</span></li>
+        <li><span class="mark" aria-hidden="true">✓</span><span><b>No email, no account.</b> You are never asked who you are.</span></li>
+        <li><span class="mark" aria-hidden="true">✓</span><span><b>Nothing stored.</b> Your answers are scored in your browser and are gone when you close the tab.</span></li>
+        <li><span class="mark" aria-hidden="true">✓</span><span><b>Skip anything.</b> A skipped statement is left out of the scoring rather than counted against you.</span></li>
+      </ul>
+
+      <button class="btn btn--primary" id="startSnapshot" type="button">Start the snapshot</button>
+    </section>
+
+    <section id="snapshot" data-instrument="sources" hidden aria-live="polite"></section>
+  </main>
+
+  <footer>
+    <p>A room in the <a href="/">Practice Village</a> digital community center. Educational support, not medical, legal, or financial advice. <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></p>
+  </footer>
+
+  <script>
+    /* ---- per-room copy ----------------------------------------------
+       The invitation replaces the old email wall. Confirm the workshop
+       link and the scholarship wording below; everything else here is
+       the room's own voice and needs no maintenance. */
+    window.SNAPSHOT_COPY = {
+      frame: "In the past 7 days",
+      resultEyebrow: "Your snapshot",
+      resultTitle: "Here is your Sources Map.",
+      driftLabel: "Primary source drift",
+      mapTitle: "Your five sources",
+      caveat: "This is a snapshot of one week. It is not a diagnosis, a test result, or a measure of who you are. You decide whether it fits.",
+      friction: {
+        title: "Protective Mode",
+        high: "A lot of self-protection is running the show right now: pulling back, staying busy, keeping things at arm's length. It is doing a job. It is worth knowing it is on.",
+        middle: "Some self-protection is running. That is ordinary in a hard week, and useful to notice before it becomes the default.",
+        low: "You are not spending much energy protecting yourself this week. More of you is available for everything else."
+      },
+      invite: {
+        eyebrow: "If you want to go further",
+        title: "Practice it with people.",
+        body: "Naming your sources is the first half. Reaching for them on purpose is the practice. The Practice Center runs practice-first workshops in mindfulness and forgiveness, the same work this snapshot came from.",
+        primaryLabel: "See the workshops",
+        primaryHref: "https://thepracticecenter.org/pathways",
+        secondaryLabel: "Look around the Village",
+        secondaryHref: "/#center",
+        scholarship: "Cost should not decide who practices. Full scholarships are available on request."
+      }
+    };
+  </script>
+  <script src="/snapshot-data.js?v=1"></script>
+  <script src="/snapshot.js?v=1"></script>
+</body>
+</html>
