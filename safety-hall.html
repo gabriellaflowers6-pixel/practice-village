@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/safety-hall.css?v=19" />
+  <link rel="stylesheet" href="/safety-hall.css?v=20" />
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -43,9 +43,9 @@
         <h1>What would help you right now?</h1>
         <p>Start by recording what happened. You do not have to organize it, explain it, or know what to call it.</p>
       </div>
-      <aside class="privacy-note">
-        <span aria-hidden="true">⌂</span>
-        <p><strong>This prototype saves private notes on this device.</strong> Typed notes, recordings, and uploaded files may be visible to anyone with access to this browser profile.</p>
+      <aside class="privacy-note" role="note" aria-label="How your notes are stored">
+        <p class="privacy-note__lead">Everything you write here stays on this device.</p>
+        <p class="privacy-note__body">Notes, recordings and files are saved in this browser and are never sent to Practice Village. <strong>Anyone who can open this browser profile can read them.</strong></p>
       </aside>
     </section>
 
@@ -61,7 +61,7 @@
         <div><span>3</span><p><b>Look across your record.</b> You decide whether a suggested pattern fits.</p></div>
         <div><span>4</span><p><b>Choose a next step.</b> Keep it private, set a boundary, or look for workplace, community, or legal information.</p></div>
       </div>
-      <p class="hall-orientation__boundary"><b>What this is not:</b> an emergency service, diagnosis, legal ruling, or automatic report to an employer. Nothing is sent from this prototype.</p>
+      <p class="hall-orientation__boundary"><b>What this is not:</b> an emergency service, diagnosis, legal ruling, or automatic report to an employer. Nothing is sent to an employer, and nothing leaves this device.</p>
     </section>
 
     <section class="support-menu" aria-label="Safety Hall support options">
@@ -106,7 +106,7 @@
             <label class="capture-button" for="entryFiles">＋ Add screenshots or files</label>
             <input id="entryFiles" type="file" accept="image/*,audio/*,.pdf,.txt,.doc,.docx" multiple hidden />
           </div>
-          <p class="capture-note">Recordings and files stay on this device in this prototype. Nothing is sent to Practice Village.</p>
+          <p class="capture-note">Recordings and files stay on this device. Nothing is sent to Practice Village.</p>
           <div class="mic-session" id="micSession" hidden>
             <span><i aria-hidden="true"></i> Microphone ready for this page</span>
             <button type="button" id="releaseMicrophone">Release microphone</button>
@@ -370,7 +370,7 @@
     <p>A transcript can make a recording easier to search and review. You can edit it, but it is not the original recording.</p>
     <section class="transcript-consent" id="transcriptConsent">
       <div class="safety-list">
-        <p><b>This prototype will not send or automatically transcribe your audio.</b> Automatic transcription stays unavailable until Safety Hall can name the processor, retention policy, and privacy boundary.</p>
+        <p><b>Safety Hall will not send or automatically transcribe your audio.</b> Automatic transcription stays unavailable until Safety Hall can name the processor, retention policy, and privacy boundary.</p>
         <p><b>You can write or paste a transcript now.</b> It will be stored with this entry in the same browser. Your original recording will remain separate and unchanged.</p>
       </div>
       <label class="consent-check"><input id="transcriptConsentCheck" type="checkbox" /> <span>I understand that I am creating an editable transcript myself and no audio is being sent.</span></label>
@@ -442,13 +442,13 @@
   </dialog>
 
   <dialog class="dialog" id="safetyDialog">
-    <button class="dialog-close" type="button" data-close aria-label="Close">×</button><span class="hand">know what this prototype can protect</span><h2>Device safety</h2>
+    <button class="dialog-close" type="button" data-close aria-label="Close">×</button><span class="hand">know what Safety Hall can protect</span><h2>Device safety</h2>
     <div class="safety-list">
       <p><b>Text, recordings, and uploaded files stay in this browser.</b> They are not sent to Practice Village, but anyone with access to this browser profile may be able to find them.</p>
       <p><b>Quick exit replaces this page.</b> It does not erase browser history, downloads, device backups, or activity visible to an administrator.</p>
       <p><b>A personal device is safest.</b> Avoid a work or shared device when documenting sensitive experiences.</p>
       <p><b>Microphone access is reused only while this page stays open.</b> You can release it at any time. Safety Hall also releases it when you use discreet view, quick exit, or leave the page.</p>
-      <p><b>Screenshots are kept as their original local files.</b> This prototype does not read them, extract their text, or analyze their contents.</p>
+      <p><b>Screenshots are kept as their original local files.</b> Safety Hall does not read them, extract their text, or analyze their contents.</p>
       <p><b>Exports contain authored text, editable transcripts, screenshot context, and metadata only.</b> Download original recordings or files separately from a saved entry. Redacted screenshots are created only when you choose and downloaded as separate PNG copies.</p>
     </div>
     <div class="storage-check">
@@ -471,6 +471,6 @@
 
   <script src="/safety-controls.js?v=4"></script>
   <script src="/safety-resources.js?v=2"></script>
-  <script src="/safety-hall.js?v=19"></script>
+  <script src="/safety-hall.js?v=20"></script>
 </body>
 </html>

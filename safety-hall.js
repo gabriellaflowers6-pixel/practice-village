@@ -443,7 +443,7 @@
         row.appendChild(artifact);
       }
       if (!item.blobId) {
-        meta.textContent += " · original content was not stored by the earlier prototype";
+        meta.textContent += " · original content was not stored by the earlier version";
         return;
       }
       getBlob(item.blobId).then(function (blob) {
@@ -832,7 +832,7 @@
     for (var index = 0; index < files.length; index += 1) {
       var file = files[index];
       if (file.size > MAX_FILE_SIZE) {
-        captureError.textContent = file.name + " is larger than the 25 MB prototype limit and was not added.";
+        captureError.textContent = file.name + " is larger than the 25 MB limit and was not added.";
         continue;
       }
       var blobId = uid();
