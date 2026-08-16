@@ -559,3 +559,39 @@ body[data-auth-page="member"]{
 .room-card[href^="/safety-hall"] .room-tag--open{ color:#1F2E5C; }
 .room-card[href^="/safety-hall"]:hover{ border-color:#33507A; }
 .room-card[href^="/safety-hall"]:hover{ border-left-color:#1F2E5C; }
+
+/* ============================================================================
+   EVERY MEMBER ROOM, NOT JUST THE LOBBY (2026-08-15)
+   The ground rule was scoped to body[data-auth-page="member"], which is only
+   the lobby. Your Record is "record", the account page is "account", HUSH and
+   the Kitchen are "room", the welcome is "welcome" — all five kept the old
+   single gold circle at 82% 8%. Scoped to the attribute itself so every room
+   stands on the same ground.
+   ============================================================================ */
+body[data-auth-page]{
+  background:
+    radial-gradient(120% 80% at 12% -5%, rgba(199,154,82,.13), transparent 55%),
+    radial-gradient(120% 80% at 100% 8%, rgba(168,66,20,.07), transparent 50%),
+    #FBF3E8 !important;
+}
+
+/* The same cream-on-cream problem the member cards had, in the components the
+   other rooms are built from. #FFFDF8 on a cream ground is not a surface. */
+.saved-card,
+.shelf-item,
+.practice-item,
+.practice-day,
+.record-actions>*{
+  background:#FFFFFF !important;
+}
+.saved-card,
+.shelf-item{
+  border:1px solid var(--line) !important;
+  border-radius:18px !important;
+  box-shadow:0 16px 36px -18px rgba(43,32,19,.30) !important;
+}
+.practice-item,
+.practice-day{
+  border:1px solid var(--line) !important;
+  border-radius:12px !important;
+}
