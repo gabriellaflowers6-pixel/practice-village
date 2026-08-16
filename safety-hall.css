@@ -809,3 +809,37 @@ body{
 .redaction-safety strong,
 .hall-orientation__boundary b,
 .what-this-is-not b{ color:#1F2E5C !important; }
+
+/* Nothing in this room sits crooked.
+   .privacy-note carried rotate(1deg), .hand rotate(-1deg), and
+   .side-card--pattern rotate(.6deg) — leftovers from the sketchbook styling.
+   A deliberate tilt reads as decoration, and this is not a room to decorate. */
+.privacy-note,
+.hand,
+.side-card--pattern,
+.support-card,
+.side-card,
+.capture-card,
+.resource-card,
+.entry-card,
+.optional-panel,
+.tracker,
+.entries,
+.dialog{
+  transform:none !important;
+}
+/* the pattern card was also still the old dark ink block */
+.side-card--pattern{
+  background:#FFFFFF !important;
+  color:var(--ink) !important;
+  border-left:3px solid #33507A !important;
+}
+.side-card--pattern p,
+.side-card--pattern span{ color:var(--ink-soft) !important; }
+/* handwriting has no job in this room */
+.hand{
+  font-family:"Hanken Grotesk",system-ui,sans-serif !important;
+  font-size:.95rem !important;
+  font-weight:700 !important;
+  color:#1F2E5C !important;
+}
