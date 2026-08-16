@@ -433,3 +433,141 @@ body.is-discreet .header-tool,body.is-discreet #quickExit { display:none; }
   --forest:#8A6524; --moss:#8A6524; --line:rgba(58,40,16,.18);
   --shadow:8px 9px 0 -2px rgba(43,32,19,.16);
 }
+
+
+/* ============================================================================
+   SAFETY HALL — Village parity + AAA (2026-08-15)
+   Same modern language as the landing and the member lobby. Nothing about the
+   safety behaviour changes: discreet view, Escape, and the exit destination
+   are untouched. Only how the room looks, and how reachable the exit is.
+   ============================================================================ */
+
+/* 1. THE GROUND
+   Safety Hall was washing the page with gold AND FOREST GREEN (2E6151 at .11).
+   No other room in the Village uses green. Gold and clay, like everywhere else. */
+body{
+  background:
+    radial-gradient(120% 80% at 12% -5%, rgba(199,154,82,.13), transparent 55%),
+    radial-gradient(120% 80% at 100% 8%, rgba(168,66,20,.07), transparent 50%),
+    #FBF3E8 !important;
+}
+
+/* 2. AAA TEXT
+   This room is used under stress, sometimes on a borrowed phone. Only the
+   three tokens that clear 7:1 are allowed to carry text.
+   ink 2B2013 14.47 · ink-soft 5D4F3E 7.19 · clay-deep 7E300C 8.24
+   ink-faint 99876F measured 3.16 and is retired here entirely. */
+:root{
+  --ink-faint:#5D4F3E;
+  --clay:#7E300C;
+  --forest:#5D4F3E;
+  --moss:#5D4F3E;
+}
+
+/* 3. NAVIGATION — the landing's bar, exactly
+   was: 76px · blur(10px) · bg .9 · a permanent 1px line · wordmark Hanken 16px */
+.hall-header{
+  position:sticky !important; top:0; z-index:100;
+  height:71px !important;
+  padding:14.4px 64px !important;
+  background:rgba(251,243,232,.84) !important;
+  -webkit-backdrop-filter:blur(9px) !important;
+  backdrop-filter:blur(9px) !important;
+  border-bottom:1.5px solid transparent !important;
+  transition:border-color .3s ease !important;
+}
+.hall-header.is-stuck{ border-bottom-color:rgba(58,40,16,.18) !important; }
+.brand{
+  display:inline-flex !important; align-items:center !important; gap:8.8px !important;
+  font-family:"Cormorant Garamond",Georgia,serif !important;
+  font-size:21.6px !important; font-weight:600 !important;
+  color:#1A1A4E !important; text-decoration:none !important; line-height:1 !important;
+}
+.brand svg{ display:none !important; }
+.brand::before{
+  content:"" !important; width:34px !important; height:34px !important; flex:0 0 34px !important;
+  background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%20width%3D%2234%22%20height%3D%2234%22%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%228%22%20r%3D%222.8%22%20fill%3D%22%231A1A4E%22%2F%3E%3Ccircle%20cx%3D%2230.4%22%20cy%3D%2214%22%20r%3D%222.8%22%20fill%3D%22%231A1A4E%22%2F%3E%3Ccircle%20cx%3D%2230.4%22%20cy%3D%2226%22%20r%3D%222.8%22%20fill%3D%22%231A1A4E%22%2F%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%2232%22%20r%3D%222.8%22%20fill%3D%22%231A1A4E%22%2F%3E%3Ccircle%20cx%3D%229.6%22%20cy%3D%2226%22%20r%3D%222.8%22%20fill%3D%22%231A1A4E%22%2F%3E%3Ccircle%20cx%3D%229.6%22%20cy%3D%2214%22%20r%3D%222.8%22%20fill%3D%22%231A1A4E%22%2F%3E%3Ccircle%20cx%3D%2220%22%20cy%3D%2220%22%20r%3D%225.5%22%20fill%3D%22%23A84214%22%2F%3E%3C%2Fsvg%3E") no-repeat center/contain !important;
+}
+.brand small{ display:none !important; }
+
+/* 4. THE WOBBLE — 34 elements carried irregular per-corner radii
+   button 11 · .dialog 9 · .support-card 6 · .side-card 3 · .primary 2
+   .privacy-note · .hall-orientation · .capture-card */
+.support-card,.side-card,.dialog,.privacy-note,.hall-orientation,
+.capture-card,.optional-panel,.tracker,.entries,.discreet-cover,
+.hall-intro>div,.resource-card,.entry-card{
+  border-radius:18px !important;
+}
+button,.primary,.header-tool,.quick-exit{ border-radius:999px !important; }
+input,textarea,select{ border-radius:12px !important; }
+
+/* 5. STICKER SHADOWS AND DOUBLE BORDERS
+   12px 14px 0 / 8px 9px 0 / 4px 5px 0, and .optional-panel's 3px double rule. */
+.support-card,.side-card,.dialog,.primary,.capture-card,
+.optional-panel,.tracker,.entries,.resource-card,.entry-card{
+  box-shadow:0 16px 36px -18px rgba(43,32,19,.30) !important;
+}
+.optional-panel{ border:1px solid rgba(58,40,16,.18) !important; }
+*{ --shadow:0 16px 36px -18px rgba(43,32,19,.30); --shadow-lg:0 22px 50px -24px rgba(43,32,19,.34); }
+
+/* 6. SURFACES READ WHITE, not cream on cream */
+.support-card,.side-card,.capture-card,.resource-card,.entry-card,.optional-panel{
+  background:#FFFFFF !important;
+}
+
+/* 7. TYPE — one hierarchy, matching the Village
+   h1 was 60.16px against the landing's 54px. */
+.hall-intro h1,.discreet-cover h1{
+  font-size:clamp(2.3rem,4.6vw,3.375rem) !important;
+  line-height:1.03 !important; letter-spacing:-.025em !important;
+}
+.tracker h2,.entries h2,.dialog h2{
+  font-size:clamp(1.5rem,2.4vw,1.75rem) !important;
+  line-height:1.15 !important; letter-spacing:-.015em !important;
+}
+.eyebrow,.side-label{ color:#7E300C !important; }
+
+/* 8. BUTTONS — primary is clay-deep so white on it clears AAA at 9.07:1 */
+.primary{
+  background:#7E300C !important; color:#FFFFFF !important;
+  border:1px solid transparent !important;
+  box-shadow:0 6px 18px -8px rgba(126,48,12,.7) !important;
+}
+.header-tool{
+  background:#FFFFFF !important; border:1px solid rgba(58,40,16,.18) !important;
+  color:#2B2013 !important; font-weight:700 !important;
+}
+
+/* ---------------------------------------------------------------------------
+   9. THE EXIT
+   Measured live: 81x38, position:static, 12.16px, label "Quick exit".
+   Three problems. It is under the 44px minimum target size. It is static, so
+   the one control that must never leave the screen scrolls off it. And user
+   testing (ACM 2023) found people do not understand the phrase "Quick exit";
+   the National DV Hotline uses the single word "exit" in a 60x60 fixed corner
+   control. The destination and the discreet-mode behaviour are unchanged.
+   --------------------------------------------------------------------------- */
+.quick-exit{
+  position:fixed !important;
+  top:14px !important; right:16px !important;
+  z-index:9999 !important;
+  min-width:64px !important; min-height:48px !important;
+  padding:.6rem 1.15rem !important;
+  border:2px solid #FFFFFF !important;
+  border-radius:999px !important;
+  background:#7E300C !important;
+  color:#FFFFFF !important;
+  font:800 .95rem/1 "Hanken Grotesk",system-ui,sans-serif !important;
+  letter-spacing:.02em !important;
+  box-shadow:0 8px 22px -8px rgba(43,32,19,.55) !important;
+  cursor:pointer;
+}
+.quick-exit:hover,.quick-exit:focus-visible{
+  background:#5F2408 !important;
+  outline:3px solid rgba(199,154,82,.5) !important; outline-offset:2px !important;
+}
+/* the sticky bar must not sit on top of the exit */
+.hall-header{ padding-right:96px !important; }
+
+/* the base rule sets min-height:76px; the Village bar is 71 */
+.hall-header{ min-height:71px !important; }

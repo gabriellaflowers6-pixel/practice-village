@@ -223,6 +223,31 @@
   function deleteBlob(id) { return id ? mediaTransaction("readwrite", function (store) { return store.delete(id); }).catch(function () {}) : Promise.resolve(); }
   function clearBlobs() { return mediaTransaction("readwrite", function (store) { return store.clear(); }).catch(function () {}); }
 
+  /* Emptying the store still leaves a database named PracticeVillageSafety in
+     the browser, and the name alone tells anyone looking that a safety tool was
+     used here. Delete all means delete the name too. Never let this hang: a
+     blocked delete resolves anyway so the rest of the wipe always finishes. */
+  function dropDatabase() {
+    return new Promise(function (resolve) {
+      var settled = false;
+      var done = function () { if (!settled) { settled = true; resolve(); } };
+      setTimeout(done, 1500);
+      try {
+        var pending = dbPromise;
+        dbPromise = null;
+        Promise.resolve(pending)
+          .then(function (db) { if (db && db.close) db.close(); })
+          .catch(function () {})
+          .then(function () {
+            var request = indexedDB.deleteDatabase(DB_NAME);
+            request.onsuccess = done;
+            request.onerror = done;
+            request.onblocked = done;
+          });
+      } catch (error) { done(); }
+    });
+  }
+
   function hasDraftContent(value) {
     var mapValues = Object.keys(value.map || {}).some(function (key) { return String(value.map[key] || "").trim(); });
     return [value.story, value.remember, value.whatChanged, value.people].some(function (text) { return String(text || "").trim(); }) ||
@@ -1105,6 +1130,7 @@
     localStorage.removeItem(PATTERN_REVIEW_KEY);
     patternReviews = {};
     await clearBlobs();
+    await dropDatabase();
     restoreForm();
     renderEntries();
     hidePanel("contextPanel");
@@ -1837,4 +1863,19 @@
   restoreForm();
   renderEntries();
   updateStorageProtection();
+})();
+
+/* The Village bar: the hairline only appears once you have left the top.
+   Same behaviour as the landing's .nav.is-stuck. Cosmetic only — it can
+   never affect the exit control, which is position:fixed and always present. */
+(function () {
+  var header = document.querySelector(".hall-header");
+  if (!header) return;
+  var sync = function () {
+    var y = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    header.classList.toggle("is-stuck", y > 8);
+  };
+  window.addEventListener("scroll", sync, { passive: true });
+  document.addEventListener("scroll", sync, true);
+  sync();
 })();

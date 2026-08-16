@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/safety-hall.css?v=16" />
+  <link rel="stylesheet" href="/safety-hall.css?v=17" />
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -21,15 +21,18 @@
     <div class="header-tools">
       <button class="header-tool" id="safetyInfo" type="button">Device safety</button>
       <button class="header-tool" id="discreetMode" type="button">Discreet view</button>
-      <button class="quick-exit" id="quickExit" type="button">Quick exit</button>
+      <button class="quick-exit" id="quickExit" type="button" aria-label="Leave this site now">exit</button>
     </div>
   </header>
 
   <section class="discreet-cover" id="discreetCover" hidden>
-    <span class="eyebrow">Private daily notes</span>
-    <h1>Your notes are hidden.</h1>
-    <p>Return only when it feels safe.</p>
-    <button class="primary" id="returnFromDiscreet" type="button">Return to my notes</button>
+    <!-- The cover has to agree with the address bar. Anyone glancing over sees
+         the Village's ordinary welcome, which is exactly what the URL promised.
+         Nothing here names notes, hiding, privacy, or safety. -->
+    <span class="eyebrow">Practice Village</span>
+    <h1>A digital community center for women.</h1>
+    <p>Many rooms, one membership. Women focused, open to all.</p>
+    <button class="primary" id="returnFromDiscreet" type="button">Continue</button>
   </section>
 
   <main>
@@ -467,6 +470,6 @@
 
   <script src="/safety-controls.js?v=3"></script>
   <script src="/safety-resources.js?v=2"></script>
-  <script src="/safety-hall.js?v=17"></script>
+  <script src="/safety-hall.js?v=18"></script>
 </body>
 </html>

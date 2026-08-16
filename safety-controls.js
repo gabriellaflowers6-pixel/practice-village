@@ -21,7 +21,7 @@
     document.body.classList.add("is-discreet");
     var cover = document.getElementById("discreetCover");
     if (cover) cover.hidden = false;
-    document.title = "Private notes";
+    document.title = "Practice Village";
     try { window.scrollTo(0, 0); } catch (error) { /* Older webviews may not support scrollTo. */ }
   }
 
