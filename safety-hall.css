@@ -872,3 +872,41 @@ body{
 .side-card p,
 .support-card small,
 .capture-card p{ color:var(--ink-soft) !important; }
+
+/* ---------------------------------------------------------------------------
+   SOFTEN THE ROOM
+   #F3F4F7 was a cool blue-grey and read as a filing system. #F4F3F1 is a bone
+   neutral: warmth (R-B) +3, against the Village cream's +19, so it eases the
+   room without walking back into the landing's palette. Every token still
+   clears AAA on it — the worst case is slate at 7.15:1.
+   The washes lose their cool cast, and the hairline goes very slightly warm so
+   it stops reading as a blue rule on a warm ground.
+   --------------------------------------------------------------------------- */
+:root{
+  --paper:#F4F3F1;
+  --paper-2:#EAE8E4;
+  --paper-3:#DEDBD5;
+  --line:rgba(40,36,46,.13);
+}
+body{
+  background:
+    radial-gradient(120% 80% at 12% -5%, rgba(51,80,122,.05), transparent 55%),
+    radial-gradient(120% 80% at 100% 8%, rgba(120,105,90,.06), transparent 50%),
+    #F4F3F1 !important;
+}
+.hall-header{
+  background:rgba(244,243,241,.84) !important;
+  border-bottom-color:transparent !important;
+}
+.hall-header.is-stuck{ border-bottom-color:var(--line) !important; }
+
+/* the caution bands follow the ground rather than staying cool-tinted */
+.hall-orientation__boundary,
+.support-first,
+.handoff-sensitive,
+.handoff-safety,
+.redaction-safety,
+.what-this-is-not{
+  background:rgba(51,80,122,.055) !important;
+  border-color:rgba(51,80,122,.26) !important;
+}
