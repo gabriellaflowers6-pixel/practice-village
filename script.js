@@ -312,12 +312,29 @@
 
   /* ============ reveal ============ */
   var reveals = document.querySelectorAll(".reveal");
-  if ("IntersectionObserver" in window) {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
-    }, { threshold: 0.1, rootMargin: "0px 0px -6% 0px" });
-    reveals.forEach(function (el) { io.observe(el); });
-  } else { reveals.forEach(function (el) { el.classList.add("in"); }); }
+  /* A cosmetic effect must never be able to hide the Village. .reveal sets
+     opacity:0, so if the observer is throttled - a backgrounded tab, a phone in
+     low power mode, a browser that never fires it - the page stays blank. Every
+     path below ends with everything visible. */
+  var revealAll = function () {
+    reveals.forEach(function (el) { el.classList.add("in"); });
+  };
+  try {
+    if (!("IntersectionObserver" in window)) {
+      revealAll();
+    } else {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+      }, { threshold: 0.1, rootMargin: "0px 0px -6% 0px" });
+      reveals.forEach(function (el) { io.observe(el); });
+      window.setTimeout(revealAll, 2000);
+      document.addEventListener("visibilitychange", function () {
+        if (!document.hidden) revealAll();
+      });
+    }
+  } catch (err) {
+    revealAll();
+  }
 
   /* ============ plan buttons -> Stripe / form ============ */
   document.querySelectorAll("[data-plan]").forEach(function (btn) {
