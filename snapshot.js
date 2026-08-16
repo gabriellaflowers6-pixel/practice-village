@@ -60,8 +60,12 @@
     return Math.round(((mean - 1) / 4) * 100);
   }
 
+  /* A skip is recorded so Back works, but it is not an answer. Counting
+     it as one would make the result line overstate what she told us. */
   function answeredCount() {
-    return items.filter(function (i) { return answers[i.id] != null; }).length;
+    return items.filter(function (i) {
+      return answers[i.id] != null && answers[i.id] !== "skip";
+    }).length;
   }
 
   /* ---------- question view ---------- */

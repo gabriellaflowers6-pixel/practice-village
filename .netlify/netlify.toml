@@ -86,6 +86,30 @@ force = false
 [redirects.headers]
 
 [[redirects]]
+from = "/wellbeing-snapshot"
+to = "/wellbeing-snapshot.html"
+status = 200.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
+
+[[redirects]]
+from = "/sources-of-wholeness"
+to = "/sources-of-wholeness.html"
+status = 200.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
+
+[[redirects]]
 from = "/login"
 to = "/login.html"
 status = 200.0
