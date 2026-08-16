@@ -1521,3 +1521,186 @@ body{
 .room__front{ overflow:hidden; }
 .room--soon .room__front{ padding-top:1.15rem; }
 @media (max-width:600px){ .room__img{ height:110px; } }
+/* ============================================================================
+   PRACTICE VILLAGE — landing upgrade, proposed
+   Pure subtraction. No layout, copy, photography or structure changes.
+   Everything here removes something that does not read modern or professional,
+   or fixes a measured accessibility failure.
+   ============================================================================ */
+
+/* ---------------------------------------------------------------------------
+   1. THE ONE COLOUR FIX
+   --ink-faint #99876F measures 3.16:1 on the cream ground. It fails AA for
+   body text and it is used for real copy: the hero signature, the demo reset,
+   ticket price detail, chips. #6E5F4A is the same hue family at 5.62:1.
+   --------------------------------------------------------------------------- */
+:root{
+  --ink-faint:#6E5F4A;
+  /* one soft elevation, replacing every hard offset shadow */
+  --shadow:    0 16px 36px -18px rgba(43,32,19,.30);
+  --shadow-lg: 0 22px 50px -24px rgba(43,32,19,.34);
+  --r:18px;    /* the radius the page already uses 22 times */
+  --r-sm:12px;
+}
+
+/* ---------------------------------------------------------------------------
+   2. THE WOBBLY BOXES
+   Buttons and room images render irregular per-corner radii
+   (14px 10px 16px 9px / 12px 9px 13px 8px). That is the amateur signal.
+   Buttons become a clean pill; panels and images take the page's own 18px.
+   --------------------------------------------------------------------------- */
+.btn,
+.btn--clay,
+.btn--ghost,
+.btn--big,
+.btn--block,
+.nav__cta,
+.breathe-btn,
+button{
+  border-radius:999px !important;
+  border-width:1px !important;
+}
+
+.room__img,
+.window__frame,
+.window__plaque,
+.faq__list,
+.ticket,
+.gift,
+.card,
+input,
+textarea,
+select{
+  border-radius:var(--r) !important;
+  border-width:1px !important;
+}
+
+/* Anything still carrying a hand-drawn blob radius falls back to the page norm. */
+[class*="rough"],
+.icard,
+.loopnode,
+.vs__col,
+.cardstack__next,
+.hl-chip{
+  border-radius:var(--r) !important;
+  border-width:1px !important;
+}
+
+/* ---------------------------------------------------------------------------
+   3. THE STICKER SHADOWS
+   Hard offset shadows (8px 9px 0 / 12px 14px 0 / 4px 5px 0) read as paper
+   cut-outs. The page already uses a soft diffuse shadow 13 times; that wins.
+   --------------------------------------------------------------------------- */
+.icard,
+.loopnode,
+.vs__col--new,
+.cardstack__next,
+.path__stops b,
+.btn--clay,
+.window__frame,
+.ticket,
+.gift{
+  box-shadow:var(--shadow) !important;
+}
+
+/* ---------------------------------------------------------------------------
+   4. NO TILT
+   Nothing sits deliberately crooked on a professional page.
+   Carousels and toggles that need transforms for layout are left alone.
+   --------------------------------------------------------------------------- */
+.vs__col--new,
+.vs__head .hand,
+.loop__back .hand,
+.layer__hint,
+.hilo__tag,
+.builders__org,
+.gifts__note,
+.map__hint,
+.ticket__ribbon{
+  transform:none !important;
+}
+
+/* ---------------------------------------------------------------------------
+   5. HANDWRITING STOPS BEING STRUCTURE
+   Caveat currently labels the interface: section kickers (8), room flip
+   labels (12), hints, tags, ribbons. Handwriting as a UI label is the single
+   biggest "hand-made" cue. Kickers become the small uppercase letterspaced
+   label the rest of the page already uses for eyebrows.
+   --------------------------------------------------------------------------- */
+.kicker,
+.room__flip,
+.map__hint,
+.hilo__tag,
+.builders__org,
+.ticket__ribbon,
+.gifts__note,
+.breathe__caption,
+.demo__empty,
+.vs__tag,
+.hand{
+  font-family:"Hanken Grotesk",system-ui,sans-serif !important;
+}
+
+.kicker{
+  font-size:.72rem !important;
+  font-weight:800 !important;
+  letter-spacing:.15em !important;
+  text-transform:uppercase !important;
+  color:var(--clay) !important;
+  line-height:1.4 !important;
+}
+
+.room__flip,
+.hilo__tag,
+.builders__org,
+.ticket__ribbon,
+.breathe__caption,
+.map__hint{
+  font-size:.78rem !important;
+  font-weight:700 !important;
+  letter-spacing:.06em !important;
+}
+
+.gifts__note,
+.demo__empty,
+.vs__tag{
+  font-size:.95rem !important;
+  font-weight:500 !important;
+}
+
+/* ---------------------------------------------------------------------------
+   6. THE DRAWN CIRCLE
+   A stroke that animates itself on like a felt-tip loop. Removed.
+   --------------------------------------------------------------------------- */
+.doodle,
+.doodle--circle{
+  display:none !important;
+}
+
+/* ---------------------------------------------------------------------------
+   7. TYPE CONSISTENCY
+   Five headings render Cormorant 600; one renders 900 and one 400.
+   One display weight, one voice.
+   --------------------------------------------------------------------------- */
+h1,h2,h3,
+.section__title,
+.hero__title{
+  font-weight:600 !important;
+}
+
+/* ---------------------------------------------------------------------------
+   KEPT ON PURPOSE
+   - the pencil botanicals (flora-spray-left / right / grass)
+   - the cream ground and its two radial washes
+   - every photograph, all copy, all layout, all spacing
+   - the sticky nav at backdrop-filter: blur(9px)
+   - Cormorant Garamond over Hanken Grotesk
+   - --marigold #C79A52, which sits on the ink ground at 6.20:1
+   --------------------------------------------------------------------------- */
+
+/* Cormorant descenders need room here too */
+h1,h2,h3,.section__title,.hero__title{ overflow:visible; line-height:1.12; padding-bottom:.04em; }
+
+/* one straggler: a bare h3 ("The Front Desk") was still set in Caveat.
+   Headings are Cormorant everywhere. */
+h3{ font-family:var(--serif) !important; }
