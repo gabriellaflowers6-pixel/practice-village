@@ -1,5 +1,5 @@
 import { getUser } from "@netlify/identity";
-import { membershipStore, isActiveStripeStatus } from "./_shared/membership.mjs";
+import { membershipStore, isActiveStripeStatus, sha256 } from "./_shared/membership.mjs";
 import { notifyCuraited } from "./_shared/curaited-notify.mjs";
 
 // Why this exists: notifyCuraited is fire-and-forget with no retry, so every
@@ -30,25 +30,30 @@ export default async function handler(request) {
   for (const blob of blobs) {
     summary.scanned += 1;
     const record = await store.get(blob.key, { type: "json" });
-    if (!record?.email || !record.stripeSubscriptionId) {
+    if (!record?.email) {
       summary.skipped += 1;
       continue;
     }
+    // Hand-provisioned members (team, comp, test, founding members added
+    // before the webhook) have no subscription id. Requiring one here was
+    // why the repair tool could not repair exactly the members who needed it.
     if (!isActiveStripeStatus(record.status)) {
       summary.skipped += 1;
       continue;
     }
     summary.active += 1;
+    const emailKey = await sha256(record.email);
+    const memberId = record.stripeSubscriptionId || `pv_member_${emailKey}`;
     if (dryRun) {
-      detail.push({ plan: record.plan, status: record.status });
+      detail.push({ plan: record.plan, status: record.status, viaStripe: Boolean(record.stripeSubscriptionId) });
       continue;
     }
     // Stable per member so a repeat run is deduplicated on the Cur.AI.ted side
     const result = await notifyCuraited({
-      stripeEventId: `backfill_${record.stripeSubscriptionId}`,
+      stripeEventId: `backfill_${memberId}`,
       eventType: "membership.activated",
       email: record.email,
-      memberId: record.stripeSubscriptionId,
+      memberId,
       membershipStatus: record.status,
       accessEndsAt: record.currentPeriodEnd,
     });

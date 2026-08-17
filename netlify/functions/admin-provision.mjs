@@ -12,7 +12,9 @@ import {
   membershipStore,
   membershipYearBounds,
   saveMembershipRecord,
+  sha256,
 } from "./_shared/membership.mjs";
+import { notifyCuraited } from "./_shared/curaited-notify.mjs";
 
 const PLANS = {
   founding_villager: { plan: "founding_villager", role: "founding_villager", label: "Founding Villager" },
@@ -79,12 +81,32 @@ export default async (req) => {
   await saveMembershipRecord(store, record);
   const identity = await grantIdentityRole(record);
 
+  // A hand-provisioned member is still a member: her included Cur.AI.ted
+  // starter has to follow the Village role, exactly as it does for a Stripe
+  // purchase. Without this, team, comp, and test members reach Cur.AI.ted with
+  // no entitlement and land on the free tier.
+  //
+  // memberId must never be null — Cur.AI.ted rejects the event outright — so
+  // members with no subscription get a stable synthetic id. The event id is
+  // keyed to the membership year, so re-provisioning the same person is
+  // deduplicated while a renewal year grants again.
+  const emailKey = await sha256(email);
+  const curaited = await notifyCuraited({
+    stripeEventId: `adminprov_${emailKey}_${membershipYear.start}`,
+    eventType: "membership.activated",
+    email,
+    memberId: record.stripeSubscriptionId || `pv_member_${emailKey}`,
+    membershipStatus: "active",
+    accessEndsAt: record.currentPeriodEnd,
+  });
+
   return Response.json({
     ok: true,
     email,
     plan: record.planLabel,
     foundingSequence,
     accountSetupEmailSent: identity.accountSetupEmailSent,
+    curaitedStarter: curaited?.ok ? "granted" : curaited?.skipped ? "skipped" : "failed",
   });
 };
 
