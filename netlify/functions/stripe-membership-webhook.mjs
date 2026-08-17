@@ -12,6 +12,7 @@ import {
   isoFromUnix,
   membershipYearBounds,
   membershipStore,
+  memberKeyForEmail,
   revokeIdentityMembership,
   saveMembershipRecord,
   stripeId,
@@ -34,14 +35,16 @@ const MONTHLY_PLAN = { plan: "membership", role: "member", label: "Membership" }
 // Coupons, new links, dashboard subscriptions and invoices all have to land a
 // member. The payment link is the best signal when we know it; the billing
 // interval is the fallback that still works when we do not.
-function resolvePlan(paymentLinkId, subscription) {
+function resolvePlan(paymentLinkId, subscription, session = null) {
   const known = PLAN_BY_PAYMENT_LINK[paymentLinkId];
   if (known) return { ...known, resolvedBy: "payment_link" };
-  const price = subscription?.items?.data?.[0]?.price;
-  const interval = price?.recurring?.interval;
+  const interval = subscription?.items?.data?.[0]?.price?.recurring?.interval;
   if (interval === "year") return { ...YEARLY_PLAN, resolvedBy: "interval" };
   if (interval === "month") return { ...MONTHLY_PLAN, resolvedBy: "interval" };
-  return { ...MONTHLY_PLAN, resolvedBy: "fallback" };
+  // No subscription: decide by what was charged before the discount.
+  const gross = session?.amount_subtotal ?? session?.amount_total ?? 0;
+  if (gross >= 10000) return { ...YEARLY_PLAN, resolvedBy: "amount" };
+  return { ...MONTHLY_PLAN, resolvedBy: session ? "amount" : "fallback" };
 }
 
 async function handleCheckoutCompleted(stripe, store, session, event) {
@@ -51,9 +54,10 @@ async function handleCheckoutCompleted(stripe, store, session, event) {
   if (!email) throw new Error("The completed Stripe session has no customer email");
 
   const subscriptionId = stripeId(session.subscription);
-  if (!subscriptionId) throw new Error("The completed Stripe session has no subscription");
-  const subscription = await stripe.subscriptions.retrieve(subscriptionId);
-  const plan = resolvePlan(paymentLinkId, subscription);
+  // A coupon that zeroes the price, or a one-time product, produces a paid
+  // session with no subscription. That is still a member.
+  const subscription = subscriptionId ? await stripe.subscriptions.retrieve(subscriptionId) : null;
+  const plan = resolvePlan(paymentLinkId, subscription, session);
   const createdAt = isoFromUnix(session.created || event.created);
   const membershipYear = membershipYearBounds(createdAt, createdAt);
 
@@ -72,16 +76,16 @@ async function handleCheckoutCompleted(stripe, store, session, event) {
     plan: plan.plan,
     role: plan.role,
     planLabel: plan.label,
-    status: subscription.status,
-    stripeCustomerId: stripeId(session.customer || subscription.customer),
-    stripeSubscriptionId: subscription.id,
+    status: subscription?.status || "active",
+    stripeCustomerId: stripeId(session.customer || subscription?.customer),
+    stripeSubscriptionId: subscription?.id || null,
     stripePaymentLinkId: paymentLinkId,
     originalMembershipStart: createdAt,
     membershipYearIndex: membershipYear.yearIndex,
     membershipYearStart: membershipYear.start,
     membershipYearEnd: membershipYear.end,
-    currentPeriodEnd: subscriptionPeriodEnd(subscription),
-    cancelAtPeriodEnd: Boolean(subscription.cancel_at_period_end),
+    currentPeriodEnd: subscription ? subscriptionPeriodEnd(subscription) : membershipYear.end,
+    cancelAtPeriodEnd: Boolean(subscription?.cancel_at_period_end),
     workshopVoucherAllowanceFirstYear: foundingBonusEligible ? 2 : 1,
     workshopVoucherAllowanceRenewalYears: 1,
     foundingBonusEligible,
@@ -101,10 +105,7 @@ async function handleCheckoutCompleted(stripe, store, session, event) {
   });
   if (isActiveStripeStatus(record.status)) {
     const identity = await grantIdentityRole(record);
-    const welcome = await sendWelcomeEmail(record.email, {
-      planLabel: record.planLabel,
-      setPasswordNeeded: identity.accountSetupEmailSent,
-    });
+    const welcome = await welcomeOnce(store, record, identity.accountSetupEmailSent);
     return {
       plan: record.plan,
       status: record.status,
@@ -118,6 +119,22 @@ async function handleCheckoutCompleted(stripe, store, session, event) {
 
 // A subscription started outside Checkout (dashboard, invoice, API) still has
 // to produce a member and a welcome.
+// One welcome per member, whichever Stripe event gets here first.
+async function welcomeOnce(store, record, setPasswordNeeded) {
+  const key = await memberKeyForEmail(record.email);
+  const saved = (await store.get(key, { type: "json" })) || record;
+  if (saved.welcomeSentAt) return { sent: false, reason: "welcome already sent", at: saved.welcomeSentAt };
+  const welcome = await sendWelcomeEmail(record.email, {
+    planLabel: record.planLabel,
+    setPasswordNeeded,
+  });
+  if (welcome.sent) {
+    saved.welcomeSentAt = new Date().toISOString();
+    await store.setJSON(key, saved);
+  }
+  return welcome;
+}
+
 async function handleSubscriptionCreated(stripe, store, subscription, event) {
   const customerId = stripeId(subscription.customer);
   const customer = customerId ? await stripe.customers.retrieve(customerId) : null;
@@ -148,14 +165,14 @@ async function handleSubscriptionCreated(stripe, store, subscription, event) {
     planLabel: plan.label,
     status: subscription.status,
     stripeCustomerId: customerId,
-    stripeSubscriptionId: subscription.id,
+    stripeSubscriptionId: subscription?.id || null,
     stripePaymentLinkId: null,
     originalMembershipStart: createdAt,
     membershipYearIndex: membershipYear.yearIndex,
     membershipYearStart: membershipYear.start,
     membershipYearEnd: membershipYear.end,
-    currentPeriodEnd: subscriptionPeriodEnd(subscription),
-    cancelAtPeriodEnd: Boolean(subscription.cancel_at_period_end),
+    currentPeriodEnd: subscription ? subscriptionPeriodEnd(subscription) : membershipYear.end,
+    cancelAtPeriodEnd: Boolean(subscription?.cancel_at_period_end),
     workshopVoucherAllowanceFirstYear: foundingBonusEligible ? 2 : 1,
     workshopVoucherAllowanceRenewalYears: 1,
     foundingBonusEligible,
@@ -166,10 +183,7 @@ async function handleSubscriptionCreated(stripe, store, subscription, event) {
 
   await saveMembershipRecord(store, record);
   const identity = await grantIdentityRole(record);
-  const welcome = await sendWelcomeEmail(record.email, {
-    planLabel: record.planLabel,
-    setPasswordNeeded: identity.accountSetupEmailSent,
-  });
+  const welcome = await welcomeOnce(store, record, identity.accountSetupEmailSent);
   return { plan: record.plan, status: record.status, resolvedBy: plan.resolvedBy, welcomeEmail: welcome };
 }
 
