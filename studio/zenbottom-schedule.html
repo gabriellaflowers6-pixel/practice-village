@@ -102,6 +102,7 @@
     padding:8px 15px;border-radius:999px;border:1px solid var(--line);background:none;
     color:var(--cream-dim);white-space:nowrap}
   .signupbtn:hover{color:var(--cream);border-color:rgba(233,192,120,.5)}
+  .demo-account-note{margin-top:11px;font-size:12px;line-height:1.5;color:var(--cream-dim)}.demo-account-note a{color:var(--gold);text-underline-offset:3px}.demo-signup-link{display:inline-block;text-decoration:none;text-align:center}
   .going{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
   .going .tag{font-size:11px;letter-spacing:.5px;color:var(--good);border:1px solid rgba(207,227,184,.4);
     border-radius:999px;padding:4px 11px}
@@ -326,7 +327,7 @@
   </div>
 </div>
 
-<div id="classModal" role="dialog" aria-modal="true" aria-label="Class details"><div class="sheet"><button class="class-close" id="classClose" aria-label="Close">×</button><div class="detail-kicker" id="detailWhen"></div><div class="detail-title" id="detailTitle"></div><div class="detail-teacher" id="detailTeacher"></div><img class="detail-image" id="detailImage" alt="" hidden><div class="detail-meta" id="detailMeta"></div><p class="detail-copy" id="detailDescription"></p><p class="detail-copy" id="detailCapacity"></p><button class="detail-action" id="detailAction" type="button">Sign up</button></div></div>
+<div id="classModal" role="dialog" aria-modal="true" aria-label="Class details"><div class="sheet"><button class="class-close" id="classClose" aria-label="Close">×</button><div class="detail-kicker" id="detailWhen"></div><div class="detail-title" id="detailTitle"></div><div class="detail-teacher" id="detailTeacher"></div><img class="detail-image" id="detailImage" alt="" hidden><div class="detail-meta" id="detailMeta"></div><p class="detail-copy" id="detailDescription"></p><p class="detail-copy" id="detailCapacity"></p><a class="detail-action demo-signup-link" id="detailAction" href="#" target="_self">Sign up</a></div></div>
 
 <section id="slotModal" role="dialog" aria-modal="true" aria-labelledby="slotTitle"><div class="sheet"><button class="slot-close" id="slotClose" type="button" aria-label="Close">×</button><p class="slot-kicker" id="slotKicker">Your practice</p><h2 class="slot-title" id="slotTitle"></h2><p class="slot-when" id="slotWhen"></p><div class="slot-plan" id="slotPlan"></div><fieldset class="mode-picker"><legend>Practice for this day</legend><div class="mode-options"><label class="yoga"><input type="radio" name="slotMode" value="yoga">Yoga</label><label class="meditation"><input type="radio" name="slotMode" value="meditation">Meditation</label><label class="blended"><input type="radio" name="slotMode" value="blended">Yoga + Meditation</label></div></fieldset><div class="slot-reminders" aria-label="Reminders"><label><input id="slotNotifyCalendar" type="checkbox"> Calendar reminder</label><label><input id="slotNotifyEmail" type="checkbox"> Email reminder</label></div><button class="slot-primary" id="slotStart" type="button">Start session now</button><div class="slot-actions"><button id="slotComplete" type="button">Mark as finished</button><button id="slotCalendar" type="button">Add this session to calendar</button><button id="slotMove" type="button">Move this session</button><button id="slotEdit" type="button">Edit recurring rhythm</button><button id="slotView" type="button">View full plan</button><button class="danger" id="slotDelete" type="button">Remove this session</button></div><div class="move-editor" id="moveEditor"><input id="moveDate" type="date" aria-label="New session date"><input id="moveTime" type="time" aria-label="New session time, optional"><button id="moveSave" type="button">Move</button></div></div></section>
 
@@ -343,7 +344,7 @@
 </section>
 
 <section id="planIntake" role="dialog" aria-modal="true" aria-labelledby="intakeTitle"><form class="sheet" id="planForm">
-  <div class="intake-step active" data-step="0"><div class="intake-count">1 of 5</div><h2 id="intakeTitle">How would you like to begin?</h2><p>Choose a guided path or make a rhythm that is yours.</p><div class="choice-grid"><label><input type="radio" name="style" value="journey" checked>The First 30 Days</label><label><input type="radio" name="style" value="freeform">My own rhythm</label></div></div>
+  <div class="intake-step active" data-step="0"><div class="intake-count">1 of 5</div><h2 id="intakeTitle">How would you like to begin?</h2><p>Choose a guided path or make a rhythm that is yours.</p><div class="choice-grid"><label><input type="radio" name="style" value="week">One week</label><label><input type="radio" name="style" value="journey" checked>The First 30 Days</label><label><input type="radio" name="style" value="freeform">My own rhythm</label></div></div>
   <div class="intake-step" data-step="1"><div class="intake-count">2 of 5</div><h2>Choose your beginner series.</h2><p>Moxie selects the lessons. You only choose the path and its length.</p><div class="choice-grid"><label><input type="radio" name="focus" value="yoga" checked>Beginner yoga</label><label><input type="radio" name="focus" value="meditation">Beginner meditation</label></div><p style="margin:18px 0 9px;color:var(--gold);font-size:11px">Series length</p><div class="choice-grid"><label><input type="radio" name="seriesDays" value="7">7 days</label><label><input type="radio" name="seriesDays" value="14">2 weeks</label><label><input type="radio" name="seriesDays" value="30" checked>30 days</label></div></div>
   <div class="intake-step" data-step="2"><div class="intake-count">3 of 5</div><h2>Which days fit your week?</h2><p>Choose one or more. Each day can stay open or have its own time.</p><p class="rhythm-count" id="rhythmCount" aria-live="polite">Choose your practice days</p><div class="day-times">
     <div class="day-time"><label class="day-check"><input type="checkbox" name="day" value="0">Sunday</label><span class="day-options"><select name="time-mode-0" aria-label="Sunday practice timing" disabled><option value="anytime">Anytime</option><option value="timed">Choose a time</option></select><input name="time-0" type="time" value="08:00" aria-label="Sunday practice time" hidden disabled></span></div>
@@ -414,18 +415,11 @@ const savedLessons = () => readSettings(localStorage, planEmail()).lessons;
 const timeLabel = value => value || "Anytime";
 
 function previewClasses() {
-  const at = (offset, hour, minute=0) => { const d = new Date(); d.setDate(d.getDate() + offset); d.setHours(hour, minute, 0, 0); return d.toISOString(); };
   return [
-    {code:"SUNSET-01",name:"Sunset Flow",teacher_name:"Beatrice M.",theme:"Vinyasa",level:"All levels",duration_min:55,starts_at:at(1,18,15),description:"A warm, spacious flow to wring out the day and meet the evening with a longer exhale.",size_cap:18,signup_count:12,status:"scheduled",image:"assets/classes/sunset-flow.jpg",image_position:"center"},
-    {code:"MORNING-02",name:"First Light",teacher_name:"Keiko S.",theme:"Slow flow",level:"Beginner",duration_min:45,starts_at:at(2,7,15),description:"Gentle standing shapes, easy hips, and a clear start before the rest of the world asks for you.",size_cap:14,signup_count:8,status:"scheduled",image:"assets/classes/first-light.jpg",image_position:"center"},
-    {code:"STEADY-03",name:"Strong & Steady",teacher_name:"Nia L.",theme:"Strength",level:"All levels",duration_min:50,starts_at:at(3,12),description:"Build useful heat with patient transitions, thoughtful options, and no pressure to push through.",size_cap:16,signup_count:10,status:"scheduled",image:"assets/classes/strong-steady.jpg",image_position:"60% center"},
-    {code:"DESK-04",name:"Shoulders, Space, Ease",teacher_name:"Sam R.",theme:"Mobility",level:"All levels",duration_min:35,starts_at:at(4,17,45),description:"A friendly release for desk shoulders, a busy neck, and the space between meetings.",size_cap:20,signup_count:6,status:"scheduled",image:"assets/classes/shoulders-ease.jpg",image_position:"40% center"},
-    {code:"REST-05",name:"Soft Landing",teacher_name:"Mara Chen",theme:"Restorative",level:"All levels",duration_min:60,starts_at:at(5,19),description:"Bolsters, long exhales, and the kind of quiet that follows you home.",size_cap:12,signup_count:9,status:"scheduled",image:"assets/classes/soft-landing.jpg",image_position:"center"},
-    {code:"SUNDAY-06",name:"Sunday Slowdown",teacher_name:"Beatrice M.",theme:"Yin",level:"All levels",duration_min:75,starts_at:at(6,16),description:"Stay close to the floor and make the last part of the weekend feel spacious.",size_cap:14,signup_count:11,status:"scheduled",image:"assets/classes/sunday-slowdown.jpg",image_position:"center"},
-    {code:"GROUND-07",name:"Grounded & Glowing",teacher_name:"Asha N.",theme:"Slow flow",level:"Beginner",duration_min:60,starts_at:at(7,9),description:"A steady, low-impact flow for arriving in your body before the week begins.",size_cap:16,signup_count:4,status:"scheduled",image:"assets/classes/grounded-glowing.jpg",image_position:"55% center"},
+    {code:"MOXIE-FIRST-LIVE",name:"Moxie Studios’ First Live Class",teacher_name:"JoYi",theme:"Yoga",level:"Beginner",duration_min:60,starts_at:"2027-02-07T09:00:00",time_label:"9:00 AM Central",description:"Meet Moxie Studios live for the first time. JoYi will lead a welcoming beginner yoga practice with time to settle in, learn the shapes, and choose the options that work for your body. Camera and microphone are always your choice, and the class is never recorded.",size_cap:108,signup_count:0,status:"scheduled",image:"assets/classes/joyi-live-class.png",image_position:"center 38%"},
   ];
 }
-if (PREVIEW || DEMO) { last = previewClasses(); if (PREVIEW) { document.body.classList.add("preview-account"); mySignups = new Set(["SUNSET-01", "SUNDAY-06"]); } }
+if (PREVIEW || DEMO) { last = previewClasses(); if (PREVIEW) document.body.classList.add("preview-account"); }
 for (const link of document.querySelectorAll(".header-actions a, .home-actions a")) if (PREVIEW || DEMO) { const url = new URL(link.href); url.searchParams.set(PREVIEW ? "preview" : "demo", "1"); link.href = url.pathname.split("/").pop() + url.search; }
 
 // ---- month calendar (always visible, even with no classes) ----
@@ -463,7 +457,7 @@ function openSlot(slot){
   $("slotKicker").textContent=slot.completed?"Finished practice":missed?"A practice you missed":"Your practice";$("slotTitle").textContent=slot.title;
   $("slotWhen").textContent=date.toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"})+" · "+timeLabel(slot.time)+" · "+slot.durationMin+" minutes"+(practicePlan.timeZone?" · "+practicePlan.timeZone.replaceAll("_"," "):"");
   const days=practicePlan.days.map(day=>["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][day]+" · "+timeLabel(practicePlan.times&&Object.prototype.hasOwnProperty.call(practicePlan.times,day)?practicePlan.times[day]:practicePlan.time)).join(", ");
-  $("slotPlan").textContent=(practicePlan.style==="journey"?"The First 30 Days":"My own rhythm")+" · "+modeLabel(slot.practiceMode)+" · "+days+"."+(slot.movedFrom?" This session was moved from "+new Date(slot.movedFrom+"T12:00:00").toLocaleDateString(undefined,{month:"short",day:"numeric"})+".":"");
+  $("slotPlan").textContent=(practicePlan.style==="journey"?(practicePlan.seriesDays===7?"One week":practicePlan.seriesDays===14?"Two weeks":"The First 30 Days"):"My own rhythm")+" · "+modeLabel(slot.practiceMode)+" · "+days+"."+(slot.movedFrom?" This session was moved from "+new Date(slot.movedFrom+"T12:00:00").toLocaleDateString(undefined,{month:"short",day:"numeric"})+".":"");
   const modeInput=document.querySelector(`[name="slotMode"][value="${slot.practiceMode}"]`);if(modeInput)modeInput.checked=true;
   document.querySelectorAll('[name="slotMode"]').forEach(input=>input.disabled=practicePlan.style==="journey");
   $("slotNotifyCalendar").checked=practicePlan.notifications?.calendar===true;$("slotNotifyEmail").checked=practicePlan.notifications?.email===true;
@@ -502,7 +496,7 @@ let planReturnFocus=null;
 function upcomingSlots(limit=5){const out=[];for(let i=0;i<=120&&out.length<limit;i++){const date=new Date();date.setDate(date.getDate()+i);const slot=slotOn(localKey(date));if(slot)out.push(slot)}return out}
 function openPlanOverview(){
   if(!practicePlan)return;planReturnFocus=document.activeElement;const history=historySummary(practicePlan,todayKey()),days=practicePlan.days.map(day=>["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][day]+" · "+timeLabel(practicePlan.times&&Object.prototype.hasOwnProperty.call(practicePlan.times,day)?practicePlan.times[day]:practicePlan.time)).join(", ");
-  $("planSessions").textContent=history.sessions;$("planStreak").textContent=history.streak;$("planProgress").textContent=practicePlan.style==="journey"?"Day "+history.journeyDay+" of 30":"Own rhythm";$("planSchedule").textContent=focusLabel(practicePlan.focus)+" · "+days+" · "+practicePlan.durationMin+" minutes · "+(practicePlan.timeZone||"device timezone");
+  $("planSessions").textContent=history.sessions;$("planStreak").textContent=history.streak;$("planProgress").textContent=practicePlan.style==="journey"?"Day "+history.journeyDay+" of "+(practicePlan.seriesDays||30):"Own rhythm";$("planSchedule").textContent=focusLabel(practicePlan.focus)+" · "+days+" · "+practicePlan.durationMin+" minutes · "+(practicePlan.timeZone||"device timezone");
   $("planReminderSummary").textContent=[practicePlan.notifications?.calendar?"Apple Calendar added":"",practicePlan.notifications?.email?"email reminders on":""].filter(Boolean).join(" and ")||"No notifications selected.";$("planUpcoming").textContent="";for(const slot of upcomingSlots()){const item=document.createElement("li");item.textContent=new Date(slot.date+"T12:00:00").toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"})+" · "+timeLabel(slot.time)+" · "+slot.title;$("planUpcoming").append(item)}
   $("planNotifyEmail").checked=practicePlan.notifications?.email===true;$("notificationPanel").classList.remove("open");$("notificationsBtn").setAttribute("aria-expanded","false");
   const paused=practicePlan.pausedUntil&&practicePlan.pausedUntil>=todayKey();$("resumePlan").hidden=!paused;$("pausePlan").hidden=paused;$("pauseUntil").disabled=paused;$("pauseUntil").value=paused?practicePlan.pausedUntil:localKey(new Date(Date.now()+7*86400000));coverUnderlying(true);$("planModal").classList.add("open");$("planModalClose").focus();
@@ -600,6 +594,7 @@ function showIntake(step=0){const opening=!$("planIntake").classList.contains("o
 function chosenTimes(){return Object.fromEntries(chosenDays().map(day=>[day,document.querySelector(`[name="time-mode-${day}"]`).value==="timed"?document.querySelector(`[name="time-${day}"]`).value:""]))}
 document.querySelector(".day-times").addEventListener("change",updateDayChoices);
 updateDayChoices();
+for(const input of document.querySelectorAll('[name="style"]'))input.addEventListener("change",()=>{if(input.value==="week")document.querySelector('[name="seriesDays"][value="7"]').checked=true;else if(input.value==="journey")document.querySelector('[name="seriesDays"][value="30"]').checked=true;});
 $("intakeBack").onclick=()=>showIntake(Math.max(0,intakeStep-1));
 $("intakeNext").onclick=()=>{
   if(intakeStep===2&&!chosenDays().length)return notify("Choose at least one day.");
@@ -727,20 +722,23 @@ let detailClass = null;
 function openClass(c) {
   detailClass = c;
   const date = new Date(c.starts_at);
-  $("detailWhen").textContent = date.toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"}) + " · " + fmtTime(c.starts_at);
+  $("detailWhen").textContent = date.toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"}) + " · " + (c.time_label || fmtTime(c.starts_at));
   $("detailTitle").textContent = c.name; $("detailTeacher").textContent = "with " + (c.teacher_name || "Moxie teacher");
   const image = $("detailImage"); image.hidden = !c.image; if (c.image) { image.src = c.image; image.style.objectPosition = c.image_position || "center"; }
   $("detailMeta").textContent = "";
   for (const text of [c.theme,levelWord(c.level),(c.duration_min||60)+" min"]) { const tag=document.createElement("span");tag.textContent=text;$("detailMeta").appendChild(tag); }
   $("detailDescription").textContent = c.description || "A thoughtfully held Moxie practice.";
-  $("detailCapacity").textContent = capacityLabel(c,c.signup_count) || "Spots available";
-  $("detailAction").textContent = mySignups.has(c.code) ? "You’re signed up" : "Sign up";
-  $("detailAction").disabled = mySignups.has(c.code);
+  $("detailCapacity").textContent = DEMO ? "Create a Practice Village account to sign up for this class." : (capacityLabel(c,c.signup_count) || "Spots available");
+  $("detailAction").textContent = DEMO ? "Create a Practice Village account" : (mySignups.has(c.code) ? "You’re signed up" : "Sign up");
+  $("detailAction").href = DEMO ? "/#doors" : "#";
+  $("detailAction").setAttribute("aria-disabled",!DEMO&&mySignups.has(c.code)?"true":"false");
   $("classModal").classList.add("open");
 }
 function closeClass(){ $("classModal").classList.remove("open"); detailClass=null; }
 $("classClose").onclick=closeClass; $("classModal").onclick=e=>{if(e.target===$("classModal"))closeClass()};
-$("detailAction").onclick=async()=>{
+$("detailAction").onclick=async event=>{
+  if(DEMO)return;
+  event.preventDefault();
   if(!detailClass)return;
   const selectedClass=detailClass;
   // Close class details before asking for identity. Otherwise the higher
@@ -807,6 +805,10 @@ function cardFor(c, now) {
     d.className = "desc"; d.textContent = c.description;
     body.appendChild(d);
   }
+  if (DEMO) {
+    const note=document.createElement("p");note.className="demo-account-note";note.append("Create a Practice Village account to sign up for this class. ");
+    const link=document.createElement("a");link.href="/#doors";link.target="_self";link.textContent="Create your account";note.appendChild(link);body.appendChild(note);
+  }
   if (!cancelled) {
     const capText = capacityLabel(c, c.signup_count);
     if (capText) {
@@ -826,7 +828,7 @@ function cardFor(c, now) {
     side.appendChild(t);
   } else {
     const time = document.createElement("div");
-    time.className = "time"; time.textContent = fmtTime(c.starts_at);
+    time.className = "time"; time.textContent = c.time_label || fmtTime(c.starts_at);
     side.appendChild(time);
     // Live classes open February 7, 2027. Until then the schedule shows what is
     // coming and never offers a door that is not there yet.
@@ -841,7 +843,9 @@ function cardFor(c, now) {
       side.appendChild(s);
     }
     // signup control
-    if (mySignups.has(c.code)) {
+    if (DEMO) {
+      const a=document.createElement("a");a.className="signupbtn demo-signup-link";a.href="/#doors";a.target="_self";a.textContent="Create account";side.appendChild(a);
+    } else if (mySignups.has(c.code)) {
       const g = document.createElement("div"); g.className = "going";
       const tag = document.createElement("span"); tag.className = "tag"; tag.textContent = "You're going";
       const cancel = document.createElement("span"); cancel.className = "cancel"; cancel.textContent = "Cancel";

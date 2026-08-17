@@ -66,7 +66,7 @@ export function migrateGuestPlan(storage, email) {
 export function createPlan(answers, today) {
   const start = parseKey(today);
   if (!start) throw new Error("today must be YYYY-MM-DD");
-  const style = answers.style === "journey" ? "journey" : "freeform";
+  const style = answers.style === "journey" || answers.style === "week" ? "journey" : "freeform";
   const days = [...new Set((answers.days || []).map(Number).filter(day => day >= 0 && day <= 6))].sort();
   if (!days.length) throw new Error("choose at least one practice day");
   const time = /^([01]\d|2[0-3]):[0-5]\d$/.test(answers.time || "") ? answers.time : "";
@@ -83,7 +83,7 @@ export function createPlan(answers, today) {
   };
   const timeZone = String(answers.timeZone || "").trim();
   const focus = FOCUSES.has(answers.focus) ? answers.focus : "balanced";
-  const requestedSeriesDays=Math.round(Number(answers.seriesDays));
+  const requestedSeriesDays=answers.style === "week" ? 7 : Math.round(Number(answers.seriesDays));
   const seriesDays = Number.isFinite(requestedSeriesDays)&&requestedSeriesDays>=1&&requestedSeriesDays<=30 ? requestedSeriesDays : 30;
   return { version: 2, style, focus, seriesDays, startDate: today, days, daysPerWeek: days.length, time, times, durationMin, timeZone, notifications, completions: [], modeOverrides: {} };
 }

@@ -1,5 +1,29 @@
 # Practice Village — Session Handoff (written 2026-08-14, ~02:00 JST)
 
+## 2026-08-17 local Live Tutor voice route
+- The shared client no longer exposes a raw JSON parse error if a static server
+  returns HTML. Moxie's port 8765 dev server now serves nested `/mockups/` and
+  `/studio/` API paths correctly. Local only; not pushed or deployed.
+
+## 2026-08-17 Live Tutor control clarification
+- Moxie practice now has one clear Live Tutor master switch. Voice, Listening,
+  Require “Moxie,” and Corrections sit beneath it; the old Guide Voice start/stop
+  buttons are gone. Local only; not committed, pushed, or deployed.
+
+## 2026-08-17 local Moxie entrance correction
+- The quick pre-practice check now starts camera and microphone automatically when
+  opened from Start now. Declined permission still turns that device back off.
+- “Plan my week” now includes a One week opening choice that creates a seven-day
+  guided series. The requested missing X buttons remain the next separate task.
+- On `integrate/moxie-studio`, both Moxie member entrance buttons in `studio/index.html`
+  now open `studio/zenbottom-schedule.html` instead of opening the practice player
+  without a lesson. Local only, not committed, pushed, merged, or deployed yet.
+- Moxie's Settings page no longer shows its own account panel or Sign out button.
+  Practice Village owns sign-in and sign-out.
+- The demo schedule now shows only “Moxie Studios’ First Live Class,” Yoga, Beginner,
+  with JoYi, February 7, 2027 at 9:00 a.m. Central. Demo signup links to Practice
+  Village `/#doors`. It uses JoYi's approved `studio/assets/classes/joyi-live-class.png` portrait.
+
 ## Read first, every session
 1. Read the shared bot worklog BEFORE any task: Google Doc `1l72hQDZR0AeamW16ECULzvtzT3JO7g0RF35KVfw7Hv0`
    (Gabby's bot tab = hands-off files; write only in JoYi's tab; the Drive connector can read but

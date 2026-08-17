@@ -145,7 +145,7 @@ function syncQuick(){
   $("startMicHelp").textContent=live?"Lets Moxie hear you. Off means she can still speak.":"Turn Live Tutor on to use your microphone.";
   if(selected)$("startMore").href=`zenbottom-session-setup.html?${new URLSearchParams({mode:selected.mode,duration:String(selected.durationMin),...(selected.sessionId?{session:selected.sessionId}:{})})}`;
 }
-function start(item){
+async function start(item){
   selected=item;
   const stored=cleanSessionSetup({...storedSetup(),type:item.mode,duration:item.durationMin});
   $("startTitle").textContent=item.title;
@@ -153,12 +153,15 @@ function start(item){
   $("startMeta").textContent=`${modeLabel(item.mode)} · ${item.durationMin} min${poses?` · ${poses} pose${poses===1?"":"s"}`:""}`;
   $("startSound").innerHTML=AMBIENT_PRESETS.map(preset=>`<option value="${safe(preset.id)}">${safe(preset.label)}</option>`).join("");
   $("startSound").value=stored.music;
-  $("startCamera").checked=stored.camera;
-  $("startLive").checked=stored.liveGuide;
-  $("startMic").checked=readTutorSettings(localStorage,email).listeningEnabled;
+  // Opening the pre-practice check is an explicit request to prepare the room.
+  // Start both devices here so the learner can see herself and confirm the mic
+  // level immediately instead of discovering two more switches inside practice.
+  $("startCamera").checked=true;
+  $("startLive").checked=true;
+  $("startMic").checked=true;
   syncQuick();
   $("startDialog").showModal();
-  syncPreviewDevices();
+  await syncPreviewDevices();
 }
 async function beginNow(item){
   const setup=quickSetup(item);

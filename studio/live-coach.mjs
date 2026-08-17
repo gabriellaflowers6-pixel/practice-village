@@ -56,6 +56,8 @@ export class LiveCoach {
     this.onState("connecting");
     this.onStatus("Requesting a private Live Coach session…");
     const tokenResponse = await fetch(studioPath("live-token"), { cache: "no-store", signal: this.connectAbort.signal });
+    const contentType = tokenResponse.headers.get("content-type") || "";
+    if (!contentType.includes("application/json")) throw new Error("Live Tutor reached the wrong local server. Open Moxie through port 8765 and try again.");
     const tokenData = await tokenResponse.json();
     if (this.closed) throw new DOMException("Live Coach start was cancelled.", "AbortError");
     if (!tokenResponse.ok || !tokenData.ok || !tokenData.token) throw new Error(tokenData.error || "Live Coach is unavailable right now.");

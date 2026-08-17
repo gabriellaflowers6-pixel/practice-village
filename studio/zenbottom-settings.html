@@ -60,18 +60,11 @@
     <section class="panel wide">
       <h2>Saved curriculums</h2><p class="help">A curriculum keeps your chosen practices in order.</p><div class="list" id="curriculums"></div>
     </section>
-    <section class="panel wide" id="accountSection">
-      <h2>Your account</h2><p class="help">Signing out only ends this session. Your saved practices and settings stay where they are.</p>
-      <div class="account-row">
-        <div class="account-who"><strong id="accountName">Signed in</strong><span id="accountEmail"></span></div>
-        <button class="danger" id="signOutBtn" type="button">Sign out</button>
-      </div><p class="note" id="signOutNote"></p>
-    </section>
   </div>
 </main>
 <script type="module">
 import { readSettings, writeSettings, removeLesson, addCurriculum, removeCurriculum, curriculumLessons, withPracticeProfile } from "./settings-lib.mjs";
-import { authClient, signOut } from "./moxie-auth.mjs";
+import { authClient } from "./moxie-auth.mjs";
 import { studioPath } from "./studio-base.mjs";
 import { buildMemberImport, importMemberData } from "./member-import-lib.mjs";
 import { hydrateMemberData } from "./member-hydrate-lib.mjs";
@@ -117,31 +110,6 @@ $("createCurriculum").onclick=()=>{const title=$("curriculumName").value;const i
 if(preview) $("previewNote").classList.remove("hidden");
 renderIdentity();render();
 if(!preview)(async()=>{try{const supabase=await authClient(),{data:{user}}=await supabase.auth.getUser();if(!user)return;const email=identity().email;await importMemberData({storage:localStorage,email,userId:user.id,supabase});const restored=await hydrateMemberData({storage:localStorage,email,userId:user.id,supabase});if(restored.settings){state=readSettings(localStorage,email);render()}}catch{localStorage.setItem("moxieSyncNotice","Your settings are available on this device. Moxie could not restore cloud data yet.")}})();
-// The account panel stays hidden until Supabase confirms a real session, so a signed-out
-// or offline visitor is never offered a Sign out button that cannot do anything.
-const studioExit=()=>"/studio";
-// The panel is ALWAYS visible. Hiding it until a session was confirmed meant
-// that on a machine without one it simply was not there, which is how Gabby
-// came to ask where the sign out button had gone. A control you cannot find is
-// worse than one that tells you plainly why it is not available yet.
-function showSignedOut(reason){
-  $("accountName").textContent="Not signed in";
-  $("accountEmail").textContent=reason;
-  $("signOutBtn").disabled=true;
-}
-showSignedOut("Sign in from the Moxie Studios home page to sync across devices.");
-if(preview){
-  showSignedOut("Preview mode. Accounts are not connected here.");
-}else{
-  (async()=>{try{
-    const supabase=await authClient(),{data:{user}}=await supabase.auth.getUser();
-    if(!user){showSignedOut("Sign in from the Moxie Studios home page to sync across devices.");return}
-    $("accountName").textContent=identity().name||"Signed in";
-    $("accountEmail").textContent=user.email||"";
-    $("signOutBtn").disabled=false;
-  }catch{showSignedOut("Moxie could not reach the account service, so signing out is unavailable right now.")}})();
-}
-$("signOutBtn").onclick=async()=>{const btn=$("signOutBtn");btn.disabled=true;setNote("signOutNote","Signing you out.");try{await signOut();location.href=studioExit();}catch{btn.disabled=false;setNote("signOutNote","Could not sign out. Check your connection and try again.");}};
 if(requestedSection==="lessons"||requestedSection==="curriculums") requestAnimationFrame(()=>$((requestedSection==="lessons"?"lessonsSection":"curriculumsSection")).scrollIntoView({behavior:"smooth",block:"start"}));
 </script>
 </body>

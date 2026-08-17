@@ -207,6 +207,7 @@
   .live-controls{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px;align-items:end;margin-top:12px}.voice-field{display:grid;gap:5px;color:var(--cream-dim);font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase}.voice-picker{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px}.voice-field select{width:100%;min-width:0;height:39px;border:1px solid rgba(245,236,220,.17);border-radius:10px;padding:0 10px;background:rgba(0,0,0,.24);color:var(--cream);font:11px Manrope,sans-serif}.voice-test{height:39px;padding:0 11px;border:1px solid var(--line);border-radius:10px;background:rgba(245,236,220,.05);color:var(--cream);font:700 9px Manrope,sans-serif;cursor:pointer;white-space:nowrap}.voice-test:disabled{opacity:.5;cursor:wait}.live-action{height:39px;padding:0 14px;border-radius:10px;font:700 10px Manrope,sans-serif;cursor:pointer}.live-action.start{border:1px solid rgba(207,227,184,.48);background:rgba(207,227,184,.12);color:var(--good)}.live-action.end{border:1px solid rgba(228,106,90,.55);background:rgba(228,106,90,.11);color:#f2a79c}.live-action:hover,.voice-test:hover{filter:brightness(1.12)}.live-action:focus-visible,.voice-field select:focus-visible,.voice-test:focus-visible{outline:2px solid var(--glow);outline-offset:2px}.livepanel .mstatus{min-height:31px;margin-top:10px;padding:9px 10px;border-radius:10px;background:rgba(0,0,0,.13);color:var(--cream-dim);font-size:10px;line-height:1.4}.livepanel .mstatus.active{color:var(--good);background:rgba(207,227,184,.07)}
   .tutor-settings{margin-top:12px;padding:3px 12px;border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.12)}.tutor-setting{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:43px;border-bottom:1px solid rgba(245,236,220,.08);color:var(--cream);font-size:11px}.tutor-setting:last-child{border-bottom:0}.tutor-setting span span{display:block;margin-top:2px;color:var(--cream-dim);font-size:9px;line-height:1.3}.tutor-setting input{width:34px;height:19px;flex:none;accent-color:var(--good)}.tutor-setting.disabled{opacity:.48}.tutor-setting .later{padding:4px 7px;border:1px solid var(--line);border-radius:999px;color:var(--cream-dim);font-size:8px;letter-spacing:.5px;text-transform:uppercase}
   .tutor-activity{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}.activity-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 8px;border:1px solid var(--line);border-radius:999px;color:var(--cream-dim);font-size:8px;font-weight:700;letter-spacing:.55px;text-transform:uppercase}.activity-pill::before{content:"";width:6px;height:6px;border-radius:50%;background:#78685a}.activity-pill.on{border-color:rgba(207,227,184,.4);color:var(--good);background:rgba(207,227,184,.07)}.activity-pill.on::before{background:var(--good);box-shadow:0 0 8px rgba(207,227,184,.62)}.activity-pill.speaking.on::before{animation:speakingPulse .7s ease-in-out infinite alternate}@keyframes speakingPulse{to{transform:scale(1.55);box-shadow:0 0 12px rgba(255,217,142,.85)}}.tutor-retry{margin-top:9px;padding:8px 12px;border:1px solid rgba(228,106,90,.48);border-radius:999px;background:rgba(228,106,90,.09);color:#ffd5cd;font:700 9px Manrope,sans-serif;cursor:pointer}
+  .tutor-master{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:14px;padding:13px 14px;border:1px solid rgba(207,227,184,.34);border-radius:14px;background:rgba(207,227,184,.07);cursor:pointer}.tutor-master strong{display:block;color:var(--cream);font:700 13px Manrope,sans-serif}.tutor-master small{display:block;margin-top:3px;color:var(--cream-dim);font:9px/1.4 Manrope,sans-serif}.tutor-master input{width:40px;height:22px;flex:none;accent-color:var(--good)}.tutor-master:focus-within{outline:2px solid var(--glow);outline-offset:2px}.live-controls{grid-template-columns:1fr}
   @media(max-width:460px){.livepanel{right:12px;bottom:62px;width:calc(100vw - 24px);padding:15px}.share-items{grid-template-columns:1fr}.live-controls{grid-template-columns:1fr}.live-action{width:100%}}
 
   /* end + empty cards */
@@ -309,8 +310,9 @@
 
 <div class="livepanel hidden" id="livePanel" aria-labelledby="livePanelTitle">
   <div class="live-head"><div><p class="live-kicker">Google AI guidance</p><h2 id="livePanelTitle">Live Tutor</h2></div><div class="live-head-actions"><span class="live-state" id="liveState">Off</span><button class="live-minimize" id="liveMinimize" type="button" aria-label="Minimize Live Tutor">−</button></div></div>
-  <div class="share-card"><p class="share-title">Shared only while Guide voice is on</p><div class="share-items"><div class="share-item"><strong>Microphone</strong><span>Live audio to Google Gemini</span></div><div class="share-item"><strong>Camera</strong><span>A snapshot to Gemini about every 5 seconds</span></div></div><p class="share-local">Nothing starts until you choose Start. Pose matching stays on this device, and sharing stops when you turn the guide off or leave.</p></div>
-  <div class="live-controls"><div class="voice-field"><label for="liveVoice">Google voice</label><div class="voice-picker"><select id="liveVoice"></select><button class="voice-test" id="testLiveVoice" type="button">Test voice</button></div></div><button class="live-action start" id="liveStart" type="button">Start Guide Voice</button><button class="live-action end hidden" id="liveEnd" type="button">Turn off Guide Voice</button></div>
+  <label class="tutor-master" for="tutorEnabled"><span><strong>Live Tutor</strong><small>Moxie can see, listen, guide, and respond.</small></span><input id="tutorEnabled" type="checkbox" role="switch"></label>
+  <div class="share-card"><p class="share-title">Shared only while Live Tutor is on</p><div class="share-items"><div class="share-item"><strong>Microphone</strong><span>Live audio to Google Gemini</span></div><div class="share-item"><strong>Camera</strong><span>A snapshot to Gemini about every 5 seconds</span></div></div><p class="share-local">Pose matching stays on this device. Sharing stops when you turn Live Tutor off or leave.</p></div>
+  <div class="live-controls"><div class="voice-field"><label for="liveVoice">Google voice</label><div class="voice-picker"><select id="liveVoice"></select><button class="voice-test" id="testLiveVoice" type="button">Test voice</button></div></div></div>
   <div class="tutor-settings" aria-label="Live Tutor settings">
     <label class="tutor-setting"><span>Voice<span>Hear the selected Google voice.</span></span><input id="tutorVoice" type="checkbox" checked></label>
     <label class="tutor-setting"><span>Listening<span>Let Live Tutor hear spoken requests.</span></span><input id="tutorListening" type="checkbox" checked></label>
@@ -645,14 +647,15 @@ function updateLiveButton(){
   const b=$("liveBtn"); b.classList.toggle("live-on",active); b.setAttribute("aria-pressed",String(active));
   const expanded=!$("livePanel").classList.contains("hidden");
   b.setAttribute("aria-expanded",String(expanded));
-  b.setAttribute("aria-label",expanded?"Minimize guide voice":active?"Guide voice on":"Guide voice"); b.dataset.tooltip=expanded?"Minimize guide voice":active?"Guide voice: on":"Guide voice";
+  b.setAttribute("aria-label",expanded?"Minimize Live Tutor":active?"Live Tutor on":"Live Tutor"); b.dataset.tooltip=expanded?"Minimize Live Tutor":active?"Live Tutor: on":"Live Tutor";
   // The wake window lapses on a timer, so the mic pill needs a heartbeat to
   // stop showing "Mic on" after the gate has quietly shut again.
   if(active&&!gateTicker) gateTicker=setInterval(()=>renderTutorState(),1000);
   if(!active&&gateTicker){ clearInterval(gateTicker); gateTicker=null; }
   syncWakeListener();
   renderTutorState();
-  $("liveStart").classList.toggle("hidden",active); $("liveEnd").classList.toggle("hidden",!active);
+  $("tutorEnabled").checked=active||liveStarting;
+  $("tutorEnabled").disabled=liveStarting;
 }
 function liveInstruction(){
   const s=steps[idx]||{};
@@ -671,7 +674,7 @@ function runLiveTool(name){
 }
 async function startLiveCoach(){
   if(liveStarting||liveCoach) return; liveStarting=true;
-  $("liveStart").disabled=true; setLiveStatus("Connecting microphone and camera…");updateLiveButton();
+  setLiveStatus("Connecting microphone and camera…");updateLiveButton();
   const mic=micReady?await micReady:null; micReady=null;
   const coach=new LiveCoach({video:uvid,instruction:liveInstruction(),voice:cleanLiveVoice($("liveVoice").value),requireWake:wakeWordMode,micStream:mic,listening:listeningEnabled,onStatus:setLiveStatus,onTool:runLiveTool,onState:renderTutorState});
   pendingLiveCoach=coach;
@@ -679,7 +682,7 @@ async function startLiveCoach(){
     if(wakeWordMode&&!wakeSupported) setLiveStatus("This browser cannot hear the wake phrase, so your microphone stays closed. Turn off Require “Moxie” to talk to the tutor.");
     if(tutorVoiceEnabled)coach.prompt("Begin now. Briefly greet the learner, then speak the current visible pose cue. Keep it concise."); }
   catch(e){ coach.close(); if(pendingLiveCoach===coach){pendingLiveCoach=null;tutorConnectionState=e?.name==="AbortError"?"off":"disconnected";setLiveStatus(e?.name==="AbortError"?"Live Guide ended.":String(e.message||"Live Guide could not start."));} }
-  finally{ liveStarting=false; $("liveStart").disabled=false;updateLiveButton(); }
+  finally{ liveStarting=false;updateLiveButton(); }
 }
 function stopLiveCoach(note="Live Guide ended."){
   if(pendingLiveCoach){ pendingLiveCoach.close();pendingLiveCoach=null; }
@@ -1072,8 +1075,11 @@ $("liveBtn").addEventListener("click", ()=>{
   updateLiveButton();
 });
 $("liveMinimize").addEventListener("click", ()=>{ $("livePanel").classList.add("hidden"); updateLiveButton(); $("liveBtn").focus(); });
-$("liveStart").addEventListener("click", startLiveCoach);
-$("liveEnd").addEventListener("click", ()=>stopLiveCoach());
+$("tutorEnabled").addEventListener("change",async e=>{
+  if(e.target.checked) await startLiveCoach();
+  else stopLiveCoach("Live Tutor is off.");
+  updateLiveButton();
+});
 $("liveRetry").addEventListener("click",()=>{liveCoach?.close();liveCoach=null;tutorConnectionState="off";startLiveCoach()});
 // Pressing this IS addressing the tutor, so it opens the same bounded window
 // the wake phrase opens. It never bypasses the rule, it satisfies it.

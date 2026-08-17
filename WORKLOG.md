@@ -1,3 +1,48 @@
+# 2026-08-17 — Moxie member entrance opens the schedule (Gabby's bot)
+
+Latest local voice fix: the shared Live Coach client now explains when it reaches
+an HTML/static server instead of displaying `Unexpected token '<'`. Moxie's port
+8765 server was also fixed to accept `/mockups/live-token` and `/studio/live-token`.
+No commit, push, merge, or deployment.
+
+Latest requested item, completed locally: the in-practice tutor panel now has one
+clear Live Tutor master switch. Voice, Listening, Require “Moxie,” and Corrections
+sit beneath it, and the old Guide Voice start/stop buttons are gone. The switch
+starts, stops, and reflects the Gemini Live session. Not committed, pushed, merged,
+or deployed.
+
+Fourth requested item, completed locally: opening the quick pre-practice check now
+turns Camera, Live Tutor, and Microphone on together, awaits the real camera preview
+and mic meter, and carries those choices into the practice room. Permission refusal
+still turns only the declined device back off. Missing X buttons remain separate.
+Not committed, pushed, merged, or deployed.
+
+Third requested item, completed locally: “Plan my week” now opens with One week,
+The First 30 Days, and My own rhythm. One week creates a seven-day guided series;
+14-day and 30-day plan labels/progress use their real length. Missing X buttons are
+untouched until the next separate task. Not committed, pushed, merged, or deployed.
+
+Second requested item, completed locally: the demo schedule's seven invented live
+classes are replaced by one Yoga event, “Moxie Studios’ First Live Class,” with JoYi
+on February 7, 2027 at 9:00 a.m. Central. It is Beginner, 60 minutes, uses the owned
+JoYi's approved `studio/assets/classes/joyi-live-class.png` portrait, includes the camera/microphone/recording promises,
+and tells demo visitors to create a Practice Village account with links to `/#doors`.
+No unlicensed web image was used. Not committed, pushed, merged, or deployed.
+
+Follow-up: the class-card, inline, and details account links now explicitly target
+the same tab. They no longer request a new browser tab.
+
+Follow-up, completed locally: removed Moxie's separate account panel and Sign out
+button from `studio/zenbottom-settings.html`. Practice Village owns sign-in and
+sign-out for every room. The session adapter remains for member data. No live-class
+cards were changed yet. Not committed, pushed, merged, or deployed.
+
+Gabby found that entering Moxie opened `zenbottom-practice.html` with no selected
+lesson, producing the dead-end “No lesson yet” card. Both entrance buttons in
+`studio/index.html` now open `zenbottom-schedule.html`, where a member can choose
+or create a practice first. Local only on `integrate/moxie-studio`; not committed,
+pushed, merged, or deployed.
+
 ### 2026-08-15 — P1 MEMBER POLISH: the member area earns the landing's restraint (JoYi's bot, STARTED 09:50, STOPPED 10:40 JST)
 JoYi's call: the membership page is subpar to the landing; make it richer. She named
 the cur.AI.ted pill (big, off-colour), the rounded buttons, the weak Open sign, and
@@ -1116,4 +1161,3 @@ with: netlify deploy --prod --dir . --site aae16881-7774-4d75-a7f2-6065e8c2e45d
 
 Local preview: python3 -m http.server 8742 from the repo root (server was stopped at
 close). NEXT-SESSION.md has the handoff.
-
