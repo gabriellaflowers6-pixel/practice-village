@@ -1,6 +1,7 @@
 // TEMPORARY diagnostic, key-guarded. Delete after use.
 import Stripe from "stripe";
 import { grantIdentityRole, membershipStore, membershipYearBounds, saveMembershipRecord } from "./_shared/membership.mjs";
+import { sendWelcomeEmail } from "./_shared/welcome-email.mjs";
 
 export default async (req) => {
   const key = process.env.SELFTEST_KEY;
@@ -25,6 +26,15 @@ export default async (req) => {
     out.stripeError = error.message;
   }
 
+  // 2a. welcome email on its own
+  if (body.welcomeOnly && body.email) {
+    out.welcome = await sendWelcomeEmail(body.email, {
+      planLabel: body.planLabel || "membership",
+      setPasswordNeeded: Boolean(body.setPasswordNeeded),
+    });
+    return Response.json({ ok: true, ...out });
+  }
+
   // 2. does the buyer path work end to end
   if (body.email) {
     try {
@@ -41,6 +51,10 @@ export default async (req) => {
       };
       await saveMembershipRecord(store, record);
       out.provision = await grantIdentityRole(record);
+      out.welcome = await sendWelcomeEmail(record.email, {
+        planLabel: record.planLabel,
+        setPasswordNeeded: out.provision.accountSetupEmailSent,
+      });
     } catch (error) {
       out.provisionError = error.message;
     }

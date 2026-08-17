@@ -1,5 +1,6 @@
 import Stripe from "stripe";
 import { notifyCuraited } from "./_shared/curaited-notify.mjs";
+import { sendWelcomeEmail } from "./_shared/welcome-email.mjs";
 import {
   FOUNDING_CUTOFF,
   FOUNDING_LIMIT,
@@ -27,10 +28,24 @@ function requireEnv(name) {
   return value;
 }
 
+const YEARLY_PLAN = { plan: "founding_villager", role: "founding_villager", label: "Founding Villager" };
+const MONTHLY_PLAN = { plan: "membership", role: "member", label: "Membership" };
+
+// Coupons, new links, dashboard subscriptions and invoices all have to land a
+// member. The payment link is the best signal when we know it; the billing
+// interval is the fallback that still works when we do not.
+function resolvePlan(paymentLinkId, subscription) {
+  const known = PLAN_BY_PAYMENT_LINK[paymentLinkId];
+  if (known) return { ...known, resolvedBy: "payment_link" };
+  const price = subscription?.items?.data?.[0]?.price;
+  const interval = price?.recurring?.interval;
+  if (interval === "year") return { ...YEARLY_PLAN, resolvedBy: "interval" };
+  if (interval === "month") return { ...MONTHLY_PLAN, resolvedBy: "interval" };
+  return { ...MONTHLY_PLAN, resolvedBy: "fallback" };
+}
+
 async function handleCheckoutCompleted(stripe, store, session, event) {
   const paymentLinkId = stripeId(session.payment_link);
-  const plan = PLAN_BY_PAYMENT_LINK[paymentLinkId];
-  if (!plan) return { ignored: true, reason: "unrecognized payment link" };
 
   const email = session.customer_details?.email || session.customer_email;
   if (!email) throw new Error("The completed Stripe session has no customer email");
@@ -38,6 +53,7 @@ async function handleCheckoutCompleted(stripe, store, session, event) {
   const subscriptionId = stripeId(session.subscription);
   if (!subscriptionId) throw new Error("The completed Stripe session has no subscription");
   const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+  const plan = resolvePlan(paymentLinkId, subscription);
   const createdAt = isoFromUnix(session.created || event.created);
   const membershipYear = membershipYearBounds(createdAt, createdAt);
 
@@ -85,9 +101,76 @@ async function handleCheckoutCompleted(stripe, store, session, event) {
   });
   if (isActiveStripeStatus(record.status)) {
     const identity = await grantIdentityRole(record);
-    return { plan: record.plan, status: record.status, accountSetupEmailSent: identity.accountSetupEmailSent };
+    const welcome = await sendWelcomeEmail(record.email, {
+      planLabel: record.planLabel,
+      setPasswordNeeded: identity.accountSetupEmailSent,
+    });
+    return {
+      plan: record.plan,
+      status: record.status,
+      resolvedBy: plan.resolvedBy,
+      accountSetupEmailSent: identity.accountSetupEmailSent,
+      welcomeEmail: welcome,
+    };
   }
   return { plan: record.plan, status: record.status };
+}
+
+// A subscription started outside Checkout (dashboard, invoice, API) still has
+// to produce a member and a welcome.
+async function handleSubscriptionCreated(stripe, store, subscription, event) {
+  const customerId = stripeId(subscription.customer);
+  const customer = customerId ? await stripe.customers.retrieve(customerId) : null;
+  const email = customer?.email;
+  if (!email) return { ignored: true, reason: "subscription has no customer email" };
+  if (!isActiveStripeStatus(subscription.status)) {
+    return { ignored: true, reason: `subscription status is ${subscription.status}` };
+  }
+
+  const plan = resolvePlan(null, subscription);
+  const createdAt = isoFromUnix(subscription.created || event.created);
+  const membershipYear = membershipYearBounds(createdAt, createdAt);
+
+  let foundingBonusEligible = false;
+  let foundingSequence = null;
+  if (plan.plan === "founding_villager" && Date.parse(createdAt) <= Date.parse(FOUNDING_CUTOFF)) {
+    const currentCount = await countFoundingBonusMembers(store);
+    if (currentCount < FOUNDING_LIMIT) {
+      foundingBonusEligible = true;
+      foundingSequence = currentCount + 1;
+    }
+  }
+
+  const record = {
+    email: email.trim().toLowerCase(),
+    plan: plan.plan,
+    role: plan.role,
+    planLabel: plan.label,
+    status: subscription.status,
+    stripeCustomerId: customerId,
+    stripeSubscriptionId: subscription.id,
+    stripePaymentLinkId: null,
+    originalMembershipStart: createdAt,
+    membershipYearIndex: membershipYear.yearIndex,
+    membershipYearStart: membershipYear.start,
+    membershipYearEnd: membershipYear.end,
+    currentPeriodEnd: subscriptionPeriodEnd(subscription),
+    cancelAtPeriodEnd: Boolean(subscription.cancel_at_period_end),
+    workshopVoucherAllowanceFirstYear: foundingBonusEligible ? 2 : 1,
+    workshopVoucherAllowanceRenewalYears: 1,
+    foundingBonusEligible,
+    foundingSequence,
+    createdAt,
+    updatedAt: new Date().toISOString(),
+  };
+
+  await saveMembershipRecord(store, record);
+  const identity = await grantIdentityRole(record);
+  const welcome = await sendWelcomeEmail(record.email, {
+    planLabel: record.planLabel,
+    setPasswordNeeded: identity.accountSetupEmailSent,
+  });
+  return { plan: record.plan, status: record.status, resolvedBy: plan.resolvedBy, welcomeEmail: welcome };
 }
 
 async function handleSubscriptionChanged(store, subscription, event) {
@@ -134,6 +217,11 @@ export default async function handler(request) {
     let result = { ignored: true, reason: "event type is not used" };
     if (["checkout.session.completed", "checkout.session.async_payment_succeeded"].includes(event.type)) {
       result = await handleCheckoutCompleted(stripe, store, event.data.object, event);
+    } else if (event.type === "customer.subscription.created") {
+      const existing = await getRecordBySubscription(store, event.data.object.id);
+      result = existing
+        ? { ignored: true, reason: "already provisioned" }
+        : await handleSubscriptionCreated(stripe, store, event.data.object, event);
     } else if (["customer.subscription.updated", "customer.subscription.deleted"].includes(event.type)) {
       result = await handleSubscriptionChanged(store, event.data.object, event);
     }
