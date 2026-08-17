@@ -5,6 +5,7 @@ redirectsOrigin = "config"
 plugins = []
 
 [build]
+edge_functions = "/Users/jkr/Documents/ALL Build Projects/practice-village/netlify/edge-functions"
 publish = "/Users/jkr/Documents/ALL Build Projects/practice-village"
 publishOrigin = "config"
 commandOrigin = "config"

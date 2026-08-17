@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Moxie Studios — Set up your practice</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600&family=DM+Mono&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root{--ink:#1b100c;--panel:#28150f;--cream:#f5ecdc;--dim:#cdbda5;--gold:#e9c078;--line:rgba(245,236,220,.15);--yoga:#f08a72;--med:#aaa2ff;--good:#cfe3b8}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(65vw 55vw at 86% 4%,rgba(130,83,58,.32),transparent 68%),radial-gradient(50vw 55vw at 0 100%,rgba(68,52,89,.3),transparent 70%),var(--ink);color:var(--cream);font-family:Manrope,sans-serif}
+    button,input{font:inherit}.wrap{width:min(940px,calc(100% - 32px));margin:auto;padding:25px 0 72px}.top{display:flex;align-items:center;justify-content:space-between}.brand{font:600 29px/.85 "Cormorant Garamond",serif}.brand em{color:var(--gold);font-style:italic}.back{border:0;background:none;color:var(--dim);font:10px DM Mono,monospace;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
+    .intro{max-width:650px;margin:62px 0 30px}.kicker{color:var(--gold);font:10px DM Mono,monospace;letter-spacing:1.5px;text-transform:uppercase}.intro h1{margin:10px 0 12px;font:500 clamp(48px,7vw,76px)/.86 "Cormorant Garamond",serif;letter-spacing:-2px}.intro p{max-width:570px;color:var(--dim);font-size:14px;line-height:1.65}
+    form{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.62fr);gap:18px}.stack{display:grid;gap:18px}.panel{padding:22px;border:1px solid var(--line);border-radius:22px;background:rgba(40,21,15,.72);box-shadow:0 18px 55px rgba(0,0,0,.13)}fieldset{margin:0;padding:0;border:0}legend,.panel h2{margin:0 0 6px;font:600 12px Manrope,sans-serif}.help{margin:0 0 15px;color:var(--dim);font-size:11px;line-height:1.55}
+    .types{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.choice{position:relative;display:grid;place-items:center;min-height:64px;padding:9px;border:1px solid var(--line);border-radius:14px;color:var(--dim);font-size:12px;font-weight:600;text-align:center;cursor:pointer}.choice input{position:absolute;opacity:0}.choice:has(input:focus-visible){outline:2px solid var(--gold);outline-offset:2px}.choice.yoga:has(input:checked){border-color:var(--yoga);background:rgba(240,138,114,.12);color:#fff}.choice.meditation:has(input:checked){border-color:var(--med);background:rgba(170,162,255,.12);color:#fff}.choice.blended:has(input:checked){border-color:var(--med);background:linear-gradient(110deg,rgba(240,138,114,.12),rgba(170,162,255,.12));color:#fff}
+    .pills{display:flex;flex-wrap:wrap;gap:7px}.pill{position:relative;padding:8px 11px;border:1px solid var(--line);border-radius:999px;color:var(--dim);font-size:11px;cursor:pointer}.pill input{position:absolute;opacity:0}.pill:has(input:checked){border-color:rgba(233,192,120,.68);background:rgba(233,192,120,.1);color:var(--gold)}.pill:has(input:focus-visible){outline:2px solid var(--gold);outline-offset:2px}
+    .sounds{display:grid;grid-template-columns:1fr 1fr;gap:8px}.sound{position:relative;display:block;min-height:76px;padding:12px;border:1px solid var(--line);border-radius:13px;cursor:pointer}.sound input{position:absolute;opacity:0}.sound b{display:block;font-size:11px}.sound span{display:block;margin-top:4px;color:var(--dim);font-size:9px;line-height:1.4}.sound:has(input:checked){border-color:rgba(233,192,120,.65);background:rgba(233,192,120,.08)}.sound:has(input:focus-visible){outline:2px solid var(--gold);outline-offset:2px}.preview{margin-top:11px;border:1px solid var(--line);border-radius:999px;padding:8px 12px;background:transparent;color:var(--cream);font-size:10px;cursor:pointer}
+    select{width:100%;height:44px;border:1px solid var(--line);border-radius:12px;padding:0 12px;background:#21120e;color:var(--cream)}.toggle{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}.toggle:first-of-type{border-top:0}.toggle b{display:block;font-size:11px}.toggle span{display:block;margin-top:3px;color:var(--dim);font-size:9px;line-height:1.45}.switch{width:45px;height:26px;accent-color:var(--gold)}
+    .summary{position:sticky;top:20px}.summary h2{font:500 34px/.95 "Cormorant Garamond",serif}.summary-list{display:grid;gap:10px;margin:19px 0}.summary-row{display:flex;justify-content:space-between;gap:15px;padding-bottom:10px;border-bottom:1px solid var(--line);font-size:11px}.summary-row span{color:var(--dim)}.start{width:100%;min-height:48px;border:0;border-radius:999px;background:var(--gold);color:#352014;font-weight:700;cursor:pointer}.privacy{margin:12px 4px 0;color:var(--dim);font-size:9px;line-height:1.5}.status{min-height:18px;margin-top:10px;color:var(--good);font-size:10px}.start:focus-visible,.preview:focus-visible,.back:focus-visible,select:focus-visible{outline:2px solid var(--cream);outline-offset:3px}
+    @media(max-width:760px){form{grid-template-columns:1fr}.summary{position:static}.intro{margin-top:45px}}@media(max-width:480px){.types{grid-template-columns:1fr}.sounds{grid-template-columns:1fr}.choice{min-height:48px}}
+  .brandmark{height:1.05em;width:auto;display:block;max-width:min(210px,44vw)}</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="top"><div class="brand"><img class="brandmark" src="assets/moxie-wordmark.png" alt="Moxie Studios" width="480" height="77" /></div><button class="back" id="back" type="button">← Back</button></header>
+  <section class="intro"><p class="kicker">Before you begin</p><h1>Make the room yours.</h1><p>Choose the shape of this session once. Every option can be adjusted again inside the practice without losing your lesson.</p></section>
+  <form id="setupForm">
+    <div class="stack">
+      <section class="panel"><fieldset><legend>Time available</legend><p class="help">Short sessions still count. Moxie will keep the ending gentle.</p><div class="pills" id="durations"></div></fieldset></section>
+      <section class="panel"><fieldset><legend>Background sound</legend><p class="help">These built-in soundscapes are generated in your browser. Uploading music is still available inside yoga practice, but never required.</p><div class="sounds" id="sounds"></div></fieldset><button class="preview" id="previewSound" type="button">Preview selected sound</button><div class="status" id="soundStatus" role="status" aria-live="polite"></div></section>
+      <section class="panel"><h2>Guide voice</h2><p class="help">Used by Live Guide. Meditation cues use the best voice available on this device until the live voice service is connected.</p><label><span class="help">Voice</span><select id="voice" name="voice"></select></label></section>
+      <section class="panel"><h2>Camera and live feedback</h2><p class="help">Both remain optional. The local pose mirror works only when the camera is on.</p>
+        <label class="toggle"><span><b>Use my camera</b><span>Pose matching stays on this device.</span></span><input class="switch" id="camera" type="checkbox" checked /></label>
+        <label class="toggle"><span><b>Start Live Guide after I enter</b><span>Shares microphone audio and periodic camera snapshots with Google Gemini while active.</span></span><input class="switch" id="liveGuide" type="checkbox" /></label>
+      </section>
+    </div>
+    <aside class="panel summary" aria-labelledby="summaryTitle"><p class="kicker">Your room</p><h2 id="summaryTitle">Ready when you are.</h2><div class="summary-list">
+      <div class="summary-row"><span>Practice</span><strong id="sumType"></strong></div><div class="summary-row"><span>Time</span><strong id="sumDuration"></strong></div><div class="summary-row"><span>Sound</span><strong id="sumSound"></strong></div><div class="summary-row"><span>Voice</span><strong id="sumVoice"></strong></div><div class="summary-row"><span>Camera</span><strong id="sumCamera"></strong></div>
+    </div><button class="start" type="submit">Enter your practice</button><p class="privacy">Nothing records automatically. Live Guide still requires an explicit start and ends when you end or leave the practice.</p></aside>
+  </form>
+</main>
+<script type="module">
+  import { AMBIENT_PRESETS, ambientLabel, createAmbientPlayer } from "./ambient-audio.mjs";
+  import { LIVE_VOICES } from "./live-coach-lib.mjs";
+  import { cleanSessionSetup, sessionDestination } from "./session-setup-lib.mjs";
+  const $=id=>document.getElementById(id), query=new URLSearchParams(location.search), form=$("setupForm"), player=createAmbientPlayer();
+  const typeLabel={yoga:"Yoga",meditation:"Meditation",blended:"Yoga + Meditation"};
+  let stored={};try{stored=JSON.parse(localStorage.getItem("moxieSessionSetup")||"{}")}catch{}
+  const initial=cleanSessionSetup({...stored,type:query.get("mode")||stored.type,duration:+(query.get("duration")||stored.duration||0),voice:query.get("voice")||stored.voice,music:query.get("music")||stored.music,camera:query.get("camera")?query.get("camera")!=="off":stored.camera,liveGuide:query.get("live")?query.get("live")==="on":stored.liveGuide});
+  $("durations").innerHTML=[3,5,7,10,12,20,30,45].map(n=>`<label class="pill"><input type="radio" name="duration" value="${n}" ${n===initial.duration?"checked":""}>${n} min</label>`).join("");
+  $("sounds").innerHTML=AMBIENT_PRESETS.map(item=>`<label class="sound"><input type="radio" name="music" value="${item.id}" ${item.id===initial.music?"checked":""}><b>${item.label}</b><span>${item.detail}</span></label>`).join("");
+  $("voice").innerHTML=LIVE_VOICES.map(v=>`<option value="${v.name}">${v.name} · ${v.feel}</option>`).join("");
+  const sessionType=initial.type;   // decided by the practice, not asked again
+  $("voice").value=initial.voice;$("camera").checked=initial.camera;$("liveGuide").checked=initial.liveGuide;
+  function value(){return cleanSessionSetup({type:sessionType,duration:+new FormData(form).get("duration"),music:new FormData(form).get("music"),voice:$("voice").value,camera:$("camera").checked,liveGuide:$("liveGuide").checked})}
+  function render(){const v=value();$("liveGuide").disabled=!v.camera;if(!v.camera)$("liveGuide").checked=false;$("sumType").textContent=typeLabel[v.type];$("sumDuration").textContent=v.duration+" minutes";$("sumSound").textContent=ambientLabel(v.music);$("sumVoice").textContent=v.voice;$("sumCamera").textContent=v.camera?(v.liveGuide?"On · Live Guide ready":"On · local mirror"):"Off"}
+  form.addEventListener("change",render);render();
+  $("previewSound").onclick=async()=>{const preset=value().music;if(player.playing){player.stop();$("previewSound").textContent="Preview selected sound";$("soundStatus").textContent="Preview stopped.";return}if(await player.play(preset)){player.setVolume(.2);$("previewSound").textContent="Stop preview";$("soundStatus").textContent=ambientLabel(preset)+" is playing."}else $("soundStatus").textContent="Quiet selected. No background sound will play."};
+  form.onsubmit=e=>{e.preventDefault();player.stop();const setup=value();localStorage.setItem("moxieSessionSetup",JSON.stringify(setup));sessionStorage.setItem("moxieSessionSetup",JSON.stringify(setup));location.href=sessionDestination(setup,{slot:query.get("slot"),date:query.get("date"),session:query.get("session"),demo:query.get("demo")==="1"})};
+  $("back").onclick=()=>history.length>1?history.back():location.assign("zenbottom-schedule.html");
+</script>
+</body></html>

@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Lesson library · Moxie Studios</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#170b08;--brown:#25120d;--panel:#321a13;--panel2:#3a2119;--cream:#fff5e8;--muted:#d4bca9;--gold:#d8bd8b;--line:rgba(255,239,216,.15);--good:#b8d2a9;--warn:#edc5a1}
+    *{box-sizing:border-box}html{background:var(--ink);color-scheme:dark}body{margin:0;min-height:100vh;color:var(--cream);font-family:Inter,system-ui,sans-serif;background:radial-gradient(circle at 82% 0,rgba(99,56,36,.32),transparent 33rem),linear-gradient(145deg,#140906,#24120d 65%,#170b08)}
+    a{color:inherit}.skip{position:absolute;left:12px;top:-60px;padding:10px 14px;background:var(--cream);color:var(--ink);z-index:10}.skip:focus{top:12px}
+    .wrap{width:min(1180px,100%);margin:auto;padding:28px 24px 72px}.top{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:54px}.brand{font:600 34px/1 "Cormorant Garamond",serif}.brand em{color:var(--gold);font-weight:500}.top nav{display:flex;align-items:center;gap:8px}.nav-link{position:relative;width:38px;height:38px;display:grid;place-items:center;padding:0;border:1px solid var(--line);border-radius:50%;text-decoration:none;color:var(--muted);background:rgba(20,10,7,.34);transition:color .2s,border-color .2s,transform .2s}.nav-link:hover,.nav-link:focus-visible{color:var(--gold);border-color:rgba(216,189,139,.6);transform:translateY(-2px)}.nav-link svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.nav-link::after{content:attr(data-label);position:absolute;right:0;top:calc(100% + 9px);z-index:20;padding:6px 9px;border:1px solid rgba(216,189,139,.28);border-radius:8px;background:rgba(24,12,9,.96);box-shadow:0 8px 24px rgba(0,0,0,.3);color:var(--cream);font-size:10px;font-weight:600;white-space:nowrap;opacity:0;transform:translateY(-4px);pointer-events:none;transition:.16s}.nav-link:hover::after,.nav-link:focus-visible::after{opacity:1;transform:none}
+    .eyebrow{margin:0 0 10px;color:var(--gold);font-size:12px;letter-spacing:.16em;text-transform:uppercase}.hero{max-width:760px}.hero h1{font:500 clamp(45px,7vw,76px)/.93 "Cormorant Garamond",serif;margin:0}.hero p{color:var(--muted);font-size:16px;line-height:1.65;margin:20px 0 34px}.privacy{display:inline-flex;gap:8px;align-items:center;font-size:12px;color:var(--muted)}
+    .filters{margin:30px 0 24px;padding:20px;border:1px solid var(--line);border-radius:22px;background:rgba(50,26,19,.72);box-shadow:0 24px 70px rgba(0,0,0,.16)}.primary-filters{display:grid;grid-template-columns:minmax(220px,1fr) 180px 180px;gap:12px}.field label,.filter-title{display:block;font-size:12px;font-weight:600;color:var(--muted);margin:0 0 7px}.field input,.field select,.calendar-fields input{width:100%;min-height:46px;border:1px solid var(--line);border-radius:12px;background:#1d0e0a;color:var(--cream);font:inherit;padding:0 13px}.field input::placeholder{color:#a98d7a}.check-row{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}.check{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;color:var(--muted);font-size:13px;background:rgba(20,9,6,.35)}.check:has(input:checked){border-color:rgba(216,189,139,.62);color:var(--cream);background:rgba(216,189,139,.08)}.check input{appearance:none;flex:0 0 16px;width:16px;height:16px;margin:1px 0 0;border:1px solid #a98d7a;border-radius:4px;background:#1d0e0a center/12px 12px no-repeat}.check input:checked{border-color:var(--gold);background-color:#2d1811;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m3.2 8.2 3 3 6.5-7' fill='none' stroke='%23ddc9ad' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}.check input:focus-visible{outline:3px solid #ffe0a8;outline-offset:3px}details{margin-top:14px}summary{cursor:pointer;color:var(--gold);font-size:13px}.preference-note{font-size:12px;line-height:1.5;color:var(--muted);margin:14px 0 0}.preference-note a{color:var(--gold)}
+    .result-bar{display:flex;justify-content:space-between;align-items:end;gap:18px;margin:0 0 15px}.result-bar h2{font:500 27px/1.1 "Cormorant Garamond",serif;margin:0}.result-bar p{margin:0;color:var(--muted);font-size:13px}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.card{display:flex;flex-direction:column;min-height:310px;padding:22px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(155deg,rgba(58,33,25,.94),rgba(37,18,13,.92));box-shadow:0 18px 46px rgba(0,0,0,.13)}.card:hover{border-color:rgba(216,189,139,.35)}.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}.tag{padding:5px 8px;border-radius:999px;background:rgba(216,189,139,.1);color:var(--gold);font-size:10px;text-transform:uppercase;letter-spacing:.08em}.tag.good{color:var(--good);background:rgba(184,210,169,.09)}.card h3{font:500 28px/1.04 "Cormorant Garamond",serif;margin:0 0 9px}.intro{color:var(--muted);font-size:13px;line-height:1.55;margin:0 0 13px}.poses{color:#e4d1c2;font-size:12px;line-height:1.5;margin:0}.warning{margin:12px 0 0;padding:10px 11px;border-left:2px solid var(--warn);background:rgba(237,197,161,.07);color:var(--warn);font-size:12px;line-height:1.45}.actions{display:flex;flex-wrap:nowrap;gap:6px;margin-top:auto;padding-top:20px}.actions .btn{flex:1 1 0;min-width:0;white-space:nowrap;padding:11px 8px;font-size:11px}.btn{border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--cream);font:600 12px/1 Inter,sans-serif;padding:11px 14px;cursor:pointer}.btn.primary{background:var(--gold);border-color:var(--gold);color:#1c0d09}.btn:hover{transform:translateY(-1px);border-color:var(--gold)}.btn[disabled]{opacity:.58;cursor:default;transform:none}.empty{grid-column:1/-1;padding:48px 20px;text-align:center;border:1px dashed var(--line);border-radius:20px;color:var(--muted)}
+    dialog{width:min(460px,calc(100% - 30px));padding:0;border:1px solid var(--line);border-radius:22px;background:var(--panel);color:var(--cream);box-shadow:0 35px 90px rgba(0,0,0,.58)}dialog::backdrop{background:rgba(10,4,2,.72);backdrop-filter:blur(3px)}.dialog-body{padding:25px}.dialog-top{display:flex;justify-content:space-between;gap:20px}.dialog-top h2{font:500 30px/1 "Cormorant Garamond",serif;margin:0}.close{border:0;background:none;color:var(--muted);font-size:25px;cursor:pointer}.dialog-copy{color:var(--muted);font-size:13px;line-height:1.5}.calendar-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}.calendar-fields label{font-size:12px;color:var(--muted)}.calendar-fields input{margin-top:7px}.dialog-actions{display:flex;justify-content:space-between;align-items:center;gap:9px}.quick-fields{display:grid;gap:2px;margin:18px 0 20px}.quick-preview{position:relative;margin:6px 0 14px;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#150e0a;border:1px solid var(--line);display:grid;place-items:center}
+.quick-preview video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);display:none}
+.quick-preview.live video{display:block}
+.preview-off{margin:0;font:500 10px DM Mono,monospace;letter-spacing:1.4px;text-transform:uppercase;color:var(--m);opacity:.7}
+.quick-preview.live .preview-off{display:none}
+.mic-meter{position:absolute;left:12px;bottom:12px;width:74px;height:5px;border-radius:999px;background:rgba(245,236,220,.22);overflow:hidden}
+.mic-meter i{display:block;height:100%;width:0;border-radius:999px;background:var(--g);transition:width .08s linear}
+.quick-row{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:52px;padding:6px 2px;border-bottom:1px solid var(--line);font-size:13px}.quick-row:last-child{border-bottom:0}.quick-row small{display:block;margin-top:3px;color:var(--muted);font-size:10.5px;line-height:1.35}.quick-row select{min-width:130px}.quick-row input[type=checkbox]{width:34px;height:19px;flex:none;accent-color:var(--good,#cfe3b8)}.quick-row.disabled{opacity:.5}.btn.quiet{border:0;background:none;color:var(--muted);text-decoration:underline;padding:0;font-size:12px}.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:var(--cream);color:var(--ink);border-radius:999px;padding:11px 17px;font-size:13px;transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
+    :focus-visible{outline:3px solid #ffe0a8;outline-offset:3px}@media(max-width:880px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.primary-filters{grid-template-columns:1fr 1fr}.search-field{grid-column:1/-1}}@media(max-width:580px){.wrap{padding:20px 15px 60px}.top{align-items:flex-start;margin-bottom:40px}.brand{font-size:29px}.top nav{justify-content:flex-end}.cards,.primary-filters{grid-template-columns:1fr}.search-field{grid-column:auto}.card{min-height:285px}.calendar-fields{grid-template-columns:1fr}.result-bar{align-items:flex-start;flex-direction:column}}
+    .top nav{position:fixed;top:28px;right:28px;z-index:120}@media(max-width:640px){.top nav{top:20px;right:16px}}
+    .pose-list{display:grid;gap:8px;margin-top:14px}.pose-detail{display:grid;grid-template-columns:54px 1fr;gap:10px;align-items:center;padding:8px;border:1px solid var(--line);border-radius:12px;background:rgba(20,9,6,.28)}.pose-detail img{width:54px;height:54px;object-fit:cover;border-radius:9px;background:#25120d}.pose-detail .pose-detail-name{display:flex;align-items:center;justify-content:center;width:54px;height:54px;border-radius:9px;background:#25120d;color:var(--muted);font:600 9px/1.15 "Cormorant Garamond",serif;text-align:center;padding:3px}.pose-detail b{display:block;color:var(--cream);font:600 15px "Cormorant Garamond",serif}.pose-detail span{display:block;margin-top:2px;color:var(--muted);font-size:10px;line-height:1.4;text-wrap:pretty}.hero h1,.card h3{text-wrap:balance}
+  .brandmark{height:1.05em;width:auto;display:block;max-width:min(210px,44vw)}</style>
+</head>
+<body>
+<a class="skip" href="#results">Skip to lessons</a>
+<main class="wrap">
+  <header class="top"><div class="brand"><img class="brandmark" src="assets/moxie-wordmark.png" alt="Moxie Studios" width="480" height="77" /></div><nav aria-label="Studio navigation"><a class="nav-link" href="zenbottom-schedule.html" aria-label="Dashboard home" data-label="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path></svg></a><a class="nav-link" href="zenbottom-library.html" aria-label="Lesson library" data-label="Lesson library"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h10.5A2.5 2.5 0 0 1 18 7v12H7.5A2.5 2.5 0 0 1 5 16.5v-12Z"></path><path d="M5 16.5A2.5 2.5 0 0 1 7.5 14H18"></path><path d="M9 8h5"></path></svg></a><a class="nav-link" href="zenbottom-meditations.html" aria-label="Meditation" data-label="Meditation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.3 9.6A7.6 7.6 0 1 1 13.2 4.5"></path><path d="M12 8.4c1.15 1.45 1.15 3.35 0 4.8-1.15-1.45-1.15-3.35 0-4.8Z"></path></svg></a><a class="nav-link" href="zenbottom-settings.html" aria-label="Settings" data-label="Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6.7"></circle><circle cx="12" cy="12" r="2.9"></circle><path d="M12 5.3V3.1M12 18.7v2.2M17.8 8.65 19.71 7.55M6.2 8.65 4.29 7.55M6.2 15.35 4.29 16.45M17.8 15.35l1.91 1.1"></path></svg></a></nav></header>
+  <section class="hero" aria-labelledby="pageTitle"><p class="eyebrow">JoYi's approved curriculum</p><h1 id="pageTitle">Find the practice that fits today.</h1><p>Search yoga and meditation lessons, keep practices gentle around the areas you name, and add one to your calendar. Every movement lesson comes from the approved Moxie curriculum.</p><span class="privacy">◌ Your preference matching happens on this device.</span></section>
+
+  <form class="filters" id="filters" role="search">
+    <div class="primary-filters">
+      <div class="field search-field"><label for="query">Search by lesson or pose</label><input id="query" name="query" type="search" placeholder="Try warrior, seated, sleep…" autocomplete="off"></div>
+      <div class="field"><label for="mode">Practice type</label><select id="mode" name="mode"><option value="all">All practices</option><option value="yoga">Yoga</option><option value="meditation">Meditation</option><option value="blended">Yoga + meditation</option></select></div>
+      <div class="field"><label for="duration">Maximum time</label><select id="duration" name="duration"><option value="">Any length</option><option value="5">5 minutes</option><option value="10">10 minutes</option><option value="20">20 minutes</option><option value="30">30 minutes</option></select></div>
+    </div>
+    <div class="check-row"><label class="check"><input id="compatible" type="checkbox" checked> Compatible with my saved preferences</label></div>
+    <details><summary>More ways to make today comfortable</summary><div class="check-row" id="avoidFilters"><label class="check"><input type="checkbox" value="wrist_pressure"> No wrist pressure</label><label class="check"><input type="checkbox" value="knee_pressure,deep_knee_bend"> No kneeling or deep knee bends</label><label class="check"><input type="checkbox" value="foot_pressure,single_foot_pressure,foot_top_pressure"> No foot pressure or balances</label><label class="check"><input type="checkbox" value="inversion"> No inversions</label><label class="check"><input type="checkbox" value="standing"> Seated or floor-based only</label></div></details>
+    <p class="preference-note" id="preferenceNote"></p>
+  </form>
+
+  <div class="result-bar"><h2 id="results">Lessons</h2><p id="count" role="status" aria-live="polite">Loading lessons…</p></div>
+  <section class="cards" id="cards" aria-labelledby="results" aria-busy="true"></section>
+</main>
+
+<dialog id="startDialog" aria-labelledby="startTitle"><form method="dialog" class="dialog-body" id="startForm"><div class="dialog-top"><h2 id="startTitle"></h2><button class="close" value="cancel" aria-label="Close">&times;</button></div><p class="dialog-copy" id="startMeta"></p><div class="quick-preview" id="startPreviewBox"><video id="startPreview" playsinline muted autoplay></video><p class="preview-off" id="startPreviewOff">Camera off</p><div class="mic-meter" id="startMicMeter" hidden aria-hidden="true"><i id="startMicLevel"></i></div></div><div class="quick-fields"><label class="quick-row" for="startSound"><span>Sound<small>Generated in your browser.</small></span><select id="startSound"></select></label><label class="quick-row" for="startCamera"><span>Camera<small>Needed for the pose mirror.</small></span><input id="startCamera" type="checkbox"></label><label class="quick-row" id="startLiveRow" for="startLive"><span>Live Tutor<small id="startLiveHelp">Talk to Moxie during practice.</small></span><input id="startLive" type="checkbox"></label><label class="quick-row" id="startMicRow" for="startMic"><span>Microphone<small id="startMicHelp">Lets Moxie hear you.</small></span><input id="startMic" type="checkbox"></label></div><div class="dialog-actions"><a class="btn quiet" id="startMore" href="#">More options</a><button class="btn primary" id="startBegin" value="default">Begin</button></div></form></dialog>
+<dialog id="calendarDialog" aria-labelledby="calendarTitle"><form method="dialog" class="dialog-body" id="calendarForm"><div class="dialog-top"><h2 id="calendarTitle">Add to calendar</h2><button class="close" value="cancel" aria-label="Close">×</button></div><p class="dialog-copy" id="calendarCopy"></p><div class="calendar-fields"><label>Date<input id="calendarDate" type="date" required></label><label>Start time<input id="calendarTime" type="time" value="09:00" required></label></div><div class="dialog-actions"><button class="btn" value="cancel">Cancel</button><button class="btn primary" id="calendarDownload" value="default">Download event</button></div></form></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script type="module">
+import { filterLesson } from "./coach-lib.mjs";
+import { buildLessonLibrary, filterLessonLibrary, incompatibilityReasons, lessonToICS } from "./lesson-library-lib.mjs";
+import { MEDITATION_SESSIONS } from "./meditation-session-lib.mjs";
+import { poseArtSource } from "./pose-art.mjs";
+import { AMBIENT_PRESETS, ambientLabel } from "./ambient-audio.mjs";
+import { cleanSessionSetup, sessionDestination } from "./session-setup-lib.mjs";
+import { readSettings, saveLesson, writeSettings } from "./settings-lib.mjs";
+import { readTutorSettings, writeTutorSettings } from "./live-tutor-settings-lib.mjs";
+import { MIC_CONSTRAINTS } from "./live-coach-lib.mjs";
+const $=id=>document.getElementById(id),email=localStorage.getItem("zbStudentEmail")||"",preview=new URLSearchParams(location.search).has("preview"),demo=new URLSearchParams(location.search).has("demo");
+let approved,items=[],selected=null,settings=readSettings(localStorage,email),toastTimer;
+const safe=value=>String(value||"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+const modeLabel=mode=>mode==="blended"?"Yoga + meditation":mode[0].toUpperCase()+mode.slice(1);
+const today=()=>{const date=new Date();return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`};
+function notify(message){clearTimeout(toastTimer);$("toast").textContent=message;$("toast").classList.add("show");toastTimer=setTimeout(()=>$("toast").classList.remove("show"),2600)}
+function activeAvoids(){return [...document.querySelectorAll("#avoidFilters input:checked")].flatMap(input=>input.value.split(","))}
+function poseMarkup(item){return item.poseDetails?.length?`<div class="pose-list">${item.poseDetails.slice(0,3).map(pose=>`<div class="pose-detail">${poseArtSource(pose.pose)?`<img src="${poseArtSource(pose.pose)}" alt="${safe(pose.name)}">`:`<span class="pose-detail-name">${safe(pose.name)}</span>`}<span><b>${safe(pose.name)}</b>${safe(pose.description)}</span></div>`).join("")}</div>`:""}
+function render(){
+  const shown=filterLessonLibrary(items,{query:$("query").value,mode:$("mode").value,maxDuration:$("duration").value,compatibleOnly:$("compatible").checked,avoidDemands:activeAvoids()},approved,settings.practiceProfile);
+  $("count").textContent=`${shown.length} ${shown.length===1?"practice":"practices"} found`;
+  $("cards").innerHTML=shown.length?shown.map(item=>{const reasons=incompatibilityReasons(item,approved,settings.practiceProfile),saved=settings.lessons.some(record=>record.id===`library-${item.id}`);return `<article class="card"><div class="tags"><span class="tag">${safe(modeLabel(item.mode))}</span><span class="tag">${item.durationMin} min</span>${!reasons.length?'<span class="tag good">Fits preferences</span>':""}</div><h3>${safe(item.title)}</h3><p class="intro">${safe(item.intro)}</p>${poseMarkup(item)}${reasons.length?`<p class="warning"><strong>May not fit your preferences:</strong> includes ${safe(reasons.join(" and "))}. You can choose a meditation instead.</p>`:""}<div class="actions"><button class="btn primary" data-action="start" data-id="${safe(item.id)}">Start now</button>${item.mode!=="meditation"?`<button class="btn" data-action="save" data-id="${safe(item.id)}" ${saved?"disabled":""}>${saved?"Saved":"Save practice"}</button>`:""}<button class="btn" data-action="calendar" data-id="${safe(item.id)}">Add to calendar</button></div></article>`}).join(""):'<div class="empty"><p>No practices match every filter.</p><p>Try removing one comfort filter, or choose Meditation for a no-movement option.</p></div>';
+  $("cards").setAttribute("aria-busy","false");
+}
+// Start now opens a quick confirm rather than the full setup page. The practice
+// already decided type and duration, so asking for them again was most of why
+// that page felt heavy. Everything still lives behind "More options", and the
+// same storage key and helpers are reused so the two cannot disagree.
+function storedSetup(){try{return JSON.parse(localStorage.getItem("moxieSessionSetup")||"{}")}catch{return {}}}
+function quickSetup(item){
+  return cleanSessionSetup({...storedSetup(),type:item.mode,duration:item.durationMin,
+    music:$("startSound").value,camera:$("startCamera").checked,liveGuide:$("startLive").checked});
+}
+// A pre-join check, the way Zoom does it: ticking Camera or Microphone opens
+// the real device here, so you can see how you are framed and watch the level
+// move before the room opens. Permission is asked once, in this dialog, and a
+// tick that is refused goes back off by itself and says why.
+let cameraStream=null,micStream=null,micAudio=null,micTimer=null;
+async function startCameraPreview(){
+  if(cameraStream)return true;
+  try{ cameraStream=await navigator.mediaDevices.getUserMedia({video:{width:{ideal:960},height:{ideal:720},facingMode:"user"},audio:false}); }
+  catch(error){ $("startCamera").checked=false; syncQuick(); notify("Camera access was declined, so the pose mirror stays off."); return false; }
+  $("startPreview").srcObject=cameraStream; $("startPreviewBox").classList.add("live");
+  try{ await $("startPreview").play(); }catch(error){}
+  return true;
+}
+function stopCameraPreview(){
+  if(cameraStream)cameraStream.getTracks().forEach(track=>track.stop());
+  cameraStream=null; $("startPreview").srcObject=null; $("startPreviewBox").classList.remove("live");
+}
+async function startMicPreview(){
+  if(micStream)return true;
+  try{ micStream=await navigator.mediaDevices.getUserMedia(MIC_CONSTRAINTS); }
+  catch(error){ $("startMic").checked=false; syncQuick(); notify("Microphone access was declined, so Moxie cannot hear you."); return false; }
+  micAudio=new AudioContext();
+  const analyser=micAudio.createAnalyser(); analyser.fftSize=512;
+  micAudio.createMediaStreamSource(micStream).connect(analyser);
+  const samples=new Uint8Array(analyser.frequencyBinCount);
+  $("startMicMeter").hidden=false;
+  // An interval, not requestAnimationFrame: a dialog in a background tab still
+  // has to show a level, and rAF is throttled to nothing there.
+  micTimer=setInterval(()=>{
+    analyser.getByteTimeDomainData(samples);
+    let peak=0; for(const sample of samples) peak=Math.max(peak,Math.abs(sample-128)/128);
+    $("startMicLevel").style.width=Math.min(100,Math.round(peak*260))+"%";
+  },90);
+  return true;
+}
+function stopMicPreview(){
+  clearInterval(micTimer); micTimer=null;
+  if(micStream)micStream.getTracks().forEach(track=>track.stop());
+  micStream=null; micAudio?.close(); micAudio=null;
+  $("startMicMeter").hidden=true; $("startMicLevel").style.width="0";
+}
+function stopPreviews(){ stopCameraPreview(); stopMicPreview(); }
+async function syncPreviewDevices(){
+  if($("startCamera").checked) await startCameraPreview(); else stopCameraPreview();
+  if($("startMic").checked&&!$("startMic").disabled) await startMicPreview(); else stopMicPreview();
+}
+function syncQuick(){
+  const on=$("startCamera").checked;
+  $("startLive").disabled=!on; if(!on)$("startLive").checked=false;
+  $("startLiveRow").classList.toggle("disabled",!on);
+  $("startLiveHelp").textContent=on?"Talk to Moxie during practice.":"Turn the camera on to use Live Tutor.";
+  // The microphone only does anything for Live Tutor, so it follows it. Off
+  // still leaves Live Tutor able to speak, it just cannot hear you.
+  const live=$("startLive").checked;
+  $("startMic").disabled=!live; if(!live)$("startMic").checked=false;
+  $("startMicRow").classList.toggle("disabled",!live);
+  $("startMicHelp").textContent=live?"Lets Moxie hear you. Off means she can still speak.":"Turn Live Tutor on to use your microphone.";
+  if(selected)$("startMore").href=`zenbottom-session-setup.html?${new URLSearchParams({mode:selected.mode,duration:String(selected.durationMin),...(selected.sessionId?{session:selected.sessionId}:{})})}`;
+}
+async function start(item){
+  selected=item;
+  const stored=cleanSessionSetup({...storedSetup(),type:item.mode,duration:item.durationMin});
+  $("startTitle").textContent=item.title;
+  const poses=item.poseDetails?.length||0;
+  $("startMeta").textContent=`${modeLabel(item.mode)} · ${item.durationMin} min${poses?` · ${poses} pose${poses===1?"":"s"}`:""}`;
+  $("startSound").innerHTML=AMBIENT_PRESETS.map(preset=>`<option value="${safe(preset.id)}">${safe(preset.label)}</option>`).join("");
+  $("startSound").value=stored.music;
+  // Opening the pre-practice check is an explicit request to prepare the room.
+  // Start both devices here so the learner can see herself and confirm the mic
+  // level immediately instead of discovering two more switches inside practice.
+  $("startCamera").checked=true;
+  $("startLive").checked=true;
+  $("startMic").checked=true;
+  syncQuick();
+  $("startDialog").showModal();
+  await syncPreviewDevices();
+}
+async function beginNow(item){
+  const setup=quickSetup(item);
+  // Whatever was ticked is already open and on screen, and a live device cannot
+  // be carried across a page load. So hand it back here and let the room reopen
+  // it as it loads. Permission is per-origin, so nothing is asked twice and the
+  // indicator comes straight back on.
+  const listening=$("startMic").checked&&setup.liveGuide&&Boolean(micStream);
+  stopPreviews();
+  // Written to the same store the practice page reads, so the two cannot drift.
+  writeTutorSettings(localStorage,email,{...readTutorSettings(localStorage,email),listeningEnabled:listening});
+  localStorage.setItem("moxieSessionSetup",JSON.stringify(setup));
+  sessionStorage.setItem("moxieSessionSetup",JSON.stringify(setup));
+  if(item.mode!=="meditation"){
+    const lesson=filterLesson({curriculumId:item.curriculumId},approved);
+    if(!lesson)return notify("This approved lesson could not be loaded.");
+    sessionStorage.setItem("zbLesson",JSON.stringify(lesson));
+  }
+  // sessionDestination snaps duration to its allowed list, which would turn a
+  // 9-minute practice into 20. The practice you picked owns its own length.
+  const url=new URL(sessionDestination(setup,{session:item.sessionId,demo}),location.href);
+  url.searchParams.set("duration",String(item.durationMin));
+  location.href=url.pathname+url.search;
+}
+function save(item){
+  const lesson=filterLesson({curriculumId:item.curriculumId},approved);if(!lesson)return notify("This approved lesson could not be loaded.");
+  settings=saveLesson(settings,lesson,new Date().toISOString(),`library-${item.id}`);writeSettings(localStorage,email,settings);notify("Practice saved. Open Settings, then Saved practices, to use it later.");render();
+}
+function openCalendar(item){selected=item;$("calendarTitle").textContent=`Plan ${item.title}`;$("calendarCopy").textContent=`Choose when to practice. This downloads a ${item.durationMin}-minute calendar event with a 30-minute reminder.`;$("calendarDate").min=today();$("calendarDate").value=today();$("calendarDialog").showModal()}
+function download(item,date,time){const text=lessonToICS(item,date,time,new Date().toISOString()),url=URL.createObjectURL(new Blob([text],{type:"text/calendar"})),link=document.createElement("a");link.href=url;link.download=`moxie-${item.id.replace(":","-")}-${date}.ics`;link.click();setTimeout(()=>URL.revokeObjectURL(url),500)}
+
+$("filters").addEventListener("input",render);$("filters").addEventListener("change",render);
+$("cards").addEventListener("click",event=>{const button=event.target.closest("button[data-action]");if(!button)return;const item=items.find(value=>value.id===button.dataset.id);if(!item)return;if(button.dataset.action==="start")start(item);if(button.dataset.action==="save")save(item);if(button.dataset.action==="calendar")openCalendar(item)});
+// Both rows gate the row beneath them, so both must re-sync. Only the camera
+// was wired, which left Microphone permanently greyed out no matter how many
+// times you clicked Live Tutor.
+// Each tick also opens or releases the device itself, so the dialog shows the
+// truth rather than a promise about what the room will do.
+$("startCamera").addEventListener("change",()=>{syncQuick();syncPreviewDevices()});
+$("startLive").addEventListener("change",()=>{syncQuick();syncPreviewDevices()});
+$("startMic").addEventListener("change",()=>{syncQuick();syncPreviewDevices()});
+// Walking away from the dialog must not leave the camera watching an empty mat.
+$("startDialog").addEventListener("close",stopPreviews);
+$("startForm").addEventListener("submit",event=>{if(event.submitter?.value!=="default"||!selected)return;event.preventDefault();$("startDialog").close();beginNow(selected)});
+$("calendarForm").addEventListener("submit",event=>{if(event.submitter?.value!=="default"||!selected)return;event.preventDefault();if(!$("calendarDate").reportValidity()||!$("calendarTime").reportValidity())return;download(selected,$("calendarDate").value,$("calendarTime").value);$("calendarDialog").close();notify("Calendar event downloaded.")});
+for(const link of document.querySelectorAll(".top a"))if(preview||demo){const url=new URL(link.href);url.searchParams.set(preview?"preview":"demo","1");link.href=url.pathname.split("/").pop()+url.search}
+
+try{const response=await fetch("moxie-approved-curriculum.json");if(!response.ok)throw new Error();approved=await response.json();items=buildLessonLibrary(approved,MEDITATION_SESSIONS);const profile=settings.practiceProfile;$("preferenceNote").innerHTML=profile.enabled?'Your saved comfort preferences are active. <a href="zenbottom-settings.html">Review preferences</a>.':'No comfort preferences are active yet. <a href="zenbottom-settings.html">Set preferences</a>, or use today’s filters above.';render()}catch{$("count").textContent="Lessons unavailable";$("cards").setAttribute("aria-busy","false");$("cards").innerHTML='<div class="empty"><p>The approved lesson library could not be loaded. Please try again.</p></div>'}
+</script>
+</body>
+</html>

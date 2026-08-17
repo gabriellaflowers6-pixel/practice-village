@@ -1,0 +1,1144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Moxie Studios - guided practice</title>
+<style>
+  :root{
+    --bg:#241310; --bg2:#311a13; --panel:#1a0d0a;
+    --cream:#f0e4cd; --cream-dim:#c9b394; --beige:#ddc9ad; --gold:#e9c078; --glow:#ffd98e;
+    --line:rgba(240,228,205,.14); --good:#cfe3b8; --warn:#e46a5a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:"Inter",sans-serif;color:var(--cream);background:var(--bg);
+    display:flex;flex-direction:column;overflow:hidden}
+  #ambient{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+  #ambient .blob{position:absolute;width:65vw;height:65vw;border-radius:50%;filter:blur(90px);opacity:.5}
+  #ambient .b1{left:-18vw;top:-22vw;background:#4a2a18}
+  #ambient .b2{right:-20vw;bottom:-24vw;background:#5a3a1e}
+
+  header{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;
+    padding:16px 24px;border-bottom:1px solid var(--line)}
+  header .title{font-family:"Cormorant Garamond",serif;font-size:22px;font-weight:600}
+  header .title em{font-style:italic;color:var(--gold)}
+  header .prog{font-size:12px;color:var(--cream-dim);letter-spacing:.4px}
+  .leave{font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;padding:9px 18px;
+    border-radius:999px;border:1px solid rgba(240,228,205,.3);background:rgba(0,0,0,.2);color:var(--cream)}
+  .leave:hover{color:var(--warn);border-color:rgba(228,106,90,.5)}
+  .leave:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+
+  .stage{position:relative;z-index:1;flex:1;display:flex;gap:20px;padding:22px;min-height:0}
+  .col{flex:1;display:flex;flex-direction:column;min-width:0}
+  /* Once the camera gate is done the pose becomes the hero and "you" drops to a
+     corner. Before that the gate needs room for its heading and button, so the
+     split only changes after setup, never during it. */
+  .stage.practicing .col.you{position:absolute;right:22px;bottom:22px;z-index:6;
+    flex:none;width:min(26vw,250px);height:min(20vh,178px);min-width:190px;transition:width .22s,height .22s}
+  /* Only popup floats. Anything larger DOCKS beside the pose and shrinks it,
+     because a big overlay sits straight on top of the cue, which is the one
+     line that teaches. */
+  /* The floating popup sits bottom-right, so on narrower screens the centred
+     cue ran underneath it. Cap the cue to the clear width instead; on a wide
+     window this resolves to the same 640px and nothing changes. */
+  .stage.practicing.you-popup .cue{max-width:min(640px,calc(100vw - 2 * (min(26vw,250px) + 40px)))}
+  .stage.practicing.you-quarter .col.you,
+  .stage.practicing.you-half .col.you,
+  .stage.practicing.you-full .col.you{position:static;height:auto;min-width:0;flex:none}
+  .stage.practicing.you-quarter .col.you{width:28%}
+  .stage.practicing.you-half .col.you{width:44%}
+  .stage.practicing.you-full .col.you{flex:1;width:auto}
+  /* Hovering your own view reveals a quiet three-dot button; clicking it opens
+     the menu. The menu itself stays put once open, so it does not vanish the
+     moment the pointer leaves the panel to reach it. */
+  .viewdots{position:absolute;top:8px;right:8px;z-index:8;width:30px;height:30px;display:grid;place-items:center;
+    border:1px solid var(--line);border-radius:50%;background:rgba(20,10,7,.68);backdrop-filter:blur(8px);
+    color:var(--cream-dim);cursor:pointer;opacity:0;pointer-events:none;transition:opacity .18s,color .18s,border-color .18s}
+  .viewdots svg{width:16px;height:16px;fill:currentColor}
+  .col.you:hover .viewdots,.col.you:focus-within .viewdots,.viewdots[aria-expanded="true"]{opacity:1;pointer-events:auto}
+  .viewdots:hover,.viewdots[aria-expanded="true"]{color:var(--gold);border-color:rgba(233,192,120,.6)}
+  .viewmenu{position:absolute;top:44px;right:8px;z-index:9;min-width:168px;padding:7px;display:grid;gap:2px;
+    border:1px solid var(--line);border-radius:14px;background:rgba(26,13,10,.97);box-shadow:0 16px 40px rgba(0,0,0,.5)}
+  .viewmenu.hidden,.devicemenu.hidden{display:none}
+  .devicemenu{position:fixed;right:18px;bottom:66px;z-index:8;min-width:210px;padding:7px;display:grid;gap:2px;
+    border:1px solid var(--line);border-radius:16px;background:rgba(26,13,10,.97);box-shadow:0 18px 46px rgba(0,0,0,.5)}
+  .devicemenu button{border:0;border-radius:9px;padding:9px 11px;background:none;color:var(--cream-dim);
+    font:600 11.5px Inter,sans-serif;text-align:left;cursor:pointer}
+  .devicemenu button:hover{background:rgba(233,192,120,.1);color:var(--cream)}
+  .viewmenu__label{padding:5px 9px 3px;color:var(--cream-dim);font-size:9px;letter-spacing:1.3px;text-transform:uppercase}
+  .viewmenu button{border:0;border-radius:9px;padding:8px 10px;background:none;color:var(--cream-dim);
+    font:600 11px Inter,sans-serif;text-align:left;cursor:pointer}
+  .viewmenu button:hover{background:rgba(233,192,120,.1);color:var(--cream)}
+  .viewmenu button.on{color:var(--gold)}
+  .viewmenu button.on::after{content:" ✓"}
+  .stage.practicing .col.you .youpanel{border-radius:16px;box-shadow:0 18px 44px rgba(0,0,0,.5)}
+  .stage.practicing .youtag{top:8px;left:10px;font-size:8px;padding:4px 9px}
+  .stage.practicing .seeing{bottom:8px;font-size:10px;padding:5px 11px;max-width:92%;overflow:hidden;text-overflow:ellipsis}
+  /* Setting up and getting ready: the camera is the whole screen and the pose
+     is not drawn at all. It appears only when the learner says they are ready. */
+  .stage.setup .col.demo,.stage.ready .col.demo{display:none}
+  .gate.ready h2{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:26px}
+  .readyhint{font-size:11px;color:var(--gold);min-height:15px}
+  .phaselabel{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);text-align:center;margin-bottom:6px;min-height:14px}
+
+  /* demonstrator */
+  /* The hold is shown by the border of her whole half of the screen, not by a
+     ring around the art. The art keeps no frame of its own and is never
+     cropped, which is the point: a circle was cutting about a third off a
+     human figure and capping how large she could be. */
+  .col.demo{position:relative}
+  .panelprog{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3}
+  .panelprog path{fill:none;stroke-width:2.5}
+  .panelprog .track{stroke:rgba(240,228,205,.13)}
+  .panelprog .fill{stroke:var(--glow);stroke-linecap:round;filter:drop-shadow(0 0 6px rgba(255,217,142,.5))}
+  .demowrap{position:relative;flex:1;display:flex;align-items:center;justify-content:center;min-height:0;width:100%}
+  .ring{position:relative;width:100%;height:100%;max-width:min(78vh,660px);margin:0 auto}
+  /* The renders carry their own dark vignette. Screen blending cannot lighten
+     dark-on-dark, so at full size the art read as a hard-edged box against the
+     warmer page. Sinking the area around her to the art's own corner darkness,
+     with a wide soft falloff, dissolves that edge; the glow still lifts her. */
+  .ring .fig{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(ellipse 58% 56% at 50% 50%, rgba(255,217,142,.30) 0%,
+      rgba(233,192,120,.09) 48%, transparent 82%)}
+  /* The pose name is burned into the bottom-right of every render. It was
+     cropped away by the circle; at full size it is plainly readable, so it is
+     faded out until the art can be regenerated without a caption. */
+  .ring .fig::after{content:"";position:absolute;right:0;bottom:0;width:42%;height:20%;pointer-events:none;
+    background:radial-gradient(ellipse at 78% 74%, rgba(16,8,5,.96) 0%, rgba(16,8,5,.72) 45%, rgba(16,8,5,0) 78%)}
+  /* The pose art is three incompatible styles: photoreal renders with a baked
+     mat, wall and watermark, one bespoke line drawing on its own dark disc, and
+     generic stock icons. Every one of them is a LIGHT figure on a DARK ground,
+     so screening them onto the glow drops the ground and leaves the figure,
+     tinted to one gold key. It makes today's mixed set coherent; it is not a
+     substitute for the commissioned gold line art. */
+  /* Fade the render's own edges to nothing. Darkening around the art only
+     softened the seam; masking removes it, so the picture has no border at all
+     and dissolves into the room instead of sitting in it. */
+  .ring .fig img{width:100%;height:100%;object-fit:contain;transition:transform .3s ease;
+    mix-blend-mode:screen;filter:grayscale(1) brightness(1.2) contrast(1.35) sepia(.9) saturate(2.2) hue-rotate(-12deg);
+    -webkit-mask-image:radial-gradient(ellipse 70% 72% at 50% 52%, #000 48%, rgba(0,0,0,.55) 74%, transparent 97%);
+    mask-image:radial-gradient(ellipse 70% 72% at 50% 52%, #000 48%, rgba(0,0,0,.55) 74%, transparent 97%)}
+  .ring .fig img:not(.active){display:none}
+  .ring .fig .fallback{font-family:"Cormorant Garamond",serif;font-size:26px;color:var(--cream-dim);text-align:center;padding:20px}
+  /* progress dots (one per pose) */
+  .progdots{display:flex;gap:6px;justify-content:center;margin-top:6px;flex-wrap:wrap;max-width:340px}
+  .progdots i{width:7px;height:7px;border-radius:50%;background:rgba(240,228,205,.2);transition:background .3s,transform .3s,box-shadow .3s}
+  .progdots i.done{background:rgba(233,192,120,.55)}
+  .progdots i.cur{background:var(--glow);transform:scale(1.35);box-shadow:0 0 8px var(--glow)}
+  /* Shown when the target pose has not been seen for a while: you are probably
+     getting water, not failing. It reassures instead of leaving dead silence. */
+  .patient{font-size:15px;color:var(--gold);text-align:center;margin-top:12px;line-height:1.4;max-width:520px;
+    margin-left:auto;margin-right:auto}
+  .nudge{font-size:13px;color:var(--gold);text-align:center;margin-top:6px;min-height:18px;letter-spacing:.2px}
+  .check{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+    font-size:64px;color:var(--beige);text-shadow:0 0 24px rgba(221,201,173,.52)}
+  .col.demo.done .check{display:flex}
+  .posename{font-family:"Cormorant Garamond",serif;font-size:32px;font-weight:600;text-align:center;margin-top:10px;
+    display:flex;align-items:baseline;justify-content:center;gap:10px;flex-wrap:wrap}
+  /* Orientation matters for framing yourself, so it stays, just quieter and on
+     the name's line instead of owning one of its own. */
+  .orient{font-family:Inter,sans-serif;font-size:10px;font-weight:600;color:var(--gold);letter-spacing:1.3px;
+    text-transform:uppercase;border:1px solid rgba(233,192,120,.4);border-radius:999px;padding:4px 10px}
+  .orient:empty{display:none}
+  /* The cue is the only line that actually teaches, so it is the biggest thing
+     on screen after her. */
+  .cue{font-size:20px;color:var(--cream);text-align:center;margin-top:12px;line-height:1.45;max-width:640px;
+    margin-left:auto;margin-right:auto;min-height:29px;text-wrap:pretty}
+  .correction{display:flex;align-items:flex-start;gap:8px;max-width:420px;margin:10px auto 0;padding:9px 12px;border:1px solid rgba(228,106,90,.48);border-radius:12px;background:rgba(228,106,90,.09);color:#ffd5cd;font-size:12px;line-height:1.45;text-align:left}
+  .correction strong{flex:none;color:#ffac9d;font-size:10px;letter-spacing:1.1px;text-transform:uppercase;margin-top:2px}
+  /* One dot per breath, filling as they pass. Replaces both the sentence and
+     the swelling figure, which Gabby did not want moving. */
+  .breaths{display:flex;gap:9px;justify-content:center;margin-top:16px;min-height:12px}
+  .breaths i{width:10px;height:10px;border-radius:50%;background:rgba(240,228,205,.18);transition:background .35s,box-shadow .35s,transform .35s}
+  .breaths i.done{background:var(--good);box-shadow:0 0 10px rgba(207,227,184,.5);transform:scale(1.12)}
+
+  /* you */
+  .youpanel{position:relative;flex:1;background:#000;border-radius:18px;overflow:hidden;border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;min-height:0}
+  .youpanel video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}
+  .youtag{position:absolute;top:12px;left:14px;z-index:3;font-size:10px;letter-spacing:2px;text-transform:uppercase;
+    color:var(--cream-dim);background:rgba(20,10,7,.6);border-radius:999px;padding:5px 12px}
+  .seeing{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);z-index:3;font-size:12px;
+    color:var(--cream);background:rgba(20,10,7,.62);backdrop-filter:blur(10px);border:1px solid var(--line);
+    border-radius:999px;padding:7px 15px;white-space:nowrap}
+  .seeing.match{color:var(--good);border-color:rgba(207,227,184,.5)}
+  .gate{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:14px;background:rgba(20,10,7,.82);text-align:center;padding:24px}
+  .gate h2{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:22px}
+  .gate p{font-size:13px;color:var(--cream-dim);max-width:340px;line-height:1.6}
+  button.primary{font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;padding:12px 24px;border-radius:999px;
+    border:1px solid rgba(233,192,120,.55);background:rgba(233,192,120,.16);color:var(--glow);box-shadow:0 0 18px rgba(255,217,142,.18)}
+  button.primary:hover{background:rgba(233,192,120,.26)}
+
+  footer{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:10px;
+    padding:14px;border-top:1px solid var(--line)}
+  footer button{font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;padding:9px 18px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--cream-dim)}
+  footer button.iconbtn{position:relative;width:42px;height:42px;padding:0;display:grid;place-items:center;border-radius:50%;transition:color .2s,border-color .2s,background .2s,transform .15s}
+  footer button.iconbtn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  footer button.iconbtn::after{content:attr(data-tooltip);position:absolute;left:50%;bottom:calc(100% + 10px);z-index:20;width:max-content;max-width:190px;padding:7px 9px;border:1px solid rgba(221,201,173,.38);border-radius:8px;background:#ddc9ad;color:#241310;font:700 10px/1.25 Inter,sans-serif;letter-spacing:.1px;box-shadow:0 8px 22px rgba(0,0,0,.3);opacity:0;pointer-events:none;transform:translate(-50%,5px);transition:opacity .14s,transform .14s}
+  footer button.iconbtn:hover::after,footer button.iconbtn:focus-visible::after{opacity:1;transform:translate(-50%,0)}
+  footer button.iconbtn:hover:not(:disabled){transform:translateY(-2px);background:rgba(233,192,120,.09)}
+  footer button:hover:not(:disabled){color:var(--cream);border-color:rgba(233,192,120,.5)}
+  footer button:disabled{opacity:.4;cursor:default}
+  footer button.voice-on{color:var(--gold);border-color:rgba(233,192,120,.5)}
+  footer button.listening-on{color:var(--good);border-color:rgba(207,227,184,.55)}
+  footer button.wake-on{color:var(--glow);border-color:rgba(255,217,142,.55)}
+  footer button.live-on{color:var(--good);border-color:rgba(207,227,184,.65);box-shadow:0 0 16px rgba(207,227,184,.16)}
+  .morepanel{position:fixed;right:18px;bottom:66px;z-index:7;width:min(320px,calc(100vw - 36px));padding:16px 18px;
+    border:1px solid var(--line);border-radius:18px;background:rgba(26,13,10,.97);box-shadow:0 20px 52px rgba(0,0,0,.42)}
+  .morepanel h2{font-family:"Cormorant Garamond",serif;font-size:21px;font-weight:600;color:var(--gold);margin-bottom:6px}
+  .morepanel select{min-width:118px;height:32px;border:1px solid rgba(245,236,220,.17);border-radius:9px;padding:0 8px;
+    background:rgba(0,0,0,.24);color:var(--cream);font:11px Inter,sans-serif}
+  .more-actions{display:flex;gap:14px;margin-top:12px}
+  .more-link{border:0;background:none;padding:0;color:var(--cream-dim);font:600 11px Inter,sans-serif;text-decoration:underline;cursor:pointer}
+  .more-link:hover{color:var(--cream)}
+  .musicpanel{position:fixed;right:18px;bottom:66px;z-index:5;width:min(330px,calc(100vw - 36px));padding:16px;border:1px solid var(--line);border-radius:16px;background:rgba(26,13,10,.96);box-shadow:0 18px 45px rgba(0,0,0,.32)}
+  .musicpanel h2{font-family:"Cormorant Garamond",serif;font-size:23px;font-weight:600;color:var(--gold)}
+  .musicpanel p{font-size:12px;color:var(--cream-dim);line-height:1.5;margin-top:4px}.musicpanel .mrow{display:flex;gap:8px;align-items:center;margin-top:12px}.musicpanel .mrow button{min-height:38px;padding:9px 14px;border:1px solid #ead9bd;border-radius:999px;background:var(--beige);color:var(--bg);font:700 11px/1 Inter,sans-serif;cursor:pointer;box-shadow:0 5px 16px rgba(0,0,0,.16);transition:background .18s,border-color .18s,transform .18s}.musicpanel .mrow button:hover:not(:disabled){background:#ead9bd;border-color:#f0dfc2;transform:translateY(-1px)}.musicpanel .mrow button:focus-visible{outline:2px solid var(--glow);outline-offset:3px}.musicpanel .mrow button:disabled{background:#8f7c69;border-color:#9f8b76;color:#271611;opacity:.72;cursor:default;box-shadow:none}.musicpanel input[type="range"]{accent-color:var(--gold);flex:1}.musicpanel .mstatus{min-height:18px;color:var(--cream-dim);font-size:12px;margin-top:10px}
+  .music-presets{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:12px}.music-preset{min-height:48px;padding:8px;border:1px solid var(--line);border-radius:10px;background:rgba(0,0,0,.14);color:var(--cream-dim);font-size:10px;text-align:left;cursor:pointer}.music-preset.active{border-color:rgba(233,192,120,.62);background:rgba(233,192,120,.09);color:var(--gold)}.music-preset:focus-visible{outline:2px solid var(--glow);outline-offset:2px}.music-divider{display:flex;align-items:center;gap:8px;margin-top:12px;color:var(--cream-dim);font-size:9px;text-transform:uppercase}.music-divider::before,.music-divider::after{content:"";height:1px;flex:1;background:var(--line)}
+  .listen-note{font-size:10.5px;color:var(--cream-dim);text-align:center;margin-top:10px;min-height:14px;line-height:1.4}
+  .talk-btn{width:100%;min-height:42px;margin-top:10px;border:1px solid rgba(207,227,184,.5);border-radius:12px;background:rgba(207,227,184,.1);color:var(--good);font:700 11px Manrope,sans-serif;cursor:pointer}
+  .talk-btn.open{border-color:rgba(255,217,142,.7);background:rgba(255,217,142,.16);color:var(--glow)}
+  .talk-btn:focus-visible{outline:2px solid var(--glow);outline-offset:2px}
+  .livepanel{position:fixed;right:18px;bottom:66px;z-index:6;width:min(390px,calc(100vw - 36px));padding:18px;border:1px solid rgba(207,227,184,.3);border-radius:20px;background:linear-gradient(155deg,rgba(37,24,18,.99),rgba(24,12,9,.99));box-shadow:0 22px 60px rgba(0,0,0,.46)}
+  .live-head{display:flex;align-items:center;justify-content:space-between;gap:14px}.live-head-actions{display:flex;align-items:center;gap:7px}.live-minimize{width:29px;height:29px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;background:none;color:var(--cream-dim);font-size:19px;line-height:1;cursor:pointer}.live-minimize:hover,.live-minimize:focus-visible{border-color:var(--gold);color:var(--cream)}.live-kicker{margin:0 0 2px!important;color:var(--cream-dim)!important;font-size:9px!important;line-height:1.2!important;letter-spacing:1.35px;text-transform:uppercase}.livepanel h2{font-family:"Cormorant Garamond",serif;font-size:27px;line-height:1;font-weight:600;color:var(--cream)}.live-state{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border:1px solid var(--line);border-radius:999px;color:var(--cream-dim);font-size:9px;font-weight:700;letter-spacing:.7px;text-transform:uppercase}.live-state::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--cream-dim)}.live-state.on{border-color:rgba(207,227,184,.45);color:var(--good);background:rgba(207,227,184,.08)}.live-state.on::before{background:var(--good);box-shadow:0 0 8px rgba(207,227,184,.7)}
+  .share-card{margin-top:14px;padding:13px;border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.14)}.share-title{margin:0!important;color:var(--cream)!important;font-size:11px!important;font-weight:700}.share-items{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}.share-item{padding:9px;border:1px solid rgba(245,236,220,.1);border-radius:10px;background:rgba(245,236,220,.035)}.share-item strong{display:block;color:var(--cream);font-size:10px;font-weight:700}.share-item span{display:block;margin-top:2px;color:var(--cream-dim);font-size:9px;line-height:1.35}.share-local{margin:9px 1px 0!important;color:var(--cream-dim)!important;font-size:10px!important;line-height:1.45!important}
+  .live-controls{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px;align-items:end;margin-top:12px}.voice-field{display:grid;gap:5px;color:var(--cream-dim);font-size:9px;font-weight:700;letter-spacing:.8px;text-transform:uppercase}.voice-picker{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px}.voice-field select{width:100%;min-width:0;height:39px;border:1px solid rgba(245,236,220,.17);border-radius:10px;padding:0 10px;background:rgba(0,0,0,.24);color:var(--cream);font:11px Manrope,sans-serif}.voice-test{height:39px;padding:0 11px;border:1px solid var(--line);border-radius:10px;background:rgba(245,236,220,.05);color:var(--cream);font:700 9px Manrope,sans-serif;cursor:pointer;white-space:nowrap}.voice-test:disabled{opacity:.5;cursor:wait}.live-action{height:39px;padding:0 14px;border-radius:10px;font:700 10px Manrope,sans-serif;cursor:pointer}.live-action.start{border:1px solid rgba(207,227,184,.48);background:rgba(207,227,184,.12);color:var(--good)}.live-action.end{border:1px solid rgba(228,106,90,.55);background:rgba(228,106,90,.11);color:#f2a79c}.live-action:hover,.voice-test:hover{filter:brightness(1.12)}.live-action:focus-visible,.voice-field select:focus-visible,.voice-test:focus-visible{outline:2px solid var(--glow);outline-offset:2px}.livepanel .mstatus{min-height:31px;margin-top:10px;padding:9px 10px;border-radius:10px;background:rgba(0,0,0,.13);color:var(--cream-dim);font-size:10px;line-height:1.4}.livepanel .mstatus.active{color:var(--good);background:rgba(207,227,184,.07)}
+  .tutor-settings{margin-top:12px;padding:3px 12px;border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.12)}.tutor-setting{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:43px;border-bottom:1px solid rgba(245,236,220,.08);color:var(--cream);font-size:11px}.tutor-setting:last-child{border-bottom:0}.tutor-setting span span{display:block;margin-top:2px;color:var(--cream-dim);font-size:9px;line-height:1.3}.tutor-setting input{width:34px;height:19px;flex:none;accent-color:var(--good)}.tutor-setting.disabled{opacity:.48}.tutor-setting .later{padding:4px 7px;border:1px solid var(--line);border-radius:999px;color:var(--cream-dim);font-size:8px;letter-spacing:.5px;text-transform:uppercase}
+  .tutor-activity{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}.activity-pill{display:inline-flex;align-items:center;gap:6px;padding:6px 8px;border:1px solid var(--line);border-radius:999px;color:var(--cream-dim);font-size:8px;font-weight:700;letter-spacing:.55px;text-transform:uppercase}.activity-pill::before{content:"";width:6px;height:6px;border-radius:50%;background:#78685a}.activity-pill.on{border-color:rgba(207,227,184,.4);color:var(--good);background:rgba(207,227,184,.07)}.activity-pill.on::before{background:var(--good);box-shadow:0 0 8px rgba(207,227,184,.62)}.activity-pill.speaking.on::before{animation:speakingPulse .7s ease-in-out infinite alternate}@keyframes speakingPulse{to{transform:scale(1.55);box-shadow:0 0 12px rgba(255,217,142,.85)}}.tutor-retry{margin-top:9px;padding:8px 12px;border:1px solid rgba(228,106,90,.48);border-radius:999px;background:rgba(228,106,90,.09);color:#ffd5cd;font:700 9px Manrope,sans-serif;cursor:pointer}
+  .tutor-master{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:14px;padding:13px 14px;border:1px solid rgba(207,227,184,.34);border-radius:14px;background:rgba(207,227,184,.07);cursor:pointer}.tutor-master strong{display:block;color:var(--cream);font:700 13px Manrope,sans-serif}.tutor-master small{display:block;margin-top:3px;color:var(--cream-dim);font:9px/1.4 Manrope,sans-serif}.tutor-master input{width:40px;height:22px;flex:none;accent-color:var(--good)}.tutor-master:focus-within{outline:2px solid var(--glow);outline-offset:2px}.live-controls{grid-template-columns:1fr}
+  @media(max-width:460px){.livepanel{right:12px;bottom:62px;width:calc(100vw - 24px);padding:15px}.share-items{grid-template-columns:1fr}.live-controls{grid-template-columns:1fr}.live-action{width:100%}}
+
+  /* end + empty cards */
+  .card{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:24px}
+  .card h2{font-family:"Cormorant Garamond",serif;font-weight:600;font-size:34px;color:var(--gold)}
+  .card p{font-size:14px;color:var(--cream-dim);max-width:400px;line-height:1.6}
+  .card a{color:var(--gold)}
+  .hidden{display:none !important}
+  @media(max-width:820px){ .stage{flex-direction:column} }
+.brandmark{height:1.05em;width:auto;display:block;max-width:min(210px,44vw)}</style>
+</head>
+<body>
+<div id="ambient"><div class="blob b1"></div><div class="blob b2"></div></div>
+
+<header>
+  <div class="title"><img class="brandmark" src="assets/moxie-wordmark.png" alt="Moxie Studios" width="480" height="77" /></div>
+  <div class="progwrap" style="text-align:center">
+    <div class="prog" id="prog"></div>
+    <div class="progdots" id="progdots"></div>
+  </div>
+  <button class="leave" id="leaveBtn" type="button">Leave</button>
+</header>
+
+<!-- guided stage -->
+<div class="stage" id="stage">
+  <div class="col demo" id="demoCol">
+    <svg class="panelprog" id="panelProg" aria-hidden="true"><path class="track"></path><path class="fill"></path></svg>
+    <div class="phaselabel" id="phaselabel"></div>
+    <div class="demowrap">
+      <div class="ring" id="ring">
+        <div class="fig" id="fig"></div>
+        <div class="check">&#10003;</div>
+      </div>
+    </div>
+      <div class="posename"><span id="posename"></span><span class="orient" id="orient"></span></div>
+    <div class="cue" id="cue"></div>
+    <div class="patient hidden" id="patient" aria-live="polite"></div>
+    <div class="correction hidden" id="correction" aria-live="polite"><strong id="correctionArea"></strong><span id="correctionText"></span></div>
+    <div class="breaths" id="breaths" aria-live="polite"></div>
+  </div>
+  <div class="col you">
+    <div class="youpanel">
+      <video id="uvid" playsinline muted></video>
+      <span class="youtag">you</span>
+      <!-- Appears on hover over your own view, the way the live class PiP does.
+           These change how YOUR panel looks, which is what it is for. -->
+      <button class="viewdots" id="viewDots" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Change how your view looks"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg></button>
+      <div class="viewmenu hidden" id="viewCtl" role="menu" aria-label="Your view">
+        <p class="viewmenu__label">Your view</p>
+        <button type="button" role="menuitem" data-view="popup">Popup</button>
+        <button type="button" role="menuitem" data-view="quarter">&frac14; screen</button>
+        <button type="button" role="menuitem" data-view="half">&frac12; screen</button>
+        <button type="button" role="menuitem" data-view="full">Full</button>
+      </div>
+      <div class="seeing hidden" id="seeing"></div>
+      <div class="gate" id="gate">
+        <h2 id="gateH">Ready to move</h2>
+        <p id="gateP">Your camera helps the mirror see when you have found each pose. It stays on your device.</p>
+        <button class="primary" id="readyBtn" type="button">Turn on my camera</button>
+      </div>
+      <!-- The ready step. No pose is on screen yet: you cannot frame a camera
+           and hold a shape at the same time, and the mirror should not be
+           watching someone still walking to the mat. -->
+      <div class="gate ready hidden" id="readyGate">
+        <h2>Take your time</h2>
+        <p id="readyLine"></p>
+        <button class="primary" id="beginBtn" type="button">Begin</button>
+        <p class="readyhint hidden" id="readyHint"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- end / empty -->
+<div class="card hidden" id="endCard">
+  <h2 id="endH">Practice complete</h2>
+  <p id="endP">Rest as long as you like. Carry this quiet with you.</p>
+  <a id="endLink" href="zenbottom-schedule.html">Back to the schedule</a>
+</div>
+
+<div class="devicemenu hidden" id="deviceMenu" role="menu" aria-label="Camera and microphone">
+  <p class="viewmenu__label">This device</p>
+  <button type="button" role="menuitem" id="devCam">Turn camera off</button>
+  <button type="button" role="menuitem" id="devMic">Turn microphone off</button>
+  <button type="button" role="menuitem" id="devVoice">Mute guide voice</button>
+  <button type="button" role="menuitem" id="devCorrections">Turn corrections off</button>
+</div>
+
+<div class="musicpanel hidden" id="musicPanel" aria-live="polite">
+  <h2>Practice music</h2>
+  <p>Choose a built-in soundscape, stay quiet, or add an owned track from your device.</p>
+  <div class="music-presets" id="musicPresets"></div>
+  <div class="music-divider">or use your own</div>
+  <input id="musicFile" class="hidden" type="file" accept="audio/*" />
+  <div class="mrow"><button id="chooseMusic" type="button">Choose a track</button><button id="musicPlay" type="button" disabled>Play</button></div>
+  <div class="mrow"><label for="musicVolume">Volume</label><input id="musicVolume" type="range" min="0" max="1" step="0.01" /></div>
+  <div class="mstatus" id="musicStatus">No track selected.</div>
+</div>
+<audio id="musicAudio" loop preload="metadata"></audio>
+
+<div class="livepanel hidden" id="livePanel" aria-labelledby="livePanelTitle">
+  <div class="live-head"><div><p class="live-kicker">Google AI guidance</p><h2 id="livePanelTitle">Live Tutor</h2></div><div class="live-head-actions"><span class="live-state" id="liveState">Off</span><button class="live-minimize" id="liveMinimize" type="button" aria-label="Minimize Live Tutor">−</button></div></div>
+  <label class="tutor-master" for="tutorEnabled"><span><strong>Live Tutor</strong><small>Moxie can see, listen, guide, and respond.</small></span><input id="tutorEnabled" type="checkbox" role="switch"></label>
+  <div class="share-card"><p class="share-title">Shared only while Live Tutor is on</p><div class="share-items"><div class="share-item"><strong>Microphone</strong><span>Live audio to Google Gemini</span></div><div class="share-item"><strong>Camera</strong><span>A snapshot to Gemini about every 5 seconds</span></div></div><p class="share-local">Pose matching stays on this device. Sharing stops when you turn Live Tutor off or leave.</p></div>
+  <div class="live-controls"><div class="voice-field"><label for="liveVoice">Google voice</label><div class="voice-picker"><select id="liveVoice"></select><button class="voice-test" id="testLiveVoice" type="button">Test voice</button></div></div></div>
+  <div class="tutor-settings" aria-label="Live Tutor settings">
+    <label class="tutor-setting"><span>Voice<span>Hear the selected Google voice.</span></span><input id="tutorVoice" type="checkbox" checked></label>
+    <label class="tutor-setting"><span>Listening<span>Let Live Tutor hear spoken requests.</span></span><input id="tutorListening" type="checkbox" checked></label>
+    <label class="tutor-setting" id="tutorWakeSetting"><span>Require “Moxie”<span id="tutorWakeHelp">Your microphone stays closed until you say Moxie.</span></span><input id="tutorWake" type="checkbox" aria-describedby="tutorWakeHelp" checked></label>
+    <label class="tutor-setting"><span>Corrections<span>Show and speak private pose corrections.</span></span><input id="tutorCorrections" type="checkbox" checked></label>
+    <div class="tutor-setting disabled" aria-disabled="true"><span>Captions<span>Written Live Tutor responses.</span></span><span class="later">Coming later</span></div>
+  </div>
+  <div class="tutor-activity" aria-label="Live Tutor activity"><span class="activity-pill" id="micActivity">Mic off</span><span class="activity-pill" id="cameraActivity">Camera off</span><span class="activity-pill speaking" id="speakingActivity">Not speaking</span></div>
+  <button class="talk-btn hidden" id="talkBtn" type="button">Talk to Moxie</button>
+  <div class="listen-note" id="listenNote" aria-live="polite"></div>
+  <div class="mstatus" id="liveStatus" role="status" aria-live="polite">Not connected.</div>
+  <button class="tutor-retry hidden" id="liveRetry" type="button">Retry connection</button>
+</div>
+
+<footer id="footer">
+  <button class="iconbtn" id="backBtn" type="button" aria-label="Previous pose" data-tooltip="Previous pose"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
+  <button class="iconbtn" id="skipBtn" type="button" aria-label="Skip this pose" data-tooltip="Next pose"><svg viewBox="0 0 24 24"><path d="m5 4 12 8-12 8z"/><path d="M19 5v14"/></svg></button>
+  <button class="iconbtn" id="liveBtn" type="button" aria-pressed="false" aria-expanded="false" aria-label="Live Tutor" data-tooltip="Live Tutor"><svg viewBox="0 0 24 24"><path d="M4 10v4h4l5 4V6L8 10z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></svg></button>
+  <button class="iconbtn" id="deviceBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Camera and microphone" data-tooltip="Camera & mic"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg></button>
+  <button class="iconbtn" id="musicBtn" type="button" aria-expanded="false" aria-label="Practice music" data-tooltip="Practice music"><svg viewBox="0 0 24 24"><path d="M9 18V5l10-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg></button>
+</footer>
+
+<script type="module">
+import { flattenLesson, breathToMs, matchProgress, voicePlan, shouldSpeakNearMatch, parseWakeCommand, lessonGrounding, NEAR_MATCH_HINT, POSE_ORIENT, PRETTY } from "./practice-lib.mjs";
+import { poseArtSources } from "./pose-art.mjs";
+import { clampVolume, musicVolume } from "./music-lib.mjs";
+import { AMBIENT_PRESETS, ambientLabel, cleanAmbientPreset, createAmbientPlayer } from "./ambient-audio.mjs";
+import { LiveCoach } from "./live-coach.mjs";
+import { DEFAULT_LIVE_VOICE, LIVE_VOICES, MIC_CONSTRAINTS, cleanLiveVoice } from "./live-coach-lib.mjs";
+import { readTutorSettings, writeTutorSettings } from "./live-tutor-settings-lib.mjs";
+import { buildUtterance } from "./local-voice-lib.mjs";
+import { readSettings, practiceProfileSummary } from "./settings-lib.mjs";
+import { completeSlot, loadPlan, savePlan } from "./practice-plan-lib.mjs";
+const $=id=>document.getElementById(id);
+const qs=new URLSearchParams(location.search);
+const DEMO=qs.get("demo")==="1";                 // fake matches, no camera (dev/eyeball)
+const BREATH=+(qs.get("breath")||4000);
+const planSlotId=qs.get("slot"), planSlotDate=qs.get("date"), planMode=qs.get("mode")||"yoga", nextMeditation=qs.get("next")==="meditation", plannedDuration=+(qs.get("duration")||20);
+const cameraRequested=qs.get("camera")!=="off", liveRequested=qs.get("live")==="on";
+const tutorEmail=localStorage.getItem("zbStudentEmail")||"";
+const personalProfile=readSettings(localStorage,tutorEmail).practiceProfile;
+let tutorSettings=readTutorSettings(localStorage,tutorEmail);
+
+// ---- lesson handoff from the coach ----
+let lesson=null;
+// An explicit ?day= or ?lesson= is an instruction, so it beats whatever a
+// previous practice left in session storage. Without this the URL says Day 3
+// and a stale lesson quietly loads instead, which is the exact confusion the
+// fabricated demo lesson used to cause.
+const explicitLesson=DEMO&&(qs.get("day")||qs.get("lesson"));
+try{ const raw=explicitLesson?null:sessionStorage.getItem("zbLesson"); if(raw){ lesson=JSON.parse(raw); } }catch(e){}
+// Query-only dev paths. Neither writes to sessionStorage or device storage,
+// and real learners still require a saved lesson.
+//
+// ?demo=1 loads a REAL lesson out of JoYi's approved curriculum, because a
+// preview that invents poses in an invented order is exactly what made a
+// fabricated three-pose "class" look like a product bug. ?day=19 picks a
+// journey day, ?lesson=morning-stretch picks a Simple Sequence.
+//
+// ?poses=... is the separate pose-ARTWORK preview. It is explicit opt-in, and
+// it is titled honestly so it can never be mistaken for a lesson.
+if(!lesson && DEMO && qs.get("poses")){
+  const artPoses=qs.get("poses").split(",").map(pose=>pose.trim()).filter(pose=>PRETTY[pose]).slice(0,12);
+  lesson={title:"Pose art preview (not a lesson)",sections:[{phase:"Preview",poses:(artPoses.length?artPoses:["mountain"]).map(pose=>({pose,holdBreaths:4,cue:"Preview the supplied "+PRETTY[pose]+" artwork."}))}]};
+}
+if(!lesson && DEMO){
+  const day=qs.get("day"), wanted=qs.get("lesson")||(day?`day-${String(day).padStart(2,"0")}`:"morning-stretch");
+  try{
+    const [{filterLesson},approved]=await Promise.all([
+      import("./coach-lib.mjs"),
+      fetch("moxie-approved-curriculum.json",{cache:"no-store"}).then(response=>response.json()),
+    ]);
+    lesson=filterLesson({curriculumId:wanted},approved)||filterLesson({curriculumId:"morning-stretch"},approved);
+  }catch(e){}
+}
+const steps=flattenLesson(lesson);
+
+// ---- recognition engine (ported from class-live.html, unchanged math) ----
+const KEYS=[0,11,12,13,14,15,16,23,24,25,26,27,28];
+const ZW=0.6;
+function feat(lm,wl){
+  const hx=(lm[23].x+lm[24].x)/2,hy=(lm[23].y+lm[24].y)/2,
+        sx=(lm[11].x+lm[12].x)/2,sy=(lm[11].y+lm[12].y)/2,
+        t=Math.hypot(sx-hx,sy-hy)||1e-3,f=[];
+  for(const k of KEYS)f.push((lm[k].x-hx)/t,(lm[k].y-hy)/t);
+  const hz=(wl[23].z+wl[24].z)/2,
+        wsx=(wl[11].x+wl[12].x)/2,wsy=(wl[11].y+wl[12].y)/2,wsz=(wl[11].z+wl[12].z)/2,
+        whx=(wl[23].x+wl[24].x)/2,why=(wl[23].y+wl[24].y)/2,
+        wt=Math.hypot(wsx-whx,wsy-why,wsz-hz)||1e-3;
+  for(const k of KEYS)f.push(ZW*(wl[k].z-hz)/wt);
+  return f;
+}
+function dist(a,b){let s=0;for(let i=0;i<a.length;i++){const d=a[i]-b[i];s+=d*d;}return Math.sqrt(s);}
+let model=null;
+function classify(f,k=3){const ds=model.feats.map((tf,i)=>({d:dist(f,tf),l:model.labels[i]})).sort((a,b)=>a.d-b.d);const top=ds.slice(0,k),v={};let tot=0;for(const t of top){const w=1/(t.d+1e-3);v[t.l]=(v[t.l]||0)+w;tot+=w;}let b=null,bv=-1;for(const l in v)if(v[l]>bv){bv=v[l];b=l;}return{label:b,conf:bv/tot,nearest:ds[0].d};}
+const REJ_D=2.37, REJ_S=0.6;
+const accept=c=>c.nearest<=REJ_D&&c.conf>=REJ_S;
+const NEED_CORE=[11,12,23,24];
+function coreBody(lm){for(const k of NEED_CORE){if(!lm[k]||(lm[k].visibility??1)<0.35)return false;}return true;}
+function kneesOk(lm){return lm[25]&&lm[26]&&(lm[25].visibility??1)>=0.35&&(lm[26].visibility??1)>=0.35;}
+const FLOOR=new Set(["cobra","plank","child","bridge","boat","easyseat","savasana","tabletop","pigeon","seatedfold","catcow","camel","birddog","happybaby","wheel","locust","legsupwall","forwardfold","chair"]);
+const legsOk=(c,lm)=>kneesOk(lm)||FLOOR.has(c.label);
+
+// ---- guided state machine ----
+let idx=0, ring=null, camOn=false, holdUntil=0, advancing=false, nearMatchSince=null, nudgeSpoken=false, correctionSince=null, correctionSpoken=false, correctionKey="";
+let currentPoseState={matched:false,hint:"",correction:null};
+// The hold border is measured, never assumed: a hard-coded length only matches
+// a fixed-size shape, and this one resizes with the window. See measurePanel().
+const PANEL_R=18, PANEL_INSET=5;
+let panelLen=0, panelPct=0;
+
+// Guide voice and Live Guide are one Google Gemini feature. There is no
+// second device/browser voice competing with the selected Google voice.
+let countTimers=[];
+let musicUrl=null, musicBase=clampVolume(localStorage.getItem("zbMusicVolume")), musicDucked=false, ambientPreset=cleanAmbientPreset(qs.get("music")||"quiet"), ambientPlaying=false;
+const musicAudio=$("musicAudio");
+const ambientPlayer=createAmbientPlayer();
+function syncMusic(){
+  $("musicVolume").value=String(musicBase);
+  musicAudio.volume=musicVolume(musicBase,musicDucked);
+  ambientPlayer.setVolume(musicVolume(musicBase,musicDucked));
+  $("musicPlay").textContent=(!musicAudio.paused||ambientPlaying)?"Pause":"Play";
+  document.querySelectorAll(".music-preset").forEach(button=>button.classList.toggle("active",button.dataset.preset===ambientPreset&&!musicUrl));
+}
+function setMusicStatus(text){ $("musicStatus").textContent=text; }
+function duckMusic(ducked){ musicDucked=ducked; syncMusic(); }
+function stopMusic(){ musicAudio.pause(); ambientPlayer.stop(); ambientPlaying=false; syncMusic(); }
+function clearVoice(){
+  for(const timer of countTimers) clearTimeout(timer);
+  countTimers=[];
+  pendingSay=null;
+  liveCoach?.stopPlayback();
+}
+// say() is not speech, it is a Gemini turn, and a new turn cancels the audio
+// that is still playing. So a line arriving mid-sentence does not follow what
+// she is saying, it cuts her off. Hold it until she stops. Only the newest line
+// is kept: each one restates where the learner is now, so a stale one is worse
+// than none at all.
+let pendingSay=null;
+function say(text){
+  if(!liveCoach||!text) return;
+  if(tutorConnectionState==="speaking"){ pendingSay=text; return; }
+  liveCoach.prompt(text);
+}
+function flushSay(){
+  if(!liveCoach||!pendingSay||tutorConnectionState==="speaking") return;
+  const text=pendingSay; pendingSay=null; liveCoach.prompt(text);
+}
+// She only has eyes while the camera is actually running: sendFrame quietly
+// does nothing when the video is dark, so without being told she narrates a
+// body she cannot see. MediaPipe judges the pose either way, never her.
+function cameraNote(){
+  return camOn
+    ? "The learner's camera is on."
+    : "The learner's camera is off, so you cannot see them at all. Never say you can see them, and never comment on their shape, their alignment, or whether they are in the pose.";
+}
+// Every prompt that moves the practice restates where the learner actually is.
+// The session instruction alone is not enough: it is fixed at connect, so after
+// two poses the model's idea of "now" has drifted from the screen.
+function stepPrompt(prefix=""){
+  const s=steps[idx]; if(!s) return "";
+  return `${prefix?prefix+" ":""}The learner is now on pose ${idx+1} of ${steps.length}, ${s.pretty}. ${voicePlan(s).intro} ${cameraNote()}`;
+}
+function announceStep(){
+  if(!steps[idx]||holdUntil) return;
+  say(stepPrompt());
+}
+// The breath count is shown, never spoken. Speaking it sent Gemini a turn every
+// four seconds and each turn cancelled the one before it, so she talked without
+// a pause and cut herself off for the length of every hold. The dots and the
+// swelling figure carry the count on their own.
+function countBreaths(){
+  const counts=voicePlan(steps[idx]).counts;
+  counts.forEach((_,i)=>{
+    countTimers.push(setTimeout(()=>renderBreaths(breathTotal,i+1), i*BREATH));
+  });
+}
+function cyclePoseArt(){
+  const frames=[...$("fig").querySelectorAll("img")];if(frames.length<2)return;
+  const breaths=Math.max(1,steps[idx]?.holdBreaths||1);
+  for(let i=1;i<breaths;i++)countTimers.push(setTimeout(()=>frames.forEach((frame,n)=>frame.classList.toggle("active",n===i%frames.length)),i*BREATH));
+}
+
+let listeningEnabled=tutorSettings.listeningEnabled, wakeWordMode=tutorSettings.wakeWordMode, tutorVoiceEnabled=tutorSettings.voiceEnabled, correctionsEnabled=tutorSettings.correctionsEnabled;
+let liveCoach=null, pendingLiveCoach=null, liveStarting=false, previewCoach=null, previewTimer=null, tutorConnectionState="off";
+// ---- wake phrase enforcement ----
+// The browser's own recognizer is the doorman. Until it hears "Moxie", the
+// LiveCoach gate stays shut and no microphone audio is sent to Google at all.
+// Asking Gemini to ignore unaddressed speech is not enforcement: it already
+// heard the request by then, and it answered anyway. This is the fix for that.
+const WakeEngine=window.SpeechRecognition||window.webkitSpeechRecognition;
+const wakeSupported=Boolean(WakeEngine);
+// Three states, not two: unknown (still proving itself), running, and failed.
+// Treating "not yet proven" as "failed" makes the UI cry wolf for the first
+// three seconds of every session.
+let wakeRecognizer=null, gateTicker=null, wakeHeard=false, wakeFailed=false, wakeProbe=null;
+// Whether the recognizer is actually running. A constructor that exists proves
+// nothing: it can start without ever emitting a single event, and then the gate
+// never opens and the tutor is silently deaf. That is a fail-closed with no
+// signal, so it must be detected and said out loud.
+function setWakeReady(ready,reason=""){
+  if(wakeHeard===ready&&wakeFailed===!ready&&!reason) return;
+  wakeHeard=ready; wakeFailed=!ready;
+  syncWakeAvailability(); syncWakeListener(); renderTutorState();
+  if(!ready&&reason&&liveCoach) setLiveStatus(reason);
+}
+function startWakeListener(){
+  if(!wakeSupported||wakeRecognizer) return;
+  const rec=wakeRecognizer=new WakeEngine();
+  rec.continuous=true; rec.interimResults=true; rec.lang="en-US";
+  rec.onstart=()=>{ if(wakeRecognizer===rec) setWakeReady(true); };
+  rec.onaudiostart=()=>{ if(wakeRecognizer===rec) setWakeReady(true); };
+  rec.onresult=event=>{
+    setWakeReady(true);
+    for(let i=event.resultIndex;i<event.results.length;i++){
+      // Interim results fire partway through the sentence, so the gate opens
+      // while the learner is still speaking. The pre-roll covers the rest.
+      if(parseWakeCommand(event.results[i][0].transcript).addressed){ liveCoach?.openGate(); renderTutorState(); break; }
+    }
+  };
+  // Chrome ends a continuous session on its own every so often. Restart while
+  // the tutor is still listening, otherwise the doorman quietly goes home.
+  rec.onend=()=>{ if(wakeRecognizer===rec&&liveCoach&&listeningEnabled&&wakeWordMode){ try{rec.start()}catch(e){} } };
+  rec.onerror=event=>{
+    const code=event?.error||"unknown";
+    console.warn("[Moxie] wake recognizer error:",code);
+    // no-speech and aborted are routine between utterances, not failures.
+    if(code==="no-speech"||code==="aborted") return;
+    setWakeReady(false,code==="not-allowed"||code==="service-not-allowed"
+      ? "Moxie cannot hear the wake phrase because speech recognition is blocked. Use Talk to Moxie, or turn off Require “Moxie”."
+      : "The wake phrase is not being heard ("+code+"). Use Talk to Moxie, or turn off Require “Moxie”.");
+  };
+  try{ rec.start(); }catch(e){ console.warn("[Moxie] wake recognizer failed to start:",e); }
+  // Prove it actually came up. Silence here is the failure we shipped before.
+  clearTimeout(wakeProbe);
+  wakeProbe=setTimeout(()=>{
+    if(wakeRecognizer===rec&&!wakeHeard) setWakeReady(false,"The wake phrase is not being heard on this browser. Use Talk to Moxie, or turn off Require “Moxie”.");
+  },3000);
+}
+function stopWakeListener(){
+  const rec=wakeRecognizer; wakeRecognizer=null;
+  clearTimeout(wakeProbe); wakeProbe=null; wakeHeard=false; wakeFailed=false;
+  if(rec){ try{ rec.stop(); }catch(e){} }
+}
+function syncWakeListener(){
+  if(liveCoach&&listeningEnabled&&wakeWordMode) startWakeListener(); else stopWakeListener();
+  const talk=$("talkBtn");
+  // Always available as the deliberate way to address the tutor, and the only
+  // way when the wake phrase cannot be heard. It is still an explicit address,
+  // so nothing unaddressed reaches Gemini.
+  talk.classList.toggle("hidden",!liveCoach||!listeningEnabled);
+  talk.textContent=wakeWordMode&&(wakeFailed||!wakeSupported)?"Talk to Moxie (wake phrase unavailable)":"Talk to Moxie";
+}
+// Voice picker: audition Gemini voices in the room itself. Remembered per
+// device; a change mid-session applies on the next Start (Google fixes the
+// voice at session setup, it cannot swap mid-conversation).
+{ const sel=$("liveVoice");
+  for(const v of LIVE_VOICES){ const o=document.createElement("option"); o.value=v.name; o.textContent=`${v.name} (${v.feel})`; sel.append(o); }
+  sel.value=cleanLiveVoice(qs.get("voice"))||tutorSettings.voice||DEFAULT_LIVE_VOICE;
+  sel.addEventListener("change",()=>{ saveTutorPreferences();
+    if(liveCoach) setLiveStatus(`Voice saved. ${sel.value} speaks the next time you start Live Guide.`); }); }
+function saveTutorPreferences(){
+  tutorSettings=writeTutorSettings(localStorage,tutorEmail,{voice:$("liveVoice").value,voiceEnabled:tutorVoiceEnabled,listeningEnabled,wakeWordMode,correctionsEnabled});
+  return tutorSettings;
+}
+function syncWakeAvailability(){
+  const wake=$("tutorWake"),row=$("tutorWakeSetting"),help=$("tutorWakeHelp");
+  wake.disabled=!listeningEnabled;row.classList.toggle("disabled",!listeningEnabled);row.setAttribute("aria-disabled",String(!listeningEnabled));
+  help.textContent=!listeningEnabled?"Turn Listening on to require Moxie.":!wakeSupported?"This browser cannot hear the wake phrase. Use Talk to Moxie instead.":wakeFailed?"The wake phrase is not being heard. Use Talk to Moxie instead.":"Your microphone stays closed until you say Moxie.";
+}
+// The listen note carries wake-phrase and listening guidance only. It must
+// never print a sentence as though the tutor were saying it: say() does not
+// speak, it prompts Gemini, which answers in its own words. Real captions of
+// what is actually spoken are a later item.
+// One dot per breath of the hold, filling as each passes. This carries what the
+// sentence said and what the swelling figure showed, without words and without
+// moving the artwork.
+// One second to settle before a correction is drawn; four before the app says
+// anything about you being away, so a normal transition between poses never
+// trips it.
+const SETTLE_MS=1000, AWAY_MS=4000;
+let awaySince=null, patientShown=false;
+let breathTotal=0, breathDone=0;
+function renderBreaths(total,done){
+  breathTotal=Math.max(0,total|0); breathDone=Math.max(0,Math.min(done|0,breathTotal));
+  const host=$("breaths"); host.textContent="";
+  for(let n=0;n<breathTotal;n++){ const dot=document.createElement("i"); if(n<breathDone) dot.className="done"; host.appendChild(dot); }
+}
+function setListenNote(text){ $("listenNote").textContent=text; }
+function handleVoiceIntent(intent){
+  const s=steps[idx]; if(!s) return;
+  if(intent==="more_time"){
+    if(holdUntil){ holdUntil+=breathToMs(2,BREATH); renderBreaths(breathTotal+2,breathDone); say("Two more breaths. Take your time."); }
+    else say("You have all the time you need.");
+    return;
+  }
+  if(intent==="again"){ renderStep("Let's take that pose again."); return; }
+  if(intent==="next"){ advance(1,"Moving on."); return; }
+  if(intent==="explain"){
+    const cue=s.cue||"Find a version of this shape that feels steady.";
+    say("Let's slow down. "+cue+" Take your time.");
+    return;
+  }
+  if(intent==="assess"){
+    say(holdUntil||currentPoseState.matched ? "Yes. Stay with your breath." : currentPoseState.hint===NEAR_MATCH_HINT ? "You're close. Take a moment to settle in." : "Keep following the figure and find a steady version of the pose.");
+  }
+}
+function setLiveStatus(text){ $("liveStatus").textContent=text; }
+function renderTutorState(state=tutorConnectionState){
+  tutorConnectionState=state;
+  const labels={off:"Off",connecting:"Connecting",listening:"Listening",speaking:"Speaking",muted:"Muted",disconnected:"Disconnected"};
+  const active=Boolean(liveCoach)||state==="connecting";
+  const liveState=$("liveState");liveState.textContent=labels[state]||"Off";liveState.classList.toggle("on",["listening","speaking"].includes(state));
+  // The mic pill reports whether audio is actually being sent, not merely
+  // whether the microphone is open. While the gate is shut it is holding.
+  const micLive=Boolean(liveCoach)&&listeningEnabled;
+  const gateOpen=micLive&&liveCoach.isGateOpen();
+  const micOn=micLive&&gateOpen;
+  const cameraOn=Boolean(liveCoach)&&cameraRequested&&camOn;
+  const speaking=state==="speaking";
+  $("micActivity").textContent=!micLive?"Mic off":gateOpen?"Mic on":wakeWordMode&&(wakeFailed||!wakeSupported)?"Tap Talk to Moxie":"Waiting for “Moxie”";$("micActivity").classList.toggle("on",micOn);
+  $("talkBtn").classList.toggle("open",gateOpen);
+  $("cameraActivity").textContent=cameraOn?"Camera sharing":"Camera off";$("cameraActivity").classList.toggle("on",cameraOn);
+  $("speakingActivity").textContent=speaking?"Tutor speaking":"Not speaking";$("speakingActivity").classList.toggle("on",speaking);
+  $("liveRetry").classList.toggle("hidden",state!=="disconnected");
+  $("liveStatus").classList.toggle("active",active);
+  // She has stopped, so anything held back while she was speaking can go now.
+  flushSay();
+}
+function updateLiveButton(){
+  const active=Boolean(liveCoach);
+  const b=$("liveBtn"); b.classList.toggle("live-on",active); b.setAttribute("aria-pressed",String(active));
+  const expanded=!$("livePanel").classList.contains("hidden");
+  b.setAttribute("aria-expanded",String(expanded));
+  b.setAttribute("aria-label",expanded?"Minimize Live Tutor":active?"Live Tutor on":"Live Tutor"); b.dataset.tooltip=expanded?"Minimize Live Tutor":active?"Live Tutor: on":"Live Tutor";
+  // The wake window lapses on a timer, so the mic pill needs a heartbeat to
+  // stop showing "Mic on" after the gate has quietly shut again.
+  if(active&&!gateTicker) gateTicker=setInterval(()=>renderTutorState(),1000);
+  if(!active&&gateTicker){ clearInterval(gateTicker); gateTicker=null; }
+  syncWakeListener();
+  renderTutorState();
+  $("tutorEnabled").checked=active||liveStarting;
+  $("tutorEnabled").disabled=liveStarting;
+}
+function liveInstruction(){
+  const s=steps[idx]||{};
+  const needs=practiceProfileSummary(personalProfile);
+  const wake=wakeWordMode?"The learner addresses you as Moxie. Their microphone only opens once they have said it, so treat everything you receive as addressed to you.":"Respond to direct spoken practice requests without requiring a wake phrase.";
+  const corrections=correctionsEnabled?"Private pose corrections are enabled.":"Pose corrections are off. Do not offer or speak a correction.";
+  return "You are Moxie, a warm, concise yoga companion for a guided practice. Speak only when useful, then stop and leave silence. "+cameraNote()+" "+wake+" "+corrections+" "+lessonGrounding(steps,idx,lesson?.title||"")+" Its visible cue is: "+(s.cue||"find a steady version")+". "+(needs?"The learner's private practice preferences are: "+needs+" Honor them with optional, non-medical variations; never mention this profile unless it directly helps the learner.":"")+" MediaPipe, not you, controls pose matching. Never diagnose, promise safety, or ask for personal data. If an action would help, use only the provided tool. Respect a learner who pauses or asks you to be quiet.";
+}
+function runLiveTool(name){
+  if(name==="repeat_cue"){ handleVoiceIntent("explain"); return {ok:true}; }
+  if(name==="extend_hold"){ handleVoiceIntent("more_time"); return {ok:true}; }
+  if(name==="restart_pose"){ handleVoiceIntent("again"); return {ok:true}; }
+  if(name==="next_pose"){ handleVoiceIntent("next"); return {ok:true}; }
+  if(name==="offer_modification"){ say("Choose a smaller, steadier version of the shape, or rest in Child's Pose if that feels better."); return {ok:true}; }
+  return {ok:false};
+}
+async function startLiveCoach(){
+  if(liveStarting||liveCoach) return; liveStarting=true;
+  setLiveStatus("Connecting microphone and camera…");updateLiveButton();
+  const mic=micReady?await micReady:null; micReady=null;
+  const coach=new LiveCoach({video:uvid,instruction:liveInstruction(),voice:cleanLiveVoice($("liveVoice").value),requireWake:wakeWordMode,micStream:mic,listening:listeningEnabled,onStatus:setLiveStatus,onTool:runLiveTool,onState:renderTutorState});
+  pendingLiveCoach=coach;
+  try{ await coach.connect(); if(pendingLiveCoach!==coach){coach.close();return} pendingLiveCoach=null;liveCoach=coach; coach.setListening(listeningEnabled); coach.setVoiceEnabled(tutorVoiceEnabled); coach.setRequireWake(wakeWordMode); clearVoice(); updateLiveButton();
+    if(wakeWordMode&&!wakeSupported) setLiveStatus("This browser cannot hear the wake phrase, so your microphone stays closed. Turn off Require “Moxie” to talk to the tutor.");
+    if(tutorVoiceEnabled)coach.prompt("Begin now. Briefly greet the learner, then speak the current visible pose cue. Keep it concise."); }
+  catch(e){ coach.close(); if(pendingLiveCoach===coach){pendingLiveCoach=null;tutorConnectionState=e?.name==="AbortError"?"off":"disconnected";setLiveStatus(e?.name==="AbortError"?"Live Guide ended.":String(e.message||"Live Guide could not start."));} }
+  finally{ liveStarting=false;updateLiveButton(); }
+}
+function stopLiveCoach(note="Live Guide ended."){
+  if(pendingLiveCoach){ pendingLiveCoach.close();pendingLiveCoach=null; }
+  if(liveCoach){ liveCoach.close(); liveCoach=null; }
+  tutorConnectionState="off";setLiveStatus(note); updateLiveButton();
+}
+function stopCamera(){
+  const stream=uvid.srcObject;if(stream?.getTracks)stream.getTracks().forEach(track=>track.stop());
+  uvid.pause();uvid.srcObject=null;camOn=false;renderTutorState();
+}
+function stopPracticeMedia(note="Live Guide ended."){
+  clearVoice();if(previewTimer)clearTimeout(previewTimer);previewTimer=null;previewCoach?.close();previewCoach=null;
+  stopLiveCoach(note);stopCamera();releaseMic();
+}
+async function testLiveVoice(){
+  if(liveCoach||liveStarting){setLiveStatus("Turn off Live Tutor before testing another voice.");return;}
+  const button=$("testLiveVoice");button.disabled=true;button.textContent="Playing…";
+  previewCoach=new LiveCoach({video:null,instruction:"You are a short voice preview. Speak exactly the requested preview sentence and nothing else.",voice:cleanLiveVoice($("liveVoice").value),onStatus:setLiveStatus});
+  try{
+    await previewCoach.connect({capture:false});
+    previewCoach.prompt("Say exactly: Hi, I’m Moxie. This is how my voice will sound in your practice.");
+    previewTimer=setTimeout(()=>{previewCoach?.close();previewCoach=null;button.disabled=false;button.textContent="Test voice";setLiveStatus("Voice preview finished.")},5500);
+  }catch(error){previewCoach?.close();previewCoach=null;button.disabled=false;button.textContent="Test voice";setLiveStatus(String(error.message||"Voice preview could not play."));}
+}
+
+function showEmpty(){
+  stopPracticeMedia("Live Guide ended.");
+  $("stage").classList.add("hidden"); $("footer").classList.add("hidden");
+  const c=$("endCard"); c.classList.remove("hidden");
+  $("endH").textContent="No lesson yet";
+  $("endP").textContent="Ask the guide for a class first, then tap Start practice.";
+}
+function showEnd(){
+  stopPracticeMedia("Practice complete. Camera and microphone are off.");
+  stopMusic();
+  $("stage").classList.add("hidden"); $("footer").classList.add("hidden");
+  $("endCard").classList.remove("hidden");
+  if(nextMeditation){const minutes=Math.max(3,Math.min(20,Math.round(plannedDuration/3)));$("endH").textContent="Movement complete";$("endP").textContent="Let the movement settle. Your meditation is ready when you are.";$("endLink").textContent="Continue to meditation";$("endLink").href=`zenbottom-meditation-session.html?slot=${encodeURIComponent(planSlotId||"")}&date=${encodeURIComponent(planSlotDate||"")}&duration=${minutes}&mode=blended&session=afterflow&music=${encodeURIComponent(ambientPreset)}&voice=${encodeURIComponent($("liveVoice").value)}`;return}
+  if(planSlotId&&planSlotDate){const email=localStorage.getItem("zbStudentEmail")||"";const plan=loadPlan(localStorage,email);if(plan)savePlan(localStorage,email,completeSlot(plan,{slotId:planSlotId,date:planSlotDate,practiceMode:planMode,completedAt:new Date().toISOString()}));}
+}
+
+// Rounded-rect path starting at TOP CENTRE and running clockwise, so the two
+// sides fill toward each other and the line closing at the top means done,
+// exactly how the ring used to read.
+function panelPath(w,h){
+  const r=PANEL_R,x0=PANEL_INSET,y0=PANEL_INSET,x1=w-PANEL_INSET,y1=h-PANEL_INSET,cx=(x0+x1)/2;
+  return `M ${cx} ${y0} H ${x1-r} A ${r} ${r} 0 0 1 ${x1} ${y0+r} V ${y1-r} A ${r} ${r} 0 0 1 ${x1-r} ${y1}`
+       + ` H ${x0+r} A ${r} ${r} 0 0 1 ${x0} ${y1-r} V ${y0+r} A ${r} ${r} 0 0 1 ${x0+r} ${y0} H ${cx}`;
+}
+function measurePanel(){
+  const col=$("demoCol"),svg=$("panelProg");
+  const w=Math.round(col.clientWidth),h=Math.round(col.clientHeight);
+  if(!w||!h) return;
+  svg.setAttribute("viewBox",`0 0 ${w} ${h}`);   // one unit per pixel, so the dash cannot distort
+  const d=panelPath(w,h);
+  const track=svg.querySelector(".track"),fill=svg.querySelector(".fill");
+  track.setAttribute("d",d); fill.setAttribute("d",d);
+  panelLen=fill.getTotalLength();
+  fill.style.strokeDasharray=panelLen;
+  paintRing(panelPct);
+}
+function paintRing(pct){
+  panelPct=pct;
+  const fill=$("panelProg").querySelector(".fill");
+  fill.style.strokeDashoffset=String(panelLen*(1-pct));
+  $("demoCol").classList.toggle("done", pct>=1);
+}
+
+function renderStep(prefix=""){
+  const s=steps[idx]; if(!s) return showEnd();
+  clearVoice();
+  renderProgressLabel();
+  const pd=$("progdots"); pd.textContent="";
+  for(let i=0;i<steps.length;i++){ const d=document.createElement("i");
+    if(i<idx)d.className="done"; else if(i===idx)d.className="cur"; pd.appendChild(d); }
+  $("phaselabel").textContent=s.phase||"";
+  $("posename").textContent=s.pretty;
+  $("orient").textContent=POSE_ORIENT[s.pose]==="side"?"Turn to your side":"Face the camera";
+  $("cue").textContent=s.cue||"";
+  renderBreaths(0,0);
+  // figure
+  const fig=$("fig"); fig.innerHTML="";
+  // A pose with no Moxie render shows its name on the glow. It must never
+  // borrow another figure; the old fallback was a stick figure, not her.
+  const artSources=poseArtSources(s.pose);
+  if(!artSources.length) fig.innerHTML='<div class="fallback">'+s.pretty+'</div>';
+  else artSources.forEach((source,frameIndex)=>{const img=document.createElement("img");img.className=frameIndex===0?"active":"";img.alt=s.pose==="catcow"?(frameIndex===0?"Cat phase of Cat/Cow":"Cow phase of Cat/Cow"):s.pretty;img.src=source;img.onerror=()=>{fig.innerHTML='<div class="fallback">'+s.pretty+'</div>'};fig.appendChild(img)});
+  paintRing(0); ring=null; holdUntil=0; advancing=false; currentPoseState={matched:false,hint:"",correction:null};
+  nearMatchSince=null; nudgeSpoken=false; correctionSince=null; correctionSpoken=false; correctionKey="";
+  awaySince=null; patientShown=false; $("patient").classList.add("hidden");
+  $("correction").classList.add("hidden");
+
+  $("backBtn").disabled=idx===0;
+  if(prefix){ clearVoice(); say(stepPrompt(prefix)); }else announceStep();
+}
+
+function enterHold(){
+  const s=steps[idx];
+  clearVoice();
+  holdUntil=performance.now()+breathToMs(s.holdBreaths, BREATH);
+  paintRing(1);
+  $("ring").style.setProperty("--breathdur", (BREATH/1000) + "s");
+  renderBreaths(s.holdBreaths,0);
+  cyclePoseArt();
+  countBreaths();
+}
+function advance(dir,prefix=""){
+  if(advancing && dir>0) return;
+  advancing=true;
+  idx+=dir;
+  if(idx>=steps.length) return showEnd();
+  if(idx<0) idx=0;
+  renderStep(prefix);
+}
+
+function angle(lm,i,j,k){const a=lm[i],b=lm[j],c=lm[k];if(!a||!b||!c)return null;const x1=a.x-b.x,y1=a.y-b.y,x2=c.x-b.x,y2=c.y-b.y,n=Math.hypot(x1,y1)*Math.hypot(x2,y2);if(!n)return null;return Math.acos(Math.max(-1,Math.min(1,(x1*x2+y1*y2)/n)))*180/Math.PI;}
+function correctionFor(pose,lm){
+  const armsLow=lm[15].y>lm[11].y+.03&&lm[16].y>lm[12].y+.03;
+  const armsNotUp=!(lm[15].y<lm[11].y&&lm[16].y<lm[12].y);
+  const left=angle(lm,23,25,27),right=angle(lm,24,26,28);
+  if(["chair","highlunge","goddess"].includes(pose)&&armsNotUp)return {area:"shoulders",text:"Let your arms rise in the shape, wherever they comfortably reach."};
+  if(pose==="warrior"&&armsLow)return {area:"shoulders",text:"Let your arms float out level with your shoulders."};
+  if(["tree","dancer","halfmoon","warrior3"].includes(pose)&&left!=null&&right!=null){const standing=Math.max(left,right);if(standing<(pose==="tree"?165:160))return {area:"standing leg",text:"Steady your standing leg and gently press the floor away."};}
+  return null;
+}
+// per-frame: is the user in the target pose? Also returns a gentle nudge when close.
+function detect(lm,wlm){
+  if(DEMO) return {matched:true, hint:"",correction:null};
+  if(!lm||!wlm||!coreBody(lm)) return {matched:false, hint:"Step back so I can see your whole body",correction:null};
+  const c=classify(feat(lm,wlm));
+  window.__seen=c.label;
+  const target=steps[idx].pose;
+  if(c.label===target){
+    const correction=correctionFor(target,lm);
+    if(accept(c)&&legsOk(c,lm)&&!correction) return {matched:true, hint:"",correction:null};
+    if(correction) return {matched:false,hint:correction.text,correction};
+    if(accept(c)&&!legsOk(c,lm)) return {matched:false, hint:"Step back so I can see your legs",correction:null};
+    return {matched:false, hint:NEAR_MATCH_HINT,correction:null};  // right pose, below the confidence line
+  }
+  return {matched:false, hint:"",correction:null};
+}
+
+let uLM=null, uvid=$("uvid"), lastT=-1;
+function tick(now){
+  requestAnimationFrame(tick);
+  if(idx>=steps.length) return;
+  // HOLD phase: count down the breaths, then advance
+  if(holdUntil){
+    if(now>=holdUntil){ holdUntil=0; advance(1); }
+    return;
+  }
+  let matched=false, hint="", correction=null, lm=null, wlm=null;
+  if(camOn && uvid.readyState>=2 && uvid.videoWidth && now!==lastT){
+    lastT=now;
+    const res=uLM.detectForVideo(uvid,now);
+    lm=res.landmarks&&res.landmarks[0]; wlm=res.worldLandmarks&&res.worldLandmarks[0];
+    const d=detect(lm,wlm); matched=d.matched; hint=d.hint; correction=d.correction;
+    if(!correctionsEnabled&&correction){hint="";correction=null;}
+  } else if(DEMO){ matched=true; }
+  currentPoseState={matched,hint,correction};
+  if(correction&&correctionsEnabled){
+    const key=correction.area+"|"+correction.text;
+    if(key!==correctionKey){correctionKey=key;correctionSince=now;correctionSpoken=false;}
+    $("correctionArea").textContent="Focus: "+correction.area;
+    $("correctionText").textContent=correction.text;
+    // Let them settle first. The card used to appear the instant a shape was
+    // recognised, which lands while someone is still lowering into it.
+    $("correction").classList.toggle("hidden", now-correctionSince<SETTLE_MS);
+    if(liveCoach&&shouldSpeakNearMatch(correctionSince,now,correctionSpoken,2600)){correctionSpoken=true;say(correction.text);}
+  }else{
+    correctionSince=null; correctionSpoken=false; correctionKey=""; $("correction").classList.add("hidden");
+  }
+  // "Away" means the target pose is not being seen at all: no match, no
+  // near-match, no correction. That is someone drinking water, not someone
+  // failing, so it gets reassurance rather than instruction or silence.
+  const away=!DEMO&&camOn&&!matched&&!correction&&hint!==NEAR_MATCH_HINT;
+  if(away){
+    if(awaySince===null) awaySince=now;
+    if(!patientShown&&now-awaySince>=AWAY_MS){
+      patientShown=true;
+      $("patient").textContent="Take your time. We'll continue when you're ready.";
+      $("patient").classList.remove("hidden");
+      speakLocal("Take your time. We'll continue when you're ready.");
+    }
+  }else{ awaySince=null; if(patientShown){ patientShown=false; $("patient").classList.add("hidden"); } }
+  if(hint===NEAR_MATCH_HINT&&!correction){
+    if(nearMatchSince===null) nearMatchSince=now;
+    if(liveCoach&&shouldSpeakNearMatch(nearMatchSince,now,nudgeSpoken)){
+      nudgeSpoken=true;
+      say("You're close. Take a moment to settle in.");
+    }
+  }else nearMatchSince=null;
+  // seeing indicator: match, then a near-match nudge, then what it currently sees
+  const seeing=$("seeing");
+  if(camOn && !DEMO){
+    seeing.classList.remove("hidden");
+    if(matched){ seeing.textContent="You found "+steps[idx].pretty; seeing.classList.add("match"); }
+    else if(hint){ seeing.textContent=hint; seeing.classList.remove("match"); }
+    else { seeing.textContent=window.__seen?("I see "+(PRETTY[window.__seen]||window.__seen)):"Finding you"; seeing.classList.remove("match"); }
+  }
+  ring=matchProgress(ring, matched, now);
+  paintRing(ring.ringPct);
+  if(ring.committed) enterHold();
+}
+
+// The pose becomes the hero only once the camera gate is out of the way, so
+// the gate keeps the room it needs for its heading, copy and button.
+// Three steps, not two: setup (grant the camera), ready (frame yourself, with
+// no pose on screen), practicing (the lesson). The pose appears only once the
+// learner says they are ready, by button or by voice.
+let stageMode="setup", readyRec=null;
+function setStageMode(mode){
+  stageMode=mode;
+  const stage=$("stage");
+  stage.classList.toggle("setup",mode==="setup");
+  stage.classList.toggle("ready",mode==="ready");
+  stage.classList.toggle("practicing",mode==="practicing");
+  $("gate").classList.toggle("hidden",mode!=="setup");
+  $("readyGate").classList.toggle("hidden",mode!=="ready");
+  if(mode==="ready"){
+    startReadyListener();
+    $("readyLine").textContent=camOn
+      ? "Get yourself in frame. Say “start”, or press Begin, when you are ready."
+      : "Say “start”, or press Begin, when you are ready.";
+  } else stopReadyListener();
+  renderProgressLabel();
+  measurePanel();
+}
+// This line is written by the app and spoken by the browser, never handed to
+// Gemini. Gemini rewords what it is given, which is exactly how the on-screen
+// words stopped matching the voice before. Here they cannot drift apart.
+// Chrome returns an EMPTY voice list until it has loaded them, and the begin
+// screen can speak before that happens. Touching getVoices early and again on
+// voiceschanged fills the browser's own cache, so buildUtterance has a real
+// list to choose from by the time anything is spoken. Without this the first
+// line still comes out in the machine default.
+if(window.speechSynthesis){ try{ speechSynthesis.getVoices(); speechSynthesis.addEventListener("voiceschanged",()=>speechSynthesis.getVoices()); }catch(e){} }
+function speakLocal(text){
+  if(!tutorVoiceEnabled||!window.speechSynthesis) return;
+  try{
+    const utterance=buildUtterance(text,{synth:speechSynthesis,Utterance:window.SpeechSynthesisUtterance});
+    if(!utterance) return;
+    speechSynthesis.cancel();
+    speechSynthesis.speak(utterance);
+  }catch(e){}
+}
+// "start" is handled locally, so it works before any Gemini session exists and
+// needs no wake phrase: nothing is being sent anywhere yet.
+function startReadyListener(){
+  if(!wakeSupported||readyRec) return;
+  const rec=readyRec=new WakeEngine();
+  rec.continuous=true; rec.interimResults=true; rec.lang="en-US";
+  rec.onresult=event=>{
+    for(let i=event.resultIndex;i<event.results.length;i++){
+      if(/\b(start|begin|ready)\b/i.test(event.results[i][0].transcript)){ beginPractice(); return; }
+    }
+  };
+  rec.onend=()=>{ if(readyRec===rec&&stageMode==="ready"){ try{rec.start()}catch(e){} } };
+  rec.onerror=event=>{ if(event?.error==="no-speech"||event?.error==="aborted") return;
+    $("readyHint").textContent="Voice is unavailable here. Press Begin when you are ready.";
+    $("readyHint").classList.remove("hidden"); };
+  try{ rec.start(); }catch(e){}
+}
+function stopReadyListener(){ const rec=readyRec; readyRec=null; if(rec){ try{rec.stop()}catch(e){} } }
+async function beginPractice(){
+  if(stageMode==="practicing") return;
+  stopReadyListener();
+  setStageMode("practicing");
+  if(ambientPreset!=="quiet"&&!musicUrl){try{ambientPlaying=await ambientPlayer.play(ambientPreset);setMusicStatus(ambientLabel(ambientPreset)+" is playing.");syncMusic()}catch{setMusicStatus("Sound could not start. Open Music to try again.")}}
+  if(liveRequested&&cameraRequested) await startLiveCoach();
+  announceStep();
+}
+// Before Begin, "Pose 1 of 7" claims you are already on pose one. Show what is
+// coming instead of where you supposedly are. Both callers share this so the
+// label cannot say two different things depending on which ran last.
+function renderProgressLabel(){
+  if(!steps.length) return;
+  $("prog").textContent = stageMode==="practicing"
+    ? "Pose "+(idx+1)+" of "+steps.length
+    : steps.length+(steps.length===1?" pose":" poses");
+}
+function syncStageMode(){ measurePanel(); }
+// The panel changes size when the layout flips and when the window resizes, and
+// a stale length would make the border lie about how much of the hold is left.
+new ResizeObserver(()=>measurePanel()).observe($("demoCol"));
+// Do NOT show the camera step while the camera is opening. Doing that flashed
+// "Turn on my camera" at someone who had already agreed to it in the dialog,
+// for however long getUserMedia took. Go straight to ready, say what is
+// happening, and only fall back to the camera step if it actually fails.
+if(DEMO||!cameraRequested) setStageMode("ready");
+else {
+  setStageMode("ready");
+  $("readyLine").textContent="Opening your camera…";
+  startCamera().then(ok=>setStageMode(ok?"ready":"setup"));
+}
+// The learner ticked Camera and Microphone a screen ago, so both come on as the
+// room opens, together. Waiting for Begin to open the microphone lit the two
+// indicators at different moments for no reason the learner could see. The
+// coach consumes this stream rather than asking for the device again.
+let micReady=null;
+if(liveRequested&&cameraRequested&&listeningEnabled&&!DEMO) micReady=navigator.mediaDevices.getUserMedia(MIC_CONSTRAINTS).catch(()=>null);
+function releaseMic(){ micReady?.then(stream=>stream?.getTracks().forEach(track=>track.stop())); micReady=null; }
+
+// ---- camera + boot ----
+async function startCamera(){
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({video:{width:{ideal:960},height:{ideal:720},facingMode:"user"},audio:false});
+    uvid.srcObject=stream; await uvid.play(); camOn=true; setStageMode("ready"); return true;
+  }catch(e){
+    $("gateH").textContent="Camera blocked";
+    $("gateP").textContent="Guided practice needs your camera to see the pose. You can still step through with Skip.";
+    return false;
+  }
+}
+$("readyBtn").addEventListener("click", async ()=>{
+  if(DEMO||!cameraRequested) camOn=false; else await startCamera();
+  if(stageMode==="setup") setStageMode("ready");
+  speakLocal($("readyLine").textContent);
+});
+// The button is the real control and the voice is a shortcut. A recognizer that
+// emits nothing must never leave someone stranded on a screen they cannot pass.
+$("beginBtn").addEventListener("click", ()=>beginPractice());
+// How your own view looks. Remembered per device, because it is a comfort
+// preference and re-choosing it every practice would be tiresome.
+const VIEW_SIZES=["popup","quarter","half","full"];
+let viewSize=VIEW_SIZES.includes(localStorage.getItem("moxieViewerSize"))?localStorage.getItem("moxieViewerSize"):"popup";
+function applyViewSize(){
+  const stage=$("stage");
+  for(const size of VIEW_SIZES) stage.classList.toggle("you-"+size,size===viewSize);
+  for(const b of $("viewCtl").querySelectorAll("[data-view]")) b.classList.toggle("on",b.dataset.view===viewSize);
+  measurePanel();
+}
+function setViewMenu(open){
+  $("viewCtl").classList.toggle("hidden",!open);
+  $("viewDots").setAttribute("aria-expanded",String(open));
+}
+$("viewDots").addEventListener("click",event=>{
+  event.stopPropagation();
+  setViewMenu($("viewCtl").classList.contains("hidden"));
+});
+// Clicking away or pressing Escape closes it, so it never sits there stranded.
+document.addEventListener("click",event=>{
+  if(!$("viewCtl").classList.contains("hidden")&&!event.target.closest("#viewCtl,#viewDots")) setViewMenu(false);
+});
+document.addEventListener("keydown",event=>{ if(event.key==="Escape") setViewMenu(false); });
+$("viewCtl").addEventListener("click",async event=>{
+  const button=event.target.closest("button"); if(!button) return;
+  if(button.dataset.view){ viewSize=button.dataset.view; localStorage.setItem("moxieViewerSize",viewSize); applyViewSize(); setViewMenu(false); return; }
+});
+applyViewSize();
+// Camera and microphone, reachable mid-practice. Every item drives the existing
+// control rather than keeping its own copy of the state, so this menu and the
+// Live Tutor panel can never disagree about what is on.
+function syncDeviceMenu(){
+  $("devCam").textContent=camOn?"Turn camera off":"Turn camera on";
+  $("devMic").textContent=listeningEnabled?"Turn microphone off":"Turn microphone on";
+  $("devVoice").textContent=tutorVoiceEnabled?"Mute guide voice":"Unmute guide voice";
+  $("devCorrections").textContent=correctionsEnabled?"Turn corrections off":"Turn corrections on";
+}
+function setDeviceMenu(open){
+  $("deviceMenu").classList.toggle("hidden",!open);
+  $("deviceBtn").setAttribute("aria-expanded",String(open));
+  if(open){ syncDeviceMenu(); $("musicPanel").classList.add("hidden"); }
+}
+$("deviceBtn").addEventListener("click",event=>{
+  event.stopPropagation();
+  setDeviceMenu($("deviceMenu").classList.contains("hidden"));
+});
+document.addEventListener("click",event=>{
+  if(!$("deviceMenu").classList.contains("hidden")&&!event.target.closest("#deviceMenu,#deviceBtn")) setDeviceMenu(false);
+});
+$("devCam").addEventListener("click",async ()=>{
+  if(camOn) stopCamera(); else { await startCamera(); if(stageMode==="setup") setStageMode("ready"); }
+  renderTutorState(); syncDeviceMenu();
+});
+function flip(id){ const el=$(id); el.checked=!el.checked; el.dispatchEvent(new Event("change")); syncDeviceMenu(); }
+$("devMic").addEventListener("click",()=>flip("tutorListening"));
+$("devVoice").addEventListener("click",()=>flip("tutorVoice"));
+$("devCorrections").addEventListener("click",()=>flip("tutorCorrections"));
+$("skipBtn").addEventListener("click", ()=>advance(1));
+$("backBtn").addEventListener("click", ()=>advance(-1));
+$("tutorVoice").addEventListener("change",e=>{tutorVoiceEnabled=e.target.checked;saveTutorPreferences();liveCoach?.setVoiceEnabled(tutorVoiceEnabled);if(!liveCoach)renderTutorState("off");setLiveStatus(tutorVoiceEnabled?"Guide voice is on.":"Guide voice is muted.")});
+$("tutorListening").addEventListener("change",e=>{listeningEnabled=e.target.checked;saveTutorPreferences();syncWakeAvailability();liveCoach?.setListening(listeningEnabled);syncWakeListener();renderTutorState(liveCoach?(listeningEnabled?"listening":"muted"):tutorConnectionState);setListenNote(listeningEnabled?(wakeWordMode?"Say “Moxie” when you want an answer.":"Live Tutor is listening."):"Live Tutor listening is off. Turn it on to use Moxie.")});
+// Turning the requirement back on shuts the gate immediately, so a session
+// cannot stay wide open just because it was started with the setting off.
+$("tutorWake").addEventListener("change",e=>{wakeWordMode=e.target.checked;saveTutorPreferences();liveCoach?.setRequireWake(wakeWordMode);syncWakeAvailability();syncWakeListener();renderTutorState();setListenNote(wakeWordMode?"Say “Moxie” when you want an answer.":"The Moxie wake phrase is off.")});
+$("tutorCorrections").addEventListener("change",e=>{correctionsEnabled=e.target.checked;saveTutorPreferences();if(!correctionsEnabled){$("correction").classList.add("hidden");correctionSince=null;correctionSpoken=false;correctionKey=""}if(liveCoach)liveCoach.prompt(correctionsEnabled?"Private pose corrections are now enabled.":"Pose corrections are now off. Do not offer or speak corrections.");setLiveStatus(correctionsEnabled?"Private corrections are on.":"Corrections are off.")});
+$("liveBtn").addEventListener("click", ()=>{
+  const panel=$("livePanel"),hidden=panel.classList.toggle("hidden");
+  updateLiveButton();
+});
+$("liveMinimize").addEventListener("click", ()=>{ $("livePanel").classList.add("hidden"); updateLiveButton(); $("liveBtn").focus(); });
+$("tutorEnabled").addEventListener("change",async e=>{
+  if(e.target.checked) await startLiveCoach();
+  else stopLiveCoach("Live Tutor is off.");
+  updateLiveButton();
+});
+$("liveRetry").addEventListener("click",()=>{liveCoach?.close();liveCoach=null;tutorConnectionState="off";startLiveCoach()});
+// Pressing this IS addressing the tutor, so it opens the same bounded window
+// the wake phrase opens. It never bypasses the rule, it satisfies it.
+$("talkBtn").addEventListener("click",()=>{ if(!liveCoach) return; liveCoach.openGate(); renderTutorState(); setLiveStatus("Listening. Ask your question."); });
+$("testLiveVoice").addEventListener("click",testLiveVoice);
+$("musicBtn").addEventListener("click", ()=>{
+  const panel=$("musicPanel"),hidden=panel.classList.toggle("hidden");
+  $("musicBtn").setAttribute("aria-expanded",String(!hidden));
+});
+for(const preset of AMBIENT_PRESETS){const button=document.createElement("button");button.type="button";button.className="music-preset";button.dataset.preset=preset.id;button.textContent=preset.label;button.title=preset.detail;button.onclick=async()=>{musicAudio.pause();if(musicUrl){URL.revokeObjectURL(musicUrl);musicUrl=null;musicAudio.removeAttribute("src");musicAudio.load()}ambientPlayer.stop();ambientPlaying=false;ambientPreset=preset.id;$("musicPlay").disabled=preset.id==="quiet";if(preset.id==="quiet")setMusicStatus("Quiet selected. No background sound.");else{try{ambientPlaying=await ambientPlayer.play(preset.id);setMusicStatus(preset.label+" is playing.")}catch{setMusicStatus("Sound could not start. Try again.")}}syncMusic()};$("musicPresets").append(button)}
+$("chooseMusic").addEventListener("click", ()=>$("musicFile").click());
+$("musicFile").addEventListener("change", async ()=>{
+  const file=$("musicFile").files[0]; if(!file) return;
+  ambientPlayer.stop(); ambientPlaying=false;
+  if(musicUrl) URL.revokeObjectURL(musicUrl);
+  musicUrl=URL.createObjectURL(file); musicAudio.src=musicUrl;
+  $("musicPlay").disabled=false;
+  setMusicStatus(file.name+" is ready.");
+  try{await musicAudio.play();setMusicStatus(file.name+" is playing.");}catch(e){setMusicStatus(file.name+" is ready. Press Play when you're ready.");}
+  syncMusic();
+});
+$("musicPlay").addEventListener("click", async ()=>{
+  if(musicUrl){if(musicAudio.paused){try{await musicAudio.play();setMusicStatus("Music is playing.");}catch(e){setMusicStatus("Music could not start. Try again.");}}else{musicAudio.pause();setMusicStatus("Music is paused.");}}
+  else if(ambientPreset!=="quiet"){if(ambientPlaying){ambientPlayer.stop();ambientPlaying=false;setMusicStatus("Sound is paused.")}else{try{ambientPlaying=await ambientPlayer.play(ambientPreset);setMusicStatus(ambientLabel(ambientPreset)+" is playing.")}catch{setMusicStatus("Sound could not start. Try again.")}}}
+  syncMusic();
+});
+$("musicVolume").addEventListener("input", ()=>{musicBase=clampVolume($("musicVolume").value);localStorage.setItem("zbMusicVolume",String(musicBase));syncMusic();});
+musicAudio.addEventListener("play",syncMusic); musicAudio.addEventListener("pause",syncMusic);
+$("leaveBtn").addEventListener("click", ()=>{
+  if(confirm("Leave this practice?")){ stopPracticeMedia();stopMusic();location.href="zenbottom-schedule.html"; }
+});
+window.addEventListener("pagehide",()=>{stopPracticeMedia();stopMusic()});
+
+async function init(){
+  if(!steps.length) return showEmpty();
+  $("tutorVoice").checked=tutorVoiceEnabled;$("tutorListening").checked=listeningEnabled;$("tutorWake").checked=wakeWordMode;$("tutorCorrections").checked=correctionsEnabled;
+  syncWakeAvailability();
+  setListenNote("Say “Moxie” when you want Live Tutor to answer.");
+  updateLiveButton();
+  syncMusic();
+  $("musicPlay").disabled=ambientPreset==="quiet";
+  setMusicStatus(ambientPreset==="quiet"?"Quiet selected. Choose a soundscape or your own track any time.":ambientLabel(ambientPreset)+" is ready and will begin when you enter.");
+  renderStep();
+  if(DEMO){ $("gateP").textContent="Demo mode: poses advance on their own so you can preview the flow."; }
+  else if(!cameraRequested){$("gateH").textContent="Ready to practice";$("gateP").textContent="Your camera is off. Use Previous and Skip to move through the lesson at your own pace.";$("readyBtn").textContent="Enter without camera"}
+  const [{ PoseLandmarker, FilesetResolver }] = await Promise.all([
+    import("./vendor/mediapipe/vision_bundle.mjs")
+  ]);
+  model=await (await fetch("./pose-library-32w-z06-ffaudit-cull6.json?bust=14",{cache:"no-store"})).json();
+  const vision=await FilesetResolver.forVisionTasks("./vendor/mediapipe/wasm");
+  uLM=await PoseLandmarker.createFromOptions(vision,{baseOptions:{modelAssetPath:"./vendor/mediapipe/pose_landmarker_full.task",delegate:"GPU"},runningMode:"VIDEO",numPoses:1});
+  requestAnimationFrame(tick);
+}
+init().catch(e=>{
+  $("gateH").textContent="Practice is unavailable right now";
+  $("gateP").textContent=String(e.message||e);
+});
+// dev hook so automation can drive the flow in DEMO mode
+window.__practice={ get idx(){return idx;}, steps, advance };
+</script>
+</body>
+</html>

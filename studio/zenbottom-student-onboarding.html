@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#241310" />
+    <title>Welcome to Moxie Studios</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --ink: #241310;
+        --cream: #f5ecdc;
+        --mist: #ddc9ad;
+        --gold: #e7be79;
+        --sage: #c9ddb7;
+        --line: rgba(245, 236, 220, 0.17);
+        --warn: #f28a78;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        min-height: 100vh;
+        margin: 0;
+        color: var(--cream);
+        font-family: Manrope, sans-serif;
+        background: radial-gradient(65vw 58vw at 100% 5%, #4d2918 0, transparent 70%), radial-gradient(58vw 55vw at -8% 100%, #3f2e1b 0, transparent 73%), var(--ink);
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      .nav {
+        max-width: 1100px;
+        margin: auto;
+        padding: 27px 28px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .brand {
+        font:
+          600 29px/0.85 "Cormorant Garamond",
+          serif;
+      }
+      .brand em {
+        font-style: italic;
+        color: var(--gold);
+      }
+      .back {
+        font:
+          500 10px DM Mono,
+          monospace;
+        text-transform: uppercase;
+        letter-spacing: 0.9px;
+        color: var(--mist);
+      }
+      .back:hover {
+        color: var(--gold);
+      }
+      main {
+        max-width: 1030px;
+        margin: 27px auto 0;
+        padding: 0 28px 70px;
+        display: grid;
+        grid-template-columns: 0.82fr 1.18fr;
+        gap: 72px;
+      }
+      .intro {
+        padding-top: 40px;
+      }
+      .kicker {
+        color: var(--gold);
+        font:
+          500 10px DM Mono,
+          monospace;
+        letter-spacing: 1.8px;
+        text-transform: uppercase;
+      }
+      h1 {
+        font:
+          500 clamp(52px, 6.5vw, 82px) / 0.83 "Cormorant Garamond",
+          serif;
+        letter-spacing: -3.5px;
+        margin: 20px 0 22px;
+      }
+      h1 em {
+        color: var(--gold);
+        font-style: italic;
+      }
+      .intro p {
+        max-width: 380px;
+        color: var(--mist);
+        font-size: 14px;
+        line-height: 1.82;
+      }
+      .pledge {
+        margin-top: 48px;
+        padding: 17px 0;
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+        color: var(--mist);
+        font-size: 11px;
+        line-height: 1.65;
+      }
+      .pledge b {
+        display: block;
+        color: var(--sage);
+        font:
+          500 16px "Cormorant Garamond",
+          serif;
+        margin-bottom: 3px;
+      }
+      .card {
+        position: relative;
+        overflow: hidden;
+        padding: 34px;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: linear-gradient(140deg, rgba(60, 31, 22, 0.91), rgba(25, 11, 8, 0.94));
+        box-shadow: 0 32px 90px rgba(0, 0, 0, 0.3);
+      }
+      .card:before {
+        content: "";
+        position: absolute;
+        width: 270px;
+        height: 270px;
+        border-radius: 50%;
+        right: -155px;
+        top: -160px;
+        background: rgba(231, 190, 121, 0.14);
+        filter: blur(5px);
+      }
+      h2 {
+        position: relative;
+        font:
+          500 37px/0.92 "Cormorant Garamond",
+          serif;
+        letter-spacing: -1px;
+        margin: 14px 0 8px;
+      }
+      .sub {
+        position: relative;
+        margin: 0 0 24px;
+        color: var(--mist);
+        font-size: 12px;
+        line-height: 1.7;
+      }
+      .field {
+        display: block;
+        margin-top: 14px;
+        color: var(--mist);
+        font-size: 11px;
+      }
+      .field input,
+      .field select {
+        display: block;
+        width: 100%;
+        margin-top: 7px;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 11px;
+        background: rgba(6, 3, 2, 0.2);
+        color: var(--cream);
+        outline: none;
+      }
+      .field input:focus,
+      .field select:focus {
+        border-color: rgba(231, 190, 121, 0.72);
+      }
+      .two {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .label {
+        display: block;
+        margin-top: 22px;
+        color: var(--gold);
+        font:
+          500 10px DM Mono,
+          monospace;
+        letter-spacing: 1.25px;
+        text-transform: uppercase;
+      }
+      .choice-set {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-top: 9px;
+      }
+      .choice {
+        position: relative;
+      }
+      .choice input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+      .choice span {
+        display: block;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 8px 10px;
+        color: var(--mist);
+        font-size: 11px;
+        transition: 0.18s;
+      }
+      .choice input:checked + span {
+        border-color: rgba(231, 190, 121, 0.72);
+        background: rgba(231, 190, 121, 0.12);
+        color: var(--gold);
+      }
+      .note {
+        display: flex;
+        gap: 9px;
+        margin: 22px 0 0;
+        color: var(--mist);
+        font-size: 10px;
+        line-height: 1.6;
+      }
+      .note input {
+        accent-color: var(--mist);
+        margin-top: 2px;
+      }
+      .submit {
+        position: relative;
+        width: 100%;
+        margin-top: 20px;
+        border: 0;
+        border-radius: 999px;
+        padding: 14px;
+        background: var(--gold);
+        color: #32190f;
+        font-weight: 700;
+        font-size: 13px;
+      }
+      .submit:hover {
+        filter: brightness(1.07);
+        transform: translateY(-1px);
+      }
+      .error {
+        min-height: 17px;
+        margin-top: 10px;
+        color: var(--warn);
+        font-size: 11px;
+      }
+      .small {
+        margin: 12px 5px 0;
+        text-align: center;
+        color: rgba(221, 201, 173, 0.74);
+        font-size: 10px;
+        line-height: 1.55;
+      }
+      @media (max-width: 780px) {
+        .nav {
+          padding: 23px 20px;
+        }
+        main {
+          display: block;
+          margin-top: 6px;
+          padding: 0 20px 55px;
+        }
+        .intro {
+          padding-top: 8px;
+          margin-bottom: 42px;
+        }
+        .pledge {
+          margin-top: 32px;
+        }
+        .card {
+          padding: 27px 21px;
+        }
+        h1 {
+          letter-spacing: -2px;
+        }
+        .two {
+          grid-template-columns: 1fr;
+        }
+      }
+    .brandmark{height:1.05em;width:auto;display:block;max-width:min(210px,44vw)}
+    /* Quiet on purpose: an escape route, not a competing call to action. */
+    .skip{display:block;margin-top:14px;text-align:center;color:var(--dim,#c9b394);font-size:12px;text-decoration:underline;text-underline-offset:3px}
+    .skip:hover,.skip:focus-visible{color:var(--gold,#e9c078)}</style>
+  </head>
+  <body>
+    <header class="nav">
+      <a class="brand" href="zenbottom-schedule.html"><img class="brandmark" src="assets/moxie-wordmark.png" alt="Moxie Studios" width="480" height="77" /></a
+      ><a class="back" href="zenbottom-schedule.html">← Back to home</a>
+    </header>
+    <main>
+      <section class="intro">
+        <div class="kicker">Your Moxie space</div>
+        <h1>Begin with<br /><em>where you are.</em></h1>
+        <p>Tell Moxie a little about your practice. Your preferences guide private AI guidance. They are never shown to your teacher or other students.</p>
+        <div class="pledge"><b>No performance required.</b>Change these answers any time in Settings. This local preview saves only on this device.</div>
+      </section>
+      <section class="card">
+        <form id="onboard">
+          <div class="kicker">Create your practice profile</div>
+          <h2>Let’s make it yours.</h2>
+          <p class="sub">Your account signs in with an email link. No password, ever.</p>
+          <div class="two">
+            <label class="field">First name<input required name="name" autocomplete="given-name" placeholder="How should Moxie greet you?" /></label><label class="field">Email<input required type="email" name="email" autocomplete="email" placeholder="you@example.com" /></label>
+          </div>
+          <label class="label">What brings you here?</label>
+          <div class="choice-set" id="intentions">
+            <label class="choice"><input type="checkbox" value="stress_relief" /><span>Stress relief</span></label
+            ><label class="choice"><input type="checkbox" value="mobility" /><span>Mobility</span></label
+            ><label class="choice"><input type="checkbox" value="sleep" /><span>Better rest</span></label
+            ><label class="choice"><input type="checkbox" value="strength" /><span>Gentle strength</span></label
+            ><label class="choice"><input type="checkbox" value="desk_reset" /><span>Desk reset</span></label>
+          </div>
+          <label class="field"
+            >Your flexibility right now<select name="rangeLevel">
+              <option value="">Choose a starting point</option>
+              <option value="just_starting">Just starting / feeling stiff</option>
+              <option value="building_ease">Building ease</option>
+              <option value="comfortable">Comfortable in most shapes</option>
+              <option value="very_mobile">Very mobile</option>
+            </select></label
+          ><label class="label">Anything Moxie should be gentle around? <span style="color: var(--mist); text-transform: none; letter-spacing: 0">Optional</span></label>
+          <div class="choice-set" id="areas">
+            <label class="choice"><input type="checkbox" value="wrists" /><span>Wrists</span></label
+            ><label class="choice"><input type="checkbox" value="knees" /><span>Knees</span></label
+            ><label class="choice"><input type="checkbox" value="hips" /><span>Hips</span></label
+            ><label class="choice"><input type="checkbox" value="shoulders" /><span>Shoulders</span></label
+            ><label class="choice"><input type="checkbox" value="lower_back" /><span>Lower back</span></label
+            ><label class="choice"><input type="checkbox" value="neck" /><span>Neck</span></label>
+          </div>
+          <label class="note"><input required type="checkbox" /><span>I’d like Moxie to use these preferences in my private AI guidance. This is not medical advice and I can update it at any time.</span></label>
+          <div class="error" id="error"></div>
+          <button class="submit" type="submit">Enter my Moxie space →</button>
+          <!-- Every field above is optional to the product but required by the form,
+               so without this the only way out of a long page was a small link at
+               the very top. Nobody should have to fill in a profile to reach the
+               studio. -->
+          <a class="skip" href="zenbottom-schedule.html">Skip for now, I will do this later</a>
+          <p class="small">Your profile stays available on this device and securely syncs to your Moxie account when you are online.</p>
+        </form>
+      </section>
+    </main>
+    <script type="module">
+      import { readSettings, writeSettings, withPracticeProfile } from "./settings-lib.mjs";
+      import { authClient, currentAccount } from "./moxie-auth.mjs";
+      import { importMemberData } from "./member-import-lib.mjs";
+      const form = document.querySelector("#onboard"),
+        error = document.querySelector("#error");
+      (async () => {
+        try {
+          const account = await currentAccount();
+          if (account) {
+            const emailInput = form.querySelector("[name=email]");
+            emailInput.value = account.user.email;
+            emailInput.readOnly = true;
+            const nameInput = form.querySelector("[name=name]");
+            if (account.profile.full_name && !nameInput.value) nameInput.value = account.profile.full_name;
+          }
+        } catch (e) {}
+      })();
+      const values = (id) => [...document.querySelectorAll("#" + id + " input:checked")].map((i) => i.value);
+      const goodEmail = (value) => {
+        const at = value.indexOf("@");
+        return at > 0 && value.slice(at).includes(".");
+      };
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const data = Object.fromEntries(new FormData(form));
+        const name = data.name.trim(),
+          email = data.email.trim().toLowerCase();
+        if (!name) {
+          error.textContent = "Please tell us what to call you.";
+          return;
+        }
+        if (!goodEmail(email)) {
+          error.textContent = "Please enter a valid email.";
+          return;
+        }
+        const profile = {
+          enabled: true,
+          intentions: values("intentions"),
+          areas: values("areas"),
+          equipment: [],
+          movementOptions: [],
+          rangeLevel: data.rangeLevel,
+          note: "",
+        };
+        localStorage.setItem("zbStudentName", name);
+        localStorage.setItem("zbStudentEmail", email);
+        const settings = readSettings(localStorage, email);
+        writeSettings(localStorage, email, withPracticeProfile(settings, profile));
+        localStorage.setItem("moxieStudentOnboarded", "1");
+        // Best effort: sync the account and existing browser data before leaving.
+        // A slow or unavailable network never blocks entry; local data remains the
+        // working copy and the notice makes the failed sync visible on the next page.
+        (async () => {
+          try {
+            await Promise.race([
+              (async () => {
+                const supabase = await authClient();
+                const {
+                  data: { user },
+                } = await supabase.auth.getUser();
+                if (!user) return;
+                const profileUpdate = await supabase
+                  .from("profiles")
+                  .update({
+                    full_name: name,
+                    onboarding_completed_at: new Date().toISOString(),
+                    time_zone: Intl.DateTimeFormat().resolvedOptions().timeZone || "",
+                  })
+                  .eq("id", user.id);
+                if (profileUpdate.error) throw profileUpdate.error;
+                const existingConsent = await supabase
+                  .from("consents")
+                  .select("id")
+                  .eq("user_id", user.id)
+                  .eq("consent_type", "personalized_guidance")
+                  .eq("policy_version", "onboarding-v1")
+                  .eq("granted", true)
+                  .limit(1);
+                if (existingConsent.error) throw existingConsent.error;
+                if (!existingConsent.data?.length) {
+                  const consent = await supabase.from("consents").insert({
+                    user_id: user.id,
+                    consent_type: "personalized_guidance",
+                    policy_version: "onboarding-v1",
+                    granted: true,
+                  });
+                  if (consent.error) throw consent.error;
+                }
+                await importMemberData({
+                  storage: localStorage,
+                  email,
+                  userId: user.id,
+                  supabase,
+                });
+                localStorage.removeItem("moxieSyncNotice");
+              })(),
+              new Promise((_, reject) => setTimeout(() => reject(new Error("Sync is taking longer than expected.")), 2500)),
+            ]);
+          } catch (e) {
+            localStorage.setItem("moxieSyncNotice", "Your practice is safe on this device. We could not sync it yet, so Moxie will try again next time you sign in.");
+          }
+          location.href = "zenbottom-schedule.html";
+        })();
+      });
+    </script>
+  </body>
+</html>
