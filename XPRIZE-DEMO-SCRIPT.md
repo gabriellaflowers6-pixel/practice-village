@@ -2,7 +2,7 @@
 
 **Deadline:** Sun Aug 17, 2026, 1:00 PM PT · **Runtime:** cut to length from the recorded audio (hard cap 3:00)
 **Entry:** Practice Village · Build with Gemini XPRIZE · Education & Human Potential (Track 01)
-**Production order (JoYi's call):** script → voice + camera first → screen capture cut to match. Gabby supplies Moxie Studios footage.
+**Production order (JoYi's call):** script → voice + camera first → screen capture cut to match. Moxie Studios now lives at thepracticevillage.org/studio behind the member gate, so the studio can be captured on the Village domain.
 
 ---
 
@@ -37,7 +37,7 @@ I signed into the member lobby and drove every room. What I found, so the video 
 | Member welcome and onboarding | **Yes** | `member_onboarding` mode on the same function |
 | Room hand-off after a question | **Yes** | `member_help` mode returns the room to send her to |
 | Your Record `/record` | Written by Gemini | The Concierge's saved cards, with their sources. No separate model call |
-| Moxie Studios | **Yes, Gabby's side** | The `/coach` proxy on moxiestudio.netlify.app |
+| Moxie Studios `/studio` | **Yes** | The `/coach` proxy, now inside the Village behind the member gate, on JoYi's paid key |
 | Safety Hall | **No, on purpose** | I clicked "Help me make sense of this" and watched the network: zero outbound requests |
 
 So the honest claim is stronger than "we use Gemini." One brain serves the porch, the desk, the welcome, and the hand-offs, Moxie runs its own coach, and Safety Hall deliberately has no AI and no network at all. Say the last part out loud. A judge who checks will find it true, and almost nobody else in this category can say it.
@@ -98,7 +98,9 @@ Read at your own pace. I will time the recorded takes and cut to fit, so ignore 
 ### 3 · SCREEN · Moxie Studios · ~23s
 *[Gabby's footage: the practitioner and the form check both in frame.]*
 
-> Moxie teaches beginner yoga and meditation. She is for the person who has not found a studio yet, or who has been in one and felt intimidated or irritated, and still knows this matters.
+> Moxie Studios is a room inside the membership, not a separate app. One sign-in gets her in.
+>
+> Moxie teaches the basics. She is for the person who has not found a studio yet, or who has been in one and felt intimidated or irritated, and still knows this matters.
 >
 > She takes you through the basics, and the mirror is there so you can check your own form. It runs on your device, and nothing is recorded or sent anywhere.
 
@@ -125,7 +127,7 @@ Read at your own pace. I will time the recorded takes and cut to fit, so ignore 
 ### 7 · SCREEN · where we are · ~21s
 *[Pricing, then the dates.]*
 
-> Four rooms are open today. We opened this month with a handful of memberships, on purpose, because the rooms had to be right before we sold them.
+> Five rooms are open today, and Moxie Studios is one of them. We opened this month with a handful of memberships, on purpose, because the rooms had to be right before we sold them.
 >
 > It is one hundred forty nine dollars a year or fifteen a month. The first workshop is October 31, and live classes start February 7.
 
