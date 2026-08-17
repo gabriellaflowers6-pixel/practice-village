@@ -29,7 +29,7 @@ export function studioPage() {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/member.css?v=35" />
+  <link rel="stylesheet" href="/assets/member.css?v=36" />
 </head>
 <body data-auth-page="room" data-room="moxie">
   <header class="member-header">
@@ -39,8 +39,8 @@ export function studioPage() {
   <main class="member-main">
     <section class="member-welcome">
       <p class="eyebrow">Moxie Studios</p>
-      <h1>Learn it properly, without being watched.</h1>
-      <p>Moxie teaches beginner yoga and meditation from the ground up. She takes you through the basics, and the mirror lets you check your own form as you go. It runs on your device. Nothing is recorded and nothing is sent anywhere.</p>
+      <h1>Learn it properly.</h1>
+      <p>Nobody is watching. Moxie teaches beginner yoga and meditation from the ground up. She takes you through the basics, and the mirror lets you check your own form as you go. It runs on your device. Nothing is recorded and nothing is sent anywhere.</p>
       <p>Every pose was reviewed with a human teacher before it reached you. Start anywhere. You do not have to finish anything today.</p>
     </section>
 
