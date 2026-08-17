@@ -828,14 +828,16 @@ function cardFor(c, now) {
     const time = document.createElement("div");
     time.className = "time"; time.textContent = fmtTime(c.starts_at);
     side.appendChild(time);
-    if (liveWindow(c, now) === "joinable") {
+    // Live classes open February 7, 2027. Until then the schedule shows what is
+    // coming and never offers a door that is not there yet.
+    if (false) {
       const a = document.createElement("a");
-      a.className = "joinbtn"; a.href = "zenbottom-live.html?class=" + encodeURIComponent(c.code);
+      a.className = "joinbtn"; a.href = "#";
       a.textContent = "Join class";
       side.appendChild(a);
     } else {
       const s = document.createElement("span");
-      s.className = "soon"; s.textContent = "upcoming";
+      s.className = "soon"; s.textContent = "opens Feb 7, 2027";
       side.appendChild(s);
     }
     // signup control

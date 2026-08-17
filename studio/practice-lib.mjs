@@ -101,7 +101,7 @@ export function parseVoiceIntent(transcript) {
 // Wake-word mode ignores all room speech unless it starts by addressing Moxie.
 // Recognizers render the name loosely, so accept the close variants, but keep
 // requiring the name to LEAD the sentence: saying "moxie" in passing is not
-// addressing the tutor. "Bott Om" is JoYi's avatar and deliberately not a wake
+// addressing the tutor. "Moxie" is JoYi's avatar and deliberately not a wake
 // phrase; the two were being confused for each other.
 export function parseWakeCommand(transcript) {
   const text = normalizeVoiceText(transcript);
