@@ -39,8 +39,8 @@ export function studioPage() {
   <main class="member-main">
     <section class="member-welcome">
       <p class="eyebrow">Moxie Studios</p>
-      <h1>Learn it properly.</h1>
-      <p>Nobody is watching. Moxie teaches beginner yoga and meditation from the ground up. She takes you through the basics, and the mirror lets you check your own form as you go. It runs on your device. Nothing is recorded and nothing is sent anywhere.</p>
+      <h1>Yoga and meditation from zero.</h1>
+      <p>Moxie teaches the basics at your pace, and the mirror lets you check your own form as you go. It runs on your device. Nobody is watching, nothing is recorded, and nothing is sent anywhere.</p>
       <p>Every pose was reviewed with a human teacher before it reached you. Start anywhere. You do not have to finish anything today.</p>
     </section>
 
