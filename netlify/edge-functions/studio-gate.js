@@ -63,4 +63,9 @@ export default async (request, context) => {
   return context.next();
 };
 
-export const config = { path: "/studio/*" };
+// MediaPipe's own model and wasm files are third-party, ~28MB, and identical
+// to what Google serves publicly. Streaming them through the gate on every
+// request buys nothing and costs the member a slow mirror, so they pass
+// straight through. Everything of ours stays gated: pages, libraries, the
+// trained pose library, and the artwork.
+export const config = { path: "/studio/*", excludedPath: "/studio/vendor/mediapipe/*" };
