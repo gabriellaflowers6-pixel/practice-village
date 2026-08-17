@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>live adapter smoke</title>
+<style>body{font:14px system-ui;background:#241310;color:#f0e4cd;padding:20px}
+video{width:420px;background:#000;border:1px solid #555;display:block;margin:10px 0}
+button{padding:8px 14px;margin-right:8px}#log{white-space:pre;font:12px monospace;color:#8cc99e}</style>
+</head><body>
+<h3>live adapter smoke (room ZEN-TST)</h3>
+<button id="teach">Be the teacher (camera+mic)</button>
+<button id="watch">Be a student (watch + ping)</button>
+<video id="v" autoplay playsinline></video>
+<div id="log"></div>
+<script src="vendor/livekit-client.umd.min.js"></script>
+<script type="module">
+import { joinClass } from "./live-video.js";
+const log = m => document.getElementById("log").textContent += m + "\n";
+const v = document.getElementById("v");
+document.getElementById("teach").onclick = async () => {
+  const s = await joinClass({ room: "ZEN-TST", name: "Teach", role: "teacher", pass: "unclench" });
+  await s.publishCameraMic(); s.attachLocalVideo(v);
+  s.onData(o => log("data from student: " + JSON.stringify(o)));
+  s.onJoin(id => log("joined: " + id));
+  log("teaching as " + s.identity);
+};
+document.getElementById("watch").onclick = async () => {
+  const s = await joinClass({ room: "ZEN-TST", name: "Stu", role: "student" });
+  s.onTrack(t => { if (t.kind === "video") t.attach(v); });
+  setInterval(() => s.sendData({ t: "pulse", pose: "tree", conf: 0.9 }), 2000);
+  log("watching as " + s.identity);
+};
+</script></body></html>

@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Moxie — My profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Mono&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --i: #241310;
+        --c: #f5ecdc;
+        --m: #ddc9ad;
+        --g: #e7be79;
+        --l: rgba(245, 236, 220, 0.16);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: radial-gradient(65vw 60vw at 100% 0, #4b2919, transparent 70%), var(--i);
+        color: var(--c);
+        font-family: Manrope, sans-serif;
+      }
+      .wrap {
+        max-width: 790px;
+        margin: auto;
+        padding: 28px 22px 65px;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .top {
+        display: flex;
+        justify-content: space-between;
+      }
+      .brand {
+        font:
+          600 30px/0.8 "Cormorant Garamond",
+          serif;
+      }
+      .brand em,
+      h1 em {
+        color: var(--g);
+        font-style: italic;
+      }
+      .header-actions { display: flex; gap: 8px; }
+      .back { position: relative; width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid var(--l); border-radius: 50%; color: var(--m); background: rgba(20,10,7,.34); transition: .2s; }
+      .back:hover,.back:focus-visible { color: var(--g); border-color: rgba(231,190,121,.6); transform: translateY(-2px); }
+      .back svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+      .back::after { content: attr(data-label); position: absolute; right: 0; top: calc(100% + 9px); z-index: 20; padding: 6px 9px; border: 1px solid rgba(231,190,121,.28); border-radius: 8px; background: rgba(24,12,9,.96); color: var(--c); font: 600 10px Manrope,sans-serif; white-space: nowrap; opacity: 0; transform: translateY(-4px); pointer-events: none; transition: .16s; }
+      .back:hover::after,.back:focus-visible::after { opacity: 1; transform: none; }
+      h1 {
+        font:
+          500 59px/0.85 "Cormorant Garamond",
+          serif;
+        letter-spacing: -2px;
+        margin: 52px 0 24px;
+      }
+      .card {
+        display: grid;
+        grid-template-columns: 135px 1fr;
+        gap: 22px;
+        border: 1px solid var(--l);
+        border-radius: 22px;
+        padding: 21px;
+        background: rgba(28, 12, 9, 0.65);
+      }
+      .avatar {
+        height: 135px;
+        display: grid;
+        place-items: center;
+        border-radius: 17px;
+        overflow: hidden;
+        background: linear-gradient(145deg, #d4aa73, #61402a);
+        font:
+          500 52px "Cormorant Garamond",
+          serif;
+      }
+      .avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .photo-pick {
+        display: block;
+        text-align: center;
+        border: 1px dashed rgba(231, 190, 121, 0.45);
+        border-radius: 10px;
+        padding: 9px;
+        margin-top: 10px;
+        font-size: 11px;
+        color: var(--m);
+        cursor: pointer;
+      }
+      .photo-pick:hover {
+        border-color: var(--g);
+        color: var(--g);
+      }
+      .photo-pick input {
+        display: none;
+      }
+      .photo-remove {
+        display: block;
+        margin: 6px auto 0;
+        border: 0;
+        background: none;
+        color: var(--m);
+        font-size: 10px;
+        text-decoration: underline;
+        cursor: pointer;
+        font-family: inherit;
+      }
+      .eyebrow {
+        font:
+          500 10px DM Mono,
+          monospace;
+        letter-spacing: 1.4px;
+        color: var(--g);
+        text-transform: uppercase;
+      }
+      .name {
+        font:
+          500 39px/0.9 "Cormorant Garamond",
+          serif;
+        margin: 12px 0 8px;
+      }
+      .copy {
+        font-size: 12px;
+        color: var(--m);
+        line-height: 1.7;
+      }
+      .tags {
+        display: flex;
+        gap: 7px;
+        flex-wrap: wrap;
+        margin-top: 13px;
+      }
+      .tags span {
+        padding: 5px 8px;
+        border: 1px solid var(--l);
+        border-radius: 999px;
+        color: var(--g);
+        font-size: 10px;
+      }
+      .blocks {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        margin-top: 16px;
+      }
+      .block {
+        border: 1px solid var(--l);
+        border-radius: 17px;
+        padding: 18px;
+        background: rgba(28, 12, 9, 0.48);
+      }
+      .block h2 {
+        font:
+          500 27px "Cormorant Garamond",
+          serif;
+        margin: 0 0 6px;
+      }
+      .block p {
+        font-size: 11px;
+        line-height: 1.65;
+        color: var(--m);
+      }
+      .btn {
+        display: inline-block;
+        margin-top: 10px;
+        border: 1px solid rgba(231, 190, 121, 0.55);
+        border-radius: 999px;
+        padding: 9px 11px;
+        color: var(--g);
+        font-size: 11px;
+        background: none;
+        font-family: inherit;
+        cursor: pointer;
+      }
+      .btn:hover {
+        background: rgba(231, 190, 121, 0.12);
+      }
+      .handle {
+        font:
+          500 12px "DM Mono",
+          monospace;
+        color: var(--g);
+        margin-bottom: 8px;
+      }
+      .bio {
+        font-size: 12px;
+        color: var(--m);
+        line-height: 1.7;
+        max-width: 430px;
+      }
+      .edit-form {
+        display: none;
+        margin-top: 16px;
+        border-top: 1px solid var(--l);
+        padding-top: 16px;
+      }
+      .card.editing .edit-form {
+        display: block;
+      }
+      .card.editing .view-row {
+        display: none;
+      }
+      .edit-form label {
+        display: block;
+        font-size: 10px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--m);
+        margin: 12px 0 6px;
+      }
+      .edit-form input,
+      .edit-form textarea {
+        display: block;
+        width: 100%;
+        border: 1px solid var(--l);
+        border-radius: 10px;
+        padding: 10px 11px;
+        background: rgba(0, 0, 0, 0.22);
+        color: var(--c);
+        font:
+          12px Manrope,
+          sans-serif;
+      }
+      .edit-form input:focus,
+      .edit-form textarea:focus {
+        outline: 1px solid rgba(231, 190, 121, 0.65);
+      }
+      .edit-form textarea {
+        min-height: 74px;
+        resize: vertical;
+      }
+      .edit-form .hint {
+        font-size: 10px;
+        color: rgba(221, 201, 173, 0.6);
+        margin-top: 5px;
+      }
+      .edit-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 14px;
+      }
+      .edit-actions .save {
+        border: 0;
+        border-radius: 999px;
+        padding: 10px 16px;
+        background: var(--g);
+        color: #32190f;
+        font: 600 11px Manrope;
+        cursor: pointer;
+      }
+      .note {
+        min-height: 16px;
+        font-size: 11px;
+        color: #c9ddb7;
+        margin-top: 8px;
+      }
+      .private-head {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 26px 0 2px;
+      }
+      .private-head svg {
+        width: 13px;
+        height: 13px;
+        stroke: var(--m);
+        fill: none;
+        stroke-width: 1.7;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      @media (max-width: 580px) {
+        .wrap {
+          padding: 22px 16px;
+        }
+        .card,
+        .blocks {
+          grid-template-columns: 1fr;
+        }
+        .avatar {
+          height: 120px;
+        }
+        h1 {
+          font-size: 50px;
+        }
+      }
+      .header-actions { position: fixed; top: 28px; right: 28px; z-index: 120; }
+      @media (max-width: 640px) { .header-actions { top: 20px; right: 16px; } }
+    .brandmark{height:1.05em;width:auto;display:block;max-width:min(210px,44vw)}</style>
+  </head>
+  <body>
+    <main class="wrap">
+      <div class="top">
+        <a class="brand" href="zenbottom-schedule.html"><img class="brandmark" src="assets/moxie-wordmark.png" alt="Moxie Studios" width="480" height="77" /></a>
+        <nav class="header-actions" aria-label="Studio navigation"><a class="back" href="zenbottom-schedule.html" aria-label="Dashboard home" data-label="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg></a><a class="back" href="zenbottom-library.html" aria-label="Lesson library" data-label="Lesson library"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5h10.5A2.5 2.5 0 0 1 18 7v12H7.5A2.5 2.5 0 0 1 5 16.5v-12Z"></path><path d="M5 16.5A2.5 2.5 0 0 1 7.5 14H18"></path><path d="M9 8h5"></path></svg></a><a class="back" href="zenbottom-meditations.html" aria-label="Meditation" data-label="Meditation"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.3 9.6A7.6 7.6 0 1 1 13.2 4.5"></path><path d="M12 8.4c1.15 1.45 1.15 3.35 0 4.8-1.15-1.45-1.15-3.35 0-4.8Z"></path></svg></a><a class="back" href="zenbottom-settings.html" aria-label="Settings" data-label="Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6.7"></circle><circle cx="12" cy="12" r="2.9"></circle><path d="M12 5.3V3.1M12 18.7v2.2M17.8 8.65 19.71 7.55M6.2 8.65 4.29 7.55M6.2 15.35 4.29 16.45M17.8 15.35l1.91 1.1"></path></svg></a></nav>
+      </div>
+      <h1>Your <em>profile</em></h1>
+      <section class="card" id="card">
+        <div>
+          <div class="avatar" id="avatar">M</div>
+          <label class="photo-pick" id="photoPick">Choose profile photo<input id="photoInput" type="file" accept="image/jpeg,image/png,image/webp" /></label><button class="photo-remove" id="photoRemove" type="button" hidden>Remove photo</button>
+        </div>
+        <div>
+          <div class="eyebrow">Public profile</div>
+          <div class="view-row">
+            <div class="name" id="name">Your Moxie space</div>
+            <div class="handle" id="handle"></div>
+            <p class="bio" id="bio">Say a little about your practice, if you like.</p>
+            <button class="btn" id="editBtn" type="button">Edit profile →</button>
+          </div>
+          <form class="edit-form" id="editForm">
+            <label for="fName">Name</label><input id="fName" maxlength="60" autocomplete="name" placeholder="How should Moxie greet you?" /><label for="fUser">Username</label><input id="fUser" maxlength="24" autocomplete="off" spellcheck="false" placeholder="yourname" />
+            <p class="hint">Lowercase letters, numbers, and dashes. Shown as @username.</p>
+            <label for="fBio">Bio</label><textarea id="fBio" maxlength="220" placeholder="A line or two about where you are in your practice."></textarea>
+            <p class="hint">Name, username, and bio are visible to your teacher and classmates. Everything below stays private.</p>
+            <div class="edit-actions"><button class="save" type="submit">Save profile</button><button class="btn" style="margin-top: 0" type="button" id="cancelBtn">Cancel</button></div>
+            <div class="note" id="note" aria-live="polite"></div>
+          </form>
+        </div>
+      </section>
+      <div class="private-head">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="5" y="10.5" width="14" height="9.5" rx="2.5"></rect>
+          <path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7"></path></svg
+        ><span class="eyebrow" style="color: var(--m)">Private to you — never shown to anyone</span>
+      </div>
+      <div class="blocks">
+        <section class="block">
+          <h2>Practice needs</h2>
+          <p>Flexibility, intentions, and areas needing care are only used in your private guidance.</p>
+          <div class="tags" id="tags"></div>
+          <a class="btn" href="zenbottom-settings.html">Edit needs →</a>
+        </section>
+        <section class="block">
+          <h2>Saved rituals</h2>
+          <p>Keep personal practices and shape them into a curriculum.</p>
+          <a class="btn" href="zenbottom-settings.html?section=lessons">Saved lessons →</a>
+        </section>
+      </div>
+    </main>
+    <script type="module">
+      import { readSettings, practiceProfileSummary } from "./settings-lib.mjs";
+      import { authClient } from "./moxie-auth.mjs";
+      const $ = (id) => document.getElementById(id),
+        email = localStorage.getItem("zbStudentEmail") || "";
+      // Carry demo or preview only when this page was opened in one. These links
+      // used to be hardcoded with demo=1, and demo fakes every pose match, so a
+      // practice reached from here counted poses the learner never did.
+      {
+        const q = new URLSearchParams(location.search),
+          mode = q.has("preview") ? "preview" : q.has("demo") ? "demo" : "";
+        if (mode) for (const link of document.querySelectorAll(".header-actions a")) {
+          const url = new URL(link.href);
+          url.searchParams.set(mode, "1");
+          link.href = url.pathname.split("/").pop() + url.search;
+        }
+      }
+      // Public identity is device-local for now (like the teacher profile); it moves to
+      // the account once Supabase is connected. Name keeps the existing zbStudentName
+      // key because sign-up and the coach greeting already read it.
+      const PROFILE_KEY = "moxieStudentProfile";
+      async function member(){const supabase=await authClient(),{data:{user}}=await supabase.auth.getUser();return user?{supabase,user}:null}
+      async function syncProfile(p){const account=await member();if(!account)return;const result=await account.supabase.from("profiles").update({full_name:p.name,username:p.username,bio:p.bio}).eq("id",account.user.id);if(result.error)throw result.error}
+      const cleanUser = (v) =>
+        String(v || "")
+          .toLowerCase()
+          .replace(/[^a-z0-9-]+/g, "-")
+          .replace(/-+/g, "-")
+          .replace(/^-|-$/g, "")
+          .slice(0, 24);
+      function load() {
+        let extra = {};
+        try {
+          extra = JSON.parse(localStorage.getItem(PROFILE_KEY)) || {};
+        } catch {}
+        const name = localStorage.getItem("zbStudentName") || "Your Moxie space";
+        return { name, username: cleanUser(extra.username) || cleanUser(name), bio: typeof extra.bio === "string" ? extra.bio : "", photo: typeof extra.photo === "string" && (extra.photo.startsWith("data:image/") || extra.photo.startsWith("https://")) ? extra.photo : "" };
+      }
+      function render() {
+        const p = load();
+        $("name").textContent = p.name;
+        $("handle").textContent = p.username ? "@" + p.username : "";
+        $("bio").textContent = p.bio || "Say a little about your practice, if you like.";
+        if (p.photo) {
+          const img = new Image();
+          img.alt = "Your profile photo";
+          img.src = p.photo;
+          $("avatar").replaceChildren(img);
+        } else
+          $("avatar").textContent =
+            p.name
+              .split(" ")
+              .map((x) => x[0])
+              .filter(Boolean)
+              .slice(0, 2)
+              .join("")
+              .toUpperCase() || "M";
+        $("photoRemove").hidden = !p.photo;
+      }
+      render();
+      (async()=>{try{const account=await member();if(!account)return;const result=await account.supabase.from("profiles").select("full_name,username,bio,avatar_path").eq("id",account.user.id).maybeSingle();if(result.error)throw result.error;const remote=result.data;if(!remote)return;const local=load(),patch={username:remote.username||local.username,bio:remote.bio||local.bio};if(remote.full_name)localStorage.setItem("zbStudentName",remote.full_name);if(remote.avatar_path){const signed=await account.supabase.storage.from("member-avatars").createSignedUrl(remote.avatar_path,3600);if(signed.data?.signedUrl)patch.photo=signed.data.signedUrl}saveExtra(patch);render()}catch{}})();
+      // Private practice tags live in the Practice needs block, under the private fence.
+      const tags = $("tags"),
+        summary = practiceProfileSummary(readSettings(localStorage, email).practiceProfile);
+      (summary ? summary.split("; ").slice(0, 3) : ["Practice profile not set"]).forEach((x) => {
+        const s = document.createElement("span");
+        s.textContent = x;
+        tags.append(s);
+      });
+      const card = $("card");
+      $("editBtn").onclick = () => {
+        const p = load();
+        $("fName").value = p.name === "Your Moxie space" ? "" : p.name;
+        $("fUser").value = p.username;
+        $("fBio").value = p.bio;
+        $("note").textContent = "";
+        card.classList.add("editing");
+        $("fName").focus();
+      };
+      $("cancelBtn").onclick = () => card.classList.remove("editing");
+      $("fUser").addEventListener("blur", () => {
+        $("fUser").value = cleanUser($("fUser").value);
+      });
+      // Photo: resized in the browser (720px, JPEG .78) exactly like the teacher
+      // profile, then saved with the rest of the profile. A full-size phone photo
+      // would blow the browser-storage quota, which is the bug that page already
+      // had to fix once.
+      function resizePhoto(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onerror = () => reject(new Error("We could not read that image."));
+          reader.onload = () => {
+            const image = new Image();
+            image.onerror = () => reject(new Error("We could not open that image."));
+            image.onload = () => {
+              const longest = Math.max(image.naturalWidth, image.naturalHeight),
+                scale = Math.min(1, 720 / longest),
+                canvas = document.createElement("canvas");
+              canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+              canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+              canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
+              resolve(canvas.toDataURL("image/jpeg", 0.78));
+            };
+            image.src = reader.result;
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+      function saveExtra(patch) {
+        const p = load();
+        const extra = { username: p.username, bio: p.bio, photo: p.photo, ...patch };
+        try {
+          localStorage.setItem(PROFILE_KEY, JSON.stringify(extra));
+          return true;
+        } catch {
+          $("note").style.color = "#f2a093";
+          $("note").textContent = "This photo is too large to save. Please choose a smaller image.";
+          return false;
+        }
+      }
+      $("photoInput").addEventListener("change", async (ev) => {
+        const file = ev.target.files[0];
+        if (!file) return;
+        if (file.size > 15 * 1024 * 1024) {
+          $("note").style.color = "#f2a093";
+          $("note").textContent = "Please choose an image smaller than 15 MB.";
+          ev.target.value = "";
+          return;
+        }
+        $("photoPick").firstChild.textContent = "Preparing your photo…";
+        try {
+          const photo = await resizePhoto(file);
+          if (saveExtra({ photo })) render();
+          const account=await member();if(account){const blob=await (await fetch(photo)).blob(),path=account.user.id+"/avatar.jpg",upload=await account.supabase.storage.from("member-avatars").upload(path,blob,{contentType:"image/jpeg",upsert:true});if(upload.error)throw upload.error;const updated=await account.supabase.from("profiles").update({avatar_path:path}).eq("id",account.user.id);if(updated.error)throw updated.error}
+        } catch (error) {
+          $("note").style.color = "#f2a093";
+          $("note").textContent = error.message || "We could not use that image.";
+        } finally {
+          $("photoPick").firstChild.textContent = "Choose profile photo";
+          ev.target.value = "";
+        }
+      });
+      $("photoRemove").addEventListener("click", async () => {
+        if (saveExtra({ photo: "" })) render();
+        try{const account=await member();if(account){await account.supabase.storage.from("member-avatars").remove([account.user.id+"/avatar.jpg"]);await account.supabase.from("profiles").update({avatar_path:""}).eq("id",account.user.id)}}catch{}
+      });
+      $("editForm").addEventListener("submit", async (ev) => {
+        ev.preventDefault();
+        const name = $("fName").value.trim().slice(0, 60),
+          username = cleanUser($("fUser").value),
+          bio = $("fBio").value.trim().slice(0, 220);
+        if (!name) {
+          $("note").style.color = "#f2a093";
+          $("note").textContent = "Please tell us what to call you.";
+          return;
+        }
+        try {
+          localStorage.setItem("zbStudentName", name);
+        } catch {
+          $("note").style.color = "#f2a093";
+          $("note").textContent = "Could not save on this device. Please try again.";
+          return;
+        }
+        if (!saveExtra({ username, bio })) return; // keeps the photo; saveExtra spreads the patch over what is already there
+        try{await syncProfile(load());render();card.classList.remove("editing");$("note").textContent="Profile saved."}catch(error){$("note").style.color="#f2a093";$("note").textContent=/duplicate|unique/i.test(error.message||"")?"That username is already taken.":"Saved on this device. Cloud sync will retry later."}
+      });
+    </script>
+  </body>
+</html>

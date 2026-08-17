@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Moxie Studios - teaching dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#241310; --bg2:#311a13; --panel:#1a0d0a;
+    --cream:#f0e4cd; --cream-dim:#c9b394; --gold:#e9c078; --glow:#ffd98e;
+    --line:rgba(240,228,205,.14); --good:#cfe3b8; --warn:#e46a5a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Inter",sans-serif;color:var(--cream);background:var(--bg);min-height:100vh}
+  #ambient{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+  #ambient .blob{position:absolute;width:65vw;height:65vw;border-radius:50%;filter:blur(90px);opacity:.5}
+  #ambient .b1{left:-18vw;top:-22vw;background:#4a2a18}
+  #ambient .b2{right:-20vw;top:8vh;background:#31190f}
+  #ambient .b3{left:14vw;bottom:-30vw;background:#5a3a1e}
+
+  input,select,textarea,button{font-family:inherit}
+  .glass{background:rgba(30,16,11,.55);backdrop-filter:blur(20px) saturate(1.4);
+    -webkit-backdrop-filter:blur(20px) saturate(1.4);border:1px solid var(--line);border-radius:16px}
+  .btn{font-size:13px;font-weight:600;cursor:pointer;padding:10px 18px;border-radius:999px;
+    border:1px solid rgba(233,192,120,.55);background:rgba(233,192,120,.16);color:var(--glow)}
+  .btn:hover{background:rgba(233,192,120,.26)}
+  .btn.plain{border-color:var(--line);background:none;color:var(--cream-dim)}
+  .btn.plain:hover{color:var(--cream);border-color:rgba(233,192,120,.5)}
+  .btn.warn{color:var(--warn);border-color:rgba(228,106,90,.6)}
+
+  /* ---- gate ---- */
+  #gate{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px}
+  #gate .card{padding:38px 34px;max-width:390px;width:100%;text-align:center;box-shadow:0 28px 80px rgba(0,0,0,.26)}
+  #gate .card::before{content:"Teacher space";display:block;margin-bottom:12px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+  #gate h1{font-family:"Cormorant Garamond",serif;font-weight:600;font-size:34px;margin-bottom:6px}
+  #gate p{font-size:13px;color:var(--cream-dim);line-height:1.55;margin-bottom:20px}
+  #gate input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);
+    background:rgba(0,0,0,.25);color:var(--cream);font-size:14px;margin-bottom:12px}
+  #gateErr{color:var(--warn);font-size:12px;min-height:16px;margin-bottom:8px}
+
+  /* ---- dashboard ---- */
+  #dash{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:26px 22px 60px;display:none}
+  .head{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;gap:16px;flex-wrap:wrap}
+  .head .title{font-family:"Cormorant Garamond",serif;font-size:26px;font-weight:600}
+  .head .title em{font-style:italic;color:var(--gold)}
+  .cols{display:grid;grid-template-columns:320px 1fr;gap:22px;align-items:start}
+  @media(max-width:900px){.cols{grid-template-columns:1fr}}
+
+  /* month grid */
+  .month{padding:16px}
+  .month .mhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .month .mhead .lbl{font-family:"Cormorant Garamond",serif;font-size:18px}
+  .month .mhead button{background:none;border:1px solid var(--line);border-radius:8px;color:var(--cream-dim);
+    cursor:pointer;width:28px;height:28px;font-size:15px}
+  .month .mhead button:hover{color:var(--cream);border-color:var(--gold)}
+  .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+  .grid .dow{font-size:10px;color:var(--cream-dim);text-align:center;padding:4px 0;letter-spacing:.5px}
+  .cell{aspect-ratio:1;border-radius:9px;border:1px solid transparent;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:3px;font-size:12px;position:relative}
+  .cell.inmonth{color:var(--cream)}
+  .cell:not(.inmonth){color:rgba(201,179,148,.35)}
+  .cell.has{cursor:pointer;border-color:var(--line);background:rgba(233,192,120,.06)}
+  .cell.has:hover{border-color:var(--gold)}
+  .dots{display:flex;gap:2px;height:5px}
+  .dots i{width:5px;height:5px;border-radius:50%;background:var(--gold)}
+  .dots .more{font-size:8px;color:var(--gold);line-height:5px}
+
+  /* class list */
+  .listwrap{display:flex;flex-direction:column;gap:20px}
+  .daygrp h3{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:18px;color:var(--gold);
+    margin-bottom:10px;padding-bottom:5px;border-bottom:1px solid var(--line)}
+  .ccard{padding:15px 17px;margin-bottom:10px}
+  .ccard .row1{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+  .ccard .nm{font-family:"Cormorant Garamond",serif;font-size:19px;font-weight:600;line-height:1.1}
+  .ccard .tm{font-family:"Cormorant Garamond",serif;font-size:17px;color:var(--cream);white-space:nowrap}
+  .ccard .meta{font-size:12.5px;color:var(--cream-dim);margin-top:3px}
+  .ccard .code{font-size:11px;color:var(--cream-dim);letter-spacing:1px;margin-top:6px}
+  .ccard .acts{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+  .ccard .acts button{font-size:12px;padding:6px 12px;border-radius:999px;cursor:pointer;
+    border:1px solid var(--line);background:none;color:var(--cream-dim)}
+  .ccard .acts button:hover{color:var(--cream);border-color:rgba(233,192,120,.5)}
+  .ccard .acts button.start{color:var(--glow);border-color:rgba(233,192,120,.6);background:rgba(233,192,120,.14)}
+  .ccard .acts button.cancel.confirm{color:var(--warn);border-color:var(--warn)}
+  .ccard.cancelled{opacity:.55}
+  .ccard.cancelled .nm{text-decoration:line-through}
+  .ctag{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--cream-dim);
+    border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+  .listempty{color:var(--cream-dim);font-family:"Cormorant Garamond",serif;font-size:18px;padding:20px 4px}
+
+  /* modal */
+  #modal{position:fixed;inset:0;z-index:100;background:rgba(10,5,3,.6);display:none;
+    align-items:center;justify-content:center;padding:20px}
+  #modal.open{display:flex}
+  #modal .sheet{padding:24px;max-width:440px;width:100%;max-height:92vh;overflow:auto}
+  #modal h2{font-family:"Cormorant Garamond",serif;font-weight:600;font-size:22px;margin-bottom:16px}
+  #modal label{display:block;font-size:12px;color:var(--cream-dim);margin:12px 0 5px}
+  #modal input,#modal select,#modal textarea{width:100%;padding:10px 12px;border-radius:10px;
+    border:1px solid var(--line);background:rgba(0,0,0,.25);color:var(--cream);font-size:14px}
+  #modal textarea{resize:vertical;min-height:60px}
+  #modal .two{display:flex;gap:10px}
+  #modal .two>div{flex:1}
+  #modalErr{color:var(--warn);font-size:12px;min-height:16px;margin-top:12px}
+  #modal .mfoot{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+  /* ---- class atelier ---- */
+  #atelier{position:fixed;inset:0;z-index:110;background:rgba(10,5,3,.72);display:none;align-items:center;justify-content:center;padding:18px}
+  #atelier.open{display:flex}.atelierSheet{width:min(980px,100%);max-height:94vh;overflow:auto;padding:26px;position:relative}
+  .atelierHead{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;margin-bottom:18px}.atelierHead h2{font-family:"Cormorant Garamond",serif;font-size:30px;font-weight:600}.atelierHead p{font-size:13px;color:var(--cream-dim);line-height:1.5;margin-top:3px}.xbtn{background:none;border:0;color:var(--cream-dim);font-size:24px;cursor:pointer}
+  .atelierGrid{display:grid;grid-template-columns:260px 1fr;gap:22px}@media(max-width:720px){.atelierGrid{grid-template-columns:1fr}}
+  .brief{padding:16px;border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.13)}.brief label{display:block;font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--gold);margin:13px 0 6px}.brief label:first-child{margin-top:0}.brief textarea,.brief input,.brief select{width:100%;border:1px solid var(--line);border-radius:10px;background:rgba(0,0,0,.22);padding:10px;color:var(--cream);font:inherit;font-size:13px}.brief textarea{min-height:110px;resize:vertical}.brief .btn{width:100%;margin-top:16px}
+  .draft{min-height:380px}.draftEmpty{height:100%;min-height:360px;display:grid;place-items:center;text-align:center;border:1px dashed var(--line);border-radius:14px;color:var(--cream-dim);padding:30px;font-family:"Cormorant Garamond",serif;font-size:20px}.draftCard{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:rgba(8,4,2,.18)}.cover{height:134px;background:center/cover no-repeat,linear-gradient(120deg,#5a311b,#160b09);padding:18px;display:flex;align-items:end}.cover h3{font-family:"Cormorant Garamond",serif;font-size:28px;text-shadow:0 2px 16px #000}.draftBody{padding:17px}.draftIntro{font-family:"Cormorant Garamond",font-size:18px;color:var(--cream-dim);line-height:1.35;margin-bottom:14px}.sequence{display:grid;gap:7px}.move{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;background:rgba(255,255,255,.035);font-size:13px}.move b{font-family:"Cormorant Garamond",serif;font-size:17px;color:var(--gold);min-width:28px}.move .moveName{flex:1}.move .moveCue{color:var(--cream-dim);font-size:12px}.move button{border:0;background:none;color:var(--cream-dim);cursor:pointer;font-size:18px}.draftFoot{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}.coverPick{display:flex;gap:8px;margin:14px 0 4px}.coverPick button{width:58px;height:42px;border-radius:9px;border:1px solid var(--line);background:center/cover no-repeat;cursor:pointer}.coverPick button[aria-pressed="true"]{outline:2px solid var(--gold);outline-offset:2px}
+
+  .toast{position:fixed;top:22px;left:50%;transform:translateX(-50%) translateY(-8px);
+    background:rgba(20,10,7,.9);backdrop-filter:blur(20px) saturate(1.2);
+    -webkit-backdrop-filter:blur(20px) saturate(1.2);
+    border:1px solid rgba(233,192,120,.55);border-radius:14px;padding:12px 20px;
+    color:var(--cream);font-size:14px;text-align:center;max-width:min(82vw,460px);
+    z-index:130;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.brandmark{height:1.05em;width:auto;display:block;max-width:min(210px,44vw)}</style>
+</head>
+<body>
+<div id="ambient"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+
+<div id="gate">
+  <div class="card glass">
+    <h1>Moxie Studios</h1>
+    <p>Plan a calm room, then hold it with your class.</p>
+    <input id="gatePass" type="password" placeholder="teacher passphrase" autocomplete="off" />
+    <div id="gateErr"></div>
+    <button class="btn" id="gateBtn" style="width:100%">Open dashboard</button>
+  </div>
+</div>
+
+<div id="dash">
+  <div class="head">
+    <div class="title"><img class="brandmark" src="assets/moxie-wordmark.png" alt="Moxie Studios" width="480" height="77" /> teaching</div>
+    <div style="display:flex;gap:9px"><a class="btn plain" href="zenbottom-teacher-profile.html">My profile</a><button class="btn plain" id="atelierBtn">Make with AI</button><button class="btn" id="newBtn">New class</button></div>
+  </div>
+  <div class="cols">
+    <div class="month glass">
+      <div class="mhead">
+        <button id="mPrev" title="Previous month">‹</button>
+        <div class="lbl" id="mLabel"></div>
+        <button id="mNext" title="Next month">›</button>
+      </div>
+      <div class="grid" id="mGrid"></div>
+    </div>
+    <div class="listwrap" id="list"></div>
+  </div>
+</div>
+
+<div id="atelier" aria-hidden="true"><div class="atelierSheet glass" role="dialog" aria-modal="true" aria-label="AI class builder">
+  <div class="atelierHead"><div><h2>Class atelier</h2><p>Describe the room. Keep, move, or remove anything before it reaches your calendar.</p></div><button class="xbtn" id="atelierClose" aria-label="Close">×</button></div>
+  <div class="atelierGrid"><aside class="brief"><label for="aGroup">Who is this for?</label><textarea id="aGroup" placeholder="e.g. 8 beginners after a long workday, some tight hips and low energy"></textarea><label for="aIntent">Intention</label><input id="aIntent" placeholder="e.g. settle and restore"/><label for="aLength">Length</label><select id="aLength"><option>30 minutes</option><option selected>45 minutes</option><option>60 minutes</option></select><button class="btn" id="aGenerate">Create a draft</button><div id="aError" style="font-size:12px;color:var(--warn);margin-top:10px"></div></aside>
+  <section class="draft" id="aDraft"><div class="draftEmpty">A good class has an arc.<br/>Tell the atelier who will be in the room.</div></section></div>
+</div></div>
+
+<div id="modal">
+  <div class="sheet glass">
+    <h2 id="mTitle">New class</h2>
+    <label>Class name</label>
+    <input id="fName" type="text" maxlength="80" placeholder="Slow Rise" />
+    <label>Theme</label>
+    <input id="fTheme" type="text" maxlength="80" placeholder="hips and letting go" />
+    <label>Date and time</label>
+    <input id="fStart" type="datetime-local" />
+    <div class="two">
+      <div>
+        <label>Duration</label>
+        <select id="fDur">
+          <option value="30">30 min</option>
+          <option value="45">45 min</option>
+          <option value="60" selected>60 min</option>
+          <option value="75">75 min</option>
+          <option value="90">90 min</option>
+        </select>
+      </div>
+      <div>
+        <label>Level</label>
+        <select id="fLevel">
+          <option value="gentle">gentle</option>
+          <option value="all levels" selected>all levels</option>
+          <option value="strong">strong</option>
+        </select>
+      </div>
+    </div>
+    <label>Your name (shown to students)</label>
+    <input id="fTeacher" type="text" maxlength="80" placeholder="Imani Reed" />
+    <label>Description (optional)</label>
+    <textarea id="fDesc" maxlength="300" placeholder="A sentence or two about the class."></textarea>
+    <div class="two">
+      <div>
+        <label>Class size cap (optional)</label>
+        <input id="fCap" type="number" min="1" max="500" placeholder="no limit" />
+      </div>
+      <div id="repeatWrap">
+        <label>Repeat</label>
+        <select id="fRepeat">
+          <option value="1">Just once</option>
+          <option value="2">Weekly for 2 weeks</option>
+          <option value="3">Weekly for 3 weeks</option>
+          <option value="4">Weekly for 4 weeks</option>
+          <option value="6">Weekly for 6 weeks</option>
+          <option value="8">Weekly for 8 weeks</option>
+          <option value="12">Weekly for 12 weeks</option>
+        </select>
+      </div>
+    </div>
+    <div id="modalErr"></div>
+    <div class="mfoot">
+      <button class="btn plain" id="mCancel">Cancel</button>
+      <button class="btn" id="mSave">Save class</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { monthGrid, groupByDay, fmtTime } from "./schedule-lib.mjs";
+import { studioPath } from "./studio-base.mjs";
+
+const $ = id => document.getElementById(id);
+let PASS = "";
+let classes = [];
+let viewYear, viewMonth; // current month grid
+let editId = null;       // set when the modal is editing
+let atelierLesson = null, atelierCover = 0;
+// Moxie renders only. dog has no render yet, so it is not in this list.
+const COVERS = ["assets/still-warrior.png", "assets/poses/savasana.webp", "assets/poses/tree.webp"];
+
+const toastEl = $("toast");
+let toastTimer = null;
+function notify(msg) {
+  toastEl.textContent = msg;
+  toastEl.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove("show"), 5000);
+}
+
+// ---------- API ----------
+async function api(body) {
+  const r = await fetch(studioPath("schedule"), {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ pass: PASS, ...body }),
+  });
+  return r.json();
+}
+async function refresh() {
+  try {
+    const r = await fetch(studioPath("schedule"), { cache: "no-store" });
+    const d = await r.json();
+    if (d.ok) { classes = d.classes; renderMonth(); renderList(); }
+    else notify(d.error || "Could not load the schedule.");
+  } catch (e) { notify("Could not load the schedule."); }
+}
+
+// ---------- gate ----------
+async function openWith(pass) {
+  PASS = pass;
+  const d = await api({ action: "verify" });
+  if (d.ok) {
+    sessionStorage.setItem("zbTeachPass", pass);
+    $("gate").style.display = "none";
+    $("dash").style.display = "block";
+    const now = new Date();
+    viewYear = now.getFullYear(); viewMonth = now.getMonth();
+    await refresh();
+    return true;
+  }
+  PASS = "";
+  return false;
+}
+$("gateBtn").onclick = async () => {
+  const p = $("gatePass").value;
+  if (!p) { $("gateErr").textContent = "Enter your passphrase."; return; }
+  $("gateErr").textContent = "";
+  const ok = await openWith(p);
+  if (!ok) $("gateErr").textContent = "That passphrase was not right.";
+};
+$("gatePass").addEventListener("keydown", e => { if (e.key === "Enter") $("gateBtn").click(); });
+
+// ---------- month grid ----------
+const MONTHS = ["January","February","March","April","May","June","July",
+  "August","September","October","November","December"];
+const DOW = ["S","M","T","W","T","F","S"];
+function renderMonth() {
+  $("mLabel").textContent = MONTHS[viewMonth] + " " + viewYear;
+  const grid = $("mGrid");
+  grid.textContent = "";
+  for (const d of DOW) {
+    const el = document.createElement("div"); el.className = "dow"; el.textContent = d;
+    grid.appendChild(el);
+  }
+  for (const cell of monthGrid(viewYear, viewMonth, classes)) {
+    const el = document.createElement("div");
+    el.className = "cell" + (cell.inMonth ? " inmonth" : "") + (cell.count ? " has" : "");
+    const num = document.createElement("div"); num.textContent = cell.day;
+    el.appendChild(num);
+    const dots = document.createElement("div"); dots.className = "dots";
+    for (let i = 0; i < Math.min(cell.count, 2); i++) {
+      const d = document.createElement("i"); dots.appendChild(d);
+    }
+    if (cell.count > 2) { const m = document.createElement("span"); m.className = "more"; m.textContent = "+" + (cell.count - 2); dots.appendChild(m); }
+    el.appendChild(dots);
+    if (cell.count) el.onclick = () => {
+      const target = document.getElementById("day-" + cell.dayKey);
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+    grid.appendChild(el);
+  }
+}
+$("mPrev").onclick = () => { viewMonth--; if (viewMonth < 0) { viewMonth = 11; viewYear--; } renderMonth(); };
+$("mNext").onclick = () => { viewMonth++; if (viewMonth > 11) { viewMonth = 0; viewYear++; } renderMonth(); };
+
+// ---------- class list ----------
+function levelWord(l) { return l ? l[0].toUpperCase() + l.slice(1) : ""; }
+function studentLink(code) {
+  return location.origin + location.pathname.replace("zenbottom-teach.html", "zenbottom-live.html") +
+    "?class=" + encodeURIComponent(code);
+}
+function renderList() {
+  const wrap = $("list");
+  wrap.textContent = "";
+  const now = Date.now();
+  if (!classes.length) {
+    const e = document.createElement("div");
+    e.className = "listempty";
+    e.textContent = "No classes scheduled yet. Press New class to plan one.";
+    wrap.appendChild(e);
+    return;
+  }
+  for (const day of groupByDay(classes, now)) {
+    const grp = document.createElement("div");
+    grp.className = "daygrp";
+    grp.id = "day-" + day.dayKey;
+    const h = document.createElement("h3"); h.textContent = day.label;
+    grp.appendChild(h);
+    for (const c of day.classes) grp.appendChild(cardFor(c));
+    wrap.appendChild(grp);
+  }
+}
+function cardFor(c) {
+  const cancelled = c.status === "cancelled";
+  const card = document.createElement("div");
+  card.className = "ccard glass" + (cancelled ? " cancelled" : "");
+
+  const row1 = document.createElement("div"); row1.className = "row1";
+  const nm = document.createElement("div"); nm.className = "nm"; nm.textContent = c.name;
+  row1.appendChild(nm);
+  if (cancelled) { const t = document.createElement("span"); t.className = "ctag"; t.textContent = "Cancelled"; row1.appendChild(t); }
+  else { const tm = document.createElement("div"); tm.className = "tm"; tm.textContent = fmtTime(c.starts_at); row1.appendChild(tm); }
+  card.appendChild(row1);
+
+  const meta = document.createElement("div"); meta.className = "meta";
+  const bits = [c.theme, levelWord(c.level), (c.duration_min || 60) + " min"];
+  if (c.teacher_name) bits.unshift("with " + c.teacher_name);
+  if (c.size_cap) bits.push("cap " + c.size_cap);
+  meta.textContent = bits.join("  ·  ");
+  card.appendChild(meta);
+
+  if (!cancelled && c.signup_count > 0) {
+    const su = document.createElement("div"); su.className = "meta";
+    su.textContent = c.signup_count + (c.signup_count === 1 ? " signed up" : " signed up");
+    card.appendChild(su);
+  }
+
+  const code = document.createElement("div"); code.className = "code"; code.textContent = c.code;
+  card.appendChild(code);
+
+  const acts = document.createElement("div"); acts.className = "acts";
+  if (!cancelled) {
+    acts.appendChild(mkBtn("Start class", "start", () =>
+      window.open("zenbottom-live.html?teach=1&code=" + encodeURIComponent(c.code), "_blank")));
+    const copy = mkBtn("Copy link", "", () => {
+      navigator.clipboard.writeText(studentLink(c.code));
+      copy.textContent = "copied"; setTimeout(() => copy.textContent = "Copy link", 1500);
+    });
+    acts.appendChild(copy);
+    acts.appendChild(mkBtn("Edit", "", () => openModal(c)));
+  }
+  acts.appendChild(mkBtn("Duplicate", "", () => openModal(c, true)));
+  if (!cancelled) {
+    let arm = null;
+    const cancelBtn = mkBtn("Cancel class", "cancel", () => {
+      if (cancelBtn.classList.contains("confirm")) {
+        clearTimeout(arm); doCancel(c.id); return;
+      }
+      cancelBtn.classList.add("confirm"); cancelBtn.textContent = "Click again to cancel";
+      arm = setTimeout(() => { cancelBtn.classList.remove("confirm"); cancelBtn.textContent = "Cancel class"; }, 3000);
+    });
+    acts.appendChild(cancelBtn);
+  }
+  card.appendChild(acts);
+  return card;
+}
+function mkBtn(label, cls, fn) {
+  const b = document.createElement("button");
+  b.type = "button"; if (cls) b.className = cls; b.textContent = label; b.onclick = fn;
+  return b;
+}
+async function doCancel(id) {
+  const d = await api({ action: "cancel", id });
+  if (d.ok) { notify("Class cancelled. Students will see this on the schedule page."); refresh(); }
+  else notify(d.error || "Could not cancel the class.");
+}
+
+// ---------- modal ----------
+function toLocalInput(iso) {
+  const d = new Date(iso);
+  const p = n => String(n).padStart(2, "0");
+  return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()) +
+    "T" + p(d.getHours()) + ":" + p(d.getMinutes());
+}
+function openModal(src, duplicate) {
+  editId = (src && !duplicate) ? src.id : null;
+  $("mTitle").textContent = editId ? "Edit class" : (duplicate ? "Duplicate class" : "New class");
+  $("modalErr").textContent = "";
+  $("repeatWrap").style.display = editId ? "none" : "";
+  $("fRepeat").value = "1";
+  const savedTeacher = localStorage.getItem("zbTeacherName") || "";
+  if (src) {
+    $("fName").value = src.name;
+    $("fTheme").value = src.theme;
+    $("fDur").value = String(src.duration_min || 60);
+    $("fLevel").value = src.level || "all levels";
+    $("fDesc").value = src.description || "";
+    $("fCap").value = src.size_cap || "";
+    $("fTeacher").value = src.teacher_name || savedTeacher;
+    const base = duplicate ? new Date(new Date(src.starts_at).getTime() + 7 * 864e5).toISOString() : src.starts_at;
+    $("fStart").value = toLocalInput(base);
+  } else {
+    for (const id of ["fName","fTheme","fDesc","fCap"]) $(id).value = "";
+    $("fDur").value = "60"; $("fLevel").value = "all levels";
+    $("fTeacher").value = savedTeacher;
+    const soon = new Date(Date.now() + 864e5); soon.setHours(19, 0, 0, 0);
+    $("fStart").value = toLocalInput(soon.toISOString());
+  }
+  $("modal").classList.add("open");
+}
+function closeModal() { $("modal").classList.remove("open"); }
+$("newBtn").onclick = () => openModal(null);
+$("mCancel").onclick = closeModal;
+$("modal").addEventListener("click", e => { if (e.target === $("modal")) closeModal(); });
+
+// ---------- AI class atelier ----------
+function fallbackLesson(group, intent, length) {
+  return { title: intent ? `A practice for ${intent}` : "A steady return", intro: group || "A grounded, spacious practice for the room.", outro: "Leave a little room for the rest of your day.", sections:[
+    {phase:"warmup",poses:[{pose:"easyseat",holdBreaths:5,cue:"Arrive with an unhurried breath."},{pose:"catcow",holdBreaths:5,cue:"Let the spine wake slowly."}]},
+    {phase:"build",poses:[{pose:"dog",holdBreaths:5,cue:"Make space through the back body."},{pose:"highlunge",holdBreaths:4,cue:"Let the legs carry you."}]},
+    {phase:"peak",poses:[{pose:"warrior",holdBreaths:5,cue:"Root down before you reach out."}]},
+    {phase:"cool",poses:[{pose:"pigeon",holdBreaths:5,cue:"Ease in, no forcing."},{pose:"seatedfold",holdBreaths:5,cue:"Lengthen before you soften."}]},
+    {phase:"rest",poses:[{pose:"savasana",holdBreaths:8,cue:"Let the floor do the holding."}]}
+  ]};
+}
+function prettyPose(key) { return ({dog:"Downward Dog",highlunge:"High Lunge",easyseat:"Easy Seat",catcow:"Cat/Cow",warrior:"Warrior II",seatedfold:"Seated Fold",savasana:"Savasana"})[key] || key.replace(/\b\w/g,c=>c.toUpperCase()); }
+function renderDraft() {
+  const host=$("aDraft"); host.textContent="";
+  if (!atelierLesson) { host.innerHTML='<div class="draftEmpty">A good class has an arc.<br/>Tell the atelier who will be in the room.</div>'; return; }
+  const card=document.createElement("div"); card.className="draftCard";
+  const cover=document.createElement("div"); cover.className="cover"; cover.style.backgroundImage=`url("${COVERS[atelierCover]}")`; const title=document.createElement("h3"); title.textContent=atelierLesson.title; cover.appendChild(title); card.appendChild(cover);
+  const body=document.createElement("div"); body.className="draftBody"; const intro=document.createElement("div"); intro.className="draftIntro"; intro.textContent=atelierLesson.intro; body.appendChild(intro);
+  const picks=document.createElement("div"); picks.className="coverPick"; COVERS.forEach((src,i)=>{const b=document.createElement("button");b.style.backgroundImage=`url("${src}")`;b.setAttribute("aria-label",`Choose cover ${i+1}`);b.setAttribute("aria-pressed",String(i===atelierCover));b.onclick=()=>{atelierCover=i;renderDraft()};picks.appendChild(b)}); body.appendChild(picks);
+  const seq=document.createElement("div"); seq.className="sequence"; const all=atelierLesson.sections.flatMap(s=>s.poses.map(p=>({...p,phase:s.phase}))); all.forEach((p,i)=>{const row=document.createElement("div");row.className="move";row.innerHTML=`<b>${i+1}</b><span class="moveName">${prettyPose(p.pose)} <small>· ${p.phase}</small></span><span class="moveCue">${p.cue}</span>`;const up=document.createElement("button");up.textContent="↑";up.title="Move earlier";up.onclick=()=>{if(i){const x=all[i-1];all[i-1]=all[i];all[i]=x;atelierLesson.sections=[{phase:"flow",poses:all.map(({phase,...q})=>q)}];renderDraft()}};const del=document.createElement("button");del.textContent="×";del.title="Remove pose";del.onclick=()=>{all.splice(i,1);atelierLesson.sections=[{phase:"flow",poses:all.map(({phase,...q})=>q)}];renderDraft()};row.append(up,del);seq.appendChild(row)});body.appendChild(seq);
+  const foot=document.createElement("div");foot.className="draftFoot";const add=document.createElement("button");add.className="btn plain";add.textContent="Add rest";add.onclick=()=>{atelierLesson.sections.push({phase:"rest",poses:[{pose:"child",holdBreaths:6,cue:"Come back to the ground."}]});renderDraft()};const use=document.createElement("button");use.className="btn";use.textContent="Use this class";use.onclick=()=>{ $("fName").value=atelierLesson.title; $("fTheme").value=$("aIntent").value||"a thoughtful practice"; $("fDur").value=$("aLength").value.startsWith("30")?"30":$("aLength").value.startsWith("45")?"45":"60"; $("fDesc").value=atelierLesson.intro; $("atelier").classList.remove("open"); $("modal").classList.add("open"); };foot.append(add,use);body.appendChild(foot);card.appendChild(body);host.appendChild(card);
+}
+$("atelierBtn").onclick=()=>{$("atelier").classList.add("open");$("aGroup").focus()};$("atelierClose").onclick=()=>$("atelier").classList.remove("open");
+$("aGenerate").onclick=async()=>{const group=$("aGroup").value.trim(),intent=$("aIntent").value.trim(),length=$("aLength").value;$('aError').textContent="";$("aGenerate").textContent="Drafting…";$("aGenerate").disabled=true;try{const r=await fetch(studioPath("coach"),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:[{role:"user",content:`Create a ${length} yoga class for this group: ${group||"a mixed beginner group"}. Intention: ${intent||"ground and restore"}. Return a lesson.`}]})});const d=await r.json();atelierLesson=d.ok&&d.lesson?d.lesson:fallbackLesson(group,intent,length);if(!d.ok)$('aError').textContent="Using a thoughtful starter draft while the AI is unavailable."}catch{atelierLesson=fallbackLesson(group,intent,length);$('aError').textContent="Using a thoughtful starter draft while the AI is unavailable."}finally{$("aGenerate").textContent="Create a draft";$("aGenerate").disabled=false;renderDraft()}};
+
+$("mSave").onclick = async () => {
+  const name = $("fName").value.trim(), theme = $("fTheme").value.trim();
+  const startVal = $("fStart").value;
+  if (!name) return void ($("modalErr").textContent = "Please give the class a name.");
+  if (!theme) return void ($("modalErr").textContent = "Please give the class a theme.");
+  if (!startVal) return void ($("modalErr").textContent = "Please pick a date and time.");
+  const startISO = new Date(startVal).toISOString();
+  if (!editId && new Date(startISO).getTime() < Date.now() - 60000)
+    return void ($("modalErr").textContent = "That start time is in the past.");
+  const capRaw = $("fCap").value.trim();
+  const teacherName = $("fTeacher").value.trim();
+  if (teacherName) localStorage.setItem("zbTeacherName", teacherName);
+  const fields = {
+    name, theme, starts_at: startISO,
+    duration_min: parseInt($("fDur").value, 10),
+    level: $("fLevel").value,
+    description: $("fDesc").value.trim(),
+    size_cap: capRaw ? parseInt(capRaw, 10) : null,
+    teacher_name: teacherName,
+  };
+  $("mSave").disabled = true;
+  let d;
+  if (editId) d = await api({ action: "update", id: editId, fields });
+  else d = await api({ action: "create", ...fields, repeat_weeks: parseInt($("fRepeat").value, 10) });
+  $("mSave").disabled = false;
+  if (d.ok) {
+    // The schedule remains the shared source of truth. The richer editable
+    // studio plan is kept on the teacher's device until teacher accounts/
+    // server-side plan storage are introduced.
+    if (!editId && atelierLesson && d.classes) {
+      for (const cls of d.classes) localStorage.setItem("zbClassPlan:" + cls.code,
+        JSON.stringify({ lesson: atelierLesson, cover: atelierCover, saved_at: new Date().toISOString() }));
+      atelierLesson = null;
+    }
+    closeModal();
+    notify(editId ? "Class updated." : "Class scheduled.");
+    refresh();
+  } else {
+    $("modalErr").textContent = d.error || "Could not save the class.";
+  }
+};
+
+// ---------- boot ----------
+(async () => {
+  const saved = sessionStorage.getItem("zbTeachPass");
+  if (saved && await openWith(saved)) return;
+  $("gatePass").focus();
+})();
+</script>
+</body>
+</html>
