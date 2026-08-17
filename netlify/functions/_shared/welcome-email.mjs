@@ -2,7 +2,7 @@
 // RESEND_API_KEY is present. Netlify Identity's set-password mail is separate
 // and still goes out for brand new accounts.
 
-const FROM = "Practice Village <info@aidedeq.org>";
+const FROM = "Practice Village <admin@thepracticecenter.org>";
 
 function html(planLabel, setPasswordNeeded) {
   const passwordLine = setPasswordNeeded
@@ -59,7 +59,7 @@ export async function sendWelcomeEmail(email, { planLabel = "membership", setPas
       body: JSON.stringify({
         from: FROM,
         to: [email],
-        reply_to: "info@aidedeq.org",
+        reply_to: "admin@thepracticecenter.org",
         subject: "You're in. Welcome to Practice Village.",
         html: html(planLabel, setPasswordNeeded),
         text: text(planLabel, setPasswordNeeded),
