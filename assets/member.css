@@ -679,3 +679,31 @@ body[data-room="kitchen"]{
     background-position:center 80%;
   }
 }
+
+/* Password visibility toggle. A member retyping a password she cannot see is
+   how "not matching" happens. */
+.pw-field {
+  position: relative;
+  display: block;
+}
+.pw-field input {
+  width: 100%;
+  padding-right: 4.5rem;
+}
+.pw-toggle {
+  position: absolute;
+  top: 50%;
+  right: .55rem;
+  transform: translateY(-50%);
+  background: none;
+  border: 0;
+  padding: .35rem .5rem;
+  font: 600 .78rem/1 "Hanken Grotesk", system-ui, sans-serif;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--clay, #a84214);
+  cursor: pointer;
+  border-radius: 6px;
+}
+.pw-toggle:hover { text-decoration: underline; }
+.pw-toggle:focus-visible { outline: 2px solid var(--clay, #a84214); outline-offset: 2px; }

@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/member.css?v=34" />
+  <link rel="stylesheet" href="/assets/member.css?v=35" />
 </head>
 <body data-auth-page="login">
   <header class="member-header">
@@ -25,12 +25,12 @@
 
       <form id="loginForm" class="auth-form">
         <label>Email<input id="loginEmail" type="email" autocomplete="email" required /></label>
-        <label>Password<input id="loginPassword" type="password" autocomplete="current-password" required /></label>
+        <label>Password<span class="pw-field"><input id="loginPassword" type="password" autocomplete="current-password" required /><button type="button" class="pw-toggle" data-pw-for="loginPassword" aria-pressed="false">Show</button></span></label>
         <button type="submit">Sign in</button>
       </form>
 
       <form id="inviteForm" class="auth-form" hidden>
-        <label>Create your password<input id="invitePassword" type="password" autocomplete="new-password" minlength="8" required aria-describedby="invitePasswordHelp" /></label>
+        <label>Create your password<span class="pw-field"><input id="invitePassword" type="password" autocomplete="new-password" minlength="8" required aria-describedby="invitePasswordHelp" /><button type="button" class="pw-toggle" data-pw-for="invitePassword" aria-pressed="false">Show</button></span></label>
         <p id="invitePasswordHelp" class="field-help">Use at least 8 characters. This is the only time you will create it.</p>
         <button type="submit">Create my account</button>
       </form>
@@ -43,7 +43,7 @@
       </div>
 
       <form id="resetForm" class="auth-form" hidden>
-        <label>New password<input id="resetPassword" type="password" autocomplete="new-password" minlength="8" required /></label>
+        <label>New password<span class="pw-field"><input id="resetPassword" type="password" autocomplete="new-password" minlength="8" required /><button type="button" class="pw-toggle" data-pw-for="resetPassword" aria-pressed="false">Show</button></span></label>
         <button type="submit">Save new password</button>
       </form>
 
@@ -57,6 +57,6 @@
       <p class="auth-help">Paid members receive an account setup email after purchase. Need help? <a href="mailto:info@aidedeq.org">Email us.</a></p>
     </section>
   </main>
-  <script type="module" src="/assets/member-auth.bundle.js?v=24"></script>
+  <script type="module" src="/assets/member-auth.bundle.js?v=25"></script>
 </body>
 </html>

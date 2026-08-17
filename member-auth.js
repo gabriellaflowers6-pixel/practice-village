@@ -43,6 +43,23 @@ function goToMemberLobby(user) {
   window.location.href = hasMemberAccess(user) ? "/member" : "/?membership=inactive#doors";
 }
 
+
+// Nobody can retype a password they cannot see, and a dead reset link used to
+// dump her back on the sign-in form with no explanation.
+function wirePasswordToggles(root = document) {
+  root.querySelectorAll(".pw-toggle").forEach((button) => {
+    const input = document.getElementById(button.dataset.pwFor);
+    if (!input) return;
+    button.addEventListener("click", () => {
+      const showing = input.type === "text";
+      input.type = showing ? "password" : "text";
+      button.textContent = showing ? "Show" : "Hide";
+      button.setAttribute("aria-pressed", String(!showing));
+      input.focus();
+    });
+  });
+}
+
 async function initLogin() {
   const card = document.getElementById("authCard");
   const status = document.getElementById("authStatus");
@@ -53,6 +70,11 @@ async function initLogin() {
   const forgotButton = document.getElementById("forgotButton");
   const inviteSuccess = document.getElementById("inviteSuccess");
   let inviteToken = null;
+  wirePasswordToggles();
+
+  const arrivedWithToken = /(?:^|[#&?])(recovery_token|invite_token|confirmation_token)=/.test(
+    `${window.location.hash}${window.location.search}`,
+  );
 
   try {
     const callback = await handleAuthCallback();
@@ -81,9 +103,14 @@ async function initLogin() {
     } else {
       const currentUser = await getUser();
       if (currentUser) goToMemberLobby(currentUser);
+      else if (arrivedWithToken) {
+        status.textContent = "That link has already been used or has expired. Choose \u201cI forgot my password\u201d below and we will send a fresh one.";
+      }
     }
   } catch (error) {
-    status.textContent = messageFor(error);
+    status.textContent = arrivedWithToken
+      ? "That link has already been used or has expired. Choose \u201cI forgot my password\u201d below and we will send a fresh one."
+      : messageFor(error);
   }
 
   loginForm.addEventListener("submit", async (event) => {
