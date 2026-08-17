@@ -124,6 +124,13 @@ async function welcomeOnce(store, record, setPasswordNeeded) {
   const key = await memberKeyForEmail(record.email);
   const saved = (await store.get(key, { type: "json" })) || record;
   if (saved.welcomeSentAt) return { sent: false, reason: "welcome already sent", at: saved.welcomeSentAt };
+  if (setPasswordNeeded) {
+    // The set-password email carries the welcome. Sending a second one is noise.
+    saved.welcomeSentAt = new Date().toISOString();
+    saved.welcomeVia = "identity";
+    await store.setJSON(key, saved);
+    return { sent: true, via: "identity set-password email" };
+  }
   const welcome = await sendWelcomeEmail(record.email, {
     planLabel: record.planLabel,
     setPasswordNeeded,

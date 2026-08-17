@@ -111,9 +111,11 @@ export async function grantIdentityRole(record) {
     });
     let accountSetupEmailSent = false;
     if (created || !user.confirmed_at) {
+      // Identity's recovery template is the Practice Village welcome, so this
+      // one email both welcomes her and sets her password. No second copy.
       accountSetupEmailSent = await sendSetPasswordEmail(record.email);
     }
-    return { userId: user.id, accountSetupEmailSent };
+    return { userId: user.id, accountSetupEmailSent, welcomeCoveredByIdentity: accountSetupEmailSent };
   }
 
   let user = await findIdentityUserByEmail(record.email);
