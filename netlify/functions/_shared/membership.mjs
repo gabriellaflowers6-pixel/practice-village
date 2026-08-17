@@ -1,5 +1,6 @@
 import { getStore } from "@netlify/blobs";
 import { admin, getIdentityConfig } from "@netlify/identity";
+import { identityApiReady, upsertMember, setRoles, sendSetPasswordEmail } from "./identity-api.mjs";
 
 export const MEMBERSHIP_ROLES = ["member", "founding_villager"];
 export const FOUNDING_CUTOFF = "2026-10-31T15:00:00-05:00";
@@ -95,6 +96,26 @@ async function inviteIdentityUser(email) {
 }
 
 export async function grantIdentityRole(record) {
+  // Preferred path. v2 functions get no Identity operator token, so the
+  // account is created over the Netlify API and the member is emailed a
+  // set-password link that also confirms the account.
+  if (identityApiReady()) {
+    const { user, created } = await upsertMember(record.email, {
+      roles: [record.role],
+      appMetadata: {
+        membership_plan: record.plan,
+        membership_status: record.status,
+        stripe_customer_id: record.stripeCustomerId,
+        stripe_subscription_id: record.stripeSubscriptionId,
+      },
+    });
+    let accountSetupEmailSent = false;
+    if (created || !user.confirmed_at) {
+      accountSetupEmailSent = await sendSetPasswordEmail(record.email);
+    }
+    return { userId: user.id, accountSetupEmailSent };
+  }
+
   let user = await findIdentityUserByEmail(record.email);
   let accountSetupEmailSent = false;
 
@@ -129,6 +150,14 @@ export async function grantIdentityRole(record) {
 }
 
 export async function revokeIdentityMembership(record) {
+  if (identityApiReady()) {
+    const { findUser } = await import("./identity-api.mjs");
+    const apiUser = await findUser(record.email);
+    if (!apiUser) return { userId: null };
+    const kept = (apiUser.app_metadata?.roles || []).filter((role) => !MEMBERSHIP_ROLES.includes(role));
+    await setRoles(record.email, kept);
+    return { userId: apiUser.id };
+  }
   const user = await findIdentityUserByEmail(record.email);
   if (!user) return { userId: null };
   const existingRoles = Array.isArray(user.roles) ? user.roles : [];
