@@ -939,3 +939,22 @@ body.is-discreet #quickExit{ display:none !important; }
 /* 2026-08-18: this site is light-only. Stops Android Chrome auto-dark and similar from inverting the cream/ink palette. */
 :root{ color-scheme: light; }
 html{ background: var(--paper, #FBF3E8); }
+
+/* 2026-08-19: phone header. On narrow screens the two tool pills kept their
+   full labels and slid under the fixed exit, and the brand wrapped to three
+   lines. Below 640px: brand on one line, tools become 44px icon pills
+   (ⓘ / Hide), exit keeps its corner. Labels stay in the DOM for screen readers. */
+@media (max-width:640px){
+  .hall-header{ height:auto !important; min-height:64px !important; padding:10px 14px !important; padding-right:104px !important; gap:.5rem !important; }
+  .brand{ font-size:17px !important; gap:8px !important; }
+  .brand::before{ width:28px !important; height:28px !important; flex-basis:28px !important; background-size:contain !important; }
+  .brand span{ line-height:1.05 !important; }
+  .brand b{ white-space:nowrap; }
+  .brand small{ font-size:.6rem !important; letter-spacing:.1em !important; }
+  .header-tools{ gap:6px !important; margin-left:auto !important; flex:none !important; }
+  .header-tool{ width:44px !important; min-width:44px !important; padding:0 !important; font-size:0 !important; color:transparent !important; }
+  .header-tool::before{ font-size:15px !important; color:#2B2013 !important; font-weight:800 !important; line-height:1 !important; }
+  #safetyInfo::before{ content:"ⓘ" !important; }
+  #discreetMode::before{ content:"Hide" !important; font-size:11.5px !important; letter-spacing:.04em !important; }
+  .quick-exit{ right:14px !important; top:10px !important; min-width:64px !important; padding:0 14px !important; }
+}
