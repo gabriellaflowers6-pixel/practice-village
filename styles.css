@@ -1887,3 +1887,11 @@ h3{ font-family:var(--serif) !important; }
 .legal__lead{ font-family:var(--serif); font-size:clamp(1.25rem,2vw,1.55rem); line-height:1.35; color:var(--ink) !important; margin-top:1rem !important; }
 .legal__cta{ display:inline-block; margin-top:1.6rem; padding:.85rem 1.25rem; border-radius:999px; background:var(--clay); color:#fff !important; text-decoration:none !important; font-weight:700; }
 .legal__cta:hover{ background:var(--clay-deep); }
+
+/* 2026-08-18: this site is light-only. Stops Android Chrome auto-dark and similar from inverting the cream/ink palette. */
+:root{ color-scheme: light; }
+html{ background: var(--paper, #FBF3E8); }
+
+/* 2026-08-18: pricing ribbon centering. A later transform:none rule cancelled translateX(-50%); the standalone translate property is unaffected. Fixes 8px sideways scroll on 360px phones. */
+.ticket__ribbon{ translate: -50% 0; }
+html, body{ overflow-x: clip; }

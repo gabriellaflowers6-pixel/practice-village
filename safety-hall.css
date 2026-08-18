@@ -935,3 +935,7 @@ body{
 body.is-discreet .header-tool,
 body.is-discreet .quick-exit,
 body.is-discreet #quickExit{ display:none !important; }
+
+/* 2026-08-18: this site is light-only. Stops Android Chrome auto-dark and similar from inverting the cream/ink palette. */
+:root{ color-scheme: light; }
+html{ background: var(--paper, #FBF3E8); }
