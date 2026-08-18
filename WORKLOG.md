@@ -1,3 +1,28 @@
+### 2026-08-18 — SECURITY STAT: Jessica's tester notes, items 1-3 shipped (JoYi's bot, 09:15-11:00 JST)
+TRIGGER: tester Jessica found /concierge was an open, unauthenticated Gemini proxy with
+no rate limit (anonymous POST -> live billed reply). JoYi rotated GEMINI_API_KEY in AI
+Studio and marked it secret in Netlify (was plain); redeployed with --build.
+SHIPPED to prod (thepracticevillage.org), each verified live:
+(1) Concierge spend fence: netlify/functions/_shared/rate-limit.mjs on Netlify Blobs
+    (store practice-village-ratelimit). Anonymous porch 20/IP/day, anonymous global
+    ceiling 400/day, members 200/account/day; env overrides CONCIERGE_ANON_PER_IP_PER_DAY,
+    CONCIERGE_ANON_GLOBAL_PER_DAY, CONCIERGE_MEMBER_PER_DAY. 429 + Retry-After when
+    capped, X-RateLimit-* on every reply, 413 on bodies over 32KB. Porch stays public by
+    design; member modes already require a verified role. Verified: 19x200 then 429.
+(2) Headers in netlify.toml: Content-Security-Policy (no unsafe-eval; unsafe-inline kept
+    for the small inline scripts; wasm-unsafe-eval + blob workers for MediaPipe in
+    /studio; connect-src allows Gemini Live wss) + Permissions-Policy. Tested on a draft
+    deploy first: home, login, safety-hall, snapshot, wholeness clean.
+    /login?purchased=1 shows a payment-received state (for the Stripe Payment Link
+    redirect; JoYi sets the redirect URL in Stripe, bot could not read the key).
+(3) Server-side sign-out: netlify/functions/_shared/session.mjs wraps getUser() and
+    refuses tokens issued before the member's last sign-out (recorded by new
+    /member-logout in store practice-village-sessions). All 14 functions import getUser
+    from the wrapper now; member-auth.js and studio/moxie-auth.mjs call /member-logout
+    before the Identity logout. Bundle bumped v=26.
+NOT DONE: (4) server-side conversation history (caps make it a non-issue for cost);
+(5) homepage copy/structure changes = JoYi's creative call, outline delivered.
+
 ### 2026-08-15 — P1 MEMBER POLISH: the member area earns the landing's restraint (JoYi's bot, STARTED 09:50, STOPPED 10:40 JST)
 JoYi's call: the membership page is subpar to the landing; make it richer. She named
 the cur.AI.ted pill (big, off-colour), the rounded buttons, the weak Open sign, and
