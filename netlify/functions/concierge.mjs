@@ -13,6 +13,9 @@
 
 import { getUser } from "@netlify/identity";
 import { membershipStore, memberKeyForEmail } from "./_shared/membership.mjs";
+import { checkDailyLimit, clientIp } from "./_shared/rate-limit.mjs";
+
+const MAX_BODY_BYTES = 32 * 1024; // 16 turns × 1000 chars leaves plenty of room
 
 const MEMBER_ROLES = ["member", "founding_villager", "admin", "test_member"];
 const PORCH_MAX_MESSAGES = 12; // six exchanges on the porch, then a warm handoff
@@ -281,15 +284,32 @@ function scrubChip(text) {
   return t;
 }
 
-const json = (o) => new Response(JSON.stringify(o), { headers: { "content-type": "application/json" } });
+const json = (o, init = {}) => new Response(JSON.stringify(o), { ...init, headers: { "content-type": "application/json", ...(init.headers || {}) } });
 
-export default async (req) => {
+const limitHeadersFor = new WeakMap();
+
+// Every response, success or not, carries the caller's X-RateLimit-* headers.
+export default async (req, context) => {
+  const res = await handle(req, context);
+  const h = limitHeadersFor.get(req);
+  if (h && res?.headers) for (const [k, v] of Object.entries(h)) res.headers.set(k, v);
+  return res;
+};
+
+async function handle(req, context) {
   if (!process.env.GEMINI_API_KEY) return json({ ok: false, error: "the Concierge is not set up yet" });
-  if (req.method !== "POST") return json({ ok: false, error: "bad request" });
+  if (req.method !== "POST") return json({ ok: false, error: "bad request" }, { status: 405 });
+  const declared = Number(req.headers.get("content-length")) || 0;
+  if (declared > MAX_BODY_BYTES) return json({ ok: false, error: "that is more than the Concierge can take in at once" }, { status: 413 });
   let o;
-  try { o = await req.json(); } catch { return json({ ok: false, error: "bad request" }); }
+  try {
+    const raw = await req.text();
+    if (raw.length > MAX_BODY_BYTES) return json({ ok: false, error: "that is more than the Concierge can take in at once" }, { status: 413 });
+    o = JSON.parse(raw);
+  } catch { return json({ ok: false, error: "bad request" }, { status: 400 }); }
+  if (!o || typeof o !== "object") return json({ ok: false, error: "bad request" }, { status: 400 });
   const msgs = trimHistory(o.messages);
-  if (!msgs.length) return json({ ok: false, error: "tell the Concierge what you are facing first" });
+  if (!msgs.length) return json({ ok: false, error: "tell the Concierge what you are facing first" }, { status: 400 });
 
   // Capability follows the verified identity, never the browser's claim.
   let member = null;
@@ -298,6 +318,19 @@ export default async (req) => {
     const roles = Array.isArray(user?.roles) ? user.roles : [];
     if (user && roles.some((role) => MEMBER_ROLES.includes(role))) member = user;
   } catch { member = null; }
+
+  // Spend fence: every model-backed reply is billed, so every caller is
+  // day-capped. Anonymous porch visitors by IP under a global ceiling; members
+  // by account. Checked before any Gemini call.
+  const limit = await checkDailyLimit("concierge", member?.email ? { email: member.email } : { ip: clientIp(req, context) });
+  limitHeadersFor.set(req, limit.headers);
+  if (!limit.allowed) {
+    return json({
+      ok: false,
+      error: member ? "The Concierge has given you all she can for today. She will be here again tomorrow." : "The porch is full for today. Come back tomorrow, or step inside the Village to keep going.",
+      rateLimited: true,
+    }, { status: 429, headers: limit.headers });
+  }
 
   const requested = ["member_onboarding", "member_help", "member_desk"].includes(o.mode) ? o.mode : "standard";
   const mode = member ? requested : "standard";
