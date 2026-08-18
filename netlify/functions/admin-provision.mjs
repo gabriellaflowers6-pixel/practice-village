@@ -3,7 +3,7 @@
 // webhook existed). Admin role required.
 //
 // POST /admin-provision { "email": "...", "plan": "founding_villager" | "membership" }
-import { getUser } from "@netlify/identity";
+import { getUser } from "./_shared/session.mjs";
 import {
   FOUNDING_CUTOFF,
   FOUNDING_LIMIT,

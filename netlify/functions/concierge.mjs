@@ -11,7 +11,7 @@
 // (no forms, no applications, no background checks); no legal/medical advice;
 // no invented specifics; free non-commercial sources only; consent-led saves.
 
-import { getUser } from "@netlify/identity";
+import { getUser } from "./_shared/session.mjs";
 import { membershipStore, memberKeyForEmail } from "./_shared/membership.mjs";
 import { checkDailyLimit, clientIp } from "./_shared/rate-limit.mjs";
 

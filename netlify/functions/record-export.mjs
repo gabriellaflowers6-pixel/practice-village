@@ -1,4 +1,4 @@
-import { getUser } from "@netlify/identity";
+import { getUser } from "./_shared/session.mjs";
 import { getMembershipRecordByEmail, sha256 } from "./_shared/membership.mjs";
 import { composeRecordPdf } from "./_shared/record-pdf.mjs";
 

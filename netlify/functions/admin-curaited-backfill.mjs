@@ -1,4 +1,4 @@
-import { getUser } from "@netlify/identity";
+import { getUser } from "./_shared/session.mjs";
 import { membershipStore, isActiveStripeStatus, sha256 } from "./_shared/membership.mjs";
 import { notifyCuraited } from "./_shared/curaited-notify.mjs";
 

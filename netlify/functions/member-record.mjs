@@ -1,4 +1,4 @@
-import { getUser } from "@netlify/identity";
+import { getUser } from "./_shared/session.mjs";
 
 const MEMBER_ROLES = ["member", "founding_villager", "admin", "test_member"];
 
@@ -36,7 +36,7 @@ function recordPage() {
       <p class="record-note">Searches and resource lists you keep carry their sources and links with them, here and in every download.</p>
     </section>
   </main>
-  <script type="module" src="/assets/member-auth.bundle.js?v=25"></script>
+  <script type="module" src="/assets/member-auth.bundle.js?v=26"></script>
 </body>
 </html>`;
 }

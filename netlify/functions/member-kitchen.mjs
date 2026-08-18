@@ -1,4 +1,4 @@
-import { getUser } from "@netlify/identity";
+import { getUser } from "./_shared/session.mjs";
 import { KITCHEN_SHELF, KITCHEN_SHELF_META } from "./_shared/kitchen-resources.mjs";
 
 const MEMBER_ROLES = ["member", "founding_villager", "admin", "test_member"];
@@ -65,7 +65,7 @@ export function kitchenPage() {
       <p class="record-note shelf-close">Each resource tells you what it offers and where it stops. Useful on its own. Free means free. No upsell shelf.</p>
     </section>
   </main>
-  <script type="module" src="/assets/member-auth.bundle.js?v=25"></script>
+  <script type="module" src="/assets/member-auth.bundle.js?v=26"></script>
 </body>
 </html>`;
 }

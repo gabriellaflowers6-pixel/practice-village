@@ -1,4 +1,4 @@
-import { getUser } from "@netlify/identity";
+import { getUser } from "./_shared/session.mjs";
 import { getMembershipRecordByEmail, sha256 } from "./_shared/membership.mjs";
 
 const MEMBER_ROLES = ["member", "founding_villager", "admin", "test_member"];

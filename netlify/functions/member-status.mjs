@@ -1,4 +1,4 @@
-import { getUser } from "@netlify/identity";
+import { getUser } from "./_shared/session.mjs";
 import { memberKeyForEmail, membershipStore, sha256 } from "./_shared/membership.mjs";
 
 export default async function handler() {

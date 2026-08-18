@@ -1,4 +1,4 @@
-import { getUser } from "@netlify/identity";
+import { getUser } from "./_shared/session.mjs";
 
 const MEMBER_ROLES = ["member", "founding_villager", "admin", "test_member"];
 
@@ -54,7 +54,7 @@ function welcomePage() {
       <p id="onboardingStatus" class="auth-status" role="status" aria-live="polite"></p>
     </section>
   </main>
-  <script type="module" src="/assets/member-auth.bundle.js?v=25"></script>
+  <script type="module" src="/assets/member-auth.bundle.js?v=26"></script>
 </body>
 </html>`;
 }

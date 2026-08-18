@@ -1087,6 +1087,13 @@ var updateUser = async (updates) => {
 };
 
 // member-auth.js
+var logout2 = async () => {
+  try {
+    await fetch("/member-logout", { method: "POST", credentials: "same-origin", cache: "no-store" });
+  } catch {
+  }
+  return logout();
+};
 var page = document.body.dataset.authPage;
 var memberRoles = ["member", "founding_villager", "admin", "test_member"];
 function rolesFor(user) {
@@ -1880,7 +1887,7 @@ async function initMemberLobby() {
     document.getElementById("voucherSummary").textContent = "Voucher details are temporarily unavailable. Your membership has not changed.";
   }
   const signOut = async () => {
-    await logout();
+    await logout2();
     window.location.replace("/");
   };
   document.getElementById("logoutButton").addEventListener("click", signOut);
@@ -2098,7 +2105,7 @@ function initDesk(user, opts = {}) {
       renderWrap(true);
     }));
     document.getElementById("logoutButton")?.addEventListener("click", async () => {
-      await logout();
+      await logout2();
       window.location.replace("/");
     });
   }
@@ -2603,7 +2610,7 @@ async function initWelcome() {
     });
   }
   document.getElementById("logoutButton").addEventListener("click", async () => {
-    await logout();
+    await logout2();
     window.location.replace("/");
   });
   try {
@@ -2625,7 +2632,7 @@ async function initRecordPage() {
     return;
   }
   document.getElementById("logoutButton")?.addEventListener("click", async () => {
-    await logout();
+    await logout2();
     window.location.replace("/");
   });
   initSavedCards();
@@ -2637,7 +2644,7 @@ async function initAccountPage() {
     return;
   }
   const signOut = async () => {
-    await logout();
+    await logout2();
     window.location.replace("/");
   };
   document.getElementById("logoutButton")?.addEventListener("click", signOut);
@@ -2775,7 +2782,7 @@ async function initAccountPage() {
       done.className = "saved-card__status";
       done.textContent = "Your membership is closed and your Record is erased. Signing you out.";
       box.replaceChildren(done);
-      await logout().catch(() => {
+      await logout2().catch(() => {
       });
       window.setTimeout(() => window.location.replace("/"), 1800);
     }
@@ -2788,7 +2795,7 @@ async function initRoomShell() {
     return;
   }
   document.getElementById("logoutButton")?.addEventListener("click", async () => {
-    await logout();
+    await logout2();
     window.location.replace("/");
   });
   const roomAdd = (buttonId, statusId, item) => {

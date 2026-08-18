@@ -2,7 +2,7 @@
 // now, so the Village session is the account: no second sign-in, no second
 // password, no magic link. The studio pages ask this endpoint instead of
 // Supabase.
-import { getUser } from "@netlify/identity";
+import { getUser } from "./_shared/session.mjs";
 
 const MEMBER_ROLES = ["member", "founding_villager", "admin", "test_member"];
 

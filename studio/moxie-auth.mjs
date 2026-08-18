@@ -72,6 +72,12 @@ export async function currentAccount() {
 // Sign-out belongs to the Village, not to a room inside it.
 export async function signOut() {
   try {
+    // Server-side sign-out first: tokens issued before now stop working everywhere.
+    await fetch("/member-logout", { method: "POST", credentials: "same-origin", cache: "no-store" });
+  } catch {
+    // Continue; the Identity logout below still revokes the refresh token.
+  }
+  try {
     await fetch("/.netlify/identity/logout", { method: "POST", credentials: "same-origin" });
   } catch {
     // The redirect below still takes her somewhere honest.

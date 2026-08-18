@@ -4,10 +4,18 @@ import {
   getUser,
   handleAuthCallback,
   login,
-  logout,
+  logout as identityLogout,
   requestPasswordRecovery,
   updateUser,
 } from "@netlify/identity";
+
+// Sign out in two steps: tell the server first so tokens issued before this
+// moment stop working everywhere (see netlify/functions/_shared/session.mjs),
+// then the Identity logout, which revokes the refresh token and clears cookies.
+const logout = async () => {
+  try { await fetch("/member-logout", { method: "POST", credentials: "same-origin", cache: "no-store" }); } catch { /* still sign out locally */ }
+  return identityLogout();
+};
 
 const page = document.body.dataset.authPage;
 const memberRoles = ["member", "founding_villager", "admin", "test_member"];

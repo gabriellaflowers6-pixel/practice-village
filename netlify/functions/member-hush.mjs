@@ -1,4 +1,4 @@
-import { getUser } from "@netlify/identity";
+import { getUser } from "./_shared/session.mjs";
 import { HUSH_SHELF, HUSH_SHELF_META } from "./_shared/hush-resources.mjs";
 
 const MEMBER_ROLES = ["member", "founding_villager", "admin", "test_member"];
@@ -64,7 +64,7 @@ export function hushPage() {
       </div>
     </section>
   </main>
-  <script type="module" src="/assets/member-auth.bundle.js?v=25"></script>
+  <script type="module" src="/assets/member-auth.bundle.js?v=26"></script>
 </body>
 </html>`;
 }

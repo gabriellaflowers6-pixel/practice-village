@@ -1,4 +1,4 @@
-import { getUser } from "@netlify/identity";
+import { getUser } from "./_shared/session.mjs";
 
 const MEMBER_ROLES = ["member", "founding_villager", "admin", "test_member"];
 
@@ -60,7 +60,7 @@ function memberPage() {
       <div class="account-links"><span id="memberPlan" class="member-plan">Checking membership…</span><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/welcome?onboarding=review">Review onboarding choices</a><a href="/account">Your account</a><button id="logoutButtonBottom" class="text-button" type="button">Sign out</button></div>
     </section>
   </main>
-  <script type="module" src="/assets/member-auth.bundle.js?v=25"></script>
+  <script type="module" src="/assets/member-auth.bundle.js?v=26"></script>
 </body>
 </html>`;
 }
