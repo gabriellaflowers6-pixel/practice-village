@@ -113,6 +113,30 @@ force = false
 [redirects.headers]
 
 [[redirects]]
+from = "/about"
+to = "/about.html"
+status = 200.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
+
+[[redirects]]
+from = "/the-concierge"
+to = "/the-concierge.html"
+status = 200.0
+force = false
+
+[redirects.query]
+
+[redirects.conditions]
+
+[redirects.headers]
+
+[[redirects]]
 from = "/login"
 to = "/login.html"
 status = 200.0
