@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /member
+Disallow: /welcome
+Disallow: /studio/
+Disallow: /login
+
+Sitemap: https://thepracticevillage.org/sitemap.xml
