@@ -46,3 +46,10 @@
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), payment=(), usb=(), interest-cohort=()"
+    # CSP (2026-08-18). Scripts and styles are same-origin; 'unsafe-inline' stays for
+    # script-src because index/login/snapshot/wholeness carry small inline scripts and
+    # the pages use inline style attributes. No 'unsafe-eval'. wasm-unsafe-eval + blob
+    # workers are for MediaPipe pose tracking in /studio. connect-src covers Gemini Live
+    # (wss) for the studio's Live Guide. frame-ancestors 'none' pairs with X-Frame-Options.
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' blob:; worker-src 'self' blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob: data:; connect-src 'self' https://generativelanguage.googleapis.com wss://generativelanguage.googleapis.com; frame-src 'none'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self' https://buy.stripe.com https://checkout.stripe.com; upgrade-insecure-requests"

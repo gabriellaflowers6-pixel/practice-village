@@ -23,6 +23,12 @@
       <h1 id="authTitle">Welcome back.</h1>
       <p id="authIntro">Sign in with the email connected to your membership.</p>
 
+      <div id="purchasedNotice" class="invite-success" hidden tabindex="-1" style="padding-top:0">
+        <p class="eyebrow">Payment received</p>
+        <p>Your membership is active. Two emails are on their way: a welcome note, and one titled “Reset your password” that sets your password for the first time. Open that one, choose a password, and the doors open.</p>
+        <p>Already have a password? Sign in below. Nothing arrived within a few minutes? Check spam, or use “I forgot my password” with the email you paid with.</p>
+      </div>
+
       <form id="loginForm" class="auth-form">
         <label>Email<input id="loginEmail" type="email" autocomplete="email" required /></label>
         <label>Password<span class="pw-field"><input id="loginPassword" type="password" autocomplete="current-password" required /><button type="button" class="pw-toggle" data-pw-for="loginPassword" aria-pressed="false">Show</button></span></label>
@@ -57,6 +63,20 @@
       <p class="auth-help">Paid members receive an account setup email after purchase. Need help? <a href="mailto:info@aidedeq.org">Email us.</a></p>
     </section>
   </main>
+  <script>
+    // Stripe Payment Links send buyers here with ?purchased=1 after checkout.
+    // Show the "payment received, set your password" state above the sign-in form.
+    (function () {
+      var q = new URLSearchParams(window.location.search);
+      if (q.get("purchased") !== "1") return;
+      var n = document.getElementById("purchasedNotice");
+      var t = document.getElementById("authTitle");
+      var i = document.getElementById("authIntro");
+      if (t) t.textContent = "You’re in.";
+      if (i) i.textContent = "Thank you. Here is what happens next.";
+      if (n) n.hidden = false;
+    })();
+  </script>
   <script type="module" src="/assets/member-auth.bundle.js?v=25"></script>
 </body>
 </html>
