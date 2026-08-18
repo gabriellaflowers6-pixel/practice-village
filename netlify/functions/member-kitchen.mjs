@@ -33,6 +33,7 @@ export function kitchenPage() {
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/member.css?v=37" />
+  <link rel="stylesheet" href="/assets/roo/roo.css?v=1" />
 </head>
 <body data-auth-page="room" data-room="kitchen">
   <header class="member-header">
@@ -67,6 +68,7 @@ export function kitchenPage() {
     </section>
   </main>
   <script type="module" src="/assets/member-auth.bundle.js?v=26"></script>
+  <script src="/assets/roo/roo-pv.js?v=1" defer></script>
 </body>
 </html>`;
 }
