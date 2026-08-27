@@ -1,3 +1,16 @@
+### 2026-08-19 — CANCEL FLOW UNBLOCKED (JoYi's bot, ~25 min)
+Jessica could not cancel: the site's /account -> Stripe Customer Portal flow was
+correct in code (portal session + return_url), but the Stripe portal CONFIG had
+"Cancel subscriptions" switched OFF, so the portal opened with no cancel control
+and no obvious way back. Fixed in Stripe dashboard (config bpc_1U6dfF2ZVkTQm...):
+cancel ON, at end of billing period (matches the site's "keeps your access
+through the period you already paid for"), collect a cancellation reason ON,
+default redirect after managing account -> https://thepracticevillage.org/account.
+Verified by fresh reload; portal preview shows the Cancel subscription button.
+No site code changed. NOTE: the portal/checkout brand still reads "TPC | AEQ"
+(account-level public business name, shared with Cur.AI.ted + Moxie) — JoYi's
+call whether to rename it; it is part of why "going back" felt broken.
+
 ### 2026-08-18 — SECURITY STAT: Jessica's tester notes, items 1-3 shipped (JoYi's bot, 09:15-11:00 JST)
 TRIGGER: tester Jessica found /concierge was an open, unauthenticated Gemini proxy with
 no rate limit (anonymous POST -> live billed reply). JoYi rotated GEMINI_API_KEY in AI
