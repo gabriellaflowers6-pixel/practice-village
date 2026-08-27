@@ -1,3 +1,12 @@
+### 2026-08-19 (later) — PORTAL BRAND + JESSICA'S CANCEL (JoYi's bot)
+Stripe public business name changed "TPC | AEQ" -> "The Practice Village" (JoYi's
+call; account-level, so Cur.AI.ted + Moxie checkouts show it too; statement
+descriptor left as TPC | AIDEDEQ). Jessica's membership (info@digitalrebel.eu,
+cus_V5lNdFz3LcvKrN) cancelled at end of period per her request: Stripe shows
+Active - Cancels Sep 17 2026, no charge will ever occur (free month), webhook
+processed and the member record shows cancelAtPeriodEnd true; access and role
+end Sep 17 automatically via customer.subscription.deleted.
+
 ### 2026-08-19 — CANCEL FLOW UNBLOCKED (JoYi's bot, ~25 min)
 Jessica could not cancel: the site's /account -> Stripe Customer Portal flow was
 correct in code (portal session + return_url), but the Stripe portal CONFIG had
