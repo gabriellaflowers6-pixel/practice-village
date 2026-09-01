@@ -154,8 +154,9 @@ function scrub(text) {
   return t;
 }
 function scrubMarkdown(text) {
+  // Markdown keeps ranges readable: dashes become hyphens, not commas.
   if (typeof text !== "string") return null;
-  const t = text.replace(/—|–/g, ",").trim();
+  const t = text.replace(/—|–/g, "-").trim();
   return t || null;
 }
 
@@ -164,7 +165,7 @@ const trim = (v, n) => (typeof v === "string" ? v.trim().slice(0, n) : null);
 function publicProject(p) {
   return {
     id: p.id, title: p.title, status: p.status, publicFacing: p.publicFacing,
-    stage: p.stage, createdAt: p.createdAt, updatedAt: p.updatedAt,
+    stage: p.stage, seed: p.seed || null, createdAt: p.createdAt, updatedAt: p.updatedAt,
     brief: p.brief, nextAction: p.nextAction,
     assets: (p.assets || []).map((a) => ({ name: a.name, kind: a.kind, href: a.href || null, chars: a.text ? a.text.length : 0, addedAt: a.addedAt })),
     artifacts: p.artifacts || [],

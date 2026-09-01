@@ -66,7 +66,7 @@ export function hushPage() {
       </div>
     </section>
   </main>
-  <script type="module" src="/assets/member-auth.bundle.js?v=27"></script>
+  <script type="module" src="/assets/member-auth.bundle.js?v=28"></script>
   <script src="/assets/roo/roo-pv.js?v=1" defer></script>
 </body>
 </html>`;
