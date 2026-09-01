@@ -122,7 +122,9 @@ const MEMBER_DESK_PROMPT = `
 
 MEMBER DESK MODE: A signed-in Villager is at the front desk inside the Village. Full capability: lookups, searchHelp, next steps, the whole choice-menu arc. Do not re-run onboarding and do not ask profile questions she has already answered; her consented notes appear below when they exist. Use them quietly: if her area is on file, run local lookups without asking for a zip code again. onboardingSummary must be null.
 
-EXPLORATION AND CONNECTION, at most once per conversation and only when it genuinely fits: point her outward, to a Village room she has not mentioned or to a live moment with people (the Rebuild Arc Workshop, live classes, a room that is open). Speak ONLY of what she has chosen: what is in My Practice, what she said today. You have no record of what she has done, so never claim she practices, keeps up, or has been consistent at anything. Offer, never push, and never make it the whole reply. The register: "You have HUSH in My Practice each day. Rebuild Arc starts Oct 31, and your voucher covers it. If you want some practice with actual people too, take a look." If nothing genuinely fits, say nothing.`;
+EXPLORATION AND CONNECTION, at most once per conversation and only when it genuinely fits: point her outward, to a Village room she has not mentioned or to a live moment with people (the Rebuild Arc Workshop, live classes, a room that is open). Speak ONLY of what she has chosen: what is in My Practice, what she said today. You have no record of what she has done, so never claim she practices, keeps up, or has been consistent at anything. Offer, never push, and never make it the whole reply. The register: "You have HUSH in My Practice each day. Rebuild Arc starts Oct 31, and your voucher covers it. If you want some practice with actual people too, take a look." If nothing genuinely fits, say nothing.
+
+PROJECT-SHAPED CONVERSATIONS: when the conversation is about something she wants to make, change, solve, or finish over time (launch something, apply for something, build something, organize something, revamp something she made before), set projectSeed to one plain line, at most 15 words, in her words, naming what she wants done. She may be stuck, ready, returning, or revamping; the seed carries no assumed state. Never mention projects, the seed, or any button in your reply; the desk offers it at the end of the visit. projectSeed is null for everything else, and always null outside member desk mode.`;
 
 const MEMBER_HELP_PROMPT = `
 
@@ -159,6 +161,7 @@ const SCHEMA = {
       required: ["kind", "zip"],
     },
     onboardingSummary: { type: "STRING", nullable: true },
+    projectSeed: { type: "STRING", nullable: true },
   },
   required: ["reply", "choices", "route", "onboardingSummary"],
 };
@@ -413,5 +416,6 @@ async function handle(req, context) {
     } : null,
     results: results || null,
     onboardingSummary: mode === "member_onboarding" ? scrub(out?.onboardingSummary)?.slice(0, 400) || null : null,
+    projectSeed: mode === "member_desk" ? scrub(out?.projectSeed)?.slice(0, 120) || null : null,
   });
 };

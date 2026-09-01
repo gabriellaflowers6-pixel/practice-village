@@ -899,6 +899,7 @@ function initDesk(user, opts = {}) {
   let lastKeptPrivate = false;
   let wrapOffered = false;
   let keptThings = [];
+  let lastSeed = null; // project-shaped conversation: the seed for "Open this as a project"
 
   const esc = (t) => { const d = document.createElement("div"); d.textContent = t == null ? "" : t; return d.innerHTML; };
   const bubbles = () => msgs.map((m) => `<p class="desk-msg desk-msg--${m.role === "user" ? "me" : "c"}">${esc(m.text)}</p>`).join("");
@@ -927,6 +928,7 @@ function initDesk(user, opts = {}) {
     if (d.searchHelp) add({ text: `Search: ${d.searchHelp.query}`, detail: { kind: "search", query: d.searchHelp.query, trustNote: d.searchHelp.trustNote, steps: d.searchHelp.steps || [] } });
     if (d.results?.items?.length) add({ text: d.results.title, detail: { kind: "resources", items: d.results.items.map((it) => ({ name: it.name, href: it.href, detail: it.detail })), sourceNote: d.results.sourceNote } });
     if (d.route) lastRoute = d.route;
+    if (d.projectSeed) lastSeed = d.projectSeed;
   }
 
   function render(d) {
@@ -990,7 +992,24 @@ function initDesk(user, opts = {}) {
     const comeBack = keptThings.length
       ? `<div class="desk-comeback"><p class="desk-q">Anything here you want to come back to?</p><ul class="desk-comeback__list">${keptThings.map((thing, index) => `<li><span>${esc(thing.text)}</span><button type="button" class="text-button" data-practice="${index}">Add to My Practice</button></li>`).join("")}</ul></div>`
       : "";
-    thread.innerHTML = `<div class="desk-end">${kept}${comeBack}<div class="welcome-actions">${lobbyBtn}${routeBtn}</div><p class="welcome-exits"><button type="button" class="text-button" data-again>Start another conversation</button></p></div>`;
+    // A project-shaped conversation gets one offer, here at the end, as a button.
+    // Never mid-conversation (PROJECTS_PRD.md).
+    const projectOffer = lastSeed
+      ? `<div class="desk-projectoffer"><p class="desk-q">This sounded like something you want to get done: ${esc(lastSeed)}</p><button type="button" class="secondary-button" data-project>Open this as a project</button></div>`
+      : "";
+    thread.innerHTML = `<div class="desk-end">${kept}${projectOffer}${comeBack}<div class="welcome-actions">${lobbyBtn}${routeBtn}</div><p class="welcome-exits"><button type="button" class="text-button" data-again>Start another conversation</button></p></div>`;
+    thread.querySelector("[data-project]")?.addEventListener("click", async (event) => {
+      const button = event.currentTarget;
+      button.disabled = true;
+      button.textContent = "Opening your project…";
+      try {
+        const r = await fetch("/project-api", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "create", seed: lastSeed }) });
+        const d = await r.json();
+        if (d.ok && d.project?.id) { window.location.assign(`/projects?id=${d.project.id}`); return; }
+      } catch { /* fall through to retry state */ }
+      button.disabled = false;
+      button.textContent = "Open this as a project";
+    });
     thread.querySelectorAll("[data-practice]").forEach((button) => button.addEventListener("click", async () => {
       const thing = keptThings[Number(button.dataset.practice)];
       button.disabled = true;
@@ -1004,7 +1023,7 @@ function initDesk(user, opts = {}) {
       }
     }));
     thread.querySelector("[data-again]").addEventListener("click", () => {
-      msgs = []; last = null; lastRoute = null; lastAdded = []; keptThings = []; wrapOffered = false;
+      msgs = []; last = null; lastRoute = null; lastAdded = []; keptThings = []; wrapOffered = false; lastSeed = null;
       renderIdle();
     });
     thread.scrollTop = 0;
@@ -1856,7 +1875,288 @@ function initReveal() {
   }
 }
 
-if (["member", "record", "account", "room", "welcome"].includes(page)) initReveal();
+// The project room (PROJECTS_PRD.md, slice 1). List of projects, and inside
+// each: the working conversation, dropped-in material, the brief the work
+// builds, real artifacts, and a wrap-up that routes PIL suggestions through
+// the same save_cards consent review the desk uses.
+async function initProjects() {
+  const user = await getUser();
+  if (!user || !hasMemberAccess(user)) {
+    window.location.replace("/login");
+    return;
+  }
+  document.getElementById("logoutButton")?.addEventListener("click", async () => { await logout(); window.location.replace("/"); });
+
+  const body = document.getElementById("projectsBody");
+  const heroTitle = document.querySelector(".member-welcome h1");
+  const heroCopy = document.querySelector(".member-welcome p:not(.eyebrow)");
+  const esc = (t) => { const d = document.createElement("div"); d.textContent = t == null ? "" : t; return d.innerHTML; };
+  const STATUS_LABELS = {
+    idea: "Idea", active: "Active", waiting: "Waiting on someone", ready_to_test: "Ready to test",
+    ready_to_launch: "Ready to launch", live: "Live", learning: "Learning", complete: "Complete", paused: "Paused",
+  };
+  const BRIEF_LABELS = [["goal", "Goal"], ["audience", "Who it is for"], ["doneEnough", "Done enough"], ["obstacle", "Obstacle"], ["whyNow", "Why now"], ["outOfScope", "Out of scope"], ["firstMilestone", "First milestone"]];
+
+  async function api(payload) {
+    const r = await fetch("/project-api", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+    const d = await r.json().catch(() => ({ ok: false, error: "that did not go through" }));
+    if (!r.ok && !d.error) d.error = "that did not go through";
+    return d;
+  }
+
+  const savedOn = (iso) => { try { return new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" }); } catch { return ""; } };
+
+  function downloadText(name, content) {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([content], { type: "text/markdown" }));
+    a.download = name;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  // The portable handoff: the whole project as Markdown, useful anywhere,
+  // no Practice Village required (PROJECTS_PRD.md export rule).
+  function exportMarkdown(p) {
+    const lines = [`# ${p.title}`, "", `Status: ${STATUS_LABELS[p.status] || p.status} · ${p.publicFacing ? "Public-facing" : "Not public-facing"} · exported ${new Date().toISOString().slice(0, 10)} from Practice Village`, ""];
+    const brief = BRIEF_LABELS.filter(([k]) => p.brief?.[k]);
+    if (brief.length) {
+      lines.push("## The brief", "");
+      for (const [k, label] of brief) lines.push(`**${label}:** ${p.brief[k]}`, "");
+    }
+    if (p.nextAction) lines.push("## Next action", "", p.nextAction, "");
+    if (p.decisions?.length) {
+      lines.push("## Decisions", "");
+      for (const d of p.decisions) lines.push(`- ${d.text} (${savedOn(d.at)})`);
+      lines.push("");
+    }
+    if (p.assets?.length) {
+      lines.push("## Material in the room", "");
+      for (const a of p.assets) lines.push(a.kind === "link" ? `- [${a.name}](${a.href})` : `- ${a.name}`);
+      lines.push("");
+    }
+    for (const art of p.artifacts || []) {
+      lines.push("---", "", `## ${art.title}`, "", art.markdown, "");
+    }
+    return { name: `${(p.title || "project").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 60) || "project"}.md`, content: lines.join("\n") };
+  }
+
+  // ---------- list view ----------
+  async function showList() {
+    history.replaceState(null, "", "/projects");
+    if (heroTitle) heroTitle.textContent = "The work you are moving.";
+    if (heroCopy) heroCopy.hidden = false;
+    body.innerHTML = `<p class="practice-note">Checking your projects…</p>`;
+    const d = await api({ action: "list" });
+    if (!d.ok) { body.innerHTML = `<p class="practice-note">${esc(d.error)}</p>`; return; }
+    const cards = (d.projects || []).map((p) => `
+      <button type="button" class="proj-card" data-open="${esc(p.id)}">
+        <b>${esc(p.title)}</b>
+        <span class="proj-meta">${esc(STATUS_LABELS[p.status] || p.status)} · ${p.artifactCount === 1 ? "1 piece made" : `${p.artifactCount} pieces made`} · ${esc(savedOn(p.updatedAt))}</span>
+        ${p.nextAction ? `<span class="proj-next">Next: ${esc(p.nextAction)}</span>` : ""}
+      </button>`).join("");
+    body.innerHTML = `
+      <div class="proj-list">${cards || `<p class="practice-note">Nothing here yet. Start with what you want to get done.</p>`}</div>
+      <div class="welcome-actions"><button type="button" class="primary-button" data-new>Start a project</button></div>`;
+    body.querySelectorAll("[data-open]").forEach((b) => b.addEventListener("click", () => openProject(b.dataset.open)));
+    body.querySelector("[data-new]").addEventListener("click", async (e) => {
+      e.currentTarget.disabled = true;
+      const made = await api({ action: "create" });
+      if (made.ok) openProject(made.project.id, made.project);
+      else { e.currentTarget.disabled = false; body.insertAdjacentHTML("beforeend", `<p class="practice-note">${esc(made.error)}</p>`); }
+    });
+  }
+
+  // ---------- project room ----------
+  let project = null;
+  let busy = false;
+  let lastQuick = [];
+
+  async function openProject(id, preloaded = null) {
+    if (preloaded) project = preloaded;
+    else {
+      body.innerHTML = `<p class="practice-note">Opening the room…</p>`;
+      const d = await api({ action: "get", id });
+      if (!d.ok) { body.innerHTML = `<p class="practice-note">${esc(d.error)}</p><div class="welcome-actions"><button type="button" class="secondary-button" data-backlist>Back to your projects</button></div>`; body.querySelector("[data-backlist]").addEventListener("click", showList); return; }
+      project = d.project;
+    }
+    history.replaceState(null, "", `/projects?id=${project.id}`);
+    if (heroTitle) heroTitle.textContent = project.title;
+    if (heroCopy) heroCopy.hidden = true;
+    renderRoom();
+    if (!project.messages.length) converse(project.seed ? "Let's get into it." : "I want to start something.", { silent: true });
+  }
+
+  function bubbles() {
+    return project.messages.map((m) => `<p class="desk-msg desk-msg--${m.role === "user" ? "me" : "c"}">${esc(m.text)}</p>`).join("");
+  }
+
+  function renderRoom(note = "") {
+    const p = project;
+    const briefRows = BRIEF_LABELS.filter(([k]) => p.brief?.[k]).map(([k, label]) => `<p class="proj-brief__row"><b>${esc(label)}</b> ${esc(p.brief[k])}</p>`).join("");
+    const artifacts = (p.artifacts || []).map((a) => `
+      <details class="proj-artifact"><summary>${esc(a.title)} <span class="proj-meta">${esc(savedOn(a.createdAt))}</span></summary>
+        <pre class="proj-artifact__body">${esc(a.markdown)}</pre>
+        <button type="button" class="text-button" data-dl-art="${esc(a.id)}">Download this piece</button>
+      </details>`).join("");
+    const assets = (p.assets || []).map((a) => `<li>${a.kind === "link" ? `<a href="${esc(a.href)}" target="_blank" rel="noopener">${esc(a.name)}</a>` : esc(a.name)} <button type="button" class="text-button" data-rm-asset="${esc(a.name)}">remove</button></li>`).join("");
+    body.innerHTML = `
+      <div class="proj-room">
+        <div class="proj-room__work">
+          <div class="proj-toolbar">
+            <button type="button" class="text-button" data-backlist>← Your projects</button>
+            <select id="projStatus" aria-label="Project status">${Object.entries(STATUS_LABELS).map(([v, l]) => `<option value="${v}"${p.status === v ? " selected" : ""}>${l}</option>`).join("")}</select>
+          </div>
+          <div class="desk-thread proj-thread" id="projThread" aria-live="polite">${bubbles()}${note ? `<p class="desk-note">${esc(note)}</p>` : ""}${lastQuick.length ? `<div class="desk-chips desk-chips--quick">${lastQuick.map((q) => `<button type="button" data-seed="${esc(q)}">${esc(q)}</button>`).join("")}</div>` : ""}</div>
+          <form class="desk-ask" id="projAsk">
+            <input type="text" id="projInput" maxlength="1200" placeholder="Say it in your own words…" aria-label="Work on this project" />
+            <button type="submit" class="primary-button">Send</button>
+          </form>
+          <div class="proj-drop" id="projDrop">
+            <label class="text-button" for="projFiles">Drop files here, or choose files</label>
+            <input type="file" id="projFiles" accept=".md,.txt,.csv,.json" multiple hidden />
+            <button type="button" class="text-button" data-add-link>Add a link</button>
+          </div>
+          <p class="onboarding-privacy">Live AI, powered by Gemini. What lands here stays in this project; nothing reaches your Record without your choice at wrap-up.</p>
+        </div>
+        <aside class="proj-room__side">
+          ${p.nextAction ? `<div class="desk-block"><span class="desk-label">next action</span><p class="desk-act">${esc(p.nextAction)}</p></div>` : ""}
+          ${briefRows ? `<div class="proj-brief"><span class="desk-label">the brief</span>${briefRows}</div>` : ""}
+          ${artifacts ? `<div class="proj-artifacts"><span class="desk-label">made in this project</span>${artifacts}</div>` : ""}
+          ${assets ? `<div class="proj-assets"><span class="desk-label">material in the room</span><ul>${assets}</ul></div>` : ""}
+          <div class="welcome-actions welcome-actions--stack">
+            ${p.pilCandidates?.length ? `<button type="button" class="secondary-button" data-wrapup>Wrap up this visit</button>` : ""}
+            <button type="button" class="secondary-button" data-export>Download the whole project</button>
+            <button type="button" class="text-button" data-remove>Remove this project</button>
+          </div>
+        </aside>
+      </div>`;
+    wireRoom();
+    const thread = document.getElementById("projThread");
+    thread.scrollTop = thread.scrollHeight;
+  }
+
+  function wireRoom() {
+    body.querySelector("[data-backlist]").addEventListener("click", showList);
+    body.querySelectorAll("[data-seed]").forEach((b) => b.addEventListener("click", () => converse(b.dataset.seed)));
+    document.getElementById("projAsk").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const input = document.getElementById("projInput");
+      const t = input.value.trim();
+      if (!t) return;
+      input.value = "";
+      converse(t);
+    });
+    document.getElementById("projStatus").addEventListener("change", async (e) => {
+      const d = await api({ action: "update", id: project.id, status: e.target.value });
+      if (d.ok) project = d.project;
+    });
+    body.querySelectorAll("[data-dl-art]").forEach((b) => b.addEventListener("click", () => {
+      const art = project.artifacts.find((a) => a.id === b.dataset.dlArt);
+      if (art) downloadText(`${art.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 60)}.md`, art.markdown);
+    }));
+    body.querySelectorAll("[data-rm-asset]").forEach((b) => b.addEventListener("click", async () => {
+      const d = await api({ action: "remove_asset", id: project.id, name: b.dataset.rmAsset });
+      if (d.ok) { project = d.project; renderRoom(); }
+    }));
+    body.querySelector("[data-export]").addEventListener("click", () => {
+      const file = exportMarkdown(project);
+      downloadText(file.name, file.content);
+    });
+    body.querySelector("[data-remove]").addEventListener("click", async (e) => {
+      if (e.currentTarget.dataset.sure !== "1") { e.currentTarget.dataset.sure = "1"; e.currentTarget.textContent = "Remove for good? This cannot be undone."; return; }
+      await api({ action: "remove", id: project.id });
+      showList();
+    });
+    body.querySelector("[data-wrapup]")?.addEventListener("click", renderWrapUp);
+    body.querySelector("[data-add-link]").addEventListener("click", async () => {
+      const href = window.prompt("Paste the link");
+      if (!href || !/^https?:\/\//.test(href.trim())) return;
+      const name = window.prompt("What is it? A short name") || href.trim().slice(0, 60);
+      const d = await api({ action: "add_assets", id: project.id, assets: [{ kind: "link", name, href: href.trim() }] });
+      if (d.ok) { project = d.project; renderRoom(); converse(`I added a link to the room: ${name}`, { silent: false }); }
+    });
+    const drop = document.getElementById("projDrop");
+    const fileInput = document.getElementById("projFiles");
+    fileInput.addEventListener("change", () => takeFiles(fileInput.files));
+    drop.addEventListener("dragover", (e) => { e.preventDefault(); drop.classList.add("proj-drop--over"); });
+    drop.addEventListener("dragleave", () => drop.classList.remove("proj-drop--over"));
+    drop.addEventListener("drop", (e) => { e.preventDefault(); drop.classList.remove("proj-drop--over"); takeFiles(e.dataTransfer.files); });
+  }
+
+  async function takeFiles(fileList) {
+    const files = [...(fileList || [])].slice(0, 8);
+    if (!files.length) return;
+    const assets = [];
+    for (const f of files) {
+      if (f.size > 200_000 || !/\.(md|txt|csv|json)$/i.test(f.name)) continue;
+      try { assets.push({ kind: "file", name: f.name, text: (await f.text()).slice(0, 48_000) }); } catch { /* skip unreadable */ }
+    }
+    if (!assets.length) { renderRoom("Those files did not land. Text files only (.md, .txt, .csv, .json), under 200KB."); return; }
+    const d = await api({ action: "add_assets", id: project.id, assets });
+    if (!d.ok) { renderRoom(d.error); return; }
+    project = d.project;
+    converse(`I dropped in: ${assets.map((a) => a.name).join(", ")}. Take a look.`);
+  }
+
+  async function converse(text, opts = {}) {
+    if (busy) return;
+    busy = true;
+    lastQuick = [];
+    if (!opts.silent) project.messages = [...project.messages, { role: "user", text }];
+    renderRoom("the Concierge is working…");
+    const d = await api({ action: "converse", id: project.id, text });
+    busy = false;
+    if (!d.ok) {
+      if (!opts.silent) project.messages = project.messages.slice(0, -1);
+      renderRoom(d.error || "The room lost the thread. Try again in a moment.");
+      return;
+    }
+    project = d.project;
+    lastQuick = d.quickReplies || [];
+    if (heroTitle) heroTitle.textContent = project.title;
+    renderRoom(d.artifact ? `New piece made: ${d.artifact.title}. It is in the side panel.` : "");
+  }
+
+  // Wrap-up: PIL suggestions go through the same consent review as the desk,
+  // via /member-onboarding save_cards. She keeps what she keeps.
+  function renderWrapUp() {
+    const candidates = project.pilCandidates || [];
+    body.innerHTML = `
+      <div class="proj-room__work">
+        <p class="desk-q">This project noticed some things about how you work. Keep any of them in your Record?</p>
+        <div class="desk-wraplist">${candidates.map((c, i) => `<label class="desk-wrapitem"><input type="checkbox" checked data-i="${i}"> ${esc(c)}</label>`).join("")}</div>
+        <div class="welcome-actions"><button type="button" class="primary-button" data-keep>Keep the checked ones</button><button type="button" class="secondary-button" data-none>Keep nothing</button></div>
+        <p class="welcome-exits"><button type="button" class="text-button" data-back>Back to the project</button></p>
+        <p class="onboarding-privacy" id="wrapStatus" role="status"></p>
+      </div>`;
+    body.querySelector("[data-keep]").addEventListener("click", async () => {
+      const chosen = [...body.querySelectorAll("input[data-i]:checked")].map((cb) => ({ text: candidates[Number(cb.dataset.i)] }));
+      const status = document.getElementById("wrapStatus");
+      if (chosen.length) {
+        status.textContent = "Saving to your Record…";
+        try {
+          const r = await fetch("/member-onboarding", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "save_cards", cards: chosen }) });
+          if (!r.ok) { status.textContent = "Saving did not go through. Everything is still here."; return; }
+        } catch { status.textContent = "Saving did not go through. Everything is still here."; return; }
+      }
+      await api({ action: "clear_pil_candidates", id: project.id });
+      project.pilCandidates = [];
+      renderRoom(chosen.length ? `${chosen.length === 1 ? "One thing" : chosen.length + " things"} kept in your Record.` : "Nothing kept.");
+    });
+    body.querySelector("[data-none]").addEventListener("click", async () => {
+      await api({ action: "clear_pil_candidates", id: project.id });
+      project.pilCandidates = [];
+      renderRoom("Nothing kept. That stays between you and this project.");
+    });
+    body.querySelector("[data-back]").addEventListener("click", () => renderRoom());
+  }
+
+  const wanted = new URLSearchParams(window.location.search).get("id");
+  if (wanted) openProject(wanted);
+  else showList();
+}
+
+if (["member", "record", "account", "room", "welcome", "projects"].includes(page)) initReveal();
 
 if (page === "login") initLogin();
 if (page === "member") initMemberLobby();
@@ -1864,3 +2164,4 @@ if (page === "record") initRecordPage();
 if (page === "account") initAccountPage();
 if (page === "room") initRoomShell();
 if (page === "welcome") initWelcome();
+if (page === "projects") initProjects();

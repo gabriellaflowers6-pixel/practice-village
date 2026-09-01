@@ -1,15 +1,18 @@
+// /projects: the member's project room (PROJECTS_PRD.md, slice 1).
+// Server-rendered shell like member-record.mjs; the client module in
+// member-auth.bundle.js (data-auth-page="projects") does the rest.
 import { getUser } from "./_shared/session.mjs";
 
 const MEMBER_ROLES = ["member", "founding_villager", "admin", "test_member"];
 
-function recordPage() {
+function projectsPage() {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="color-scheme" content="light" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Your Record · Practice Village</title>
+  <title>Your Projects · Practice Village</title>
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,26 +20,18 @@ function recordPage() {
   <link rel="stylesheet" href="/assets/member.css?v=38" />
   <link rel="stylesheet" href="/assets/roo/roo.css?v=1" />
 </head>
-<body data-auth-page="record">
+<body data-auth-page="projects">
   <header class="member-header">
     <a href="/member" class="member-brand">Practice Village</a>
-    <nav><a href="/member" class="member-link">Back to your lobby</a><a href="/account" class="member-link">Your account</a><button id="logoutButton" class="text-button" type="button">Sign out</button></nav>
+    <nav><a href="/member" class="member-link">Back to your lobby</a><a href="/record" class="member-link">Your Record</a><button id="logoutButton" class="text-button" type="button">Sign out</button></nav>
   </header>
-  <main class="member-main">
+  <main class="member-main" id="projectsMain">
     <section class="member-welcome">
-      <p class="eyebrow">Your Record</p>
-      <h1>Your Personal Intelligence Layer.</h1>
-      <p>Everything you chose to keep, from the front desk and across the Village. Yours to read, remove, and take with you.</p>
+      <p class="eyebrow">Your Projects</p>
+      <h1>The work you are moving.</h1>
+      <p>Bring something you want to make, change, solve, or finish. The Concierge works it with you: what exists, what matters, what to do next, and real pieces made along the way.</p>
     </section>
-    <section class="member-grid" aria-label="Your Record">
-      <article class="member-card member-card--record"><div id="savedCards" class="saved-cards"><p id="savedCardsCopy">Checking your Record…</p></div><div id="recordActions" class="record-actions"></div><span id="savedCardsState" class="member-state">Yours to keep or clear</span></article>
-    </section>
-    <section class="member-section">
-      <p class="eyebrow">Privacy</p>
-      <h2>What stays where</h2>
-      <p class="record-note">What you keep here travels with your membership. What you document in Safety Hall stays on your device and is never sent to us. Removing something here removes it for good.</p>
-      <p class="record-note">Searches and resource lists you keep carry their sources and links with them, here and in every download.</p>
-    </section>
+    <section id="projectsBody" aria-label="Your Projects"><p class="practice-note">Checking your projects…</p></section>
   </main>
   <script type="module" src="/assets/member-auth.bundle.js?v=27"></script>
   <script src="/assets/roo/roo-pv.js?v=1" defer></script>
@@ -50,7 +45,7 @@ export default async function handler() {
   if (!user || !roles.some((role) => MEMBER_ROLES.includes(role))) {
     return new Response(null, { status: 302, headers: { Location: "/login" } });
   }
-  return new Response(recordPage(), {
+  return new Response(projectsPage(), {
     headers: {
       "Content-Type": "text/html; charset=utf-8",
       "Cache-Control": "private, no-store",
@@ -59,5 +54,5 @@ export default async function handler() {
 }
 
 export const config = {
-  path: ["/record", "/record/"],
+  path: ["/projects", "/projects/"],
 };

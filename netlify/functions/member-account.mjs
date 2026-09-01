@@ -18,7 +18,7 @@ function accountPage() {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/member.css?v=37" />
+  <link rel="stylesheet" href="/assets/member.css?v=38" />
   <link rel="stylesheet" href="/assets/roo/roo.css?v=1" />
 </head>
 <body data-auth-page="account">
@@ -81,7 +81,7 @@ function accountPage() {
       <div class="account-links"><span id="memberPlan" class="member-plan">Checking membership…</span><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/welcome?onboarding=review">Review onboarding choices</a><a href="/login">Change your password</a><button id="logoutButtonBottom" class="text-button" type="button">Sign out</button></div>
     </section>
   </main>
-  <script type="module" src="/assets/member-auth.bundle.js?v=26"></script>
+  <script type="module" src="/assets/member-auth.bundle.js?v=27"></script>
   <script src="/assets/roo/roo-pv.js?v=1" defer></script>
 </body>
 </html>`;
