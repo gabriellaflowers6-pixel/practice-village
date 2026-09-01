@@ -12,10 +12,12 @@ HANDOFF packs, never live integrations), decisions log, next action, status,
 full Markdown export. PIL suggestions accumulate quietly and route through the
 existing save_cards consent review at wrap-up; project data never auto-enters
 the Record. Cache busters: member.css v38, bundle v27. Also force-404'd
-PROJECTS_PRD.md (publish-root rule). FOUND, needs JoYi: GEMINI_API_KEY exists
-only in the production env context (local dev cannot call Gemini), and a stray
-env var NAMED with the literal API key value leaks the key into CLI logs;
-recommend deleting the stray var and rotating the key.
+PROJECTS_PRD.md (publish-root rule). FOUND: GEMINI_API_KEY exists only in the
+production env context (local dev cannot call Gemini). A stray env var NAMED
+with a literal key value sat in the config; TESTED 9/1: that string is the
+DEAD old key from JoYi's earlier rotation (Google rejects it), pasted into the
+name field back then. Current key was never exposed. Stray var deleted; no
+rotation needed.
 
 ### 2026-08-19 (later) — PORTAL BRAND + JESSICA'S CANCEL (JoYi's bot)
 Stripe public business name changed "TPC | AEQ" -> "The Practice Village" (JoYi's
