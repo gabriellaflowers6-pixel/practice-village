@@ -361,7 +361,10 @@ export default async (req) => {
 
     const patch = out?.patch && typeof out.patch === "object" ? out.patch : {};
     if (typeof patch.title === "string" && patch.title.trim() && (p.title === "New project" || !p.title)) p.title = trim(patch.title, 120);
-    if (typeof patch.publicFacing === "boolean") p.publicFacing = patch.publicFacing;
+    // Gemini's nested nullable booleans are flaky: accept the string forms too,
+    // and never let a later null unset a value the conversation established.
+    if (patch.publicFacing === true || patch.publicFacing === "true") p.publicFacing = true;
+    else if (patch.publicFacing === false || patch.publicFacing === "false") p.publicFacing = false;
     for (const f of ["goal", "audience", "doneEnough", "obstacle", "whyNow", "outOfScope", "firstMilestone"]) {
       const v = trim(patch[f], 400);
       if (v) p.brief[f] = v;
