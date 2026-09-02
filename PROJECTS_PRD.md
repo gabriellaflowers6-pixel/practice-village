@@ -191,3 +191,58 @@ All copy passes the no-LLM-speak sweep and assumes no emotional state.
 - `MOXIE-COPY-RULES.md` — copy rulebook (audit input)
 - `On_and_Off_the_Zafu_Season_One_Podcast_Outline.md` — the season this feature serves first
 - v1 process brief in Downloads — superseded, reference only
+
+---
+
+## 13. Friction map — traditional process vs. the Village (added 2026-09-02)
+
+The differentiation claim, stated honestly. "Native" = the Village does it. "Prepared" = the Village
+does the thinking and hands her a pack she executes in her own tool. Nothing here pretends an
+integration that does not exist.
+
+| Traditional best practice | The friction | What the Village does instead |
+|---|---|---|
+| Research the field: courses, YouTube, 47 tabs | Weeks of procrastination disguised as research | Attention audit reads HER material first; pattern scan gives 3-7 precedents with borrow/avoid; research stops when it will not change a decision (native) |
+| Gather scattered notes and docs into one place | Files everywhere, work redone | Drop zone; every file named for what it is and used, never re-explained (native) |
+| Write a plan or PRD from a blank page | The blank page kills the project | IAMAR conversation builds intent card, meaning brief, and a real PRD from what she already said and dropped in (native) |
+| Keep asking "what do I do next" | Momentum dies between sessions | One concrete next action, always current; the project remembers the work across visits (native) |
+| Wait on a collaborator | Progress becomes someone else's calendar | Blocker named by type; an independent next move offered without dropping the collaboration (native) |
+| "Do the marketing" as a separate scary discipline after building | Blank-page marketing, generic AI copy | Public-facing projects get distribution as part of finishing: positioning, hooks, scripts mined from the real work in her voice (native) |
+| Re-explain the project inside every tool: design app, research app, scheduler | The same decisions re-made five times | Handoff packs carry the decisions in: Canva brief with exact copy, NotebookLM source pack, Blotato queue plan. She never re-decides messaging inside a tool (prepared) |
+| Lessons evaporate when the project ends | Every project starts from zero | Decisions log in the project; portable personal patterns offered to the PIL through the existing consent review; the next project starts warmer (native) |
+| Your work lives inside someone's platform | Lock-in | One-click Markdown export: the whole project stands alone, usable with any AI, developer, or collaborator. Autonomy is the product (native) |
+| Tools quietly keep everything you type | Consent as afterthought | Nothing reaches the Record without her choice at wrap-up; keep-private interrupt always available (native) |
+
+**The space:** community platforms offer rooms and content; project tools (Notion, Asana) hold plans
+the user must think up; chatbots wait for good prompts; AI copilots have no lifecycle, no consent
+layer, no community. The Village front desk walks a woman from "I want to do this" to a shipped,
+distributed, exportable thing, and the work stays hers. That is the digital community center
+difference.
+
+## 14. Walkthrough v2 — the full recorded arc (replaces the 12-moment list as the master plan)
+
+JoYi records this over multiple sessions, one continuous take each. Transparency rule: she vibecodes;
+Claude is on camera as her build partner where that is true. The Village prepares; her tools execute.
+
+**Session A — cold start to PRD (in the Village)**
+1. Fresh desk conversation in her words; things set aside; wrap-up; "Open this as a project"
+2. The system knows nothing about the podcast until she IMPORTS HER FILE: season outline dropped
+   into the room, named concretely by the audit
+3. Attention audit: already have / missing / noise / blockers
+4. "Build the PRD" and the prd artifact lands, drawn from her file and answers
+5. First tangible artifact beyond the PRD (recruitment invitation exists; next is her call)
+
+**Session B — record the first episode (outside the Village, per the ZBO kit)**
+6. GarageBand session per the run-of-show one-sheet; the Village project holds the checklist and
+   logs the decision when the episode is in the can
+
+**Session C — marketing, transparent toolchain**
+7. Village produces the marketing source bank + hook bank + script from the real project
+8. NotebookLM: source pack handed off; grounded synthesis on camera
+9. Canva: brief handed off; assets made without re-deciding messaging
+10. Remotion with Claude: vibecoding the promo video on camera, driven by the Village hook/script
+11. Blotato: distribution plan executed; drafts + approval before anything publishes
+
+**Session D — the loop closes**
+12. Results discussed back in the project; learnings logged; PIL suggestions through consent review
+13. Full Markdown export shown leaving the Village: the standalone project, autonomy on camera
