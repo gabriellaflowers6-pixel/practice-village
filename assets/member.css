@@ -750,3 +750,7 @@ html{ background: var(--paper, #FBF3E8); }
    actions clear of it. */
 #projectsBody{padding-bottom:96px}
 #projectsBody>.welcome-actions{margin-right:96px}
+/* 2026-09-02: .member-card p:not(.eyebrow) (0,2,1) was beating the desk embed's
+   .desk-msg color (0,2,0), painting chat bubbles dark-on-dark on the member
+   home. Matching specificity, declared later, so the embed wins. */
+.member-card--desk-embed p.desk-msg{color:#FBF9F4}
