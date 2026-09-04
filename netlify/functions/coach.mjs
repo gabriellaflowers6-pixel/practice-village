@@ -10,6 +10,11 @@
 import { readFileSync } from "node:fs";
 import { trimHistory, sanitizeContents, filterLesson, practiceModeInstruction, cleanConcerns, compatibleLessonIds, lessonDemands, profileConcerns } from "./coach-lib.mjs";
 import { SYSTEM_PROMPT } from "./coach-prompt.mjs";
+import { checkDailyLimit, clientIp } from "./_shared/rate-limit.mjs";
+
+// /coach answers on the public path as well as /studio/coach, so it needs the
+// same spend fence the Concierge carries.
+const MAX_BODY_BYTES = 32 * 1024;
 
 const APPROVED = JSON.parse(readFileSync(new URL("./moxie-approved-curriculum.json", import.meta.url), "utf8"));
 const APPROVED_IDS = Object.entries(APPROVED.lessons).map(([id, lesson]) => `${id}: ${lesson.title}; demands=${[...lessonDemands(APPROVED,id)].join(",")||"none"}`).join("\n");
@@ -25,7 +30,7 @@ const fixedReply = (kind, lesson) => {
   return "Tell me how much time you have and whether you want yoga, meditation, or both.";
 };
 
-const json = (o) => new Response(JSON.stringify(o), { headers: { "content-type": "application/json" } });
+const json = (o, init = {}) => new Response(JSON.stringify(o), { ...init, headers: { "content-type": "application/json", ...(init.headers || {}) } });
 
 const COACH_SCHEMA = {
   type: "OBJECT",
@@ -86,13 +91,22 @@ async function gemini(messages, profile, practiceMode) {
   return JSON.parse(text);
 }
 
-export default async (req) => {
+export default async (req, context) => {
   if (!process.env.GEMINI_API_KEY) return json({ ok: false, error: "the guide is not set up yet" });
   if (req.method !== "POST") return json({ ok: false, error: "bad request" });
+  const declared = Number(req.headers.get("content-length") || 0);
+  if (declared > MAX_BODY_BYTES) return json({ ok: false, error: "that is more than the guide can take in at once" }, { status: 413 });
+  let raw;
+  try { raw = await req.text(); } catch { return json({ ok: false, error: "bad request" }); }
+  if (raw.length > MAX_BODY_BYTES) return json({ ok: false, error: "that is more than the guide can take in at once" }, { status: 413 });
   let o;
-  try { o = await req.json(); } catch { return json({ ok: false, error: "bad request" }); }
+  try { o = JSON.parse(raw); } catch { return json({ ok: false, error: "bad request" }); }
   const msgs = trimHistory(o.messages);
   if (!msgs.length) return json({ ok: false, error: "say something to the guide first" });
+  const limit = await checkDailyLimit("coach", { ip: clientIp(req, context) });
+  if (!limit.allowed) {
+    return json({ ok: false, error: "the guide has taken all the questions it can today. Please come back tomorrow." }, { status: 429, headers: limit.headers });
+  }
   let out;
   try { out = await gemini(msgs, o.profile, o.practiceMode); } catch { return json({ ok: false, error: "the guide is unavailable right now" }); }
   const concerns = cleanConcerns([...profileConcerns(o.profile), ...(out?.concerns || [])]);
@@ -102,7 +116,7 @@ export default async (req) => {
   const fallback = concerns.includes("urgent_symptoms") || concerns.includes("unknown_health") ? "seek_care" : (!lesson && concerns.length ? "meditation_fallback" : out?.replyKind);
   const actions=cleanActions(out?.actions,msgs.at(-1)?.text,o.practiceMode),challenge=actions.find(action=>action.type==="create_challenge");
   const reply=challenge?`I can prepare a ${challenge.days}-day beginner ${challenge.practiceMode} challenge. Confirm the plan below and I will add it to your Moxie calendar.`:lesson?fixedReply(fallback,lesson):String(out?.reply||fixedReply(fallback,lesson)).trim().slice(0,800);
-  return json({ ok: true, reply, lesson, actions, next: !lesson && ["meditation_library","meditation_fallback"].includes(fallback) ? "meditation" : null });
+  return json({ ok: true, reply, lesson, actions, next: !lesson && ["meditation_library","meditation_fallback"].includes(fallback) ? "meditation" : null }, { headers: limit.headers });
 };
 
 // Answers at the site root and inside the studio folder, so the same file
