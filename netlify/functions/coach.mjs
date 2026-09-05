@@ -11,10 +11,12 @@ import { readFileSync } from "node:fs";
 import { trimHistory, sanitizeContents, filterLesson, practiceModeInstruction, cleanConcerns, compatibleLessonIds, lessonDemands, profileConcerns } from "./coach-lib.mjs";
 import { SYSTEM_PROMPT } from "./coach-prompt.mjs";
 import { checkDailyLimit, clientIp } from "./_shared/rate-limit.mjs";
+import { getUser } from "./_shared/session.mjs";
 
 // /coach answers on the public path as well as /studio/coach, so it needs the
 // same spend fence the Concierge carries.
 const MAX_BODY_BYTES = 32 * 1024;
+const MEMBER_ROLES = ["member", "founding_villager", "admin", "test_member"];
 
 const APPROVED = JSON.parse(readFileSync(new URL("./moxie-approved-curriculum.json", import.meta.url), "utf8"));
 const APPROVED_IDS = Object.entries(APPROVED.lessons).map(([id, lesson]) => `${id}: ${lesson.title}; demands=${[...lessonDemands(APPROVED,id)].join(",")||"none"}`).join("\n");
@@ -103,7 +105,16 @@ export default async (req, context) => {
   try { o = JSON.parse(raw); } catch { return json({ ok: false, error: "bad request" }); }
   const msgs = trimHistory(o.messages);
   if (!msgs.length) return json({ ok: false, error: "say something to the guide first" });
-  const limit = await checkDailyLimit("coach", { ip: clientIp(req, context) });
+  // Capability follows the verified identity, never the browser's claim —
+  // same as the Concierge. Members get the per-account cap; everyone else
+  // shares the anonymous per-IP cap under the global ceiling.
+  let member = null;
+  try {
+    const user = await getUser();
+    const roles = Array.isArray(user?.roles) ? user.roles : [];
+    if (user && roles.some((role) => MEMBER_ROLES.includes(role))) member = user;
+  } catch { member = null; }
+  const limit = await checkDailyLimit("coach", member?.email ? { email: member.email } : { ip: clientIp(req, context) });
   if (!limit.allowed) {
     return json({ ok: false, error: "the guide has taken all the questions it can today. Please come back tomorrow." }, { status: 429, headers: limit.headers });
   }
