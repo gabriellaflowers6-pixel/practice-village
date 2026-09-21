@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="color-scheme" content="light" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cancel or change your membership · Practice Village</title>
+  <meta name="description" content="How to cancel your Practice Village membership, change the card on file, or remove your payment information." />
+  <link rel="canonical" href="https://thepracticevillage.org/cancel" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css?v=111" />
+  <link rel="stylesheet" href="/assets/roo/roo.css?v=1" />
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="nav nav--legal">
+    <a href="/" class="nav__brand" aria-label="Practice Village home"><span class="nav__wordmark">Practice&nbsp;Village</span></a>
+    <a href="/" class="btn btn--ghost nav__cta">Back to Practice Village</a>
+  </header>
+  <main class="legal">
+    <h1>Cancel or change your membership</h1>
+    <p class="legal__updated">You do not owe anyone an explanation, and you do not have to wait for a reply to an email.</p>
+
+    <h2>If you can sign in</h2>
+    <p>Go to <a href="/account">your account page</a> and choose <strong>Manage billing and cancel</strong>. That opens Stripe, where you can cancel your membership, change the card on file, or read your past invoices.</p>
+
+    <h2>If you cannot sign in</h2>
+    <p id="portalFallback">Email <a href="mailto:info@aidedeq.org?subject=Cancel%20my%20Practice%20Village%20membership">info@aidedeq.org</a> from any address and tell us the email you used to join. A person will cancel it and write back to confirm. You do not need to get into your account first.</p>
+    <p id="portalBlock" hidden>Open the <a id="portalLink" href="#" rel="noopener">Stripe billing page</a> and enter the email address you used to join. Stripe emails you a code, you type it in, and you are looking at your own membership. There is no password and no Practice Village account needed.</p>
+
+    <h2>What happens when you cancel</h2>
+    <p>Your membership stops renewing and you keep access through the end of the period you already paid for. We do not prorate partial billing periods, and you are not charged again. Nothing you have saved is deleted by cancelling, so you can still sign in and download your Record until your access ends.</p>
+
+    <h2>Removing your payment information</h2>
+    <p>Stripe will not let you delete your last card while a membership is still running, so the order matters. Cancel first, then open the Stripe billing page again and remove the card under <strong>Payment methods</strong>.</p>
+    <p>If you want both to happen at once, sign in and use <strong>Close my membership</strong> on <a href="/account">your account page</a>. That cancels your membership right away, erases your Record, removes the cards on file, and ends your access. It cannot be undone, so download your Record first if you want to keep it.</p>
+    <p>Your full card number is never stored by us. Stripe handles payment details and we only ever see the last four digits. We do keep your past invoices, because a nonprofit has to keep its own financial records. An invoice holds the date, the amount, and your email address.</p>
+
+    <h2>Leaving the free Charter List</h2>
+    <p>The Charter List is email only and there is no payment attached to it. Use the unsubscribe link at the bottom of any email we send, or ask us at <a href="mailto:info@aidedeq.org?subject=Unsubscribe%20from%20the%20Charter%20List">info@aidedeq.org</a>.</p>
+
+    <h2>If any of this does not work</h2>
+    <p>Email <a href="mailto:info@aidedeq.org?subject=Cancel%20my%20Practice%20Village%20membership">info@aidedeq.org</a> and say what happened. We would rather cancel it for you than have you fighting with a billing page.</p>
+    <p class="legal__seealso"><a href="/terms">Terms of Service</a> · <a href="/privacy">Privacy Policy</a> · <a href="#" class="roo-footer-link" data-roo-open>Something broken? Tell Roo</a></p>
+  </main>
+  <script>
+    // Paste the Stripe customer portal link between the quotes below.
+    // Stripe dashboard > Settings > Billing > Customer portal > "Share a link with customers".
+    // It looks like: https://billing.stripe.com/p/login/xxxxxxxxxxxx
+    // While this is an empty string, the page shows the email route instead, so
+    // it never ships a dead link.
+    var STRIPE_PORTAL_LINK = "";
+    (function () {
+      if (!STRIPE_PORTAL_LINK) return;
+      document.getElementById("portalLink").href = STRIPE_PORTAL_LINK;
+      document.getElementById("portalBlock").hidden = false;
+      document.getElementById("portalFallback").hidden = true;
+    })();
+  </script>
+  <script src="/assets/roo/roo-pv.js?v=1" data-roo-mode="footer" defer></script>
+</body>
+</html>

@@ -33,7 +33,7 @@ function projectsPage() {
     </section>
     <section id="projectsBody" aria-label="Your Projects"><p class="practice-note">Checking your projects…</p></section>
   </main>
-  <script type="module" src="/assets/member-auth.bundle.js?v=28"></script>
+  <script type="module" src="/assets/member-auth.bundle.js?v=29"></script>
   <script src="/assets/roo/roo-pv.js?v=1" defer></script>
 </body>
 </html>`;

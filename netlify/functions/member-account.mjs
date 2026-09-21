@@ -43,6 +43,7 @@ function accountPage() {
           <button id="openBilling" class="secondary-button" type="button">Manage billing and cancel</button>
         </div>
         <p class="room-note">Billing opens in Stripe, where you can cancel, change your card, or read past invoices. Cancelling keeps your access through the period you already paid for.</p>
+        <p class="room-note">To take your card off the file entirely, cancel first, then come back here and remove it under Payment methods. Stripe will not let go of your last card while a membership is still running. <a href="/cancel">All of the steps are here</a>.</p>
         <p class="room-note">If you would rather a person handled it, email <a href="mailto:info@aidedeq.org?subject=Practice%20Village%20membership">info@aidedeq.org</a>.</p>
       </article>
     </section>
@@ -68,7 +69,7 @@ function accountPage() {
         </article>
         <article class="member-card">
           <h3>Close my membership and erase everything</h3>
-          <p>Cancels your membership immediately, erases your Record, and removes your access to the member area. You will not be able to sign in afterward.</p>
+          <p>Cancels your membership immediately, erases your Record, removes the cards Stripe has on file for you, and removes your access to the member area. You will not be able to sign in afterward. Your past invoices stay in our financial records, and they hold a date, an amount, and your email, never a card number.</p>
           <div id="closeAccountBox"><button id="closeAccountStart" class="text-button account-danger" type="button">Close my membership</button></div>
         </article>
       </div>
@@ -81,7 +82,7 @@ function accountPage() {
       <div class="account-links"><span id="memberPlan" class="member-plan">Checking membership…</span><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/welcome?onboarding=review">Review onboarding choices</a><a href="/login">Change your password</a><button id="logoutButtonBottom" class="text-button" type="button">Sign out</button></div>
     </section>
   </main>
-  <script type="module" src="/assets/member-auth.bundle.js?v=28"></script>
+  <script type="module" src="/assets/member-auth.bundle.js?v=29"></script>
   <script src="/assets/roo/roo-pv.js?v=1" defer></script>
 </body>
 </html>`;
@@ -125,16 +126,51 @@ export default async function handler(request) {
   }
 
   if (body.action === "close_account") {
-    // Ends everything: Stripe subscription, the member record, and member access.
+    // Ends everything: Stripe subscription, the saved cards, the member record,
+    // and member access.
     if (String(body.confirm || "").trim().toUpperCase() !== "CLOSE") {
       return Response.json({ ok: false, error: "Type CLOSE to confirm" }, { status: 400 });
     }
+    const stripe = record?.stripeCustomerId || record?.stripeSubscriptionId
+      ? new Stripe(process.env.STRIPE_SECRET_KEY)
+      : null;
     if (record?.stripeSubscriptionId) {
       try {
-        const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
         await stripe.subscriptions.cancel(record.stripeSubscriptionId);
       } catch {
         return Response.json({ ok: false, error: "Your membership could not be cancelled just now, so nothing was erased. Try again, or email info@aidedeq.org." }, { status: 502 });
+      }
+    }
+    // "Erase everything" has to include the card. We detach the payment methods
+    // rather than deleting the Stripe customer, so her past invoices survive for
+    // our own financial records. An invoice holds a date, an amount, and an
+    // email, never a card number.
+    const cards = { removed: 0, kept: 0 };
+    if (stripe && record?.stripeCustomerId) {
+      try {
+        // A card still attached to another live subscription is not ours to pull.
+        const live = await stripe.subscriptions.list({
+          customer: record.stripeCustomerId,
+          status: "active",
+          limit: 1,
+        });
+        if (live.data.length) {
+          cards.kept = live.data.length;
+        } else {
+          const methods = await stripe.paymentMethods.list({ customer: record.stripeCustomerId, limit: 100 });
+          for (const method of methods.data) {
+            try {
+              await stripe.paymentMethods.detach(method.id);
+              cards.removed += 1;
+            } catch {
+              cards.kept += 1;
+            }
+          }
+        }
+      } catch {
+        // Her membership is already cancelled by this point. Housekeeping that
+        // fails must not strand her mid-close, so this falls through quietly and
+        // the count below tells the truth about what is left.
       }
     }
     const identityUser = await findIdentityUserByEmail(user.email);
@@ -146,7 +182,7 @@ export default async function handler(request) {
     if (membership.key) await store.delete(membership.key).catch(() => {});
     if (record?.stripeSubscriptionId) await store.delete(`subscription/${record.stripeSubscriptionId}`).catch(() => {});
     if (record?.stripeCustomerId) await store.delete(`customer/${record.stripeCustomerId}`).catch(() => {});
-    return Response.json({ ok: true, closed: true });
+    return Response.json({ ok: true, closed: true, cardsRemoved: cards.removed, cardsRemaining: cards.kept });
   }
 
   return Response.json({ ok: false, error: "Unknown action" }, { status: 400 });

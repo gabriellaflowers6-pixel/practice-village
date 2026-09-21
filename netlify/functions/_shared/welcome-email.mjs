@@ -28,6 +28,7 @@ function html(planLabel, setPasswordNeeded) {
   <p>Your ${planLabel} includes one Rebuild Arc workshop voucher each membership year. The first workshop is four Saturdays starting October 31 at 3:00 pm Central. Live classes begin February 7.</p>
   <p>Start wherever you are. You do not have to use every room or finish anything today.</p>
   <p>If something is confusing or broken, reply to this email and tell us.</p>
+  <p style="margin-top:28px;padding-top:18px;border-top:1px solid #ead9bd;font-size:15px;color:#4a4a6a;">Your membership is yours to manage. Change your card or cancel any time at <a href="https://thepracticevillage.org/account" style="color:#b95537;">thepracticevillage.org/account</a>. The steps, including how to remove your payment information, are at <a href="https://thepracticevillage.org/cancel" style="color:#b95537;">thepracticevillage.org/cancel</a>.</p>
 </div>`;
 }
 
@@ -46,6 +47,9 @@ function text(planLabel, setPasswordNeeded) {
     `Your ${planLabel} includes one Rebuild Arc workshop voucher each membership year. The first workshop is four Saturdays starting October 31 at 3:00 pm Central. Live classes begin February 7.`,
     "",
     "If something is confusing or broken, reply and tell us.",
+    "",
+    "Change your card or cancel any time: https://thepracticevillage.org/account",
+    "How to cancel or remove your payment information: https://thepracticevillage.org/cancel",
   ].join("\n");
 }
 

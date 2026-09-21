@@ -1791,7 +1791,7 @@ async function initAccountPage() {
     onDone: async (box) => {
       const done = document.createElement("p");
       done.className = "saved-card__status";
-      done.textContent = "Your membership is closed and your Record is erased. Signing you out.";
+      done.textContent = "Your membership is closed, your Record is erased, and your saved cards are removed. Signing you out.";
       box.replaceChildren(done);
       await logout().catch(() => {});
       window.setTimeout(() => window.location.replace("/"), 1800);

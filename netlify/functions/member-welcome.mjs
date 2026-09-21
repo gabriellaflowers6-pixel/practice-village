@@ -56,7 +56,7 @@ function welcomePage() {
       <p id="onboardingStatus" class="auth-status" role="status" aria-live="polite"></p>
     </section>
   </main>
-  <script type="module" src="/assets/member-auth.bundle.js?v=28"></script>
+  <script type="module" src="/assets/member-auth.bundle.js?v=29"></script>
   <script src="/assets/roo/roo-pv.js?v=1" defer></script>
 </body>
 </html>`;
