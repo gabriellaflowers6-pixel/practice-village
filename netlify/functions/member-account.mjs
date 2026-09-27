@@ -1,7 +1,7 @@
 import Stripe from "stripe";
 import { admin } from "@netlify/identity";
 import { getUser } from "./_shared/session.mjs";
-import { getMembershipRecordByEmail, findIdentityUserByEmail, membershipStore } from "./_shared/membership.mjs";
+import { getMembershipRecordByEmail, findIdentityUserByEmail, membershipStore, detachPaymentMethods } from "./_shared/membership.mjs";
 
 const MEMBER_ROLES = ["member", "founding_villager", "admin", "test_member"];
 const SITE = "https://thepracticevillage.org";
@@ -43,7 +43,7 @@ function accountPage() {
           <button id="openBilling" class="secondary-button" type="button">Manage billing and cancel</button>
         </div>
         <p class="room-note">Billing opens in Stripe, where you can cancel, change your card, or read past invoices. Cancelling keeps your access through the period you already paid for.</p>
-        <p class="room-note">To take your card off the file entirely, cancel first, then come back here and remove it under Payment methods. Stripe will not let go of your last card while a membership is still running. <a href="/cancel">All of the steps are here</a>.</p>
+        <p class="room-note">Cancelling also takes your card, Apple Pay, or Link off the file, automatically, the moment you cancel. Your access still runs through the period you already paid for. <a href="/cancel">How it all works</a>.</p>
         <p class="room-note">If you would rather a person handled it, email <a href="mailto:info@aidedeq.org?subject=Practice%20Village%20membership">info@aidedeq.org</a>.</p>
       </article>
     </section>
@@ -141,36 +141,15 @@ export default async function handler(request) {
         return Response.json({ ok: false, error: "Your membership could not be cancelled just now, so nothing was erased. Try again, or email info@aidedeq.org." }, { status: 502 });
       }
     }
-    // "Erase everything" has to include the card. We detach the payment methods
-    // rather than deleting the Stripe customer, so her past invoices survive for
-    // our own financial records. An invoice holds a date, an amount, and an
-    // email, never a card number.
-    const cards = { removed: 0, kept: 0 };
+    // "Erase everything" has to include the card. The customer stays so her
+    // invoices survive for our records; an invoice never holds a card number.
+    let cards = { removed: 0, kept: 0, skipped: false };
     if (stripe && record?.stripeCustomerId) {
       try {
-        // A card still attached to another live subscription is not ours to pull.
-        const live = await stripe.subscriptions.list({
-          customer: record.stripeCustomerId,
-          status: "active",
-          limit: 1,
-        });
-        if (live.data.length) {
-          cards.kept = live.data.length;
-        } else {
-          const methods = await stripe.paymentMethods.list({ customer: record.stripeCustomerId, limit: 100 });
-          for (const method of methods.data) {
-            try {
-              await stripe.paymentMethods.detach(method.id);
-              cards.removed += 1;
-            } catch {
-              cards.kept += 1;
-            }
-          }
-        }
+        cards = await detachPaymentMethods(stripe, record.stripeCustomerId);
       } catch {
-        // Her membership is already cancelled by this point. Housekeeping that
-        // fails must not strand her mid-close, so this falls through quietly and
-        // the count below tells the truth about what is left.
+        // Membership is already cancelled by here. Housekeeping that fails
+        // must not strand her mid-close; the counts below tell the truth.
       }
     }
     const identityUser = await findIdentityUserByEmail(user.email);
@@ -182,7 +161,7 @@ export default async function handler(request) {
     if (membership.key) await store.delete(membership.key).catch(() => {});
     if (record?.stripeSubscriptionId) await store.delete(`subscription/${record.stripeSubscriptionId}`).catch(() => {});
     if (record?.stripeCustomerId) await store.delete(`customer/${record.stripeCustomerId}`).catch(() => {});
-    return Response.json({ ok: true, closed: true, cardsRemoved: cards.removed, cardsRemaining: cards.kept });
+    return Response.json({ ok: true, closed: true, cardsRemoved: cards.removed, cardsRemaining: cards.kept + (cards.skipped ? 1 : 0) });
   }
 
   return Response.json({ ok: false, error: "Unknown action" }, { status: 400 });

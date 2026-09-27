@@ -1,6 +1,6 @@
 import Stripe from "stripe";
 import { notifyCuraited } from "./_shared/curaited-notify.mjs";
-import { sendWelcomeEmail } from "./_shared/welcome-email.mjs";
+import { sendWelcomeEmail, sendAdminAlert } from "./_shared/welcome-email.mjs";
 import {
   FOUNDING_CUTOFF,
   FOUNDING_LIMIT,
@@ -17,6 +17,10 @@ import {
   saveMembershipRecord,
   stripeId,
   subscriptionPeriodEnd,
+  cancellationJustHappened,
+  detachPaymentMethods,
+  findLiveDuplicate,
+  undoDuplicateSubscription,
 } from "./_shared/membership.mjs";
 
 function response(body, status = 200) {
@@ -47,6 +51,29 @@ function resolvePlan(paymentLinkId, subscription, session = null) {
   return { ...MONTHLY_PLAN, resolvedBy: session ? "amount" : "fallback" };
 }
 
+// Both Stripe events that announce a checkout run through here. If the email
+// already holds a live membership, the new subscription is undone and a person
+// hears about it. The existing membership is never touched.
+async function refuseDuplicate(stripe, store, email, subscription) {
+  if (!subscription) return null;
+  const existing = await findLiveDuplicate(store, email, subscription.id);
+  if (!existing) return null;
+  let undo;
+  try {
+    undo = await undoDuplicateSubscription(stripe, subscription);
+  } catch (error) {
+    undo = { error: error instanceof Error ? error.message : "undo failed" };
+  }
+  const dollars = ((undo.refundedCents || 0) / 100).toFixed(2);
+  await sendAdminAlert("duplicate signup undone", [
+    `${email} checked out again while already holding a live membership.`,
+    `Kept: ${existing.stripeSubscriptionId} (${existing.planLabel}).`,
+    `Undid: ${subscription.id}. Cancelled: ${undo.cancelled ? "yes" : "already"}. Refunded: $${dollars}.`,
+    undo.error ? `Something did not go through: ${undo.error}. Check Stripe.` : "Nothing else needs doing.",
+  ]);
+  return { ignored: true, reason: "duplicate membership for this email", undo };
+}
+
 async function handleCheckoutCompleted(stripe, store, session, event) {
   const paymentLinkId = stripeId(session.payment_link);
 
@@ -57,6 +84,8 @@ async function handleCheckoutCompleted(stripe, store, session, event) {
   // A coupon that zeroes the price, or a one-time product, produces a paid
   // session with no subscription. That is still a member.
   const subscription = subscriptionId ? await stripe.subscriptions.retrieve(subscriptionId) : null;
+  const duplicate = await refuseDuplicate(stripe, store, email, subscription);
+  if (duplicate) return duplicate;
   const plan = resolvePlan(paymentLinkId, subscription, session);
   const createdAt = isoFromUnix(session.created || event.created);
   const membershipYear = membershipYearBounds(createdAt, createdAt);
@@ -150,6 +179,8 @@ async function handleSubscriptionCreated(stripe, store, subscription, event) {
   if (!isActiveStripeStatus(subscription.status)) {
     return { ignored: true, reason: `subscription status is ${subscription.status}` };
   }
+  const duplicate = await refuseDuplicate(stripe, store, email, subscription);
+  if (duplicate) return duplicate;
 
   const plan = resolvePlan(null, subscription);
   const createdAt = isoFromUnix(subscription.created || event.created);
@@ -194,7 +225,7 @@ async function handleSubscriptionCreated(stripe, store, subscription, event) {
   return { plan: record.plan, status: record.status, resolvedBy: plan.resolvedBy, welcomeEmail: welcome };
 }
 
-async function handleSubscriptionChanged(store, subscription, event) {
+async function handleSubscriptionChanged(stripe, store, subscription, event) {
   const record = await getRecordBySubscription(store, subscription.id);
   if (!record) return { ignored: true, reason: "subscription is not linked to a Practice Village membership" };
 
@@ -211,6 +242,16 @@ async function handleSubscriptionChanged(store, subscription, event) {
 
   if (isActiveStripeStatus(record.status)) await grantIdentityRole(record);
   else await revokeIdentityMembership(record);
+
+  // Cancelling is also how she takes her card off the file.
+  let cards = null;
+  if (cancellationJustHappened(subscription, event)) {
+    try {
+      cards = await detachPaymentMethods(stripe, record.stripeCustomerId);
+    } catch (error) {
+      cards = { error: error instanceof Error ? error.message : "detach failed" };
+    }
+  }
   await notifyCuraited({
     stripeEventId: event?.id || `${subscription.id}:${subscription.status}`,
     eventType: isActiveStripeStatus(record.status) ? "membership.updated" : "membership.cancelled",
@@ -219,7 +260,7 @@ async function handleSubscriptionChanged(store, subscription, event) {
     membershipStatus: record.status,
     accessEndsAt: record.currentPeriodEnd,
   });
-  return { plan: record.plan, status: record.status };
+  return { plan: record.plan, status: record.status, cards };
 }
 
 export default async function handler(request) {
@@ -244,7 +285,7 @@ export default async function handler(request) {
         ? { ignored: true, reason: "already provisioned" }
         : await handleSubscriptionCreated(stripe, store, event.data.object, event);
     } else if (["customer.subscription.updated", "customer.subscription.deleted"].includes(event.type)) {
-      result = await handleSubscriptionChanged(store, event.data.object, event);
+      result = await handleSubscriptionChanged(stripe, store, event.data.object, event);
     }
 
     await store.setJSON(eventKey, { type: event.type, processedAt: new Date().toISOString(), result });

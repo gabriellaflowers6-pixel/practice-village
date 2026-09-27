@@ -76,3 +76,23 @@ export async function sendWelcomeEmail(email, { planLabel = "membership", setPas
     return { sent: false, reason: error.message };
   }
 }
+
+// A short note to a person when the system had to step in on a member's
+// behalf, so nobody finds out from a bank statement.
+export async function sendAdminAlert(subject, lines) {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) return { sent: false, reason: "RESEND_API_KEY is not configured" };
+  const to = process.env.ADMIN_ALERT_EMAIL || "info@aidedeq.org";
+  try {
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ from: FROM, to: [to], subject: `Practice Village: ${subject}`, text: lines.join("\n") }),
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) return { sent: false, reason: payload.message || `Resend ${response.status}` };
+    return { sent: true, id: payload.id };
+  } catch (error) {
+    return { sent: false, reason: error.message };
+  }
+}

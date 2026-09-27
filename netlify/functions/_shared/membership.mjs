@@ -205,3 +205,82 @@ export async function getMembershipRecordByEmail(email) {
   const key = await memberKeyForEmail(email);
   return { store, key, record: await store.get(key, { type: "json" }) };
 }
+
+// --- Cards come off when the membership ends ------------------------------
+//
+// The Stripe portal refuses to remove a card while a subscription is still
+// running out its paid period, which is exactly when a member wants it gone.
+// So the Village does it: the moment a cancellation lands, every saved card,
+// Apple Pay, or Link method comes off the customer. Nothing else is live on
+// that customer, so nothing can charge her again.
+
+export function subscriptionIsLive(subscription) {
+  return ["active", "trialing"].includes(subscription.status) && !subscription.cancel_at_period_end;
+}
+
+export async function detachPaymentMethods(stripe, customerId) {
+  const result = { removed: 0, kept: 0, skipped: false };
+  if (!customerId) return result;
+  const subscriptions = await stripe.subscriptions.list({ customer: customerId, status: "all", limit: 100 });
+  if (subscriptions.data.some(subscriptionIsLive)) {
+    // Something on this customer still needs the card. Not ours to pull.
+    result.skipped = true;
+    return result;
+  }
+  const methods = await stripe.paymentMethods.list({ customer: customerId, limit: 100 });
+  for (const method of methods.data) {
+    try {
+      await stripe.paymentMethods.detach(method.id);
+      result.removed += 1;
+    } catch {
+      result.kept += 1;
+    }
+  }
+  return result;
+}
+
+// True only on the event where the cancellation actually happened, not on
+// every later update to a subscription that is already winding down. A member
+// who schedules a cancel and then adds a new card to change her mind keeps it.
+export function cancellationJustHappened(subscription, event) {
+  const previous = event?.data?.previous_attributes || {};
+  if (event?.type === "customer.subscription.deleted") return true;
+  if (subscription.cancel_at_period_end && "cancel_at_period_end" in previous) return true;
+  if (!isActiveStripeStatus(subscription.status) && "status" in previous) return true;
+  return false;
+}
+
+// --- One membership per email ---------------------------------------------
+//
+// A second checkout on an email that already holds a live membership is a
+// slip, not a second member. Left alone it would overwrite her record and
+// leave the first subscription charging with nothing pointing at it.
+
+export async function findLiveDuplicate(store, email, subscriptionId) {
+  const existing = await store.get(await memberKeyForEmail(email), { type: "json" });
+  if (!existing?.stripeSubscriptionId || !subscriptionId) return null;
+  if (existing.stripeSubscriptionId === subscriptionId) return null;
+  if (!isActiveStripeStatus(existing.status)) return null;
+  return existing;
+}
+
+// Cancels the duplicate and refunds what it just took, both idempotent so the
+// two Stripe events that announce one checkout cannot do it twice.
+export async function undoDuplicateSubscription(stripe, subscription) {
+  const out = { cancelled: false, refundedCents: 0 };
+  if (subscription.status !== "canceled") {
+    await stripe.subscriptions.cancel(subscription.id);
+    out.cancelled = true;
+  }
+  const customerId = stripeId(subscription.customer);
+  if (!customerId) return out;
+  const charges = await stripe.charges.list({ customer: customerId, limit: 5 });
+  const recent = charges.data.filter(
+    (charge) => charge.paid && !charge.refunded && Math.abs(charge.created - subscription.created) < 600,
+  );
+  for (const charge of recent) {
+    const refund = await stripe.refunds.create({ charge: charge.id });
+    out.refundedCents += refund.amount;
+  }
+  return out;
+}
