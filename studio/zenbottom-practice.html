@@ -121,6 +121,14 @@
     -webkit-mask-image:radial-gradient(ellipse 70% 72% at 50% 52%, #000 48%, rgba(0,0,0,.55) 74%, transparent 97%);
     mask-image:radial-gradient(ellipse 70% 72% at 50% 52%, #000 48%, rgba(0,0,0,.55) 74%, transparent 97%)}
   .ring .fig img:not(.active){display:none}
+  /* Bott Om, JoYi's avatar, teaching in place of the pictures (2026-10-05).
+     Her own studio shows inside the frame; the edges dissolve into the room
+     the same way the renders did. */
+  .ring .fig.avatar{background:none}
+  .ring .fig.avatar::after{display:none}
+  .ring .fig iframe{width:100%;height:100%;border:0;display:block;background:transparent;
+    -webkit-mask-image:radial-gradient(ellipse 72% 74% at 50% 50%, #000 58%, rgba(0,0,0,.6) 80%, transparent 99%);
+    mask-image:radial-gradient(ellipse 72% 74% at 50% 50%, #000 58%, rgba(0,0,0,.6) 80%, transparent 99%)}
   .ring .fig .fallback{font-family:"Cormorant Garamond",serif;font-size:26px;color:var(--cream-dim);text-align:center;padding:20px}
   /* progress dots (one per pose) */
   .progdots{display:flex;gap:6px;justify-content:center;margin-top:6px;flex-wrap:wrap;max-width:340px}
@@ -489,7 +497,61 @@ function countBreaths(){
     countTimers.push(setTimeout(()=>renderBreaths(breathTotal,i+1), i*BREATH));
   });
 }
+// ---- Bott Om teaches (2026-10-05) ----
+// JoYi's avatar demonstrates each pose instead of a picture. She is her own
+// site (built from movemirror by scripts/build_avatar_site.mjs, her 3D files
+// scrambled), framed here and driven by postMessage with the curriculum's
+// pose ids; this page still listens, checks the pose and decides when to move
+// on. Until she says "ready", or if she never does within a minute, the
+// pictures teach as before. ?avatar=0 forces the pictures; ?avatarSrc= points
+// at another copy of her. AVATAR_HOME is empty until her site is live, so
+// the live page keeps its pictures until then.
+const AVATAR_HOME="";
+const avatarParams=new URLSearchParams(location.search);
+const AVATAR_SRC=avatarParams.get("avatarSrc")||(["localhost","127.0.0.1"].includes(location.hostname)
+  ?`http://${location.hostname}:8792/mockups/bott-om-teacher.html?embed=1`
+  :(AVATAR_HOME?`${AVATAR_HOME}/mockups/bott-om-teacher.html?embed=1`:""));
+let avatarOn=Boolean(AVATAR_SRC)&&avatarParams.get("avatar")!=="0";
+let avatarFrame=null, avatarReady=false, avatarPose="";
+function avatarSend(pose){
+  avatarPose=pose;
+  if(avatarReady&&avatarFrame?.contentWindow) avatarFrame.contentWindow.postMessage({type:"bottom:pose",pose},"*");
+}
+function avatarMount(fig){
+  if(!avatarFrame){
+    avatarFrame=document.createElement("iframe");
+    avatarFrame.title="Bott Om demonstrates the pose";
+    avatarFrame.setAttribute("allow","autoplay");
+    avatarFrame.src=AVATAR_SRC;
+    // she has a minute to arrive; otherwise the pictures take over again
+    setTimeout(()=>{ if(!avatarReady){ avatarOn=false; avatarFrame?.remove(); avatarFrame=null; if(steps[idx]) renderFigure(steps[idx]); } },60000);
+  }
+  if(avatarFrame.parentNode!==fig){ fig.innerHTML=""; fig.appendChild(avatarFrame); }
+  fig.classList.add("avatar");
+}
+addEventListener("message",e=>{
+  if(!avatarFrame||e.source!==avatarFrame.contentWindow) return;
+  if(e.data?.type==="bottom:ready"){ avatarReady=true; if(avatarPose) avatarSend(avatarPose); }
+});
+function renderFigure(s){
+  const fig=$("fig");
+  if(avatarOn){ avatarMount(fig); avatarSend(s.pose); return; }
+  fig.classList.remove("avatar");
+  fig.innerHTML="";
+  // A pose with no Moxie render shows its name on the glow. It must never
+  // borrow another figure; the old fallback was a stick figure, not her.
+  const artSources=poseArtSources(s.pose);
+  if(!artSources.length) fig.innerHTML='<div class="fallback">'+s.pretty+'</div>';
+  else artSources.forEach((source,frameIndex)=>{const img=document.createElement("img");img.className=frameIndex===0?"active":"";img.alt=s.pose==="catcow"?(frameIndex===0?"Cat phase of Cat/Cow":"Cow phase of Cat/Cow"):s.pretty;img.src=source;img.onerror=()=>{fig.innerHTML='<div class="fallback">'+s.pretty+'</div>'};fig.appendChild(img)});
+}
+
 function cyclePoseArt(){
+  // Bott Om moves between Cat and Cow a breath at a time, as the pictures did
+  if(avatarOn&&steps[idx]?.pose==="catcow"){
+    const breaths=Math.max(1,steps[idx].holdBreaths||1);
+    for(let i=1;i<breaths;i++)countTimers.push(setTimeout(()=>avatarSend(i%2?"cow":"cat"),i*BREATH));
+    return;
+  }
   const frames=[...$("fig").querySelectorAll("img")];if(frames.length<2)return;
   const breaths=Math.max(1,steps[idx]?.holdBreaths||1);
   for(let i=1;i<breaths;i++)countTimers.push(setTimeout(()=>frames.forEach((frame,n)=>frame.classList.toggle("active",n===i%frames.length)),i*BREATH));
@@ -761,13 +823,8 @@ function renderStep(prefix=""){
   $("orient").textContent=POSE_ORIENT[s.pose]==="side"?"Turn to your side":"Face the camera";
   $("cue").textContent=s.cue||"";
   renderBreaths(0,0);
-  // figure
-  const fig=$("fig"); fig.innerHTML="";
-  // A pose with no Moxie render shows its name on the glow. It must never
-  // borrow another figure; the old fallback was a stick figure, not her.
-  const artSources=poseArtSources(s.pose);
-  if(!artSources.length) fig.innerHTML='<div class="fallback">'+s.pretty+'</div>';
-  else artSources.forEach((source,frameIndex)=>{const img=document.createElement("img");img.className=frameIndex===0?"active":"";img.alt=s.pose==="catcow"?(frameIndex===0?"Cat phase of Cat/Cow":"Cow phase of Cat/Cow"):s.pretty;img.src=source;img.onerror=()=>{fig.innerHTML='<div class="fallback">'+s.pretty+'</div>'};fig.appendChild(img)});
+  // figure: Bott Om when she is available, the pictures otherwise
+  renderFigure(s);
   paintRing(0); ring=null; holdUntil=0; advancing=false; currentPoseState={matched:false,hint:"",correction:null};
   nearMatchSince=null; nudgeSpoken=false; correctionSince=null; correctionSpoken=false; correctionKey="";
   awaySince=null; patientShown=false; $("patient").classList.add("hidden");
