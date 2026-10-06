@@ -1231,12 +1231,12 @@ function fillTimeMenu(){
 const TIME_NAMES={auto:"now",morning:"morning",afternoon:"afternoon",dusk:"dusk",night:"night"};
 // the view outside the doorway: the mountain lake or the bamboo courtyard
 let sceneChoice=(()=>{try{return new URL(AVATAR_SRC,location.href).searchParams.get("windowScene")||"mountain"}catch(e){return "mountain"}})();
-const SCENE_NAMES={mountain:"lake",courtyard:"courtyard"};
+const SCENE_NAMES={mountain:"lake",courtyard:"courtyard",islands:"islands"};
 function syncSceneLabel(){ $("sceneLabel").textContent="View: "+(SCENE_NAMES[sceneChoice]||sceneChoice); }
 function setSceneMenu(open){
   if(open){
     const menu=$("sceneMenu"); menu.querySelectorAll("button").forEach(b=>b.remove());
-    for(const [sc,label] of [["mountain","Mountain lake"],["courtyard","Bamboo courtyard"]]){
+    for(const [sc,label] of [["mountain","Mountain lake"],["courtyard","Bamboo courtyard"],["islands","Floating islands"]]){
       const b=document.createElement("button"); b.type="button"; b.setAttribute("role","menuitem"); b.textContent=label;
       if(sc===sceneChoice) b.className="current";
       b.addEventListener("click",()=>{ sceneChoice=sc; avatarPost({type:"bottom:scene",scene:sc}); syncSceneLabel(); setSceneMenu(false); });
