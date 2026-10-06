@@ -1,3 +1,15 @@
+### 2026-10-06 (later) — Studio practice: time of day and Explore the room (Gabby's bot, local only)
+Demo mode only, branch feature/bott-om-teaches, not pushed. Two footer buttons
+beside the class picker: a sun ("Time of day": now / morning / afternoon / dusk
+/ night) sends {type:"bottom:time"} to Bott Om's page, which changes the
+mountain view and the studio's light; a compass ("Explore the room") sends
+{type:"bottom:explore"}: she stands in Mountain, her view fills the stage
+without the round fade, the camera is free (drag, scroll, right-drag), and the
+class pauses (the hold resumes where it stopped; poses sent meanwhile are kept
+and played on the way out). Choices made before she has loaded are sent again
+when she says ready. window.__avatarLog records what was sent. Tested in the
+pane: explore, turn, zoom, night/dusk, back to the class, class continues.
+
 ### 2026-10-06 — Studio practice: class picker and stay-in-studio end (Gabby's bot, local only)
 Branch feature/bott-om-teaches, not pushed, not deployed. Gabby reviews Bott Om's
 movement on studio/zenbottom-practice.html?demo=1 and asked for a way to pick a
