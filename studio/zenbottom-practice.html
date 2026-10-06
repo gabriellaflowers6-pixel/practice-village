@@ -62,6 +62,16 @@
   .viewmenu{position:absolute;top:44px;right:8px;z-index:9;min-width:168px;padding:7px;display:grid;gap:2px;
     border:1px solid var(--line);border-radius:14px;background:rgba(26,13,10,.97);box-shadow:0 16px 40px rgba(0,0,0,.5)}
   .viewmenu.hidden,.devicemenu.hidden{display:none}
+  /* class picker (demo/review mode): a long list, so it scrolls */
+  .devicemenu.classmenu{left:18px;right:auto;max-height:62vh;overflow:auto;min-width:250px}
+  .devicemenu.classmenu button.current{color:var(--gold)}
+  /* demo end: stay in the studio, a panel over her instead of a page */
+  .card.float{position:fixed;left:50%;top:44%;transform:translate(-50%,-50%);z-index:30;flex:none;width:min(420px,calc(100vw - 32px));
+    padding:22px 20px;border:1px solid var(--line);border-radius:18px;background:rgba(26,13,10,.95);box-shadow:0 18px 46px rgba(0,0,0,.5)}
+  .endactions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+  .endactions.hidden{display:none}
+  .endactions button{border:1px solid rgba(233,192,120,.5);border-radius:999px;padding:9px 16px;background:none;color:var(--gold);font:700 12px Inter,sans-serif;cursor:pointer}
+  .endactions button:hover{background:rgba(233,192,120,.1)}
   .devicemenu{position:fixed;right:18px;bottom:66px;z-index:8;min-width:210px;padding:7px;display:grid;gap:2px;
     border:1px solid var(--line);border-radius:16px;background:rgba(26,13,10,.97);box-shadow:0 18px 46px rgba(0,0,0,.5)}
   .devicemenu button{border:0;border-radius:9px;padding:9px 11px;background:none;color:var(--cream-dim);
@@ -293,7 +303,15 @@
 <div class="card hidden" id="endCard">
   <h2 id="endH">Practice complete</h2>
   <p id="endP">Rest as long as you like. Carry this quiet with you.</p>
+  <div class="endactions hidden" id="endActions">
+    <button type="button" id="endReplay">Play this class again</button>
+    <button type="button" id="endPick">Pick another class</button>
+  </div>
   <a id="endLink" href="zenbottom-schedule.html">Back to the schedule</a>
+</div>
+
+<div class="devicemenu classmenu hidden" id="classMenu" role="menu" aria-label="Pick a class">
+  <p class="viewmenu__label">Pick a class</p>
 </div>
 
 <div class="devicemenu hidden" id="deviceMenu" role="menu" aria-label="Camera and microphone">
@@ -335,6 +353,7 @@
 </div>
 
 <footer id="footer">
+  <button class="iconbtn hidden" id="classBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Pick a class" data-tooltip="Pick a class"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></button>
   <button class="iconbtn" id="backBtn" type="button" aria-label="Previous pose" data-tooltip="Previous pose"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
   <button class="iconbtn" id="skipBtn" type="button" aria-label="Skip this pose" data-tooltip="Next pose"><svg viewBox="0 0 24 24"><path d="m5 4 12 8-12 8z"/><path d="M19 5v14"/></svg></button>
   <button class="iconbtn" id="liveBtn" type="button" aria-pressed="false" aria-expanded="false" aria-label="Live Tutor" data-tooltip="Live Tutor"><svg viewBox="0 0 24 24"><path d="M4 10v4h4l5 4V6L8 10z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"/></svg></button>
@@ -778,6 +797,16 @@ function showEmpty(){
 function showEnd(){
   stopPracticeMedia("Practice complete. Camera and microphone are off.");
   stopMusic();
+  /* Demo / review (Gabby, 2026-10-06): finishing a class should not send her
+     off to the schedule. Stay in the studio with Bott Om, offer the same class
+     again or another one; the schedule link stays, but only if she wants it. */
+  if(DEMO){
+    $("endCard").classList.add("float"); $("endCard").classList.remove("hidden");
+    $("endActions").classList.remove("hidden");
+    $("endH").textContent="Class complete";
+    $("endP").textContent="Play it again, or pick another class.";
+    return;
+  }
   $("stage").classList.add("hidden"); $("footer").classList.add("hidden");
   $("endCard").classList.remove("hidden");
   if(nextMeditation){const minutes=Math.max(3,Math.min(20,Math.round(plannedDuration/3)));$("endH").textContent="Movement complete";$("endP").textContent="Let the movement settle. Your meditation is ready when you are.";$("endLink").textContent="Continue to meditation";$("endLink").href=`zenbottom-meditation-session.html?slot=${encodeURIComponent(planSlotId||"")}&date=${encodeURIComponent(planSlotDate||"")}&duration=${minutes}&mode=blended&session=afterflow&music=${encodeURIComponent(ambientPreset)}&voice=${encodeURIComponent($("liveVoice").value)}`;return}
@@ -1097,6 +1126,48 @@ function syncDeviceMenu(){
   $("devVoice").textContent=tutorVoiceEnabled?"Mute guide voice":"Unmute guide voice";
   $("devCorrections").textContent=correctionsEnabled?"Turn corrections off":"Turn corrections on";
 }
+// ---- class picker (demo / review mode) ----
+// Lists JoYi's approved classes; picking one reloads this page on it, keeping
+// every other query switch (demo, avatarSrc...). Demo only: a real student's
+// class comes from the guide.
+let classList=null;
+async function fillClassMenu(){
+  if(classList) return;
+  const menu=$("classMenu");
+  try{
+    const approved=await fetch("moxie-approved-curriculum.json",{cache:"no-store"}).then(r=>r.json());
+    classList=Object.entries(approved.lessons||{}).map(([id,l])=>({id,title:l.title||id}));
+  }catch(e){ classList=[]; }
+  const day=id=>/^day-/.test(id);
+  const order=[...classList.filter(c=>c.id==="moxie-sequence"),...classList.filter(c=>c.id!=="moxie-sequence"&&!day(c.id)),...classList.filter(c=>day(c.id))];
+  const current=qs.get("lesson")||(qs.get("day")?`day-${String(qs.get("day")).padStart(2,"0")}`:"morning-stretch");
+  for(const c of order){
+    const b=document.createElement("button"); b.type="button"; b.setAttribute("role","menuitem");
+    b.textContent=c.title; if(c.id===current) b.className="current";
+    b.addEventListener("click",()=>pickClass(c.id)); menu.appendChild(b);
+  }
+}
+function pickClass(id){
+  const url=new URL(location.href);
+  url.searchParams.set("demo","1"); url.searchParams.set("lesson",id); url.searchParams.delete("day");
+  stopPracticeMedia(); stopMusic(); location.href=url.href;
+}
+async function setClassMenu(open){
+  if(open) await fillClassMenu();
+  $("classMenu").classList.toggle("hidden",!open);
+  $("classBtn").setAttribute("aria-expanded",String(open));
+  if(open){ setDeviceMenu(false); $("musicPanel").classList.add("hidden"); }
+}
+if(DEMO) $("classBtn").classList.remove("hidden");
+$("classBtn").addEventListener("click",event=>{ event.stopPropagation(); setClassMenu($("classMenu").classList.contains("hidden")); });
+$("endPick").addEventListener("click",event=>{ event.stopPropagation(); setClassMenu(true); });
+$("endReplay").addEventListener("click",()=>{
+  $("endCard").classList.add("hidden"); $("endActions").classList.add("hidden");
+  idx=0; renderStep();
+});
+document.addEventListener("click",event=>{
+  if(!$("classMenu").classList.contains("hidden")&&!event.target.closest("#classMenu,#classBtn,#endPick")) setClassMenu(false);
+});
 function setDeviceMenu(open){
   $("deviceMenu").classList.toggle("hidden",!open);
   $("deviceBtn").setAttribute("aria-expanded",String(open));

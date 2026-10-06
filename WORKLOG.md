@@ -1,3 +1,16 @@
+### 2026-10-06 — Studio practice: class picker and stay-in-studio end (Gabby's bot, local only)
+Branch feature/bott-om-teaches, not pushed, not deployed. Gabby reviews Bott Om's
+movement on studio/zenbottom-practice.html?demo=1 and asked for a way to pick a
+class, and not to be sent to the schedule when a class ends. Demo mode only (a
+real student's class still comes from the guide): a "Pick a class" button
+(footer, left) lists JoYi's 32 approved classes from moxie-approved-curriculum.json
+and reloads the page on the one picked, keeping every other query switch; at the
+end of a demo class a "Class complete" panel sits over the studio with "Play
+this class again" and "Pick another class" (the schedule link stays, as a
+choice). Non-demo behaviour unchanged. Checked in the browser pane: 32 classes,
+current one marked, end panel shown with the stage and footer still up, replay
+restarts at pose 1.
+
 ### 2026-09-01 — PROJECTS SLICE 1 SHIPPED (JoYi's bot)
 The Concierge grows a Project lifecycle (PROJECTS_PRD.md v2, decisions locked
 with JoYi today). New: /projects room (member-projects.mjs page shell +
