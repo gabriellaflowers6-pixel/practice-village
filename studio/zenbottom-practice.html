@@ -396,6 +396,7 @@
 </footer>
 
 <script type="module">
+import { hasReference, matchesReference } from "./pose-reference-lib.mjs";
 import { flattenLesson, breathToMs, matchProgress, voicePlan, shouldSpeakNearMatch, parseWakeCommand, lessonGrounding, NEAR_MATCH_HINT, POSE_ORIENT, PRETTY } from "./practice-lib.mjs";
 import { poseArtSources } from "./pose-art.mjs";
 import { clampVolume, musicVolume } from "./music-lib.mjs";
@@ -466,7 +467,7 @@ function feat(lm,wl){
   return f;
 }
 function dist(a,b){let s=0;for(let i=0;i<a.length;i++){const d=a[i]-b[i];s+=d*d;}return Math.sqrt(s);}
-let model=null;
+let model=null, poseRef=null;
 function classify(f,k=3){const ds=model.feats.map((tf,i)=>({d:dist(f,tf),l:model.labels[i]})).sort((a,b)=>a.d-b.d);const top=ds.slice(0,k),v={};let tot=0;for(const t of top){const w=1/(t.d+1e-3);v[t.l]=(v[t.l]||0)+w;tot+=w;}let b=null,bv=-1;for(const l in v)if(v[l]>bv){bv=v[l];b=l;}return{label:b,conf:bv/tot,nearest:ds[0].d};}
 const REJ_D=2.37, REJ_S=0.6;
 const accept=c=>c.nearest<=REJ_D&&c.conf>=REJ_S;
@@ -939,9 +940,15 @@ function correctionFor(pose,lm){
 function detect(lm,wlm){
   if(DEMO) return {matched:true, hint:"",correction:null};
   if(!lm||!wlm||!coreBody(lm)) return {matched:false, hint:"Step back so I can see your whole body",correction:null};
-  const c=classify(feat(lm,wlm));
+  const f=feat(lm,wlm), c=classify(f);
   window.__seen=c.label;
   const target=steps[idx].pose;
+  // Poses the classifier has no class for are checked against Bott Om's own
+  // shape (pose-reference-lib.mjs). Both use the knees, so they must be seen.
+  if(hasReference(poseRef,target)){
+    if(!kneesOk(lm)) return {matched:false, hint:"Step back so I can see your legs",correction:null};
+    return matchesReference(poseRef,target,f)?{matched:true, hint:"",correction:null}:{matched:false, hint:"",correction:null};
+  }
   if(c.label===target){
     const correction=correctionFor(target,lm);
     if(accept(c)&&legsOk(c,lm)&&!correction) return {matched:true, hint:"",correction:null};
@@ -1362,6 +1369,9 @@ async function init(){
     import("./vendor/mediapipe/vision_bundle.mjs")
   ]);
   model=await (await fetch("./pose-library-32w-z06-ffaudit-cull6.json?bust=14",{cache:"no-store"})).json();
+  // Bott Om as the reference for lesson poses the classifier cannot name
+  // (Halfway Lift, Low Lunge). Without it those steps could never be matched.
+  try{ poseRef=await (await fetch("./pose-reference-avatar.json?bust=1",{cache:"no-store"})).json(); }catch(e){ poseRef=null; }
   const vision=await FilesetResolver.forVisionTasks("./vendor/mediapipe/wasm");
   uLM=await PoseLandmarker.createFromOptions(vision,{baseOptions:{modelAssetPath:"./vendor/mediapipe/pose_landmarker_full.task",delegate:"GPU"},runningMode:"VIDEO",numPoses:1});
   requestAnimationFrame(tick);
