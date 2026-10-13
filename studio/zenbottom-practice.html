@@ -224,6 +224,22 @@
     .col.demo.avatarmode .cue{font-size:14px}
   }
 
+  /* LOADING (2026-10-13, Gabby: she "takes a while to load and get her hair
+     and clothes correct ... a loading screen until she is rendered
+     completely"). Covers her frame from the moment it is made until her page
+     says she is dressed (bottom:ready waits for the braids and the pants),
+     then fades away. */
+  .avatarload{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+    background:radial-gradient(ellipse at 50% 45%, #2a1610 0%, #1a0d0a 70%);border-radius:18px;
+    color:var(--cream-dim);font-family:"Cormorant Garamond",serif;font-size:22px;letter-spacing:.3px;
+    transition:opacity .7s ease, visibility 0s linear 0s}
+  .avatarload p{margin:0}
+  .avatarload.hidden{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .7s ease, visibility 0s linear .7s}
+  .avatarload .spin{width:38px;height:38px;border-radius:50%;border:2px solid rgba(233,192,120,.18);border-top-color:var(--gold);
+    animation:avatarSpin 1.1s linear infinite}
+  @keyframes avatarSpin{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion:reduce){.avatarload .spin{animation:none}}
+
   /* you */
   .youpanel{position:relative;flex:1;background:#000;border-radius:18px;overflow:hidden;border:1px solid var(--line);
     display:flex;align-items:center;justify-content:center;min-height:0}
@@ -309,6 +325,7 @@
     <div class="demowrap">
       <div class="ring" id="ring">
         <div class="fig" id="fig"></div>
+        <div class="avatarload hidden" id="avatarLoad" role="status" aria-live="polite"><span class="spin" aria-hidden="true"></span><p>Bott Om is getting ready</p></div>
         <div class="check">&#10003;</div>
       </div>
     </div>
@@ -622,15 +639,17 @@ function avatarMount(fig){
     avatarFrame.setAttribute("allow","autoplay");
     avatarFrame.src=AVATAR_SRC;
     // she has a minute to arrive; otherwise the pictures take over again
-    setTimeout(()=>{ if(!avatarReady){ avatarOn=false; avatarFrame?.remove(); avatarFrame=null; if(steps[idx]) renderFigure(steps[idx]); } },60000);
+    setTimeout(()=>{ if(!avatarReady){ avatarOn=false; avatarFrame?.remove(); avatarFrame=null; $("avatarLoad").classList.add("hidden"); if(steps[idx]) renderFigure(steps[idx]); } },60000);
   }
   if(avatarFrame.parentNode!==fig){ fig.innerHTML=""; fig.appendChild(avatarFrame); }
+  $("avatarLoad").classList.toggle("hidden",avatarReady);
   fig.classList.add("avatar");
   $("demoCol").classList.add("avatarmode");     // instructions float over her (see .avatarmode)
 }
 addEventListener("message",e=>{
   if(!avatarFrame||e.source!==avatarFrame.contentWindow) return;
   if(e.data?.type==="bottom:ready"){ avatarReady=true; avatarLog.push([Math.round(performance.now()),"READY"]); if(avatarPose) avatarSend(avatarPose);
+    $("avatarLoad").classList.add("hidden");
     // whatever was picked while she was still loading (demo: time of day,
     // exploring); sent again a moment later too, in case her room was still
     // setting up (resending the same choice changes nothing)
@@ -1010,6 +1029,7 @@ let uLM=null, uvid=$("uvid"), lastT=-1;
 function tick(now){
   requestAnimationFrame(tick);
   if(posePick) return;                          // a pose picked from the Pose menu holds the class
+  if(avatarOn && !avatarReady) return;          // the class waits while she is still getting ready (loading screen)
   if(idx>=steps.length) return;
   // HOLD phase: count down the breaths, then advance
   if(holdUntil){
