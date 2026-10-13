@@ -233,7 +233,8 @@
     background:radial-gradient(ellipse at 50% 45%, #2a1610 0%, #1a0d0a 70%);border-radius:18px;
     color:var(--cream-dim);font-family:"Cormorant Garamond",serif;font-size:22px;letter-spacing:.3px;
     transition:opacity .7s ease, visibility 0s linear 0s}
-  .avatarload p{margin:0}
+  .avatarload p{margin:0;transition:opacity .45s ease}
+  .avatarload p.fade{opacity:0}
   .avatarload.hidden{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .7s ease, visibility 0s linear .7s}
   .avatarload .spin{width:38px;height:38px;border-radius:50%;border:2px solid rgba(233,192,120,.18);border-top-color:var(--gold);
     animation:avatarSpin 1.1s linear infinite}
@@ -325,7 +326,7 @@
     <div class="demowrap">
       <div class="ring" id="ring">
         <div class="fig" id="fig"></div>
-        <div class="avatarload hidden" id="avatarLoad" role="status" aria-live="polite"><span class="spin" aria-hidden="true"></span><p>Bott Om is getting ready</p></div>
+        <div class="avatarload hidden" id="avatarLoad" role="status" aria-live="polite"><span class="spin" aria-hidden="true"></span><p id="avatarLoadLine">Lighting the candles…</p></div>
         <div class="check">&#10003;</div>
       </div>
     </div>
@@ -632,10 +633,27 @@ function avatarSend(pose){
   avatarLog.push([Math.round(performance.now()),"pose",pose,avatarReady]);
   if(avatarReady&&avatarFrame?.contentWindow) avatarFrame.contentWindow.postMessage({type:"bottom:pose",pose},"*");
 }
+// Getting the studio ready while Moxie loads (Gabby 2026-10-13: "things relating
+// to yoga, like lighting the candles, laying out zafus"): one line at a time,
+// a gentle fade between them, starting somewhere different each visit.
+const LOAD_LINES=["Lighting the candles","Laying out the zafus","Unrolling the mat","Opening the balcony doors",
+  "Lighting the incense","Tying back the curtains","Warming up the room","Fluffing the bolsters",
+  "Tuning the singing bowl","Settling into her breath"];
+let loadLineTimer=null;
+function startLoadLines(){
+  if(loadLineTimer) return;
+  const el=$("avatarLoadLine"); let i=Math.floor(Math.random()*LOAD_LINES.length);
+  el.textContent=LOAD_LINES[i]+"…";
+  loadLineTimer=setInterval(()=>{
+    if($("avatarLoad").classList.contains("hidden")){ clearInterval(loadLineTimer); loadLineTimer=null; return; }
+    el.classList.add("fade");
+    setTimeout(()=>{ i=(i+1)%LOAD_LINES.length; el.textContent=LOAD_LINES[i]+"…"; el.classList.remove("fade"); },450);
+  },2600);
+}
 function avatarMount(fig){
   if(!avatarFrame){
     avatarFrame=document.createElement("iframe");
-    avatarFrame.title="Bott Om demonstrates the pose";
+    avatarFrame.title="Moxie demonstrates the pose";
     avatarFrame.setAttribute("allow","autoplay");
     avatarFrame.src=AVATAR_SRC;
     // she has a minute to arrive; otherwise the pictures take over again
@@ -643,6 +661,7 @@ function avatarMount(fig){
   }
   if(avatarFrame.parentNode!==fig){ fig.innerHTML=""; fig.appendChild(avatarFrame); }
   $("avatarLoad").classList.toggle("hidden",avatarReady);
+  if(!avatarReady) startLoadLines();
   fig.classList.add("avatar");
   $("demoCol").classList.add("avatarmode");     // instructions float over her (see .avatarmode)
 }
