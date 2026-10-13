@@ -192,6 +192,38 @@
   .breaths i{width:10px;height:10px;border-radius:50%;background:rgba(240,228,205,.18);transition:background .35s,box-shadow .35s,transform .35s}
   .breaths i.done{background:var(--good);box-shadow:0 0 10px rgba(207,227,184,.5);transform:scale(1.12)}
 
+  /* INSTRUCTIONS OVER HER, NOT UNDER HER (2026-10-13, Gabby: "instead of the
+     brown border expanding to fit the instructions, I want the instructions
+     to pop up in a box that's see-through and dark brown enough for people to
+     see"). With Bott Om teaching, her view fills the whole panel and the
+     pose name, cue, breaths and any correction sit in one box over it, top
+     left: over the wall and window, never where she stands (she is framed
+     in the middle) and clear of your own view (bottom right). It fades in
+     with each new pose. The picture mode keeps the old stacked layout. */
+  .col.demo.avatarmode{border-radius:18px;overflow:hidden}
+  .col.demo.avatarmode .demowrap{position:absolute;inset:0}
+  .col.demo.avatarmode .ring{max-width:none;height:100%}
+  .col.demo.avatarmode .ring .fig iframe{-webkit-mask-image:none;mask-image:none}
+  .col.demo.avatarmode .phaselabel{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:5;margin:0;
+    padding:4px 12px;border-radius:999px;background:rgba(34,17,11,.55);backdrop-filter:blur(6px)}
+  .col.demo.avatarmode .phaselabel:empty{display:none}
+  .col.demo.avatarmode .instr{position:absolute;top:16px;left:16px;z-index:5;width:min(380px,44%);
+    padding:13px 17px 14px;border:1px solid rgba(233,192,120,.3);border-radius:16px;
+    background:rgba(34,17,11,.66);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+    box-shadow:0 12px 32px rgba(0,0,0,.38)}
+  .col.demo.avatarmode .instr.pop{animation:instrPop .45s ease-out}
+  @keyframes instrPop{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+  .col.demo.avatarmode .posename{justify-content:flex-start;font-size:26px;margin-top:0;text-align:left}
+  .col.demo.avatarmode .cue{text-align:left;font-size:16px;line-height:1.45;margin:6px 0 0;max-width:none;min-height:0}
+  .col.demo.avatarmode .patient{text-align:left;font-size:13px;margin:8px 0 0}
+  .col.demo.avatarmode .correction{margin:8px 0 0;max-width:none}
+  .col.demo.avatarmode .breaths{justify-content:flex-start;margin-top:10px}
+  @media (max-width:640px){
+    .col.demo.avatarmode .instr{top:10px;left:10px;right:10px;width:auto;padding:10px 13px 11px}
+    .col.demo.avatarmode .posename{font-size:21px}
+    .col.demo.avatarmode .cue{font-size:14px}
+  }
+
   /* you */
   .youpanel{position:relative;flex:1;background:#000;border-radius:18px;overflow:hidden;border:1px solid var(--line);
     display:flex;align-items:center;justify-content:center;min-height:0}
@@ -280,11 +312,13 @@
         <div class="check">&#10003;</div>
       </div>
     </div>
+    <div class="instr" id="instr">
       <div class="posename"><span id="posename"></span><span class="orient" id="orient"></span></div>
-    <div class="cue" id="cue"></div>
-    <div class="patient hidden" id="patient" aria-live="polite"></div>
-    <div class="correction hidden" id="correction" aria-live="polite"><strong id="correctionArea"></strong><span id="correctionText"></span></div>
-    <div class="breaths" id="breaths" aria-live="polite"></div>
+      <div class="cue" id="cue"></div>
+      <div class="patient hidden" id="patient" aria-live="polite"></div>
+      <div class="correction hidden" id="correction" aria-live="polite"><strong id="correctionArea"></strong><span id="correctionText"></span></div>
+      <div class="breaths" id="breaths" aria-live="polite"></div>
+    </div>
   </div>
   <div class="col you">
     <div class="youpanel">
@@ -592,6 +626,7 @@ function avatarMount(fig){
   }
   if(avatarFrame.parentNode!==fig){ fig.innerHTML=""; fig.appendChild(avatarFrame); }
   fig.classList.add("avatar");
+  $("demoCol").classList.add("avatarmode");     // instructions float over her (see .avatarmode)
 }
 addEventListener("message",e=>{
   if(!avatarFrame||e.source!==avatarFrame.contentWindow) return;
@@ -608,6 +643,7 @@ function renderFigure(s){
   const fig=$("fig");
   if(avatarOn){ avatarMount(fig); avatarSend(s.pose); return; }
   fig.classList.remove("avatar");
+  $("demoCol").classList.remove("avatarmode");
   fig.innerHTML="";
   // A pose with no Moxie render shows its name on the glow. It must never
   // borrow another figure; the old fallback was a stick figure, not her.
@@ -904,6 +940,8 @@ function renderStep(prefix=""){
   $("orient").textContent=POSE_ORIENT[s.pose]==="side"?"Turn to your side":"Face the camera";
   $("cue").textContent=s.cue||"";
   renderBreaths(0,0);
+  // the instruction box pops in again for each pose
+  const ins=$("instr"); ins.classList.remove("pop"); void ins.offsetWidth; ins.classList.add("pop");
   // figure: Bott Om when she is available, the pictures otherwise
   renderFigure(s);
   paintRing(0); ring=null; holdUntil=0; advancing=false; currentPoseState={matched:false,hint:"",correction:null};
