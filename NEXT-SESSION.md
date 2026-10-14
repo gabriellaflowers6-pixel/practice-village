@@ -1,5 +1,10 @@
 # Practice Village — Session Handoff (written 2026-08-14, ~02:00 JST)
 
+> **2026-10-14: class page / Moxie work** lives in
+> `~/dev/movemirror/NEXT-SESSION-MOXIE-CLASS.md`. Read that first for anything on
+> `studio/zenbottom-practice.html` (the student view design is waiting for Gabby's yes).
+
+
 ## Read first, every session
 1. Read the shared bot worklog BEFORE any task: Google Doc `1l72hQDZR0AeamW16ECULzvtzT3JO7g0RF35KVfw7Hv0`
    (Gabby's bot tab = hands-off files; write only in JoYi's tab; the Drive connector can read but
