@@ -1,0 +1,19 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//The Practice Center//WBS Session//EN
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:wbs-joyi-20261102@thepracticecenter.org
+DTSTAMP:20261028T213000Z
+DTSTART:20261102T190000Z
+DTEND:20261102T210000Z
+SUMMARY:What Are We Teaching Boys? The Community Standard St
+ arts With Us.
+LOCATION:Online — register with Women Build Safety
+URL:https://womenbuildsafety.com/register?webinar=joyi-rhyss
+DESCRIPTION:Women Build Safety x KOAlition with JoYi Rhyss. 
+ November 2\, 1–3 p.m. Central. Register at https://womenbui
+ ldsafety.com/register?webinar=joyi-rhyss . WBS emails the Z
+ oom link shortly before the session.
+END:VEVENT
+END:VCALENDAR
