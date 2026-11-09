@@ -1,3 +1,34 @@
+### 2026-11-08 (night) — WHOLE BACKEND 502 SINCE 10/28, FIXED (side session from the aidedeq audit)
+FOUND: Roo's registry check on /concierge got 502 instead of 405. It was not just
+the Concierge: every function that imports an npm package was crashing on load
+(concierge, coach, member, account, member-status, member-logout, project-api,
+record-export, studio-session, admin-provision, stripe-membership-webhook).
+Only schedule (node builtins only) still worked. Function log, every call:
+"Cannot find package '@netlify/identity' imported from
+/var/task/netlify/functions/concierge.mjs" (ERR_MODULE_NOT_FOUND).
+CAUSE: the prod deploy of 2026-10-28 21:39 UTC (6ae26bae) did not come from this
+folder. A Codex task cloned the repo to
+~/Documents/Codex/2026-10-26/task/practice-village-event, added the Nov 2 Women
+Build Safety section (commit cea0441), and deployed from there with node_modules
+as a SYMLINK back to this folder. The function bundler did not pack the
+symlinked packages, so the live bundles shipped without their dependencies.
+Down from 10/28 ~4:40pm CT to 11/8 night: members could not reach /member or
+/account, the porch Concierge was dead, and Stripe webhooks returned 502.
+FIX: fast-forwarded cea0441 into this repo (git fetch from the clone, --ff-only,
+so live content is unchanged; full live-vs-repo diff showed no other drift, the
+safety-hall Privacy/Terms links differ only by Netlify pretty-URL rewriting).
+Redeployed from THIS folder: draft 6af128a9 checked first, then
+`netlify deploy --build --prod` -> 6af128e6. No code changed.
+VERIFIED: GET /concierge 405; POST answers (200, Gemini reply); real porch on
+the homepage answered in Chrome; all 6 Practice Village Roo registry checks pass;
+other functions back to normal codes (401/302/405 when signed out).
+RULE: deploy PV only from this folder with its real node_modules. Never deploy
+from a clone or worktree whose node_modules is a symlink.
+OPEN: Stripe webhook deliveries between 10/28 and 11/8 failed. Stripe retries for
+3 days, so events older than ~11/5 are not coming back on their own. Check the
+webhook's failed events in the Stripe dashboard and resend any checkout or
+subscription events from that window.
+
 ### 2026-09-01 — PROJECTS SLICE 1 SHIPPED (JoYi's bot)
 The Concierge grows a Project lifecycle (PROJECTS_PRD.md v2, decisions locked
 with JoYi today). New: /projects room (member-projects.mjs page shell +
