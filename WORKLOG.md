@@ -24,10 +24,11 @@ the homepage answered in Chrome; all 6 Practice Village Roo registry checks pass
 other functions back to normal codes (401/302/405 when signed out).
 RULE: deploy PV only from this folder with its real node_modules. Never deploy
 from a clone or worktree whose node_modules is a symlink.
-OPEN: Stripe webhook deliveries between 10/28 and 11/8 failed. Stripe retries for
-3 days, so events older than ~11/5 are not coming back on their own. Check the
-webhook's failed events in the Stripe dashboard and resend any checkout or
-subscription events from that window.
+STRIPE CHECKED (same night): the PV Membership webhook shows zero deliveries in the
+window and neither PV payment link has any checkout sessions, so no payment events
+were lost and nothing needs replaying.
+FOLLOW-UP booked: Practice Village deep dive, Fri 11/13 1-3pm CT (monitoring gaps,
+member note, archive the Codex clone, delete the dead stray env var, past Nov 2 section).
 
 ### 2026-09-01 — PROJECTS SLICE 1 SHIPPED (JoYi's bot)
 The Concierge grows a Project lifecycle (PROJECTS_PRD.md v2, decisions locked
