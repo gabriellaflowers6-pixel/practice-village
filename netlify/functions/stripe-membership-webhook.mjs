@@ -4,7 +4,6 @@ import { sendWelcomeEmail, sendAdminAlert } from "./_shared/welcome-email.mjs";
 import {
   FOUNDING_CUTOFF,
   FOUNDING_LIMIT,
-  PLAN_BY_PAYMENT_LINK,
   countFoundingBonusMembers,
   getRecordBySubscription,
   grantIdentityRole,
@@ -22,6 +21,12 @@ import {
   findLiveDuplicate,
   undoDuplicateSubscription,
 } from "./_shared/membership.mjs";
+import {
+  notVillageSale,
+  subscriptionPriceIds,
+  villagePlanForCheckout,
+  villagePlanForSubscription,
+} from "./_shared/village-sale.mjs";
 
 function response(body, status = 200) {
   return Response.json(body, { status });
@@ -31,24 +36,6 @@ function requireEnv(name) {
   const value = Netlify.env.get(name);
   if (!value) throw new Error(`${name} is not configured`);
   return value;
-}
-
-const YEARLY_PLAN = { plan: "founding_villager", role: "founding_villager", label: "Founding Villager" };
-const MONTHLY_PLAN = { plan: "membership", role: "member", label: "Membership" };
-
-// Coupons, new links, dashboard subscriptions and invoices all have to land a
-// member. The payment link is the best signal when we know it; the billing
-// interval is the fallback that still works when we do not.
-function resolvePlan(paymentLinkId, subscription, session = null) {
-  const known = PLAN_BY_PAYMENT_LINK[paymentLinkId];
-  if (known) return { ...known, resolvedBy: "payment_link" };
-  const interval = subscription?.items?.data?.[0]?.price?.recurring?.interval;
-  if (interval === "year") return { ...YEARLY_PLAN, resolvedBy: "interval" };
-  if (interval === "month") return { ...MONTHLY_PLAN, resolvedBy: "interval" };
-  // No subscription: decide by what was charged before the discount.
-  const gross = session?.amount_subtotal ?? session?.amount_total ?? 0;
-  if (gross >= 10000) return { ...YEARLY_PLAN, resolvedBy: "amount" };
-  return { ...MONTHLY_PLAN, resolvedBy: session ? "amount" : "fallback" };
 }
 
 // Both Stripe events that announce a checkout run through here. If the email
@@ -74,19 +61,23 @@ async function refuseDuplicate(stripe, store, email, subscription) {
   return { ignored: true, reason: "duplicate membership for this email", undo };
 }
 
-async function handleCheckoutCompleted(stripe, store, session, event) {
+export async function handleCheckoutCompleted(stripe, store, session, event) {
   const paymentLinkId = stripeId(session.payment_link);
-
-  const email = session.customer_details?.email || session.customer_email;
-  if (!email) throw new Error("The completed Stripe session has no customer email");
 
   const subscriptionId = stripeId(session.subscription);
   // A coupon that zeroes the price, or a one-time product, produces a paid
   // session with no subscription. That is still a member.
   const subscription = subscriptionId ? await stripe.subscriptions.retrieve(subscriptionId) : null;
+  // This Stripe account also sells Cur.AI.ted and other products. Decide whose
+  // sale this is before anything else, so another product's checkout can never
+  // create, cancel or refund a Village membership.
+  const plan = await villagePlanForCheckout(stripe, session, subscription);
+  if (!plan) return notVillageSale(subscriptionPriceIds(subscription));
+
+  const email = session.customer_details?.email || session.customer_email;
+  if (!email) throw new Error("The completed Stripe session has no customer email");
   const duplicate = await refuseDuplicate(stripe, store, email, subscription);
   if (duplicate) return duplicate;
-  const plan = resolvePlan(paymentLinkId, subscription, session);
   const createdAt = isoFromUnix(session.created || event.created);
   const membershipYear = membershipYearBounds(createdAt, createdAt);
 
@@ -171,7 +162,10 @@ async function welcomeOnce(store, record, setPasswordNeeded) {
   return welcome;
 }
 
-async function handleSubscriptionCreated(stripe, store, subscription, event) {
+export async function handleSubscriptionCreated(stripe, store, subscription, event) {
+  // Same rule as checkout: only a Village price makes a Village member.
+  const plan = await villagePlanForSubscription(stripe, subscription);
+  if (!plan) return notVillageSale(subscriptionPriceIds(subscription));
   const customerId = stripeId(subscription.customer);
   const customer = customerId ? await stripe.customers.retrieve(customerId) : null;
   const email = customer?.email;
@@ -182,7 +176,6 @@ async function handleSubscriptionCreated(stripe, store, subscription, event) {
   const duplicate = await refuseDuplicate(stripe, store, email, subscription);
   if (duplicate) return duplicate;
 
-  const plan = resolvePlan(null, subscription);
   const createdAt = isoFromUnix(subscription.created || event.created);
   const membershipYear = membershipYearBounds(createdAt, createdAt);
 
@@ -225,7 +218,7 @@ async function handleSubscriptionCreated(stripe, store, subscription, event) {
   return { plan: record.plan, status: record.status, resolvedBy: plan.resolvedBy, welcomeEmail: welcome };
 }
 
-async function handleSubscriptionChanged(stripe, store, subscription, event) {
+export async function handleSubscriptionChanged(stripe, store, subscription, event) {
   const record = await getRecordBySubscription(store, subscription.id);
   if (!record) return { ignored: true, reason: "subscription is not linked to a Practice Village membership" };
 
